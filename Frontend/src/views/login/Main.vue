@@ -49,7 +49,7 @@
               A few more clicks to sign in to your account. Manage all your
               e-commerce accounts in one place
             </div>
-            <form method="POST" action="/login">
+            <form @submit.prevent="handleSubmit">
               <div class="intro-x mt-8">
                 <input
                   type="text"
@@ -83,7 +83,6 @@
                 <button
                   class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
                   type="submit"
-                  @click="handleSubmit"
                 >
                   Login
                 </button>
@@ -147,6 +146,13 @@ export default defineComponent({
         })
           .then(response => {
             console.log(response.data)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+            localStorage.setItem('token', response.data.token)
+            if (localStorage.getItem('token') != null) {
+              axios.defaults.headers.common['Content-Type'] = 'application/json'
+              axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('token')
+              this.$router.push({ name: 'side-menu-dashboard-overview-1' })
+            }
           })
           .catch(error => {
             console.error(error.message)
