@@ -49,57 +49,63 @@
               A few more clicks to sign in to your account. Manage all your
               e-commerce accounts in one place
             </div>
-            <div class="intro-x mt-8">
-              <input
-                type="text"
-                class="intro-x login__input form-control py-3 px-4 border-gray-300 block"
-                placeholder="Email"
-              />
-              <input
-                type="password"
-                class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
-                placeholder="Password"
-              />
-            </div>
-            <div
-              class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
-            >
-              <div class="flex items-center mr-auto">
+            <form method="POST" action="/login">
+              <div class="intro-x mt-8">
                 <input
-                  id="remember-me"
-                  type="checkbox"
-                  class="form-check-input border mr-2"
+                  type="text"
+                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block"
+                  placeholder="Email"
+                  v-model="email"
                 />
-                <label class="cursor-pointer select-none" for="remember-me"
-                  >Remember me</label
-                >
+                <input
+                  type="password"
+                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  placeholder="Password"
+                  v-model="password"
+                />
               </div>
-              <a href="">Forgot Password?</a>
-            </div>
-            <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
-              <button
-                class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
+              <div
+                class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
               >
-                Login
-              </button>
-              <button
-                class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top"
+                <div class="flex items-center mr-auto">
+                  <input
+                    id="remember-me"
+                    type="checkbox"
+                    class="form-check-input border mr-2"
+                  />
+                  <label class="cursor-pointer select-none" for="remember-me">
+                    Remember me
+                  </label>
+                </div>
+                <a href="">Forgot Password?</a>
+              </div>
+              <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
+                <button
+                  class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
+                  type="submit"
+                  @click="handleSubmit"
+                >
+                  Login
+                </button>
+                <button
+                  class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top"
+                >
+                  Sign up
+                </button>
+              </div>
+              <div
+                class="intro-x mt-10 xl:mt-24 text-gray-700 dark:text-gray-600 text-center xl:text-left"
               >
-                Sign up
-              </button>
-            </div>
-            <div
-              class="intro-x mt-10 xl:mt-24 text-gray-700 dark:text-gray-600 text-center xl:text-left"
-            >
-              By signin up, you agree to our <br />
-              <a class="text-theme-1 dark:text-theme-10" href=""
-                >Terms and Conditions</a
-              >
-              &
-              <a class="text-theme-1 dark:text-theme-10" href=""
-                >Privacy Policy</a
-              >
-            </div>
+                By signin up, you agree to our <br />
+                <a class="text-theme-1 dark:text-theme-10" href="">
+                  Terms and Conditions
+                </a>
+                &
+                <a class="text-theme-1 dark:text-theme-10" href="">
+                  Privacy Policy
+                </a>
+              </div>
+            </form>
           </div>
         </div>
         <!-- END: Login Form -->
@@ -111,6 +117,7 @@
 <script>
 import { defineComponent, onMounted } from 'vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
@@ -123,6 +130,29 @@ export default defineComponent({
         .removeClass('error-page')
         .addClass('login')
     })
+  },
+  data() {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    handleSubmit(e) {
+      e.preventDefault()
+      if (this.password.length > 0) {
+        axios.post('http://127.0.0.1:8000/api/auth/login', {
+          email: this.email,
+          password: this.password
+        })
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.error(error.message)
+          })
+      }
+    }
   }
 })
 </script>
