@@ -260,7 +260,7 @@
                     </div>
                     <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
                   </div>
-                  <div class="text-gray-600 mt-1">Has joined the team</div>
+                  <div class="text-gray-600 mt-1">is now an Admin</div>
                 </div>
               </div>
               <div class="intro-x relative flex items-center mb-3">
@@ -282,7 +282,7 @@
                     <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
                   </div>
                   <div class="text-gray-600">
-                    <div class="mt-1">Added 3 new photos</div>
+                    <div class="mt-1">Added 3 new posts</div>
                     <div class="flex mt-2">
                       <Tippy
                         tag="div"
@@ -343,11 +343,10 @@
                     <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
                   </div>
                   <div class="text-gray-600 mt-1">
-                    Has changed
+                    Has edited
                     <a class="text-theme-1 dark:text-theme-10" href="">{{
-                        $f()[7].products[0].name
+                        $f()[7].news[0].title
                       }}</a>
-                    price and description
                   </div>
                 </div>
               </div>
@@ -370,11 +369,7 @@
                     <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
                   </div>
                   <div class="text-gray-600 mt-1">
-                    Has changed
-                    <a class="text-theme-1 dark:text-theme-10" href="">{{
-                        $f()[6].products[0].name
-                      }}</a>
-                    description
+                    Has deleted a post
                   </div>
                 </div>
               </div>

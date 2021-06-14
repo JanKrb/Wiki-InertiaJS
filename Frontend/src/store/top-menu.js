@@ -12,17 +12,32 @@ const state = () => {
         title: 'Subjects',
         subMenu: [
           {
-            icon: '',
+            icon: 'DivideIcon',
             pageName: 'top-menu-chart',
             title: 'Math'
           },
           {
-            icon: '',
-            pageName: 'top-menu-slider',
-            title: 'Software'
+            icon: 'FileTextIcon',
+            pageName: 'top-menu-chart',
+            title: 'German'
           },
           {
-            icon: '',
+            icon: 'ServerIcon',
+            pageName: 'top-menu-chart',
+            title: 'OS & Networking'
+          },
+          {
+            icon: 'TrendingDownIcon',
+            pageName: 'top-menu-chart',
+            title: 'Math'
+          },
+          {
+            icon: 'HardDriveIcon',
+            pageName: 'top-menu-slider',
+            title: 'Computer technic'
+          },
+          {
+            icon: 'DatabaseIcon',
             pageName: 'top-menu-image-zoom',
             title: 'Databases'
           }
