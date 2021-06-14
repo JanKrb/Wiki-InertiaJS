@@ -2,9 +2,25 @@ const state = () => {
   return {
     menu: [
       {
-        icon: 'HomeIcon',
+        icon: 'LayoutIcon',
+        pageName: 'side-menu-dashboard-overview-2',
+        title: 'Dashboard'
+      },
+      {
+        icon: 'GridIcon',
+        pageName: 'side-menu-chart',
+        title: 'Categories'
+      },
+      {
+        icon: 'BarChart2Icon',
+        pageName: 'side-menu-chart',
+        title: 'Statistics'
+      },
+      'devider',
+      {
+        icon: 'BoxIcon',
         pageName: 'side-menu-dashboard',
-        title: 'Dashboard',
+        title: 'Rubick',
         subMenu: [
           {
             icon: '',
@@ -20,14 +36,7 @@ const state = () => {
             icon: '',
             pageName: 'side-menu-dashboard-overview-3',
             title: 'Overview 3'
-          }
-        ]
-      },
-      {
-        icon: 'BoxIcon',
-        pageName: 'side-menu-menu-layout',
-        title: 'Menu Layout',
-        subMenu: [
+          },
           {
             icon: '',
             pageName: 'side-menu-dashboard-overview-1',
@@ -45,381 +54,379 @@ const state = () => {
             pageName: 'top-menu-dashboard-overview-1',
             title: 'Top Menu',
             ignore: true
-          }
-        ]
-      },
-      {
-        icon: 'InboxIcon',
-        pageName: 'side-menu-inbox',
-        title: 'Inbox'
-      },
-      {
-        icon: 'HardDriveIcon',
-        pageName: 'side-menu-file-manager',
-        title: 'File Manager'
-      },
-      {
-        icon: 'CreditCardIcon',
-        pageName: 'side-menu-point-of-sale',
-        title: 'Point of Sale'
-      },
-      {
-        icon: 'MessageSquareIcon',
-        pageName: 'side-menu-chat',
-        title: 'Chat'
-      },
-      {
-        icon: 'FileTextIcon',
-        pageName: 'side-menu-post',
-        title: 'Post'
-      },
-      {
-        icon: 'CalendarIcon',
-        pageName: 'side-menu-calendar',
-        title: 'Calendar'
-      },
-      'devider',
-      {
-        icon: 'EditIcon',
-        pageName: 'side-menu-crud',
-        title: 'Crud',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-crud-data-list',
-            title: 'Data List'
           },
           {
-            icon: '',
-            pageName: 'side-menu-crud-form',
-            title: 'Form'
-          }
-        ]
-      },
-      {
-        icon: 'UsersIcon',
-        pageName: 'side-menu-users',
-        title: 'Users',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-users-layout-1',
-            title: 'Layout 1'
+            icon: 'InboxIcon',
+            pageName: 'side-menu-inbox',
+            title: 'Inbox'
           },
           {
-            icon: '',
-            pageName: 'side-menu-users-layout-2',
-            title: 'Layout 2'
+            icon: 'HardDriveIcon',
+            pageName: 'side-menu-file-manager',
+            title: 'File Manager'
           },
           {
-            icon: '',
-            pageName: 'side-menu-users-layout-3',
-            title: 'Layout 3'
-          }
-        ]
-      },
-      {
-        icon: 'TrelloIcon',
-        pageName: 'side-menu-profile',
-        title: 'Profile',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-profile-overview-1',
-            title: 'Overview 1'
+            icon: 'CreditCardIcon',
+            pageName: 'side-menu-point-of-sale',
+            title: 'Point of Sale'
           },
           {
-            icon: '',
-            pageName: 'side-menu-profile-overview-2',
-            title: 'Overview 2'
+            icon: 'MessageSquareIcon',
+            pageName: 'side-menu-chat',
+            title: 'Chat'
           },
           {
-            icon: '',
-            pageName: 'side-menu-profile-overview-3',
-            title: 'Overview 3'
-          }
-        ]
-      },
-      {
-        icon: 'LayoutIcon',
-        pageName: 'side-menu-layout',
-        title: 'Pages',
-        subMenu: [
+            icon: 'FileTextIcon',
+            pageName: 'side-menu-post',
+            title: 'Post'
+          },
           {
-            icon: '',
-            pageName: 'side-menu-wizards',
-            title: 'Wizards',
+            icon: 'CalendarIcon',
+            pageName: 'side-menu-calendar',
+            title: 'Calendar'
+          },
+          {
+            icon: 'InboxIcon',
+            pageName: 'side-menu-components',
+            title: 'Components',
             subMenu: [
               {
                 icon: '',
-                pageName: 'side-menu-wizard-layout-1',
+                pageName: 'side-menu-table',
+                title: 'Table',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-regular-table',
+                    title: 'Regular Table'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-tabulator',
+                    title: 'Tabulator'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-overlay',
+                title: 'Overlay',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-modal',
+                    title: 'Modal'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-slide-over',
+                    title: 'Slide Over'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-notification',
+                    title: 'Notification'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-accordion',
+                title: 'Accordion'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-button',
+                title: 'Button'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-alert',
+                title: 'Alert'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-progress-bar',
+                title: 'Progress Bar'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-tooltip',
+                title: 'Tooltip'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-dropdown',
+                title: 'Dropdown'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-typography',
+                title: 'Typography'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-icon',
+                title: 'Icon'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-loading-icon',
+                title: 'Loading Icon'
+              }
+            ]
+          },
+          {
+            icon: 'EditIcon',
+            pageName: 'side-menu-crud',
+            title: 'Crud',
+            subMenu: [
+              {
+                icon: '',
+                pageName: 'side-menu-crud-data-list',
+                title: 'Data List'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-crud-form',
+                title: 'Form'
+              }
+            ]
+          },
+          {
+            icon: 'UsersIcon',
+            pageName: 'side-menu-users',
+            title: 'Users',
+            subMenu: [
+              {
+                icon: '',
+                pageName: 'side-menu-users-layout-1',
                 title: 'Layout 1'
               },
               {
                 icon: '',
-                pageName: 'side-menu-wizard-layout-2',
+                pageName: 'side-menu-users-layout-2',
                 title: 'Layout 2'
               },
               {
                 icon: '',
-                pageName: 'side-menu-wizard-layout-3',
+                pageName: 'side-menu-users-layout-3',
                 title: 'Layout 3'
               }
             ]
           },
           {
-            icon: '',
-            pageName: 'side-menu-blog',
-            title: 'Blog',
+            icon: 'TrelloIcon',
+            pageName: 'side-menu-profile',
+            title: 'Profile',
             subMenu: [
               {
                 icon: '',
-                pageName: 'side-menu-blog-layout-1',
-                title: 'Layout 1'
+                pageName: 'side-menu-profile-overview-1',
+                title: 'Overview 1'
               },
               {
                 icon: '',
-                pageName: 'side-menu-blog-layout-2',
-                title: 'Layout 2'
+                pageName: 'side-menu-profile-overview-2',
+                title: 'Overview 2'
               },
               {
                 icon: '',
-                pageName: 'side-menu-blog-layout-3',
-                title: 'Layout 3'
+                pageName: 'side-menu-profile-overview-3',
+                title: 'Overview 3'
               }
             ]
           },
           {
-            icon: '',
-            pageName: 'side-menu-pricing',
-            title: 'Pricing',
+            icon: 'LayoutIcon',
+            pageName: 'side-menu-layout',
+            title: 'Pages',
             subMenu: [
               {
                 icon: '',
-                pageName: 'side-menu-pricing-layout-1',
-                title: 'Layout 1'
+                pageName: 'side-menu-wizards',
+                title: 'Wizards',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-wizard-layout-1',
+                    title: 'Layout 1'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-wizard-layout-2',
+                    title: 'Layout 2'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-wizard-layout-3',
+                    title: 'Layout 3'
+                  }
+                ]
               },
               {
                 icon: '',
-                pageName: 'side-menu-pricing-layout-2',
-                title: 'Layout 2'
+                pageName: 'side-menu-blog',
+                title: 'Blog',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-blog-layout-1',
+                    title: 'Layout 1'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-blog-layout-2',
+                    title: 'Layout 2'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-blog-layout-3',
+                    title: 'Layout 3'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-pricing',
+                title: 'Pricing',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-pricing-layout-1',
+                    title: 'Layout 1'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-pricing-layout-2',
+                    title: 'Layout 2'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-invoice',
+                title: 'Invoice',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-invoice-layout-1',
+                    title: 'Layout 1'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-invoice-layout-2',
+                    title: 'Layout 2'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-faq',
+                title: 'FAQ',
+                subMenu: [
+                  {
+                    icon: '',
+                    pageName: 'side-menu-faq-layout-1',
+                    title: 'Layout 1'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-faq-layout-2',
+                    title: 'Layout 2'
+                  },
+                  {
+                    icon: '',
+                    pageName: 'side-menu-faq-layout-3',
+                    title: 'Layout 3'
+                  }
+                ]
+              },
+              {
+                icon: '',
+                pageName: 'login',
+                title: 'Login'
+              },
+              {
+                icon: '',
+                pageName: 'register',
+                title: 'Register'
+              },
+              {
+                icon: '',
+                pageName: 'error-page',
+                title: 'Error Page'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-update-profile',
+                title: 'Update profile'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-change-password',
+                title: 'Change Password'
               }
             ]
           },
           {
-            icon: '',
-            pageName: 'side-menu-invoice',
-            title: 'Invoice',
+            icon: 'SidebarIcon',
+            pageName: 'side-menu-forms',
+            title: 'Forms',
             subMenu: [
               {
                 icon: '',
-                pageName: 'side-menu-invoice-layout-1',
-                title: 'Layout 1'
+                pageName: 'side-menu-regular-form',
+                title: 'Regular Form'
               },
               {
                 icon: '',
-                pageName: 'side-menu-invoice-layout-2',
-                title: 'Layout 2'
+                pageName: 'side-menu-datepicker',
+                title: 'Datepicker'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-tail-select',
+                title: 'Tail Select'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-file-upload',
+                title: 'File Upload'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-wysiwyg-editor',
+                title: 'Wysiwyg Editor'
+              },
+              {
+                icon: '',
+                pageName: 'side-menu-validation',
+                title: 'Validation'
               }
             ]
           },
           {
-            icon: '',
-            pageName: 'side-menu-faq',
-            title: 'FAQ',
+            icon: 'HardDriveIcon',
+            pageName: 'side-menu-widgets',
+            title: 'Widgets',
             subMenu: [
               {
                 icon: '',
-                pageName: 'side-menu-faq-layout-1',
-                title: 'Layout 1'
+                pageName: 'side-menu-chart',
+                title: 'Chart'
               },
               {
                 icon: '',
-                pageName: 'side-menu-faq-layout-2',
-                title: 'Layout 2'
+                pageName: 'side-menu-slider',
+                title: 'Slider'
               },
               {
                 icon: '',
-                pageName: 'side-menu-faq-layout-3',
-                title: 'Layout 3'
+                pageName: 'side-menu-image-zoom',
+                title: 'Image Zoom'
               }
             ]
-          },
-          {
-            icon: '',
-            pageName: 'login',
-            title: 'Login'
-          },
-          {
-            icon: '',
-            pageName: 'register',
-            title: 'Register'
-          },
-          {
-            icon: '',
-            pageName: 'error-page',
-            title: 'Error Page'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-update-profile',
-            title: 'Update profile'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-change-password',
-            title: 'Change Password'
-          }
-        ]
-      },
-      'devider',
-      {
-        icon: 'InboxIcon',
-        pageName: 'side-menu-components',
-        title: 'Components',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-table',
-            title: 'Table',
-            subMenu: [
-              {
-                icon: '',
-                pageName: 'side-menu-regular-table',
-                title: 'Regular Table'
-              },
-              {
-                icon: '',
-                pageName: 'side-menu-tabulator',
-                title: 'Tabulator'
-              }
-            ]
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-overlay',
-            title: 'Overlay',
-            subMenu: [
-              {
-                icon: '',
-                pageName: 'side-menu-modal',
-                title: 'Modal'
-              },
-              {
-                icon: '',
-                pageName: 'side-menu-slide-over',
-                title: 'Slide Over'
-              },
-              {
-                icon: '',
-                pageName: 'side-menu-notification',
-                title: 'Notification'
-              }
-            ]
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-accordion',
-            title: 'Accordion'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-button',
-            title: 'Button'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-alert',
-            title: 'Alert'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-progress-bar',
-            title: 'Progress Bar'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-tooltip',
-            title: 'Tooltip'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-dropdown',
-            title: 'Dropdown'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-typography',
-            title: 'Typography'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-icon',
-            title: 'Icon'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-loading-icon',
-            title: 'Loading Icon'
-          }
-        ]
-      },
-      {
-        icon: 'SidebarIcon',
-        pageName: 'side-menu-forms',
-        title: 'Forms',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-regular-form',
-            title: 'Regular Form'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-datepicker',
-            title: 'Datepicker'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-tail-select',
-            title: 'Tail Select'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-file-upload',
-            title: 'File Upload'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-wysiwyg-editor',
-            title: 'Wysiwyg Editor'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-validation',
-            title: 'Validation'
-          }
-        ]
-      },
-      {
-        icon: 'HardDriveIcon',
-        pageName: 'side-menu-widgets',
-        title: 'Widgets',
-        subMenu: [
-          {
-            icon: '',
-            pageName: 'side-menu-chart',
-            title: 'Chart'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-slider',
-            title: 'Slider'
-          },
-          {
-            icon: '',
-            pageName: 'side-menu-image-zoom',
-            title: 'Image Zoom'
           }
         ]
       }
