@@ -1,210 +1,465 @@
 <template>
   <div>
-    <div class="intro-y flex items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
-    </div>
-    <div class="grid grid-cols-12 gap-6">
-      <!-- BEGIN: Profile Menu -->
-      <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
-        <div class="intro-y box mt-5">
-          <div class="relative flex items-center p-5">
-            <div class="w-12 h-12 image-fit">
-              <img
-                alt="Icewall Tailwind HTML Admin Template"
-                class="rounded-full"
-                :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
-              />
-            </div>
-            <div class="ml-4 mr-auto">
-              <div class="font-medium text-base">
-                {{ user.name }}
-              </div>
-              <div class="text-gray-600">{{ user.email }}</div>
-            </div>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <router-link :to="{ name: 'profile.personal' }">
-              <a class="flex items-center text-theme-1 dark:text-theme-10 font-medium" href="">
-                <UserIcon class="w-4 h-4 mr-2"/> Personal Information
-              </a>
-            </router-link>
-            <router-link :to="{ name: 'profile.password' }">
-              <a class="flex items-center mt-3" href="">
-                <LockIcon class="w-4 h-4 mr-2"/> Change Password
-              </a>
-            </router-link>
-            <a class="flex items-center mt-3" href="">
-              <MailIcon class="w-4 h-4 mr-2"/> Email Settings
-            </a>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <a class="flex items-center" href="">
-              <BookIcon class="w-4 h-4 mr-2"/> Terms of service
-            </a>
-            <a class="flex items-center mt-3" href="">
-              <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
-            </a>
-          </div>
-        </div>
+    <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+      <h2 class="text-lg font-medium mr-auto">Wiki Roles</h2>
+      <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <button class="btn btn-primary shadow-md mr-2">Add New Role</button>
       </div>
-      <!-- END: Profile Menu -->
-      <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
-        <!-- BEGIN: Display Information -->
-        <div class="intro-y box lg:mt-5">
-          <div
-            class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5"
+    </div>
+    <!-- BEGIN: HTML Table Data -->
+    <div class="intro-y box p-5 mt-5">
+      <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
+        <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto">
+          <div class="sm:flex items-center sm:mr-4">
+            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
+              Field
+            </label>
+            <select
+              id="tabulator-html-filter-field"
+              v-model="filter.field"
+              class="form-select w-full sm:w-32 xxl:w-full mt-2 sm:mt-0 sm:w-auto"
+            >
+              <option value="id">ID</option>
+              <option value="name">Name</option>
+              <option value="color">Color</option>
+            </select>
+          </div>
+          <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
+            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
+              Type
+            </label>
+            <select
+              id="tabulator-html-filter-type"
+              v-model="filter.type"
+              class="form-select w-full mt-2 sm:mt-0 sm:w-auto"
+            >
+              <option value="like" selected>like</option>
+              <option value="=">=</option>
+              <option value="<">&lt;</option>
+              <option value="<=">&lt;=</option>
+              <option value=">">></option>
+              <option value=">=">>=</option>
+              <option value="!=">!=</option>
+            </select>
+          </div>
+          <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
+            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
+              Value
+            </label>
+            <input
+              id="tabulator-html-filter-value"
+              v-model="filter.value"
+              type="text"
+              class="form-control sm:w-40 xxl:w-full mt-2 sm:mt-0"
+              placeholder="Search..."
+            />
+          </div>
+          <div class="mt-2 xl:mt-0">
+            <button
+              id="tabulator-html-filter-go"
+              type="button"
+              class="btn btn-primary w-full sm:w-16"
+              @click="onFilter"
+            >
+              Go
+            </button>
+            <button
+              id="tabulator-html-filter-reset"
+              type="button"
+              class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1"
+              @click="onResetFilter"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+        <div class="flex mt-5 sm:mt-0">
+          <button
+            id="tabulator-print"
+            class="btn btn-outline-secondary w-1/2 sm:w-auto mr-2"
+            @click="onPrint"
           >
-            <h2 class="font-medium text-base mr-auto">Display Information</h2>
-          </div>
-          <div class="p-5">
-            <form @submit.prevent="handleSubmit">
-              <div class="flex flex-col-reverse xl:flex-row flex-col">
-                <div class="flex-1 mt-6 xl:mt-0">
-                  <div class="grid grid-cols-12 gap-x-5">
-                    <div class="col-span-12 xxl:col-span-6">
-                      <div>
-                        <label for="update-profile-form-1" class="form-label">
-                          Firstname
-                        </label>
-                        <input
-                          id="update-profile-form-1"
-                          type="text"
-                          class="form-control"
-                          placeholder="Firstname"
-                          v-model="user.pre_name"
-                        />
-                      </div>
-                      <div class="mt-3">
-                        <label for="update-profile-form-1" class="form-label">
-                          Username
-                        </label>
-                        <input
-                          id="update-profile-form-2"
-                          type="text"
-                          class="form-control"
-                          placeholder="Username"
-                          v-model="user.name"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-span-12 xxl:col-span-6">
-                      <div class="mt-3 xxl:mt-0">
-                        <label for="update-profile-form-1" class="form-label">
-                          Lastname
-                        </label>
-                        <input
-                          id="update-profile-form-3"
-                          type="text"
-                          class="form-control"
-                          placeholder="Lastname"
-                          v-model="user.last_name"
-                        />
-                      </div>
-                      <div class="mt-3">
-                        <label for="update-profile-form-4" class="form-label">
-                          Email
-                        </label>
-                        <input
-                          id="update-profile-form-5"
-                          type="text"
-                          class="form-control"
-                          placeholder="Email"
-                          v-model="user.email"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary w-20 mt-3">
-                    Save
-                  </button>
-                </div>
-                <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
-                  <div
-                    class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5"
-                  >
-                    <div
-                      class="h-40 relative image-fit cursor-pointer zoom-in mx-auto"
-                    >
-                      <img
-                        class="rounded-md"
-                        alt="Icewall Tailwind HTML Admin Template"
-                        :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
-                      />
-                      <Tippy
-                        tag="div"
-                        content="Remove this profile photo?"
-                        class="w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2"
-                      >
-                        <xIcon class="w-4 h-4" />
-                      </Tippy>
-                    </div>
-                    <div class="mx-auto cursor-pointer relative mt-5">
-                      <button type="button" class="btn btn-primary w-full">
-                        Change Photo
-                      </button>
-                      <input
-                        type="file"
-                        class="w-full h-full top-0 left-0 absolute opacity-0"
-                      />
-                    </div>
-                  </div>
-                </div>
+            <PrinterIcon class="w-4 h-4 mr-2" /> Print
+          </button>
+          <div class="dropdown w-1/2 sm:w-auto">
+            <button
+              class="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto"
+              aria-expanded="false"
+            >
+              <FileTextIcon class="w-4 h-4 mr-2"/> Export
+              <ChevronDownIcon class="w-4 h-4 ml-auto sm:ml-2" />
+            </button>
+            <div class="dropdown-menu w-40">
+              <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
+                <a
+                  id="tabulator-export-csv"
+                  href="javascript:;"
+                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                  @click="onExportCsv"
+                >
+                  <FileTextIcon class="w-4 h-4 mr-2"/> Export CSV
+                </a>
+                <a
+                  id="tabulator-export-json"
+                  href="javascript:;"
+                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                  @click="onExportJson"
+                >
+                  <FileTextIcon class="w-4 h-4 mr-2"/> Export JSON
+                </a>
+                <a
+                  id="tabulator-export-xlsx"
+                  href="javascript:;"
+                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                  @click="onExportXlsx"
+                >
+                  <FileTextIcon class="w-4 h-4 mr-2"/> Export XLSX
+                </a>
+                <a
+                  id="tabulator-export-html"
+                  href="javascript:;"
+                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                  @click="onExportHtml"
+                >
+                  <FileTextIcon class="w-4 h-4 mr-2"/> Export HTML
+                </a>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-        <!-- END: Display Information -->
+      </div>
+      <div class="overflow-x-auto scrollbar-hidden">
+        <div
+          id="tabulator"
+          ref="tableRef"
+          class="mt-5 table-report table-report--tabulator"
+        ></div>
       </div>
     </div>
+    <!-- END: HTML Table Data -->
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive, onMounted } from 'vue'
+import xlsx from 'xlsx'
+import feather from 'feather-icons'
+import Tabulator from 'tabulator-tables'
 import axios from 'axios'
 
 export default defineComponent({
   data() {
     return {
-      user: {}
+      roles: {}
     }
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchRoles()
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault()
-      const loader = this.$loading.show()
-      axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
-        name: this.user.name,
-        pre_name: this.user.pre_name,
-        last_name: this.user.last_name,
-        email: this.user.email
-      })
+    fetchRoles() {
+      axios.get('http://localhost:8000/api/roles')
         .then(response => {
-          loader.hide()
-          this.fetchUser()
+          this.roles = response.data.data
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
         })
-    },
-    fetchUser() {
-      axios.get('http://localhost:8000/api/auth/user')
-        .then(response => {
-          localStorage.setItem('user', JSON.stringify(response.data.data.user))
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      return this.roles
     }
   },
   setup() {
-    const select = ref('1')
+    const tableRef = ref()
+    const tabulator = ref()
+    const filter = reactive({
+      field: 'name',
+      type: 'like',
+      value: ''
+    })
+    const initTabulator = () => {
+      tabulator.value = new Tabulator(tableRef.value, {
+        ajaxURL: 'http://127.0.0.1:8000/api/roles'.data,
+        ajaxConfig: {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'same-origin',
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        },
+        ajaxFiltering: true,
+        ajaxSorting: true,
+        printAsHtml: true,
+        printStyled: true,
+        pagination: 'remote',
+        paginationSize: 10,
+        paginationSizeSelector: [10, 20, 30, 40],
+        layout: 'fitColumns',
+        responsiveLayout: 'collapse',
+        placeholder: 'No matching records found',
+        columns: [
+          {
+            formatter: 'responsiveCollapse',
+            width: 40,
+            minWidth: 30,
+            hozAlign: 'center',
+            resizable: false,
+            headerSort: false
+          },
+
+          // For HTML table
+          {
+            title: 'ID',
+            minWidth: 0,
+            responsive: 0,
+            field: 'id',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div>
+                <div class="font-medium whitespace-nowrap">${
+                cell.getData().id
+              }</div>
+              </div>`
+            }
+          },
+          {
+            title: 'Name',
+            minWidth: 200,
+            responsive: 0,
+            field: 'name',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div>
+                <div class="font-medium whitespace-nowrap">${
+                  cell.getData().name
+                }</div>
+              </div>`
+            }
+          },
+          {
+            title: 'Description',
+            minWidth: 200,
+            responsive: 0,
+            field: 'remaining_stock',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div>
+                <div class="font-medium whitespace-nowrap">${
+                cell.getData().category
+              }</div>
+              </div>`
+            }
+          },
+          {
+            title: 'Color',
+            minWidth: 10,
+            field: 'status',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div class="flex items-center lg:justify-center ${
+                cell.getData().status ? 'text-theme-9' : 'text-theme-6'
+              }">
+                <i data-feather="check-square" class="w-4 h-4 mr-2"></i> ${
+                  cell.getData().status ? 'Active' : 'Inactive'
+                }
+              </div>`
+            }
+          },
+          {
+            title: 'Created at',
+            minWidth: 200,
+            responsive: 0,
+            field: 'remaining_stock',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div>
+                <div class="font-medium whitespace-nowrap">${
+                cell.getData().category
+              }</div>
+              </div>`
+            }
+          },
+          {
+            title: 'Updated at',
+            minWidth: 200,
+            responsive: 0,
+            field: 'remaining_stock',
+            vertAlign: 'middle',
+            print: false,
+            download: false,
+            formatter(cell) {
+              return `<div>
+                <div class="font-medium whitespace-nowrap">${
+                cell.getData().category
+              }</div>
+              </div>`
+            }
+          },
+          {
+            title: '',
+            minWidth: 200,
+            field: 'actions',
+            responsive: 1,
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            print: true,
+            download: false,
+            formatter() {
+              const a = cash(`<div class="flex lg:justify-center items-center">
+                <a class="flex items-center mr-3" href="javascript:;">
+                  <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Edit
+                </a>
+                <a class="flex items-center text-theme-6" href="javascript:;">
+                  <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                </a>
+              </div>`)
+              cash(a).on('click', function() {
+                // On click actions
+              })
+
+              return a[0]
+            }
+          },
+
+          // For print format
+          {
+            title: 'Role id',
+            field: 'name',
+            visible: false,
+            print: true,
+            download: true
+          },
+          {
+            title: 'Role name',
+            field: 'category',
+            visible: false,
+            print: true,
+            download: true
+          },
+          {
+            title: 'Role description',
+            field: 'remaining_stock',
+            visible: false,
+            print: true,
+            download: true
+          },
+          {
+            title: 'Role color',
+            field: 'status',
+            visible: false,
+            print: true,
+            download: true,
+            formatterPrint(cell) {
+              return cell.getValue() ? 'Active' : 'Inactive'
+            }
+          },
+          {
+            title: 'Created at',
+            field: 'status',
+            visible: false,
+            print: true,
+            download: true,
+            formatterPrint(cell) {
+              return cell.getValue() ? 'Active' : 'Inactive'
+            }
+          },
+          {
+            title: 'Updated at',
+            field: 'status',
+            visible: false,
+            print: true,
+            download: true,
+            formatterPrint(cell) {
+              return cell.getValue() ? 'Active' : 'Inactive'
+            }
+          }
+        ],
+        renderComplete() {
+          feather.replace({
+            'stroke-width': 1.5
+          })
+        }
+      })
+    }
+
+    // Redraw table onresize
+    const reInitOnResizeWindow = () => {
+      window.addEventListener('resize', () => {
+        tabulator.value.redraw()
+        feather.replace({
+          'stroke-width': 1.5
+        })
+      })
+    }
+
+    // Filter function
+    const onFilter = () => {
+      tabulator.value.setFilter(filter.field, filter.type, filter.value)
+    }
+
+    // On reset filter
+    const onResetFilter = () => {
+      filter.field = 'id'
+      filter.type = 'like'
+      filter.value = ''
+      onFilter()
+    }
+
+    // Export
+    const onExportCsv = () => {
+      tabulator.value.download('csv', 'data.csv')
+    }
+
+    const onExportJson = () => {
+      tabulator.value.download('json', 'data.json')
+    }
+
+    const onExportXlsx = () => {
+      const win = window
+      win.XLSX = xlsx
+      tabulator.value.download('xlsx', 'data.xlsx', {
+        sheetName: 'Products'
+      })
+    }
+
+    const onExportHtml = () => {
+      tabulator.value.download('html', 'data.html', {
+        style: true
+      })
+    }
+
+    // Print
+    const onPrint = () => {
+      tabulator.value.print()
+    }
+
+    onMounted(() => {
+      reInitOnResizeWindow()
+      initTabulator()
+    })
 
     return {
-      select
+      tableRef,
+      filter,
+      onFilter,
+      onResetFilter,
+      onExportCsv,
+      onExportJson,
+      onExportXlsx,
+      onExportHtml,
+      onPrint
     }
   }
 })

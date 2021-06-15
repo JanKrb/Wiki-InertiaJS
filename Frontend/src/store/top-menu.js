@@ -42,6 +42,33 @@ const state = () => {
             title: 'Databases'
           }
         ]
+      },
+      {
+        icon: 'SlidersIcon',
+        pageName: 'dashboard',
+        title: 'Administration',
+        subMenu: [
+          {
+            icon: 'ShieldIcon',
+            pageName: 'dashboard',
+            title: 'Roles'
+          },
+          {
+            icon: 'KeyIcon',
+            pageName: 'dashboard',
+            title: 'Permissions'
+          },
+          {
+            icon: 'UsersIcon',
+            pageName: 'dashboard',
+            title: 'Accounts'
+          },
+          {
+            icon: 'SlashIcon',
+            pageName: 'dashboard',
+            title: 'Bans'
+          }
+        ]
       }
     ]
   }
