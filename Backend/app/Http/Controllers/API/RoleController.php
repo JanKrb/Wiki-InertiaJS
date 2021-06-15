@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class RoleController extends BaseController
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        $roles = Role::all();
-        return $this->sendResponse(RoleResource::collection($roles), 'Roles retrieved successfully');
+        return [
+            'success' => true,
+            'message' => 'Roles retrieved successfully',
+            'data' => Role::paginate(15)->toArray()
+        ];
     }
 
     public function store(Request $request): JsonResponse
