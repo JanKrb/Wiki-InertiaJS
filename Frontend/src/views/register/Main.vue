@@ -157,6 +157,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       if (this.password === this.password_confirmation && this.password.length > 0) {
+        const loader = this.$loading.show()
         axios.post('http://127.0.0.1:8000/api/auth/register', {
           name: this.name,
           email: this.email,
@@ -167,6 +168,7 @@ export default defineComponent({
             localStorage.setItem('user', JSON.stringify(response.data.data.user))
             localStorage.setItem('token', response.data.data.token)
             if (localStorage.getItem('token') != null) {
+              loader.hide()
               this.$router.push({ name: 'dashboard' })
             }
           })

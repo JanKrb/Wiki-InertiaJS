@@ -140,6 +140,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       if (this.password.length > 0) {
+        const loader = this.$loading.show()
         axios.post('http://127.0.0.1:8000/api/auth/login', {
           email: this.email,
           password: this.password
@@ -150,7 +151,8 @@ export default defineComponent({
             localStorage.setItem('token', response.data.data.token)
             if (localStorage.getItem('token') != null) {
               axios.defaults.headers.common['Content-Type'] = 'application/json'
-              axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('token')
+              axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.data.token
+              loader.hide()
               this.$router.push({ name: 'dashboard' })
             }
           })
