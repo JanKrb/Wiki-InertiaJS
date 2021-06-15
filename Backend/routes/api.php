@@ -5,6 +5,7 @@ use App\Http\Controllers\API\BadgeController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
+use App\Http\Controllers\API\UserBadgesController;
 use App\Http\Controllers\API\UserController;
 use Orion\Facades\Orion;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +71,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::put('badges/{badge}', [BadgeController::class, 'update'])->name('badges.update');
     Route::delete('badges/{badge}', [BadgeController::class, 'destroy'])->name('badges.destroy');
     Route::get('badges/{badge}', [BadgeController::class, 'show'])->name('badges.show');
+
+    Route::get('users/{user}/badges', [UserBadgesController::class, 'index'])->name('users.badges.index');
+    Route::post('users/{user}/badges', [UserBadgesController::class, 'store'])->name('users.badges.store');
+    Route::get('users/{user}/badges/{badge}', [UserBadgesController::class, 'show'])->name('users.badges.show');
+    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'destroy'])->name('users.badges.destroy');
 });
 
 // Debugging
