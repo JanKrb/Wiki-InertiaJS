@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\OrionController;
+use App\Http\Controllers\BaseController;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-            return (new OrionController)->sendError('Unauthenticated.', [], 401);
+            return (new BaseController())->sendError('Unauthenticated.', [], 401);
         }
 
         return redirect()->guest(route('login'));
