@@ -164,10 +164,10 @@ export default defineComponent({
           password_confirmation: this.password_confirmation
         })
           .then(response => {
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user', JSON.stringify(response.data.data.user))
+            localStorage.setItem('token', response.data.data.token)
             if (localStorage.getItem('token') != null) {
-              this.$router.push({ name: 'top-menu-dashboard-overview-2' })
+              this.$router.push({ name: 'dashboard' })
             }
           })
           .catch(error => {

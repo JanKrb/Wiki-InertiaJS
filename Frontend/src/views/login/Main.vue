@@ -145,13 +145,13 @@ export default defineComponent({
           password: this.password
         })
           .then(response => {
-            console.log(response.data)
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            localStorage.setItem('token', response.data.token)
+            console.log(response)
+            localStorage.setItem('user', JSON.stringify(response.data.data.user))
+            localStorage.setItem('token', response.data.data.token)
             if (localStorage.getItem('token') != null) {
               axios.defaults.headers.common['Content-Type'] = 'application/json'
               axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('token')
-              this.$router.push({ name: 'top-menu-dashboard-overview-2' })
+              this.$router.push({ name: 'dashboard' })
             }
           })
           .catch(error => {

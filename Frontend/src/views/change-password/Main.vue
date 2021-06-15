@@ -17,9 +17,9 @@
             </div>
             <div class="ml-4 mr-auto">
               <div class="font-medium text-base">
-                {{ $f()[0].users[0].name }}
+                {{ user.name }}
               </div>
-              <div class="text-gray-600">{{ $f()[0].jobs[0] }}</div>
+              <div class="text-gray-600">{{ user.email }}</div>
             </div>
           </div>
           <div class="p-5 border-t border-gray-200 dark:border-dark-5">
@@ -55,7 +55,7 @@
           </div>
           <div class="p-5">
             <form @submit.prevent="handleSubmit">
-              <div>
+              <div class="mt-3">
                 <label for="change-password-form-1" class="form-label">
                   Old Password
                 </label>
@@ -63,7 +63,7 @@
                   id="change-password-form-1"
                   type="password"
                   class="form-control"
-                  placeholder="Input text"
+                  placeholder="Input old password"
                   v-model="old_password"
                 />
               </div>
@@ -75,7 +75,7 @@
                   id="change-password-form-2"
                   type="password"
                   class="form-control"
-                  placeholder="Input text"
+                  placeholder="Input new password"
                   v-model="password"
                 />
               </div>
@@ -87,7 +87,7 @@
                   id="change-password-form-3"
                   type="password"
                   class="form-control"
-                  placeholder="Input text"
+                  placeholder="Input new password again"
                   v-model="password_confirmation"
                 />
               </div>
@@ -110,16 +110,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   data() {
     return {
-      email: '',
+      email: JSON.parse(localStorage.getItem('user')).email,
       old_password: '',
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      user: {}
     }
+  },
+  mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
       axios.post('http://127.0.0.1:8000/api/auth/password/change', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         email: this.email,
         old_password: this.old_password,
         password: this.password,
