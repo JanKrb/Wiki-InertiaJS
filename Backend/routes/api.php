@@ -56,11 +56,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
 
     Route::get('roles/{role}/permissions', [RolesPermissionsController::class, 'index'])->name('roles.permissions.index');
-
-    // TODO: Perm Routes below
     Route::post('roles/{role}/permissions', [RolesPermissionsController::class, 'store'])->name('roles.permissions.store');
     Route::get('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'show'])->name('roles.permissions.show');
-    Route::patch('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'update'])->name('roles.permissions.update');
+    Route::get('roles/{role}/permissions/{permission_name}/name', [RolesPermissionsController::class, 'show_name'])->name('roles.permissions.showName');
     Route::delete('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'destroy'])->name('roles.permissions.destroy');
 });
 
