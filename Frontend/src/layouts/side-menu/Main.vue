@@ -7,7 +7,7 @@
       <nav class="side-nav">
         <!-- BEGIN: Logo -->
         <router-link
-          :to="{ name: 'side-menu-dashboard-overview-1' }"
+          :to="{ name: 'dashboard' }"
           tag="a"
           class="intro-x flex items-center pl-5 pt-4"
         >
@@ -171,7 +171,7 @@ export default defineComponent({
     const store = useStore()
     const formattedMenu = ref([])
     const sideMenu = computed(() =>
-      nestedMenu(store.state.sideMenu.menu, route)
+      nestedMenu(store.state.topMenu.menu, route)
     )
 
     watch(

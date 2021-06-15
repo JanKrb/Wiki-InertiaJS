@@ -9,7 +9,7 @@
       <div class="top-bar-boxed flex items-center">
         <!-- BEGIN: Logo -->
         <router-link
-          :to="{ name: 'top-menu-dashboard-overview-2' }"
+          :to="{ name: 'dashboard' }"
           tag="a"
           class="-intro-x hidden md:flex"
         >
@@ -189,9 +189,9 @@
               class="dropdown-menu__content box bg-theme-26 dark:bg-dark-6 text-white"
             >
               <div class="p-4 border-b border-theme-27 dark:border-dark-3">
-                <div class="font-medium">{{ $f()[0].users[0].name }}</div>
+                <div class="font-medium">{{ user.name }}</div>
                 <div class="text-xs text-theme-41 mt-0.5 dark:text-gray-600">
-                  {{ $f()[0].jobs[0] }}
+                  {{ user.email }}
                 </div>
               </div>
               <div class="p-2">
@@ -206,16 +206,12 @@
                   </a>
                 </router-link>
                 <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                  <HelpCircleIcon class="w-4 h-4 mr-2"/> Help
+                  <HelpCircleIcon class="w-4 h-4 mr-2"/> Help {{ token }}
                 </a>
               </div>
               <div class="p-2 border-t border-theme-27 dark:border-dark-3">
-                <a
-                  href=""
-                  class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md"
-                >
-                  <LogOutIcon class="w-4 h-4 mr-2" />
-                  Logout
+                <a v-on:click="logout" href="#" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
+                  <LogOutIcon class="w-4 h-4 mr-2"/>Logout
                 </a>
               </div>
             </div>
@@ -322,6 +318,7 @@ import { helper as $h } from '@/utils/helper'
 import TopBar from '@/components/top-bar/Main.vue'
 import MobileMenu from '@/components/mobile-menu/Main.vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
+import axios from 'axios'
 import {
   searchDropdown,
   showSearchDropdown,
@@ -334,6 +331,29 @@ export default defineComponent({
     TopBar,
     MobileMenu,
     DarkModeSwitcher
+  },
+  data() {
+    return {
+      user: {},
+      token: ''
+    }
+  },
+  mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
+    this.token = localStorage.getItem('token')
+  },
+  methods: {
+    logout() {
+      axios.get('http://127.0.0.1:8000/api/auth/logout')
+        .then(response => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          this.$router.push({ name: 'login' })
+        })
+        .catch(error => {
+          console.error(error.message)
+        })
+    }
   },
   setup() {
     const route = useRoute()

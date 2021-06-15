@@ -3,42 +3,42 @@ const state = () => {
     menu: [
       {
         icon: 'HomeIcon',
-        pageName: 'top-menu-dashboard-overview-2',
+        pageName: 'dashboard',
         title: 'Dashboard'
       },
       {
         icon: 'LayersIcon',
-        pageName: 'top-menu-dashboard-overview-2',
+        pageName: 'dashboard',
         title: 'Subjects',
         subMenu: [
           {
             icon: 'DivideIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'Math'
           },
           {
             icon: 'FileTextIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'German'
           },
           {
             icon: 'ServerIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'OS & Networking'
           },
           {
             icon: 'TrendingDownIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'Math'
           },
           {
             icon: 'HardDriveIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'Computer technic'
           },
           {
             icon: 'DatabaseIcon',
-            pageName: 'top-menu-dashboard-overview-2',
+            pageName: 'dashboard',
             title: 'Databases'
           }
         ]
