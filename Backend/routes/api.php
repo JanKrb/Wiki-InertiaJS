@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
 use App\Http\Controllers\API\UserController;
@@ -48,17 +49,19 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
 
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::post('permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::put('permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    Route::get('permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
+
     Route::get('roles/{role}/permissions', [RolesPermissionsController::class, 'index'])->name('roles.permissions.index');
+
+    // TODO: Perm Routes below
     Route::post('roles/{role}/permissions', [RolesPermissionsController::class, 'store'])->name('roles.permissions.store');
-    Route::post('roles/{role}/permissions/attach', [RolesPermissionsController::class, 'attach'])->name('roles.permissions.attach');
-    Route::delete('roles/{role}/permissions/detach', [RolesPermissionsController::class, 'detach'])->name('roles.permissions.detach');
-    Route::post('roles/{role}/permissions/search', [RolesPermissionsController::class, 'search'])->name('sroles.permissions.earch');
-    Route::patch('roles/{role}/permissions/sync', [RolesPermissionsController::class, 'sync'])->name('roles.permissions.sync');
-    Route::get('roles/{role}/permissions/toggle', [RolesPermissionsController::class, 'toggle'])->name('roles.permissions.toggle');
-    Route::get('roles/{role}/permissions/{permission?}', [RolesPermissionsController::class, 'show'])->name('roles.permissions.show');
-    Route::patch('roles/{role}/permissions/{permission?}', [RolesPermissionsController::class, 'update'])->name('roles.permissions.update');
-    Route::delete('roles/{role}/permissions/{permission?}', [RolesPermissionsController::class, 'destroy'])->name('roles.permissions.destroy');
-    Route::get('roles/{role}/permissions/{permission?}/privot', [RolesPermissionsController::class, 'updatePivot'])->name('roles.permissions.updatePivot');
+    Route::get('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'show'])->name('roles.permissions.show');
+    Route::patch('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'update'])->name('roles.permissions.update');
+    Route::delete('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'destroy'])->name('roles.permissions.destroy');
 });
 
 Route::get('middleware_test', ['middleware' => ['auth:api', 'permission:test_permission'], function () {
