@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class AuthController extends BaseController
 {
@@ -219,5 +220,29 @@ class AuthController extends BaseController
         $user->save();
 
         return $this->sendResponse([], 'Email confirmed successfully');
+    }
+
+    public function update_details(Request $request, $account_id) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:users,name,' . $account_id,
+            'pre_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $account_id,
+            'profile_picture' => ''
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error', ['errors' => $validator->errors()]);
+        }
+
+        $account = User::find($account_id);
+
+        if (is_null($account)) {
+            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+        }
+
+        $account->update($request->all());
+
+        return $this->sendResponse($account, 'Successfully updated user details.');
     }
 }
