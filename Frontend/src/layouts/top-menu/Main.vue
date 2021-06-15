@@ -4,12 +4,12 @@
     <MobileMenu />
     <!-- BEGIN: Top Bar -->
     <div
-      class="border-b border-theme-29 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-10"
+      class="border-b border-theme-29 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2"
     >
       <div class="top-bar-boxed flex items-center">
         <!-- BEGIN: Logo -->
         <router-link
-          :to="{ name: 'top-menu-dashboard-overview-1' }"
+          :to="{ name: 'top-menu-dashboard-overview-2' }"
           tag="a"
           class="-intro-x hidden md:flex"
         >
@@ -195,12 +195,12 @@
                 </div>
               </div>
               <div class="p-2">
-                <router-link :to="{ name: 'top-menu-update-profile' }">
+                <router-link :to="{ name: 'profile.personal' }">
                   <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <UserIcon class="w-4 h-4 mr-2" /> Profile
                   </a>
                 </router-link>
-                <router-link :to="{ name: 'top-menu-change-password' }">
+                <router-link :to="{ name: 'profile.password' }">
                   <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <LockIcon class="w-4 h-4 mr-2" /> Change Password
                   </a>

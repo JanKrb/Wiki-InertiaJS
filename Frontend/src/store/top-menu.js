@@ -8,37 +8,37 @@ const state = () => {
       },
       {
         icon: 'LayersIcon',
-        pageName: 'top-menu-widgets',
+        pageName: 'top-menu-dashboard-overview-2',
         title: 'Subjects',
         subMenu: [
           {
             icon: 'DivideIcon',
-            pageName: 'top-menu-chart',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'Math'
           },
           {
             icon: 'FileTextIcon',
-            pageName: 'top-menu-chart',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'German'
           },
           {
             icon: 'ServerIcon',
-            pageName: 'top-menu-chart',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'OS & Networking'
           },
           {
             icon: 'TrendingDownIcon',
-            pageName: 'top-menu-chart',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'Math'
           },
           {
             icon: 'HardDriveIcon',
-            pageName: 'top-menu-slider',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'Computer technic'
           },
           {
             icon: 'DatabaseIcon',
-            pageName: 'top-menu-image-zoom',
+            pageName: 'top-menu-dashboard-overview-2',
             title: 'Databases'
           }
         ]

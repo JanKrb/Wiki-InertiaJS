@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-12 gap-6">
-    <div class="col-span-12 xxl:col-span-9">
-      <div class="grid grid-cols-12 gap-6">
+  <div class="grid grid-cols-12 gap-5">
+    <div class="col-span-12 xxl:col-span-10">
+      <div class="grid grid-cols-12 gap-5">
         <!-- BEGIN: Notification -->
         <div class="col-span-12 mt-6 -mb-6 intro-y">
           <div
@@ -26,7 +26,7 @@
         <div
           v-for="(faker, fakerKey) in $_.take($f(), 6)"
           :key="fakerKey"
-          class="intro-y blog col-span-12 md:col-span-6 box"
+          class="intro-y blog col-span-12 md:col-span-4 box"
         >
           <div class="blog__preview image-fit">
             <img
@@ -52,12 +52,12 @@
                   class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
                   aria-expanded="false"
                 >
-                  <MoreVerticalIcon class="w-4 h-4 text-white" />
+                  <MoreVerticalIcon class="w-4 h-4 text-white"/>
                 </a>
                 <div class="dropdown-menu w-40">
                   <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
                     <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                      <Edit2Icon class="w-4 h-4 mr-2" /> Edit
+                      <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
                   </div>
                 </div>
@@ -104,11 +104,13 @@
         <!-- END: Blog Layout -->
       </div>
     </div>
-    <div class="col-span-12 xxl:col-span-3">
+    <div class="col-span-12 xxl:col-span-2">
       <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
-        <div class="xxl:pl-6 grid grid-cols-12 gap-6">
+        <div class="xxl:pl-6 grid grid-cols-12 gap-5">
           <!-- BEGIN: Important Notes -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-12 mt-3 xxl:mt-8">
+          <div
+            class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3"
+          >
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-auto">
                 Important Notes
@@ -206,12 +208,15 @@
           <!-- END: Important Notes -->
           <!-- BEGIN: General Report -->
           <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 xl:col-start-1 xl:row-start-2 xxl:col-start-auto xxl:row-start-auto mt-3">
+            <div class="intro-x flex items-center h-10">
+              <h2 class="text-lg font-medium truncate mr-5">Overview</h2>
+            </div>
             <div class="report-box-2 intro-y mt-12 sm:mt-5">
               <div class="box sm:flex">
                 <div class="px-8 py-12 flex flex-col justify-center flex-1">
                   <FileTextIcon class="w-10 h-10 text-theme-12" />
                   <div class="relative text-3xl font-bold mt-12">
-                    4 Posts
+                    4 Postings
                   </div>
                   <div class="mt-4 text-gray-600 dark:text-gray-600">
                     These are the Wikiposts in all Categories.
@@ -227,155 +232,46 @@
             </div>
           </div>
           <!-- END: General Report -->
-          <!-- BEGIN: Recent Activities -->
+          <!-- BEGIN: Transactions -->
           <div
-            class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3"
+            class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8"
           >
             <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">
-                Recent Activities
-              </h2>
+              <h2 class="text-lg font-medium truncate mr-5">Recent Authors</h2>
+            </div>
+            <div class="mt-5">
+              <div
+                v-for="(faker, fakerKey) in $_.take($f(), 5)"
+                :key="fakerKey"
+                class="intro-x"
+              >
+                <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                  <div
+                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
+                  >
+                    <img
+                      alt="Icewall Tailwind HTML Admin Template"
+                      :src="require(`@/assets/images/${faker.photos[0]}`)"
+                    />
+                  </div>
+                  <div class="ml-4 mr-auto">
+                    <div class="font-medium">
+                      {{ faker.users[0].name }}
+                    </div>
+                    <div class="text-gray-600 text-xs mt-0.5">
+                      {{ faker.dates[0] }}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <a
                 href=""
-                class="ml-auto text-theme-1 dark:text-theme-10 truncate"
-              >Show More</a
+                class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600"
+              >View More</a
               >
             </div>
-            <div class="report-timeline mt-5 relative">
-              <div class="intro-x relative flex items-center mb-3">
-                <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
-                    <img
-                      alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${$f()[9].photos[0]}`)"
-                    />
-                  </div>
-                </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
-                  <div class="flex items-center">
-                    <div class="font-medium">
-                      {{ $f()[9].users[0].name }}
-                    </div>
-                    <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
-                  </div>
-                  <div class="text-gray-600 mt-1">is now an Admin</div>
-                </div>
-              </div>
-              <div class="intro-x relative flex items-center mb-3">
-                <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
-                    <img
-                      alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${$f()[8].photos[0]}`)"
-                    />
-                  </div>
-                </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
-                  <div class="flex items-center">
-                    <div class="font-medium">
-                      {{ $f()[8].users[0].name }}
-                    </div>
-                    <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
-                  </div>
-                  <div class="text-gray-600">
-                    <div class="mt-1">Added 3 new posts</div>
-                    <div class="flex mt-2">
-                      <Tippy
-                        tag="div"
-                        class="w-8 h-8 image-fit mr-1 zoom-in"
-                        :content="$f()[0].products[0].name"
-                      >
-                        <img
-                          alt="Icewall Tailwind HTML Admin Template"
-                          class="rounded-md border border-white"
-                          :src="require(`@/assets/images/${$f()[8].images[0]}`)"
-                        />
-                      </Tippy>
-                      <Tippy
-                        tag="div"
-                        class="w-8 h-8 image-fit mr-1 zoom-in"
-                        :content="$f()[1].products[0].name"
-                      >
-                        <img
-                          alt="Icewall Tailwind HTML Admin Template"
-                          class="rounded-md border border-white"
-                          :src="require(`@/assets/images/${$f()[8].images[1]}`)"
-                        />
-                      </Tippy>
-                      <Tippy
-                        tag="div"
-                        class="w-8 h-8 image-fit mr-1 zoom-in"
-                        :content="$f()[2].products[0].name"
-                      >
-                        <img
-                          alt="Icewall Tailwind HTML Admin Template"
-                          class="rounded-md border border-white"
-                          :src="require(`@/assets/images/${$f()[8].images[2]}`)"
-                        />
-                      </Tippy>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="intro-x text-gray-500 text-xs text-center my-4">
-                12 November
-              </div>
-              <div class="intro-x relative flex items-center mb-3">
-                <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
-                    <img
-                      alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${$f()[7].photos[0]}`)"
-                    />
-                  </div>
-                </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
-                  <div class="flex items-center">
-                    <div class="font-medium">
-                      {{ $f()[7].users[0].name }}
-                    </div>
-                    <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
-                  </div>
-                  <div class="text-gray-600 mt-1">
-                    Has edited
-                    <a class="text-theme-1 dark:text-theme-10" href="">{{
-                        $f()[7].news[0].title
-                      }}</a>
-                  </div>
-                </div>
-              </div>
-              <div class="intro-x relative flex items-center mb-3">
-                <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
-                    <img
-                      alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${$f()[6].photos[0]}`)"
-                    />
-                  </div>
-                </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
-                  <div class="flex items-center">
-                    <div class="font-medium">
-                      {{ $f()[6].users[0].name }}
-                    </div>
-                    <div class="text-xs text-gray-500 ml-auto">07:00 PM</div>
-                  </div>
-                  <div class="text-gray-600 mt-1">
-                    Has deleted a post
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-          <!-- END: Recent Activities -->
+          <!-- END: Transactions -->
         </div>
       </div>
     </div>

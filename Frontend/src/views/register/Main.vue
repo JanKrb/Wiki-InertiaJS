@@ -167,7 +167,7 @@ export default defineComponent({
             localStorage.setItem('user', JSON.stringify(response.data.user))
             localStorage.setItem('token', response.data.token)
             if (localStorage.getItem('token') != null) {
-              this.$router.push({ name: 'side-menu-dashboard-overview-1' })
+              this.$router.push({ name: 'top-menu-dashboard-overview-2' })
             }
           })
           .catch(error => {
