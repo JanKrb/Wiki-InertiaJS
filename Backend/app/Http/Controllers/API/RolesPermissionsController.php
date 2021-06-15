@@ -48,7 +48,7 @@ class RolesPermissionsController extends BaseController
             return $this->sendError('Invalid permission', ['permission_name' => $input['name']]);
         }
 
-        $role->permissions->push($permission);
+        $role->permissions()->save($permission); // [15.06.2021] If causes errors, change to: $role->permissions->push($permission);
 
         return $this->sendResponse($role->permissions, 'Successfully added permission to role');
     }
@@ -60,13 +60,17 @@ class RolesPermissionsController extends BaseController
             return  $this->sendError('Invalid role id.', ['role_id' => $role_id]);
         }
 
-        $permission = Permission::find($permission_id);
+        foreach ($role->permissions as $permission) {
+            if ($permission->id == $permission_id) {
+                $found_permission = Permission::find($permission_id);
 
-        if (is_null($permission)) {
-            return  $this->sendError('Invalid permission id.', ['permission_id' => $permission_id]);
+                if (!is_null($found_permission)) {
+                    return $this->sendResponse($found_permission, 'Successfully fetched permission of role');
+                }
+            }
         }
 
-        return $this->sendResponse($permission, 'Successfully fetched permission of role');
+        return $this->sendError('Permission does not belong to role', ['role_id' => $role_id, 'permission_id' => $permission_id]);
     }
 
     public function show_name($role_id, $permission_name) {
@@ -92,20 +96,17 @@ class RolesPermissionsController extends BaseController
             return  $this->sendError('Invalid role id.', ['role_id' => $role_id]);
         }
 
-        $permission = Permission::find($permission_id);
+        foreach ($role->permission as $permission) {
+            if ($permission->id == $permission_id) {
+                $found_permission = Permission::find($permission_id);
 
-        if (is_null($permission)) {
-            return $this->sendError('Invalid permission', ['permission_name' => $permission_id]);
-        }
-
-        foreach ($role->permissions as $test_permission) {
-            if ($test_permission->id === $permission->id) {
-                $test_permission->delete($permission);
-
-                return $this->sendResponse($permission, 'Successfully removed permission by name from role');
+                if (!is_null($found_permission)) {
+                    $found_permission->delete();
+                    return $this->sendResponse([], 'Permission has been removed from role');
+                }
             }
         }
 
-        return $this->sendError('Role has no permission with this name', ['role_id' => $role->id, 'permission_id' => $permission_id]);
+        return $this->sendError('Role has no permission with this id', ['role_id' => $role->id, 'permission_id' => $permission_id]);
     }
 }
