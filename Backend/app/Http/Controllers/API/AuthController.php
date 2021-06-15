@@ -43,7 +43,7 @@ class AuthController extends BaseController
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $success['token'] =  $user->createToken('PersonalAccessToken')-> accessToken;
-            $success['name'] =  $user->name;
+            $success['user'] =  $user;
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {
@@ -79,7 +79,7 @@ class AuthController extends BaseController
         $user->sendEmailVerificationNotification();
 
         $success['token'] =  $user->createToken('PersonalAccessToken')->accessToken;
-        $success['name'] =  $user->name;
+        $success['user'] =  $user;
 
         return $this->sendResponse($success, 'User register successfully.');
     }
