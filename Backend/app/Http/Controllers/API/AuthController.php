@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Activity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
@@ -46,10 +47,21 @@ class AuthController extends BaseController
             $success['token'] =  $user->createToken('PersonalAccessToken')-> accessToken;
             $success['user'] =  $user;
 
+            $now = now();
+            $user->sendActivity('Successful login.', `${$user->name} [${$user->id}] logged in on ${$now}`, $user);
+
             return $this->sendResponse($success, 'User login successfully.');
-        } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Login failed.']);
         }
+
+        Activity::create([
+            'issuer_type' => 0, // 0 => Unknown/Undefined
+            'issuer_id' => 1,
+            'short' => 'Failed login.',
+            'details' => `${$request->ip()} failed to log in into ${$credentials['name']} / ${$credentials['email']}`,
+            'attributes' => json_encode($credentials)
+        ]);
+
+        return $this->sendError('Unauthorised.', ['error' => 'Login failed.']);
     }
 
     /**
@@ -77,9 +89,14 @@ class AuthController extends BaseController
         $input['email_verification_code'] = Str::random(40);
         $user = User::create($input);
 
+        $user->sendActivity('User Account has been created via registering.', '', $user);
         $user->sendEmailVerificationNotification();
+        $user->sendActivity('Email-Verification-Email has been sent.', 'A mail to verify the email-adress has been sent to ' . $user->email, $user);
+
 
         $success['token'] =  $user->createToken('PersonalAccessToken')->accessToken;
+        $user->sendActivity('Session token has been created.', 'A session token for login and api requests has been created and passed.');
+
         $success['user'] =  $user;
 
         return $this->sendResponse($success, 'User register successfully.');
@@ -93,6 +110,18 @@ class AuthController extends BaseController
      */
     public function user(Request $request): JsonResponse
     {
+        if (Auth::user() == null) {
+            Activity::create([
+                'issuer_type' => 0, // 0 => Unknown/Undefined
+                'issuer_id' => 1,
+                'short' => 'Tried to fetch unauthenticated user',
+                'details' => `IP ${$request->ip()} tried to fetch his user, but is unauthenticated.`,
+                'attributes' => json_encode($request)
+            ]);
+        } else {
+            Auth::user()->sendActivity('Fetched user');
+        }
+
         return $this->sendResponse([
             'user' => Auth::user()
         ], 'User returned successfully.');
@@ -106,6 +135,7 @@ class AuthController extends BaseController
      */
     public function logout(Request $request): JsonResponse
     {
+        Auth::user()->sendActivity('Logged out', 'User has logged out and token has been revoked.');
         Auth::user()->token()->revoke();
         return $this->sendResponse([], 'User Logged Out');
     }
@@ -127,11 +157,14 @@ class AuthController extends BaseController
         }
 
         $input = $request->all();
-        if (!User::where('email', $input['email'])->exists()) {
+        $user = User::where('email', $input['email']);
+
+        if (!$user->exists()) {
             return $this->sendError('This email does not belong to any users', ['email' => $input['email']]);
         }
 
         $response = Password::sendResetLink($input);
+        $user->sendActivity('Password-Reset-Email has been sent.', 'A mail to reset the password has been sent to ' . $user->email, $user);
 
         $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : 'Whoops... Something went wrong...';
 
@@ -157,6 +190,8 @@ class AuthController extends BaseController
         }
 
         $response = Password::reset($request->all(), function ($user, $password) {
+            $user->sendActivity('Password-Reset has been performed', 'The password has been changed through a reset-email.');
+
             $user->password = Hash::make($password);
             $user->save();
         });
@@ -190,6 +225,7 @@ class AuthController extends BaseController
 
         $user->password = Hash::make($request['password']);
         $user->save();
+        $user->sendActivity('Password-Reset has been performed', 'The password has been changed through the profile or an admin.');
 
         return $this->sendResponse([], 'Password changed successfully');
     }
@@ -218,6 +254,7 @@ class AuthController extends BaseController
         $user->email_verification_code = '';
         $user->email_verified_at = now();
         $user->save();
+        $user->sendActivity('Email-Verification passed', 'The email has been verified trough the email-verification.');
 
         return $this->sendResponse([], 'Email confirmed successfully');
     }
@@ -242,6 +279,7 @@ class AuthController extends BaseController
         }
 
         $account->update($request->all());
+        $account->sendActivity('Account details has been changed', 'The profile details has been changed through the profile or an admin');
 
         return $this->sendResponse($account, 'Successfully updated user details.');
     }

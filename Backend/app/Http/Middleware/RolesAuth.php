@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Activity;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,14 @@ class RolesAuth
                     'data'    => $permission,
                     'message' => "Missing permission to access.",
                 ];
+
+                Activity::create([
+                    'issuer_type' => 0, // 0 => Unknown/Undefined
+                    'issuer_id' => 1,
+                    'short' => 'Unauthenticated access',
+                    'details' => $request->user()->name . " [" . $request->user()->id . "] tried to access on " . url()->full() . " without permissions.",
+                    'attributes' => $request->json()
+                ]);
 
                 return response()->json($response, 401);
             }

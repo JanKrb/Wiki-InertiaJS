@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\UserSaving;
 use App\Notifications\EmailVerificationNotification;
 use App\Notifications\MailResetPasswordToken;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -52,6 +53,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Activities
+     */
+    public function sendActivity($short, $details = '', $attributes = []) {
+        Activity::create([
+            'issuer_type' => 1, // 1 => User
+            'issuer_id' => $this->id,
+            'short' => $short,
+            'details' => $details,
+            'attributes' => json_encode($attributes)
+        ]);
+    }
 
     /**
      * Override reset password notification
