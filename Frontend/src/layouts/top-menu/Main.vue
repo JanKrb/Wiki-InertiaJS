@@ -206,7 +206,7 @@
                   </a>
                 </router-link>
                 <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                  <HelpCircleIcon class="w-4 h-4 mr-2"/> Help {{ token }}
+                  <HelpCircleIcon class="w-4 h-4 mr-2"/> Help
                 </a>
               </div>
               <div class="p-2 border-t border-theme-27 dark:border-dark-3">
@@ -259,7 +259,7 @@
                 @click="linkTo(subMenu, router, $event)"
               >
                 <div class="top-menu__icon">
-                  <ActivityIcon />
+                  <component :is="subMenu.icon" />
                 </div>
                 <div class="top-menu__title">
                   {{ subMenu.title }}
@@ -334,13 +334,11 @@ export default defineComponent({
   },
   data() {
     return {
-      user: {},
-      token: ''
+      user: {}
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
-    this.token = localStorage.getItem('token')
   },
   methods: {
     logout() {
