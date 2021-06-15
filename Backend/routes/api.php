@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BadgeController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
@@ -26,6 +27,7 @@ Route::get('/', function () {
     ], 404)->header('Content-Type', 'application/json');
 });
 
+// Auth System
 Route::group(['prefix' => 'auth'], function() {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -40,9 +42,8 @@ Route::group(['prefix' => 'auth'], function() {
     });
 });
 
+// Roles & Permissions System
 Route::group(['middleware' => 'auth:api'], function() {
-    // TODO: Add permission middlewares
-
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
     Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
     Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
@@ -62,6 +63,16 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'destroy'])->name('roles.permissions.destroy');
 });
 
+// Badges System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('badges', [BadgeController::class, 'index'])->name('badges.index');
+    Route::post('badges', [BadgeController::class, 'store'])->name('badges.store');
+    Route::put('badges/{badge}', [BadgeController::class, 'update'])->name('badges.update');
+    Route::delete('badges/{badge}', [BadgeController::class, 'destroy'])->name('badges.destroy');
+    Route::get('badges/{badge}', [BadgeController::class, 'show'])->name('badges.show');
+});
+
+// Debugging
 Route::get('middleware_test', ['middleware' => ['auth:api', 'permission:test_permission'], function () {
     $response = [
         'success' => true,

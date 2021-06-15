@@ -31,4 +31,12 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class, 'role_permissions');
     }
+
+    /**
+     * Badge relation
+     */
+    public function badges(): HasMany
+    {
+        return $this->hasMany(Badge::class);
+    }
 }
