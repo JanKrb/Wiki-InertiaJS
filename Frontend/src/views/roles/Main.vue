@@ -3,9 +3,53 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Wiki Roles</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <button class="btn btn-primary shadow-md mr-2">Add New Role</button>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Role</a>
       </div>
     </div>
+
+    <!-- BEGIN: Modal Content -->
+    <div id="create-role-modal" class="modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <form @submit.prevent="addRole(this.role)">
+          <div class="modal-content">
+            <!-- BEGIN: Modal Header -->
+            <div class="modal-header">
+              <h2 class="font-medium text-base mr-auto">
+                Create a new Role
+              </h2>
+            </div>
+            <!-- END: Modal Header -->
+            <!-- BEGIN: Modal Body -->
+            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+              <div class="col-span-12">
+                <label for="create-role-modal-name" class="form-label">Name</label>
+                <input id="create-role-modal-name" type="text" class="form-control" placeholder="example@gmail.com" v-model="role.name"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-role-modal-description" class="form-label">Description</label>
+                <textarea id="create-role-modal-description" class="form-control" placeholder="example@gmail.com" v-model="role.description"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-role-modal-color" class="form-label">Color</label>
+                <input id="create-role-modal-color" type="color" class="form-control" v-model="role.color"/>
+              </div>
+            </div>
+            <!-- END: Modal Body -->
+            <!-- BEGIN: Modal Footer -->
+            <div class="modal-footer text-right">
+              <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary w-20">
+                Create
+              </button>
+            </div>
+            <!-- END: Modal Footer -->
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- END: Modal Content -->
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
@@ -74,6 +118,11 @@ export default defineComponent({
   data() {
     return {
       roles: [],
+      role: {
+        name: 'New Role',
+        description: null,
+        color_code: '000000'
+      },
       pagination: {}
     }
   },
@@ -106,6 +155,20 @@ export default defineComponent({
         .then(
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         )
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    addRole(role) {
+      axios.post('http://localhost:8000/api/roles', {
+        name: role.name,
+        description: role.description,
+        color_code: role.color_code
+      })
+        .then(response => {
+          console.log(response)
+          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+        })
         .catch(error => {
           console.error(error)
         })
