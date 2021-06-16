@@ -39,4 +39,11 @@ class Role extends Model
     {
         return $this->hasMany(Badge::class);
     }
+
+    /**
+     * User relation
+     */
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -28,4 +28,11 @@ class Permission extends Model
     {
         return $this->belongsToMany(Role::class, 'role_permissions');
     }
+
+    /**
+     * User relation
+     */
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

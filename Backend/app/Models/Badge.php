@@ -44,4 +44,11 @@ class Badge extends Model
     {
         return $this->belongsToMany(User::class, 'user_badges');
     }
+
+    /**
+     * User relation
+     */
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

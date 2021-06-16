@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -107,5 +108,23 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    /**
+     * Creator relations
+     */
+    public function created_permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, 'user_id');
+    }
+
+    public function created_badges(): HasMany
+    {
+        return $this->hasMany(Badge::class, 'user_id');
+    }
+
+    public function created_roles(): HasMany
+    {
+        return $this->hasMany(Role::class, 'user_id');
     }
 }
