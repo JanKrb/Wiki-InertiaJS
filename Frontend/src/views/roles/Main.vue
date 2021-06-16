@@ -6,460 +6,100 @@
         <button class="btn btn-primary shadow-md mr-2">Add New Role</button>
       </div>
     </div>
-    <!-- BEGIN: HTML Table Data -->
-    <div class="intro-y box p-5 mt-5">
-      <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
-        <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto">
-          <div class="sm:flex items-center sm:mr-4">
-            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
-              Field
-            </label>
-            <select
-              id="tabulator-html-filter-field"
-              v-model="filter.field"
-              class="form-select w-full sm:w-32 xxl:w-full mt-2 sm:mt-0 sm:w-auto"
-            >
-              <option value="id">ID</option>
-              <option value="name">Name</option>
-              <option value="color">Color</option>
-            </select>
-          </div>
-          <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
-            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
-              Type
-            </label>
-            <select
-              id="tabulator-html-filter-type"
-              v-model="filter.type"
-              class="form-select w-full mt-2 sm:mt-0 sm:w-auto"
-            >
-              <option value="like" selected>like</option>
-              <option value="=">=</option>
-              <option value="<">&lt;</option>
-              <option value="<=">&lt;=</option>
-              <option value=">">></option>
-              <option value=">=">>=</option>
-              <option value="!=">!=</option>
-            </select>
-          </div>
-          <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
-            <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">
-              Value
-            </label>
-            <input
-              id="tabulator-html-filter-value"
-              v-model="filter.value"
-              type="text"
-              class="form-control sm:w-40 xxl:w-full mt-2 sm:mt-0"
-              placeholder="Search..."
-            />
-          </div>
-          <div class="mt-2 xl:mt-0">
-            <button
-              id="tabulator-html-filter-go"
-              type="button"
-              class="btn btn-primary w-full sm:w-16"
-              @click="onFilter"
-            >
-              Go
-            </button>
-            <button
-              id="tabulator-html-filter-reset"
-              type="button"
-              class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1"
-              @click="onResetFilter"
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-        <div class="flex mt-5 sm:mt-0">
-          <button
-            id="tabulator-print"
-            class="btn btn-outline-secondary w-1/2 sm:w-auto mr-2"
-            @click="onPrint"
-          >
-            <PrinterIcon class="w-4 h-4 mr-2" /> Print
+    <!-- BEGIN: Datatable -->
+    <table class="table mt-5">
+      <thead>
+      <tr class="bg-gray-700 dark:bg-dark-1 text-white">
+        <th class="whitespace-nowrap">#</th>
+        <th class="whitespace-nowrap">Name</th>
+        <th class="whitespace-nowrap">Description</th>
+        <th class="whitespace-nowrap">Color</th>
+        <th class="whitespace-nowrap">Updated at</th>
+        <th class="whitespace-nowrap">Created at</th>
+        <th class="whitespace-nowrap"></th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr v-for="role in this.roles" v-bind:key="role.id">
+          <td class="border-b dark:border-dark-5">{{ role.id }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.name }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.description }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.color_code }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
+          <td class="border-b dark:border-dark-5">
+            <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon><Trash2Icon class="hover:text-blue-700"></Trash2Icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- END: Datatable -->
+    <!-- BEGIN: Datatable Pagination -->
+    <div class="flex flex-col items-center mt-5">
+      <ul class="flex">
+        <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchRoles(pagination.first_page_url)">
+            <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
           </button>
-          <div class="dropdown w-1/2 sm:w-auto">
-            <button
-              class="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto"
-              aria-expanded="false"
-            >
-              <FileTextIcon class="w-4 h-4 mr-2"/> Export
-              <ChevronDownIcon class="w-4 h-4 ml-auto sm:ml-2" />
-            </button>
-            <div class="dropdown-menu w-40">
-              <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                <a
-                  id="tabulator-export-csv"
-                  href="javascript:;"
-                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                  @click="onExportCsv"
-                >
-                  <FileTextIcon class="w-4 h-4 mr-2"/> Export CSV
-                </a>
-                <a
-                  id="tabulator-export-json"
-                  href="javascript:;"
-                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                  @click="onExportJson"
-                >
-                  <FileTextIcon class="w-4 h-4 mr-2"/> Export JSON
-                </a>
-                <a
-                  id="tabulator-export-xlsx"
-                  href="javascript:;"
-                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                  @click="onExportXlsx"
-                >
-                  <FileTextIcon class="w-4 h-4 mr-2"/> Export XLSX
-                </a>
-                <a
-                  id="tabulator-export-html"
-                  href="javascript:;"
-                  class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                  @click="onExportHtml"
-                >
-                  <FileTextIcon class="w-4 h-4 mr-2"/> Export HTML
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="overflow-x-auto scrollbar-hidden">
-        <div
-          id="tabulator"
-          ref="tableRef"
-          class="mt-5 table-report table-report--tabulator"
-        ></div>
-      </div>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" @click="fetchRoles(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+            <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
+          </button>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" @click="fetchRoles(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+            <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
+          </button>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchRoles(pagination.last_page_url)">
+            <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
+          </button>
+        </li>
+      </ul>
     </div>
-    <!-- END: HTML Table Data -->
+    <!-- END: Datatable Pagination -->
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue'
-import xlsx from 'xlsx'
-import feather from 'feather-icons'
-import Tabulator from 'tabulator-tables'
+import { defineComponent } from 'vue'
 import axios from 'axios'
 
 export default defineComponent({
   data() {
     return {
-      roles: {}
+      roles: [],
+      pagination: {}
     }
   },
   mounted() {
-    this.fetchRoles()
+    this.fetchRoles('http://localhost:8000/api/roles')
   },
   methods: {
-    fetchRoles() {
-      axios.get('http://localhost:8000/api/roles')
+    fetchRoles(page) {
+      axios.get(page)
         .then(response => {
-          this.roles = response.data.data
+          this.roles = response.data.data.data
+          this.makePagination(response.data.data)
         })
         .catch(error => {
           console.error(error)
         })
       return this.roles
-    }
-  },
-  setup() {
-    const tableRef = ref()
-    const tabulator = ref()
-    const filter = reactive({
-      field: 'name',
-      type: 'like',
-      value: ''
-    })
-    const initTabulator = () => {
-      tabulator.value = new Tabulator(tableRef.value, {
-        ajaxURL: 'http://127.0.0.1:8000/api/roles'.data,
-        ajaxConfig: {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'same-origin',
-          headers: {
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token')
-          }
-        },
-        ajaxFiltering: true,
-        ajaxSorting: true,
-        printAsHtml: true,
-        printStyled: true,
-        pagination: 'remote',
-        paginationSize: 10,
-        paginationSizeSelector: [10, 20, 30, 40],
-        layout: 'fitColumns',
-        responsiveLayout: 'collapse',
-        placeholder: 'No matching records found',
-        columns: [
-          {
-            formatter: 'responsiveCollapse',
-            width: 40,
-            minWidth: 30,
-            hozAlign: 'center',
-            resizable: false,
-            headerSort: false
-          },
-
-          // For HTML table
-          {
-            title: 'ID',
-            minWidth: 0,
-            responsive: 0,
-            field: 'id',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div>
-                <div class="font-medium whitespace-nowrap">${
-                cell.getData().id
-              }</div>
-              </div>`
-            }
-          },
-          {
-            title: 'Name',
-            minWidth: 200,
-            responsive: 0,
-            field: 'name',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div>
-                <div class="font-medium whitespace-nowrap">${
-                  cell.getData().name
-                }</div>
-              </div>`
-            }
-          },
-          {
-            title: 'Description',
-            minWidth: 200,
-            responsive: 0,
-            field: 'remaining_stock',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div>
-                <div class="font-medium whitespace-nowrap">${
-                cell.getData().category
-              }</div>
-              </div>`
-            }
-          },
-          {
-            title: 'Color',
-            minWidth: 10,
-            field: 'status',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div class="flex items-center lg:justify-center ${
-                cell.getData().status ? 'text-theme-9' : 'text-theme-6'
-              }">
-                <i data-feather="check-square" class="w-4 h-4 mr-2"></i> ${
-                  cell.getData().status ? 'Active' : 'Inactive'
-                }
-              </div>`
-            }
-          },
-          {
-            title: 'Created at',
-            minWidth: 200,
-            responsive: 0,
-            field: 'remaining_stock',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div>
-                <div class="font-medium whitespace-nowrap">${
-                cell.getData().category
-              }</div>
-              </div>`
-            }
-          },
-          {
-            title: 'Updated at',
-            minWidth: 200,
-            responsive: 0,
-            field: 'remaining_stock',
-            vertAlign: 'middle',
-            print: false,
-            download: false,
-            formatter(cell) {
-              return `<div>
-                <div class="font-medium whitespace-nowrap">${
-                cell.getData().category
-              }</div>
-              </div>`
-            }
-          },
-          {
-            title: '',
-            minWidth: 200,
-            field: 'actions',
-            responsive: 1,
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            print: true,
-            download: false,
-            formatter() {
-              const a = cash(`<div class="flex lg:justify-center items-center">
-                <a class="flex items-center mr-3" href="javascript:;">
-                  <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Edit
-                </a>
-                <a class="flex items-center text-theme-6" href="javascript:;">
-                  <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                </a>
-              </div>`)
-              cash(a).on('click', function() {
-                // On click actions
-              })
-
-              return a[0]
-            }
-          },
-
-          // For print format
-          {
-            title: 'Role id',
-            field: 'name',
-            visible: false,
-            print: true,
-            download: true
-          },
-          {
-            title: 'Role name',
-            field: 'category',
-            visible: false,
-            print: true,
-            download: true
-          },
-          {
-            title: 'Role description',
-            field: 'remaining_stock',
-            visible: false,
-            print: true,
-            download: true
-          },
-          {
-            title: 'Role color',
-            field: 'status',
-            visible: false,
-            print: true,
-            download: true,
-            formatterPrint(cell) {
-              return cell.getValue() ? 'Active' : 'Inactive'
-            }
-          },
-          {
-            title: 'Created at',
-            field: 'status',
-            visible: false,
-            print: true,
-            download: true,
-            formatterPrint(cell) {
-              return cell.getValue() ? 'Active' : 'Inactive'
-            }
-          },
-          {
-            title: 'Updated at',
-            field: 'status',
-            visible: false,
-            print: true,
-            download: true,
-            formatterPrint(cell) {
-              return cell.getValue() ? 'Active' : 'Inactive'
-            }
-          }
-        ],
-        renderComplete() {
-          feather.replace({
-            'stroke-width': 1.5
-          })
-        }
-      })
-    }
-
-    // Redraw table onresize
-    const reInitOnResizeWindow = () => {
-      window.addEventListener('resize', () => {
-        tabulator.value.redraw()
-        feather.replace({
-          'stroke-width': 1.5
-        })
-      })
-    }
-
-    // Filter function
-    const onFilter = () => {
-      tabulator.value.setFilter(filter.field, filter.type, filter.value)
-    }
-
-    // On reset filter
-    const onResetFilter = () => {
-      filter.field = 'id'
-      filter.type = 'like'
-      filter.value = ''
-      onFilter()
-    }
-
-    // Export
-    const onExportCsv = () => {
-      tabulator.value.download('csv', 'data.csv')
-    }
-
-    const onExportJson = () => {
-      tabulator.value.download('json', 'data.json')
-    }
-
-    const onExportXlsx = () => {
-      const win = window
-      win.XLSX = xlsx
-      tabulator.value.download('xlsx', 'data.xlsx', {
-        sheetName: 'Products'
-      })
-    }
-
-    const onExportHtml = () => {
-      tabulator.value.download('html', 'data.html', {
-        style: true
-      })
-    }
-
-    // Print
-    const onPrint = () => {
-      tabulator.value.print()
-    }
-
-    onMounted(() => {
-      reInitOnResizeWindow()
-      initTabulator()
-    })
-
-    return {
-      tableRef,
-      filter,
-      onFilter,
-      onResetFilter,
-      onExportCsv,
-      onExportJson,
-      onExportXlsx,
-      onExportHtml,
-      onPrint
+    },
+    makePagination(meta) {
+      const pagination = {
+        current_page: meta.current_page,
+        last_page: meta.last_page,
+        next_page_url: meta.next_page_url,
+        prev_page_url: meta.prev_page_url
+      }
+      this.pagination = pagination
     }
   }
 })
