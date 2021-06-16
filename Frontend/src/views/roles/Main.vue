@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <!-- BEGIN: Modal Content -->
+    <!-- BEGIN: Create Role Modal -->
     <div id="create-role-modal" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <form @submit.prevent="addRole(this.role)">
@@ -49,7 +49,50 @@
         </form>
       </div>
     </div>
-    <!-- END: Modal Content -->
+    <!-- END: Create Role Modal -->
+    <!-- BEGIN: Edit Role Modal -->
+    <div id="edit-role-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+      <div class="modal-dialog">
+        <form @submit.prevent="">
+          <div class="modal-content">
+            <!-- BEGIN: Modal Header -->
+            <div class="modal-header">
+              <h2 class="font-medium text-base mr-auto">
+                Edit a Role
+              </h2>
+            </div>
+            <!-- END: Modal Header -->
+            <!-- BEGIN: Modal Body -->
+            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+              <div class="col-span-12">
+                <label for="edit-role-modal-name" class="form-label">Name</label>
+                <input id="edit-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="role.name"/>
+              </div>
+              <div class="col-span-12">
+                <label for="edit-role-modal-description" class="form-label">Description</label>
+                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="role.description"/>
+              </div>
+              <div class="col-span-12">
+                <label for="edit-role-modal-color" class="form-label">Color</label>
+                <input id="edit-role-modal-color" type="color" class="form-control" v-model="role.color"/>
+              </div>
+            </div>
+            <!-- END: Modal Body -->
+            <!-- BEGIN: Modal Footer -->
+            <div class="modal-footer text-right">
+              <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary w-20">
+                Save
+              </button>
+            </div>
+            <!-- END: Modal Footer -->
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- END: Edit Role Modal -->
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
@@ -72,7 +115,7 @@
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon><Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
+            <edit2-icon class="mr-5 hover:text-blue-700" @click="editRole(role)"></edit2-icon><Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
           </td>
         </tr>
       </tbody>
@@ -118,6 +161,7 @@ export default defineComponent({
   data() {
     return {
       roles: [],
+      edit_role: {},
       role: {
         name: 'New Role',
         description: null,
@@ -172,7 +216,21 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
-    }
+    },
+    editRole(role) {
+      axios.put('http://localhost:8000/api/roles' + role.id, {
+        name: role.name,
+        description: role.description,
+        color_code: role.color_code
+      })
+        .then(response => {
+          console.log(response)
+          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
   }
 })
 </script>
