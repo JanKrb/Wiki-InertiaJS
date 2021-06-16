@@ -28,7 +28,7 @@
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon><Trash2Icon class="hover:text-blue-700"></Trash2Icon>
+            <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon><Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
           </td>
         </tr>
       </tbody>
@@ -100,6 +100,15 @@ export default defineComponent({
         prev_page_url: meta.prev_page_url
       }
       this.pagination = pagination
+    },
+    deleteRole(id) {
+      axios.delete('http://localhost:8000/api/roles/' + id)
+        .then(
+          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+        )
+        .catch(error => {
+          console.error(error)
+        })
     }
   }
 })
