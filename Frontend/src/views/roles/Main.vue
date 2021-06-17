@@ -115,10 +115,17 @@
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <a href="javascript:;" @click="show_editRole(role)" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
-              <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon>
+            <router-link :to="{ 'name': 'admin.role.view', 'params': { id: role.id }}">
+              <a href="javascript:;" class="text-small">
+                <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
+              </a>
+            </router-link>
+            <a href="javascript:;" @click="this.edit_role = role" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+              <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
             </a>
-            <Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
+            <a href="javascript:;" @click="deleteRole(role.id)" class="text-small">
+              <Trash2Icon class="w-5 h-5 hover:text-blue-700"></Trash2Icon>
+            </a>
           </td>
         </tr>
       </tbody>
@@ -243,9 +250,6 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
-    },
-    show_editRole(role) {
-      this.edit_role = role
     }
   }
 })
