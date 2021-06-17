@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
+        $per_page = $request->get('per_page', 15);
         return [
             'success' => true,
             'message' => 'Permissions retrieved successfully',
-            'data' => Permission::paginate(15)->toArray()
+            'data' => Permission::paginate($per_page)->toArray()
         ];
     }
 

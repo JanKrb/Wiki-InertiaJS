@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class RoleController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
+        $per_page = $request->get('per_page', 15);
         return [
             'success' => true,
             'message' => 'Roles retrieved successfully',
-            'data' => Role::paginate(15)->toArray()
+            'data' => Role::paginate($per_page)->toArray()
         ];
     }
 
