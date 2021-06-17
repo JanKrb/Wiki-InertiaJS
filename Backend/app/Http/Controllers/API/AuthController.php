@@ -57,7 +57,7 @@ class AuthController extends BaseController
             'issuer_type' => 0, // 0 => Unknown/Undefined
             'issuer_id' => 1,
             'short' => 'Failed login.',
-            'details' => `${$request->ip()} failed to log in into ${$credentials['name']} / ${$credentials['email']}`,
+            'details' => "{$request->ip()} failed to log in into " . $credentials['name'] == null ? $credentials['email'] : $credentials['name'],
             'attributes' => json_encode($credentials)
         ]);
 
@@ -115,7 +115,7 @@ class AuthController extends BaseController
                 'issuer_type' => 0, // 0 => Unknown/Undefined
                 'issuer_id' => 1,
                 'short' => 'Tried to fetch unauthenticated user',
-                'details' => `IP ${$request->ip()} tried to fetch his user, but is unauthenticated.`,
+                'details' => "IP {$request->ip()} tried to fetch his user, but is unauthenticated.",
                 'attributes' => json_encode($request)
             ]);
         } else {
