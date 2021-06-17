@@ -1,37 +1,28 @@
 <template>
   <div>
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Wiki Roles</h2>
+      <h2 class="text-lg font-medium mr-auto">Wiki Permissions</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Role</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-permission-modal" class="btn btn-primary">Add New Permission</a>
       </div>
     </div>
-
-    <!-- BEGIN: Create Role Modal -->
-    <div id="create-role-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <!-- BEGIN: Create Permission Modal -->
+    <div id="create-permission-modal" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
-        <form @submit.prevent="addRole(this.role)">
+        <form @submit.prevent="addPermission(this.permission)">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
               <h2 class="font-medium text-base mr-auto">
-                Create a new Role
+                Create a new Permission
               </h2>
             </div>
             <!-- END: Modal Header -->
             <!-- BEGIN: Modal Body -->
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
-                <label for="create-role-modal-name" class="form-label">Name</label>
-                <input id="create-role-modal-name" type="text" class="form-control" placeholder="example@gmail.com" v-model="role.name"/>
-              </div>
-              <div class="col-span-12">
-                <label for="create-role-modal-description" class="form-label">Description</label>
-                <textarea id="create-role-modal-description" class="form-control" placeholder="example@gmail.com" v-model="role.description"/>
-              </div>
-              <div class="col-span-12">
-                <label for="create-role-modal-color" class="form-label">Color</label>
-                <input id="create-role-modal-color" type="color" class="form-control" v-model="role.color"/>
+                <label for="create-permission-modal-name" class="form-label">Name</label>
+                <input id="create-permission-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="permission.name"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -40,7 +31,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20">
+              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
                 Create
               </button>
             </div>
@@ -49,32 +40,24 @@
         </form>
       </div>
     </div>
-    <!-- END: Create Role Modal -->
-    <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+    <!-- END: Create Permission Modal -->
+    <!-- BEGIN: Edit Permission Modal -->
+    <div id="edit-permission-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-permission-modal">
       <div class="modal-dialog">
-        <form @submit.prevent="editRole">
+        <form @submit.prevent="editPermission">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
               <h2 class="font-medium text-base mr-auto">
-                Edit a Role
+                Edit a Permission
               </h2>
             </div>
             <!-- END: Modal Header -->
             <!-- BEGIN: Modal Body -->
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
-                <label for="edit-role-modal-name" class="form-label">Name</label>
-                <input id="edit-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_role.name"/>
-              </div>
-              <div class="col-span-12">
-                <label for="edit-role-modal-description" class="form-label">Description</label>
-                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="edit_role.description"/>
-              </div>
-              <div class="col-span-12">
-                <label for="edit-role-modal-color" class="form-label">Color</label>
-                <input id="edit-role-modal-color" type="color" class="form-control" v-model="edit_role.color"/>
+                <label for="edit-permission-modal-name" class="form-label">Name</label>
+                <input id="edit-permission-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_permission.name"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -83,7 +66,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20">
+              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
                 Save
               </button>
             </div>
@@ -92,33 +75,29 @@
         </form>
       </div>
     </div>
-    <!-- END: Edit Role Modal -->
+    <!-- END: Edit Permission Modal -->
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
       <tr class="bg-gray-700 dark:bg-dark-1 text-white">
         <th class="whitespace-nowrap">#</th>
         <th class="whitespace-nowrap">Name</th>
-        <th class="whitespace-nowrap">Description</th>
-        <th class="whitespace-nowrap">Color</th>
         <th class="whitespace-nowrap">Updated at</th>
         <th class="whitespace-nowrap">Created at</th>
         <th class="whitespace-nowrap"></th>
       </tr>
       </thead>
       <tbody>
-        <tr v-for="role in this.roles" v-bind:key="role.id">
-          <td class="border-b dark:border-dark-5">{{ role.id }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.name }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.description }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.color_code }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
+        <tr v-for="permission in this.permissions" v-bind:key="permission.id">
+          <td class="border-b dark:border-dark-5">{{ permission.id }}</td>
+          <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
+          <td class="border-b dark:border-dark-5">{{ permission.updated_at }}</td>
+          <td class="border-b dark:border-dark-5">{{ permission.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <a href="javascript:;" @click="show_editRole(role)" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+            <a href="javascript:;" @click="show_editPermission(permission)" data-toggle="modal" data-target="#edit-permission-modal" class="text-small">
               <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon>
             </a>
-            <Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
+            <Trash2Icon class="hover:text-blue-700" @click="deletePermission(permission.id)"></Trash2Icon>
           </td>
         </tr>
       </tbody>
@@ -128,12 +107,12 @@
     <div class="flex flex-col items-center mt-5">
       <ul class="flex">
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchRoles(pagination.first_page_url)">
+          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchPermissions(pagination.first_page_url)">
             <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
           </button>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" @click="fetchRoles(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+          <button class="flex items-center font-bold" @click="fetchPermissions(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
             <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
           </button>
         </li>
@@ -141,12 +120,12 @@
           <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" @click="fetchRoles(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+          <button class="flex items-center font-bold" @click="fetchPermissions(pagination.next_page_url)" :disabled="!pagination.next_page_url">
             <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
           </button>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchRoles(pagination.last_page_url)">
+          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchPermissions(pagination.last_page_url)">
             <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
           </button>
         </li>
@@ -163,30 +142,31 @@ import axios from 'axios'
 export default defineComponent({
   data() {
     return {
-      roles: [],
-      edit_role: {},
-      role: {
-        name: 'New Role',
-        description: null,
-        color_code: '000000'
+      permissions: [],
+      edit_permission: {},
+      permission: {
+        name: 'New Permission'
       },
       pagination: {}
     }
   },
   mounted() {
-    this.fetchRoles('http://localhost:8000/api/roles')
+    this.fetchPermissions('http://localhost:8000/api/permissions')
   },
   methods: {
-    fetchRoles(page) {
+    fetchPermissions(page) {
+      const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
-          this.roles = response.data.data.data
+          this.permissions = response.data.data.data
+          loader.hide()
           this.makePagination(response.data.data)
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
-      return this.roles
+      return this.permissions
     },
     makePagination(meta) {
       const pagination = {
@@ -197,45 +177,52 @@ export default defineComponent({
       }
       this.pagination = pagination
     },
-    deleteRole(id) {
-      axios.delete('http://localhost:8000/api/roles/' + id)
-        .then(
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
-        )
+    deletePermission(id) {
+      const loader = this.$loading.show()
+      axios.delete('http://localhost:8000/api/permissions/' + id)
+        .then(response => {
+          loader.hide()
+          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
+        })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
-    addRole(role) {
-      axios.post('http://localhost:8000/api/roles', {
-        name: role.name,
-        description: role.description,
-        color_code: role.color_code
+    addPermission(permission) {
+      const loader = this.$loading.show()
+      axios.post('http://localhost:8000/api/permissions', {
+        name: permission.name,
+        description: permission.description,
+        color_code: permission.color_code
       })
         .then(response => {
-          console.log(response)
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          loader.hide()
+          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
-    editRole() {
-      axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
-        name: this.edit_role.name,
-        description: this.edit_role.description,
-        color_code: this.edit_role.color_code
+    editPermission() {
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/permissions/' + this.edit_permission.id, {
+        name: this.edit_permission.name,
+        description: this.edit_permission.description,
+        color_code: this.edit_permission.color_code
       })
         .then(response => {
-          console.log(response)
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          loader.hide()
+          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          loader.hide()
+          console.log(error)
         })
     },
-    show_editRole(role) {
-      this.edit_role = role
+    show_editPermission(permission) {
+      this.edit_permission = permission
     }
   }
 })

@@ -23,11 +23,11 @@
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
                 <label for="create-role-modal-name" class="form-label">Name</label>
-                <input id="create-role-modal-name" type="text" class="form-control" placeholder="example@gmail.com" v-model="role.name"/>
+                <input id="create-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="role.name"/>
               </div>
               <div class="col-span-12">
                 <label for="create-role-modal-description" class="form-label">Description</label>
-                <textarea id="create-role-modal-description" class="form-control" placeholder="example@gmail.com" v-model="role.description"/>
+                <textarea id="create-role-modal-description" class="form-control" placeholder="Your Description" v-model="role.description"/>
               </div>
               <div class="col-span-12">
                 <label for="create-role-modal-color" class="form-label">Color</label>
@@ -40,7 +40,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20">
+              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
                 Create
               </button>
             </div>
@@ -83,7 +83,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20">
+              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
                 Save
               </button>
             </div>
@@ -178,13 +178,16 @@ export default defineComponent({
   },
   methods: {
     fetchRoles(page) {
+      const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
           this.roles = response.data.data.data
+          loader.hide()
           this.makePagination(response.data.data)
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
       return this.roles
     },
@@ -198,40 +201,47 @@ export default defineComponent({
       this.pagination = pagination
     },
     deleteRole(id) {
+      const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/roles/' + id)
-        .then(
+        .then(response => {
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
-        )
+          loader.hide()
+        })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
     addRole(role) {
+      const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/roles', {
         name: role.name,
         description: role.description,
         color_code: role.color_code
       })
         .then(response => {
-          console.log(response)
+          loader.hide()
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
     editRole() {
+      const loader = this.$loading.show()
       axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
         name: this.edit_role.name,
         description: this.edit_role.description,
         color_code: this.edit_role.color_code
       })
         .then(response => {
-          console.log(response)
+          loader.hide()
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
     show_editRole(role) {
