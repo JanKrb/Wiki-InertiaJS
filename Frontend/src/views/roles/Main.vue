@@ -53,7 +53,7 @@
     <!-- BEGIN: Edit Role Modal -->
     <div id="edit-role-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
       <div class="modal-dialog">
-        <form @submit.prevent="">
+        <form @submit.prevent="editRole">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
@@ -66,15 +66,15 @@
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
                 <label for="edit-role-modal-name" class="form-label">Name</label>
-                <input id="edit-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="role.name"/>
+                <input id="edit-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_role.name"/>
               </div>
               <div class="col-span-12">
                 <label for="edit-role-modal-description" class="form-label">Description</label>
-                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="role.description"/>
+                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="edit_role.description"/>
               </div>
               <div class="col-span-12">
                 <label for="edit-role-modal-color" class="form-label">Color</label>
-                <input id="edit-role-modal-color" type="color" class="form-control" v-model="role.color"/>
+                <input id="edit-role-modal-color" type="color" class="form-control" v-model="edit_role.color"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -115,7 +115,10 @@
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <edit2-icon class="mr-5 hover:text-blue-700" @click="editRole(role)"></edit2-icon><Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
+            <a href="javascript:;" @click="show_editRole(role)" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+              <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon>
+            </a>
+            <Trash2Icon class="hover:text-blue-700" @click="deleteRole(role.id)"></Trash2Icon>
           </td>
         </tr>
       </tbody>
@@ -217,11 +220,11 @@ export default defineComponent({
           console.error(error)
         })
     },
-    editRole(role) {
-      axios.put('http://localhost:8000/api/roles' + role.id, {
-        name: role.name,
-        description: role.description,
-        color_code: role.color_code
+    editRole() {
+      axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
+        name: this.edit_role.name,
+        description: this.edit_role.description,
+        color_code: this.edit_role.color_code
       })
         .then(response => {
           console.log(response)
@@ -231,6 +234,9 @@ export default defineComponent({
           console.error(error)
         })
     },
+    show_editRole(role) {
+      this.edit_role = role
+    }
   }
 })
 </script>
