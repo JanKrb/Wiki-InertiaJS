@@ -45,17 +45,17 @@ const state = () => {
       },
       {
         icon: 'SlidersIcon',
-        pageName: 'dashboard',
+        pageName: 'admin.roles',
         title: 'Administration',
         subMenu: [
           {
             icon: 'ShieldIcon',
-            pageName: 'dashboard',
+            pageName: 'admin.roles',
             title: 'Roles'
           },
           {
             icon: 'KeyIcon',
-            pageName: 'dashboard',
+            pageName: 'admin.permissions',
             title: 'Permissions'
           },
           {

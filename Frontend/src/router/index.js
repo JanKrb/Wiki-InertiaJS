@@ -3,6 +3,7 @@ import axios from 'axios'
 import TopMenu from '../layouts/top-menu/Main.vue'
 import DashboardOverview2 from '../views/dashboard-overview-2/Main.vue'
 import Roles from '../views/roles/Main.vue'
+import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
@@ -67,6 +68,16 @@ const routes = [
         component: Roles,
         meta: {
           title: 'Wiki Roles',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'roles/:id/view',
+        name: 'admin.role.view',
+        component: Role,
+        meta: {
+          title: 'Wiki Role',
           auth: true,
           isAuth: false
         }
