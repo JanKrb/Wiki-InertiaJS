@@ -8,7 +8,7 @@
     </div>
 
     <!-- BEGIN: Create Role Modal -->
-    <div id="create-role-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <form @submit.prevent="addRole(this.role)">
           <div class="modal-content">
@@ -51,7 +51,7 @@
     </div>
     <!-- END: Create Role Modal -->
     <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+    <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
       <div class="modal-dialog">
         <form @submit.prevent="editRole">
           <div class="modal-content">

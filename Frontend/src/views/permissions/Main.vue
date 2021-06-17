@@ -7,7 +7,7 @@
       </div>
     </div>
     <!-- BEGIN: Create Permission Modal -->
-    <div id="create-permission-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <form @submit.prevent="addPermission(this.permission)">
           <div class="modal-content">
@@ -42,7 +42,7 @@
     </div>
     <!-- END: Create Permission Modal -->
     <!-- BEGIN: Edit Permission Modal -->
-    <div id="edit-permission-modal" class="modal" tabindex="-1" aria-hidden="true" ref="edit-permission-modal">
+    <div id="edit-permission-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-permission-modal">
       <div class="modal-dialog">
         <form @submit.prevent="editPermission">
           <div class="modal-content">
