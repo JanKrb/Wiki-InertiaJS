@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UserBadgesController extends BaseController
 {
-    public function index($user_id) {
+    public function index(Request $request, $user_id) {
+        $per_page = $request->get('per_page', 15);
         $user = User::find($user_id);
 
         if (is_null($user)) {
@@ -23,7 +24,7 @@ class UserBadgesController extends BaseController
         return [
             'success' => true,
             'message' => 'Successfully retrieved badges',
-            'data' => (new Collection($user->badges))->paginate(15)
+            'data' => (new Collection($user->badges))->paginate($per_page)
         ];
     }
 

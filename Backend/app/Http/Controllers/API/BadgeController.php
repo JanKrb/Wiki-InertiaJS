@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class BadgeController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
+        $per_page = $request->get('per_page', 15);
         return [
             'success' => true,
             'message' => 'Badges retrieved successfully',
-            'data' => Badge::paginate(15)->toArray()
+            'data' => Badge::paginate($per_page)->toArray()
         ];
     }
 

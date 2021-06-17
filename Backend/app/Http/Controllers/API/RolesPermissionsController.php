@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Validator;
 
 class RolesPermissionsController extends BaseController
 {
-    public function index($role_id) {
+    public function index(Request $request, $role_id) {
+        $per_page = $request->get('per_page', 15);
+
         $role = Role::find($role_id);
 
         if (is_null($role)) {
@@ -21,7 +23,7 @@ class RolesPermissionsController extends BaseController
         return [
             'success' => true,
             'message' => 'Successfully retrieved permissions',
-            'data' => (new Collection($role->permissions))->paginate(15)
+            'data' => (new Collection($role->permissions))->paginate($per_page)
         ];
     }
 
