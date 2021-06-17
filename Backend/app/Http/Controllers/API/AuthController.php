@@ -48,7 +48,7 @@ class AuthController extends BaseController
             $success['user'] =  $user;
 
             $now = now();
-            $user->sendActivity('Successful login.', `${$user->name} [${$user->id}] logged in on ${$now}`, $user);
+            $user->sendActivity('Successful login.', "$user->name [$user->id] logged in on $now", $user);
 
             return $this->sendResponse($success, 'User login successfully.');
         }
