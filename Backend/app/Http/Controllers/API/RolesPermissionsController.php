@@ -98,7 +98,7 @@ class RolesPermissionsController extends BaseController
             return  $this->sendError('Invalid role id.', ['role_id' => $role_id]);
         }
 
-        foreach ($role->permission as $permission) {
+        foreach ($role->permissions as $permission) {
             if ($permission->id == $permission_id) {
                 $found_permission = Permission::find($permission_id);
 
