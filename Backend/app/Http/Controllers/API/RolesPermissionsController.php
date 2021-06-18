@@ -22,7 +22,7 @@ class RolesPermissionsController extends BaseController
             return  $this->sendError('Invalid role id.', ['role_id' => $role_id]);
         }
 
-        return (new RolePermissionCollection(Role::paginate($per_page)))->additional([
+        return (new RolePermissionCollection($role->permissions->paginate($per_page)))->additional([
             'success' => true,
             'message' => 'Successfully retrieved role permissions'
         ]);
