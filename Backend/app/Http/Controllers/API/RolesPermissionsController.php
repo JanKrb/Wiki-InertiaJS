@@ -101,12 +101,7 @@ class RolesPermissionsController extends BaseController
 
         foreach ($role->permissions as $permission) {
             if ($permission->id == $permission_id) {
-                $found_permission = Permission::find($permission_id);
-
-                if (!is_null($found_permission)) {
-                    $found_permission->delete();
-                    return $this->sendResponse([], 'Permission has been removed from role');
-                }
+                $role->permissions->delete($permission);
             }
         }
 
