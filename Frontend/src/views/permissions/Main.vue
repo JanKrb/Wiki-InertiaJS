@@ -79,7 +79,7 @@
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
-      <tr class="bg-gray-700 dark:bg-dark-1 text-white">
+      <tr class="bg-primary-2 dark:bg-blue-800 text-white">
         <th class="whitespace-nowrap">#</th>
         <th class="whitespace-nowrap">Name</th>
         <th class="whitespace-nowrap">Updated at</th>
