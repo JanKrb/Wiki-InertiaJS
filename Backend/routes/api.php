@@ -5,6 +5,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
+use App\Http\Controllers\API\TagController;
 use App\Http\Controllers\API\UserBadgesController;
 use App\Http\Controllers\API\UserController;
 use Orion\Facades\Orion;
@@ -86,6 +87,15 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+});
+
+// Tags System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('tags', [TagController::class, 'index'])->name('tags.index');
+    Route::post('tags', [TagController::class, 'store'])->name('tags.store');
+    Route::put('tags/{tag}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
+    Route::get('tags/{tag}', [TagController::class, 'show'])->name('tags.show');
 });
 
 // Debugging
