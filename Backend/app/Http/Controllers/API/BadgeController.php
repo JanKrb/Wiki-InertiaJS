@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\BadgeCollection;
 use App\Models\Badge;
 use App\Http\Resources\Badge as BadgeResource;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,10 @@ class BadgeController extends BaseController
     public function index(Request $request)
     {
         $per_page = $request->get('per_page', 15);
-        return [
+        return (new BadgeCollection(Badge::paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Badges retrieved successfully',
-            'data' => Badge::paginate($per_page)->toArray()
-        ];
+            'message' => 'Successfully retrieved badges'
+        ]);
     }
 
     public function store(Request $request): JsonResponse

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\PermissionCollection;
 use App\Models\Permission;
 use App\Http\Resources\Permission as PermissionResource;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,10 @@ class PermissionController extends BaseController
     public function index(Request $request)
     {
         $per_page = $request->get('per_page', 15);
-        return [
+        return (new PermissionCollection(Permission::paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Permissions retrieved successfully',
-            'data' => Permission::paginate($per_page)->toArray()
-        ];
+            'message' => 'Successfully retrieved permissions'
+        ]);
     }
 
     public function store(Request $request): JsonResponse

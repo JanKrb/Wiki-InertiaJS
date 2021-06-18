@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\RoleCollection;
 use App\Models\Role;
 use App\Http\Resources\Role as RoleResource;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,10 @@ class RoleController extends BaseController
     public function index(Request $request)
     {
         $per_page = $request->get('per_page', 15);
-        return [
+        return (new RoleCollection(Role::paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Roles retrieved successfully',
-            'data' => Role::paginate($per_page)->toArray()
-        ];
+            'message' => 'Successfully retrieved roles'
+        ]);
     }
 
     public function store(Request $request): JsonResponse

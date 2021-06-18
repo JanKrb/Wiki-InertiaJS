@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
 use App\Http\Resources\Category as CategoryResource;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,10 @@ class CategoryController extends BaseController
     public function index(Request $request)
     {
         $per_page = $request->get('per_page', 15);
-        return [
+        return (new CategoryCollection(Category::paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Categories retrieved successfully',
-            'data' => Category::paginate($per_page)->toArray()
-        ];
+            'message' => 'Successfully retrieved categories'
+        ]);
     }
 
     public function store(Request $request): JsonResponse
