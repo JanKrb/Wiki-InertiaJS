@@ -101,7 +101,7 @@ class RolesPermissionsController extends BaseController
 
         foreach ($role->permissions as $permission) {
             if ($permission->id == $permission_id) {
-                $role->permissions->delete($permission);
+                $role->permissions = $role->permissions->where('id', '!=', $permission->id);
             }
         }
 
