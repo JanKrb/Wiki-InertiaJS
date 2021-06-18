@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\RolePermissionCollection;
+use App\Http\Resources\RolePermission as RolePermissionResource;
 
 class RolesPermissionsController extends BaseController
 {
@@ -20,11 +22,10 @@ class RolesPermissionsController extends BaseController
             return  $this->sendError('Invalid role id.', ['role_id' => $role_id]);
         }
 
-        return [
+        return (new RolePermissionCollection(Role::paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Successfully retrieved permissions',
-            'data' => (new Collection($role->permissions))->paginate($per_page)
-        ];
+            'message' => 'Successfully retrieved role permissions'
+        ]);
     }
 
     public function store(Request $request, $role_id) {
@@ -52,7 +53,7 @@ class RolesPermissionsController extends BaseController
 
         $role->permissions()->save($permission); // [15.06.2021] If causes errors, change to: $role->permissions->push($permission);
 
-        return $this->sendResponse($role->permissions, 'Successfully added permission to role');
+        return $this->sendResponse(new RolePermissionResource($permission), 'Successfully added permission to role');
     }
 
     public function show($role_id, $permission_id) {
@@ -67,7 +68,7 @@ class RolesPermissionsController extends BaseController
                 $found_permission = Permission::find($permission_id);
 
                 if (!is_null($found_permission)) {
-                    return $this->sendResponse($found_permission, 'Successfully fetched permission of role');
+                    return $this->sendResponse(new RolePermissionResource($found_permission), 'Successfully fetched permission of role');
                 }
             }
         }
@@ -88,7 +89,7 @@ class RolesPermissionsController extends BaseController
             return $this->sendError('Invalid permission', ['permission_name' => $permission_name]);
         }
 
-        return $this->sendResponse($permission, 'Successfully fetched permission by name of role');
+        return $this->sendResponse(new RolePermissionResource($permission), 'Successfully fetched permission by name of role');
     }
 
     public function destroy($role_id, $permission_id) {
