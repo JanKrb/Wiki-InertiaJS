@@ -6,7 +6,9 @@ import Roles from '../views/roles/Main.vue'
 import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
-import Account from '../views/account/AccountInformations.vue'
+import AccountInformations from '../views/account/AccountInformations.vue'
+import AccountSettings from '../views/account/AccountSettings.vue'
+import AccountSecurity from '../views/account/AccountSecurity.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
@@ -106,8 +108,8 @@ const routes = [
       },
       {
         path: 'accounts/:id/informations',
-        name: 'admin.account.informations',
-        component: Account,
+        name: 'admin.accounts.informations',
+        component: AccountInformations,
         meta: {
           title: 'Wiki Account',
           auth: true,
@@ -116,8 +118,18 @@ const routes = [
       },
       {
         path: 'accounts/:id/settings',
-        name: 'admin.account.settings',
-        component: Account,
+        name: 'admin.accounts.settings',
+        component: AccountSettings,
+        meta: {
+          title: 'Wiki Account',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'accounts/:id/security',
+        name: 'admin.accounts.security',
+        component: AccountSecurity,
         meta: {
           title: 'Wiki Account',
           auth: true,
