@@ -158,9 +158,9 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
-          this.permissions = response.data.data.data
+          this.permissions = response.data.data
           loader.hide()
-          this.makePagination(response.data.data)
+          this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
           console.error(error)
@@ -168,12 +168,14 @@ export default defineComponent({
         })
       return this.permissions
     },
-    makePagination(meta) {
+    makePagination(meta, links) {
       const pagination = {
         current_page: meta.current_page,
         last_page: meta.last_page,
-        next_page_url: meta.next_page_url,
-        prev_page_url: meta.prev_page_url
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev
       }
       this.pagination = pagination
     },
