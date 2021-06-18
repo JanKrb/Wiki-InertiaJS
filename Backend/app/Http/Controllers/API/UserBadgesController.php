@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\UserBadgeCollection;
+use \App\Http\Resources\Badge as BadgeResource;
 use App\Models\Badge;
 use App\Models\Role;
 use App\Models\User;
@@ -21,11 +23,10 @@ class UserBadgesController extends BaseController
             return  $this->sendError('Invalid user id.', ['user_id' => $user_id]);
         }
 
-        return [
+        return (new UserBadgeCollection($user->badges->paginate($per_page)))->additional([
             'success' => true,
-            'message' => 'Successfully retrieved badges',
-            'data' => (new Collection($user->badges))->paginate($per_page)
-        ];
+            'message' => 'Successfully retrieved user badges'
+        ]);
     }
 
     public function store(Request $request, $user_id) {
@@ -53,7 +54,7 @@ class UserBadgesController extends BaseController
 
         $user->badges()->save($badge);
 
-        return $this->sendResponse($user->badges, 'Successfully added badge to user');
+        return $this->sendResponse(new BadgeResource($badge), 'Successfully added badge to user');
     }
 
     public function show($user_id, $badge_id) {
@@ -68,7 +69,7 @@ class UserBadgesController extends BaseController
                 $found_badge = Badge::find($badge_id);
 
                 if (!is_null($found_badge)) {
-                    return $this->sendResponse($found_badge, 'Successfully fetched badge of user');
+                    return $this->sendResponse(new BadgeResource($found_badge), 'Successfully fetched badge of user');
                 }
             }
         }
