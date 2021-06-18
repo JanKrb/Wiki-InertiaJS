@@ -120,7 +120,7 @@
                 <!-- BEGIN: Datatable -->
                 <table class="table mt-5">
                   <thead>
-                  <tr class="bg-gray-700 dark:bg-dark-1 text-white">
+                  <tr class="bg-primary-2 dark:bg-blue-800 text-white">
                     <th class="whitespace-nowrap">#</th>
                     <th class="whitespace-nowrap">Name</th>
                     <th class="whitespace-nowrap">Creator</th>
@@ -216,23 +216,23 @@
         <!-- END: Role Info -->
         <!-- END: Add Permissions -->
         <div class="box p-5 mt-5">
-          <div>
+          <form @submit.prevent="addPermission">
             <label>Add Permission</label>
             <div class="mt-2">
               <TailSelect
-                v-model="select"
+                v-model="newPermission"
                 :options="{
                   search: true,
                   classNames: 'w-full'
                 }"
               >
-                <option :value="permission.id" v-for="permission in fetchSelectablePermissions()" v-bind:key="permission.id">{{ permission.name }}</option>
+                <option v-for="permission in fetchSelectablePermissions()" v-bind:key="permission.id">{{ permission.name }}</option>
               </TailSelect>
             </div>
             <button type="submit" class="btn btn-primary btn-sm w-20 mt-3">
               Save
             </button>
-          </div>
+          </form>
         </div>
         <!-- END: Add Permission -->
       </div>
@@ -251,7 +251,8 @@ export default defineComponent({
       role: {},
       role_permissions: [],
       all_permissions: [],
-      pagination: {}
+      pagination: {},
+      newPermission: 'NewPermission'
     }
   },
   mounted() {
@@ -349,12 +350,14 @@ export default defineComponent({
     fetchSelectablePermissions() {
       return this.all_permissions.filter(all => !this.role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
     },
-    addPermission(name) {
+    addPermission() {
+      const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions', {
-        name: name
+        name: this.newPermission
       })
         .then(response => {
-          console.log(response)
+          loader.hide()
+          this.fetchRolePermissions(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
