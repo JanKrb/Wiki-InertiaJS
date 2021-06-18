@@ -96,15 +96,15 @@
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
-      <tr class="bg-gray-700 dark:bg-dark-1 text-white">
-        <th class="whitespace-nowrap">#</th>
-        <th class="whitespace-nowrap">Name</th>
-        <th class="whitespace-nowrap">Description</th>
-        <th class="whitespace-nowrap">Color</th>
-        <th class="whitespace-nowrap">Updated at</th>
-        <th class="whitespace-nowrap">Created at</th>
-        <th class="whitespace-nowrap"></th>
-      </tr>
+        <tr class="bg-gray-700 dark:bg-dark-1 text-white">
+          <th class="whitespace-nowrap">#</th>
+          <th class="whitespace-nowrap">Name</th>
+          <th class="whitespace-nowrap">Description</th>
+          <th class="whitespace-nowrap">Color</th>
+          <th class="whitespace-nowrap">Updated at</th>
+          <th class="whitespace-nowrap">Created at</th>
+          <th class="whitespace-nowrap"></th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="role in this.roles" v-bind:key="role.id">
@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import axios from 'axios'
 
 export default defineComponent({
@@ -188,9 +188,10 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
-          this.roles = response.data.data.data
+          this.roles = response.data.data
+          console.log(response)
           loader.hide()
-          this.makePagination(response.data.data)
+          this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
           console.error(error)
@@ -198,12 +199,14 @@ export default defineComponent({
         })
       return this.roles
     },
-    makePagination(meta) {
+    makePagination(meta, links) {
       const pagination = {
         current_page: meta.current_page,
         last_page: meta.last_page,
-        next_page_url: meta.next_page_url,
-        prev_page_url: meta.prev_page_url
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev
       }
       this.pagination = pagination
     },
@@ -250,6 +253,13 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    }
+  },
+  setup() {
+    const select = ref('1')
+
+    return {
+      select
     }
   }
 })
