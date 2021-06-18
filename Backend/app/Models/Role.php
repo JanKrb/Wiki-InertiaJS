@@ -21,7 +21,7 @@ class Role extends Model
     protected $fillable = [
         'name',
         'description',
-        'color_code',
+        'color',
         'user_id'
     ];
 

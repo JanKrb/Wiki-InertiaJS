@@ -19,7 +19,7 @@ class Role extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'color_code' => $this->color_code,
+            'color' => $this->color,
             'user' => $this->creator,
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')

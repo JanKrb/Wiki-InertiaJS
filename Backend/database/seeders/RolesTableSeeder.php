@@ -17,19 +17,19 @@ class RolesTableSeeder extends Seeder
         Role::insert([
             [
                 'name' => 'User',
-                'color_code' => '242424',
+                'color' => '242424',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Moderator',
-                'color_code' => '0d8028',
+                'color' => '0d8028',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Administrator',
-                'color_code' => '800d0d',
+                'color' => '800d0d',
                 'created_at' => now(),
                 'updated_at' => now()
             ]

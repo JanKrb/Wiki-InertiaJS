@@ -28,7 +28,7 @@ class RoleController extends BaseController
         $validator = Validator::make($input, [
             'name' => 'required|max:255',
             'description' => '',
-            'color_code' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^'
+            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^'
         ]);
 
         if ($validator->fails()) {
@@ -57,7 +57,7 @@ class RoleController extends BaseController
         $validator = Validator::make($input, [
             'name' => 'required|max:255',
             'description' => '',
-            'color_code' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^'
+            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^'
         ]);
 
         if ($validator->fails()) {
@@ -66,7 +66,7 @@ class RoleController extends BaseController
 
         $role->name = $input['name'];
         $role->description = $input['description'];
-        $role->color_code = $input['color_code'];
+        $role->color = $input['color'];
 
         $role->save();
 

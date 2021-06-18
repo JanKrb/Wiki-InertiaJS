@@ -16,7 +16,7 @@ class AddCreatorToRole extends Migration
         Schema::table('roles', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')
                 ->comment('Creator')
-                ->after('color_code')
+                ->after('color')
                 ->nullable();
 
             $table->foreign('user_id')
