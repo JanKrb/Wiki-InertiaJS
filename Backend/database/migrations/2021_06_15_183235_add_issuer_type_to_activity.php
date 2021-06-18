@@ -14,7 +14,7 @@ class AddIssuerTypeToActivities extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->integer('issuer_type');
+            $table->integer('issuer_type')->after('id');
         });
     }
 
