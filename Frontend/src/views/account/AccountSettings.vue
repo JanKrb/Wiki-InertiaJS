@@ -43,10 +43,11 @@
       </div>
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
-        <!-- BEGIN: Display Information -->
+        <!-- BEGIN: Roles & Tags -->
         <div class="intro-y box lg:mt-5">
-          <div class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
-            <h2 class="font-medium text-base mr-auto">Display Information</h2>
+          <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
+            <h2 class="font-medium text-base mr-auto">Roles & Tags</h2>
+            <button class="btn btn-primary btn-sm ml-auto"><SaveIcon class="mr-2 w-5 h-5"></SaveIcon>Save</button>
           </div>
           <div class="p-5">
             <div class="flex flex-col-reverse xl:flex-row flex-col">
@@ -54,134 +55,118 @@
                 <div class="grid grid-cols-12 gap-x-5">
                   <div class="col-span-12 xxl:col-span-6">
                     <div>
-                      <label for="update-profile-form-1" class="form-label">
-                        Display Name
+                      <label for="accounts-role-edit" class="form-label">
+                        Role
                       </label>
                       <input
-                        id="update-profile-form-1"
+                        id="accounts-role-edit"
                         type="text"
                         class="form-control"
-                        placeholder="Input text"
-                        value="NinoKrb"
-                      />
-                    </div>
-                    <div class="mt-3">
-                      <label for="accounts-firstname-edit" class="form-label">
-                        Firstname
-                      </label>
-                      <input
-                        id="accounts-firstname-edit"
-                        type="text"
-                        class="form-control"
-                        placeholder="Input text"
-                        value="Nino"
+                        placeholder="Your Role"
                       />
                     </div>
                   </div>
                   <div class="col-span-12 xxl:col-span-6">
-                    <div class="mt-3 xxl:mt-0">
-                      <label for="accounts-email-edit" class="form-label">
-                        Email address
+                    <div>
+                      <label class="form-label">
+                        Tags
                       </label>
-                      <input
-                        id="accounts-email-edit"
-                        type="text"
-                        class="form-control"
-                        placeholder="Input text"
-                        value="demo@ninokrb.com"
-                      />
+                      <TailSelect
+                        v-model="select"
+                        :options="{
+                          search: true,
+                          descriptions: true,
+                          hideSelected: true,
+                          hideDisabled: true,
+                          multiLimit: 15,
+                          multiShowCount: false,
+                          multiContainer: true,
+                          classNames: 'w-full'
+                        }"
+                        multiple
+                      >
+                        <option value="1">ITA20b</option>
+                        <option value="2">ITA20a</option>
+                        <option value="3">Maintainer</option>
+                        <option value="4">Co. Worker</option>
+                        <option value="5">Author of the Month</option>
+                      </TailSelect>
                     </div>
-                    <div class="mt-3">
-                      <label for="accounts-lastname-edit" class="form-label">
-                        Lastname
-                      </label>
-                      <input
-                        id="accounts-lastname-edit"
-                        type="text"
-                        class="form-control"
-                        placeholder="Input text"
-                        value="Gralla"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-span-12">
-                    <hr class="mt-5 mb-3">
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="mt-3 xxl:mt-0">
-                      <label for="accounts-email_verify-edit" class="form-label">
-                        Email verified at
-                      </label>
-                      <input
-                        id="accounts-email_verify-edit"
-                        type="text"
-                        class="form-control"
-                        placeholder="Input text"
-                        value="Unknown"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="mt-3 xxl:mt-0">
-                      <label for="accounts-id-edit" class="form-label">
-                        Account ID
-                      </label>
-                      <input
-                        id="accounts-id-edit"
-                        type="text"
-                        class="form-control"
-                        placeholder="Input text"
-                        value="1"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex justify-end mt-4">
-                  <button type="button" class="btn btn-primary w-20 mr-auto">
-                    Save
-                  </button>
-                  <a href="" class="text-theme-6 flex items-center">
-                    <Trash2Icon class="w-4 h-4 mr-1"/> Delete Account
-                  </a>
-                </div>
-              </div>
-              <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
-                <div
-                  class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5"
-                >
-                  <div
-                    class="h-40 relative image-fit cursor-pointer zoom-in mx-auto"
-                  >
-                    <img
-                      class="rounded-md"
-                      alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
-                    />
-                    <Tippy
-                      tag="div"
-                      content="Remove this profile photo?"
-                      class="w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2"
-                    >
-                      <xIcon class="w-4 h-4" />
-                    </Tippy>
-                  </div>
-                  <div class="mx-auto cursor-pointer relative mt-5">
-                    <button type="button" class="btn btn-primary w-full">
-                      Change Photo
-                    </button>
-                    <input
-                      type="file"
-                      class="w-full h-full top-0 left-0 absolute opacity-0"
-                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- END: Display Information -->
+        <!-- END: Roles & Tags -->
+        <!-- BEGIN: Settings -->
+        <div class="intro-y box lg:mt-5">
+          <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
+            <h2 class="font-medium text-base mr-auto">Account Settings</h2>
+            <button class="btn btn-primary btn-sm ml-auto"><SaveIcon class="mr-2 w-5 h-5"></SaveIcon>Save</button>
+          </div>
+          <div class="p-5">
+            <div class="flex flex-col-reverse xl:flex-row flex-col">
+              <div class="flex-1 mt-6 xl:mt-0">
+                <div class="grid grid-cols-12 gap-x-5 mb-4">
+                  <div class="col-span-12 xxl:col-span-6">
+                    <div class="flex items-center">
+                      <div class="border-l-2 border-theme-1 pl-4">
+                        <a href="" class="font-medium">
+                          Verified Emailaddress
+                        </a>
+                        <div class="text-gray-600">
+                          Is the account-email verified?
+                        </div>
+                      </div>
+                      <input class="form-check-switch ml-auto" type="checkbox">
+                    </div>
+                  </div>
+                  <div class="col-span-12 xxl:col-span-6 mb-4">
+                    <div class="flex items-center">
+                      <div class="border-l-2 border-theme-1 pl-4">
+                        <a href="" class="font-medium">
+                          Newsletter
+                        </a>
+                        <div class="text-gray-600">
+                          Does the user get newsletter?
+                        </div>
+                      </div>
+                      <input class="form-check-switch ml-auto" type="checkbox">
+                    </div>
+                  </div>
+                  <div class="col-span-12 xxl:col-span-6">
+                    <div class="flex items-center">
+                      <div class="border-l-2 border-theme-1 pl-4">
+                        <a href="" class="font-medium">
+                          Security Alerts
+                        </a>
+                        <div class="text-gray-600">
+                          Does the user get Security alerts
+                        </div>
+                      </div>
+                      <input class="form-check-switch ml-auto" type="checkbox">
+                    </div>
+                  </div>
+                  <div class="col-span-12 xxl:col-span-6">
+                    <div class="flex items-center">
+                      <div class="border-l-2 border-theme-1 pl-4">
+                        <a href="" class="font-medium">
+                          Posting Informations
+                        </a>
+                        <div class="text-gray-600">
+                          Does the user get Informations about recent Postings?
+                        </div>
+                      </div>
+                      <input class="form-check-switch ml-auto" type="checkbox">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: Settings -->
       </div>
     </div>
   </div>
