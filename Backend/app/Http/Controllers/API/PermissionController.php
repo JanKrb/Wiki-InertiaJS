@@ -26,7 +26,7 @@ class PermissionController extends BaseController
         $input = $request->all();
 
         $validator = Validator::make($input, [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255|unique:permissions'
         ]);
 
         if ($validator->fails()) {
@@ -51,7 +51,7 @@ class PermissionController extends BaseController
         $input = $request->all();
 
         $validator = Validator::make($input, [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255|unique:permissions,name,' . $permission->name
         ]);
 
         if ($validator->fails()) {
