@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
 use App\Http\Resources\Category as CategoryResource;
+use App\Http\Resources\StructuredCategoryCollection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +18,14 @@ class CategoryController extends BaseController
     {
         $per_page = $request->get('per_page', 15);
         return (new CategoryCollection(Category::paginate($per_page)))->additional([
+            'success' => true,
+            'message' => 'Successfully retrieved categories'
+        ]);
+    }
+
+    public function structured(Request $request) {
+        $per_page = $request->get('per_page', 15);
+        return (new StructuredCategoryCollection(Category::paginate($per_page)))->additional([
             'success' => true,
             'message' => 'Successfully retrieved categories'
         ]);
