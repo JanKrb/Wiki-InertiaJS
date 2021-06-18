@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="pos intro-y grid grid-cols-12 gap-5 mt-5">
-      <!-- BEGIN: Post Content -->
+      <!-- BEGIN: Role Content -->
       <div class="intro-y col-span-12 lg:col-span-9">
         <div class="intro-y">
           <div class="box p-2">
@@ -110,78 +110,78 @@
             aria-labelledby="permissions-tab"
           >
             <div class="box p-5 mt-5">
-              <!-- BEGIN: Table Buttons -->
-              <div class="intro-y flex flex-col sm:flex-row items-center">
-                <h2 class="text-lg font-medium mr-auto">Permissions</h2>
-                <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                  <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary"><PlusIcon class="mr-2"></PlusIcon>Permission</a>
+              <!-- BEGIN: Permission Tab -->
+              <div class="grid lg:grid-cols-1 gap-6 my-5">
+                <!-- BEGIN: Table Buttons -->
+                <div class="intro-y flex flex-col sm:flex-row items-center">
+                  <h2 class="text-lg font-medium mr-auto">Permissions</h2>
+                </div>
+                <!-- END: Table Buttons -->
+                <!-- BEGIN: Datatable -->
+                <table class="table mt-5">
+                  <thead>
+                  <tr class="bg-gray-700 dark:bg-dark-1 text-white">
+                    <th class="whitespace-nowrap">#</th>
+                    <th class="whitespace-nowrap">Name</th>
+                    <th class="whitespace-nowrap">Creator</th>
+                    <th class="whitespace-nowrap">Updated at</th>
+                    <th class="whitespace-nowrap">Created at</th>
+                    <th class="whitespace-nowrap"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="permission in role_permissions" v-bind:key="permission.id">
+                      <td class="border-b dark:border-dark-5">{{ permission.id }}</td>
+                      <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
+                      <td class="border-b dark:border-dark-5">{{ permission.user_id }}</td>
+                      <td class="border-b dark:border-dark-5">{{ permission.updated_at }}</td>
+                      <td class="border-b dark:border-dark-5">{{ permission.created_at }}</td>
+                      <td class="border-b dark:border-dark-5">
+                        <a class="text-small" href="javascript:;" @click="deletePermission(permission)">
+                          <Trash2Icon class="hover:text-blue-700"></Trash2Icon>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- END: Datatable -->
+                <!-- BEGIN: Datatable Pagination -->
+                <div class="flex flex-col items-center mt-5">
+                  <ul class="flex">
+                    <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+                      <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchRolePermissions(pagination.first_page_url)">
+                        <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
+                      </button>
+                    </li>
+                    <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+                      <button class="flex items-center font-bold" @click="fetchRolePermissions(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+                        <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
+                      </button>
+                    </li>
+                    <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+                      <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+                    </li>
+                    <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+                      <button class="flex items-center font-bold" @click="fetchRolePermissions(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+                        <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
+                      </button>
+                    </li>
+                    <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+                      <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchRolePermissions(pagination.last_page_url)">
+                        <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <!-- END: Table Buttons -->
-              <!-- BEGIN: Datatable -->
-              <table class="table mt-5">
-                <thead>
-                <tr class="bg-gray-700 dark:bg-dark-1 text-white">
-                  <th class="whitespace-nowrap">#</th>
-                  <th class="whitespace-nowrap">Name</th>
-                  <th class="whitespace-nowrap">Creator</th>
-                  <th class="whitespace-nowrap">Updated at</th>
-                  <th class="whitespace-nowrap">Created at</th>
-                  <th class="whitespace-nowrap"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td class="border-b dark:border-dark-5">1</td>
-                  <td class="border-b dark:border-dark-5">role.permission</td>
-                  <td class="border-b dark:border-dark-5">Nikko</td>
-                  <td class="border-b dark:border-dark-5">Now</td>
-                  <td class="border-b dark:border-dark-5">2 days ago</td>
-                  <td class="border-b dark:border-dark-5">
-                    <a class="text-small">
-                      <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon>
-                    </a>
-                    <Trash2Icon class="hover:text-blue-700"></Trash2Icon>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-              <!-- END: Datatable -->
-              <!-- BEGIN: Datatable Pagination -->
-              <div class="flex flex-col items-center mt-5">
-                <ul class="flex">
-                  <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                    <button class="flex items-center font-bold">
-                      <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
-                    </button>
-                  </li>
-                  <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                    <button class="flex items-center font-bold">
-                      <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
-                    </button>
-                  </li>
-                  <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                    <a class="font-bold">Page 1 / 1</a>
-                  </li>
-                  <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                    <button class="flex items-center font-bold">
-                      <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
-                    </button>
-                  </li>
-                  <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                    <button class="flex items-center font-bold">
-                      <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
-                    </button>
-                  </li>
-                </ul>
-              </div>
               <!-- END: Datatable Pagination -->
+              <!-- END: Permission Tab -->
             </div>
           </div>
         </div>
       </div>
-      <!-- END: Post Content -->
-      <!-- BEGIN: Post Info -->
+      <!-- END: Role Content -->
+      <!-- BEGIN: Role Info -->
       <div class="col-span-12 lg:col-span-3">
         <div class="box p-5">
           <div class="flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
@@ -213,8 +213,30 @@
             <ClockIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>
         </div>
+        <!-- END: Role Info -->
+        <!-- END: Add Permissions -->
+        <div class="box p-5 mt-5">
+          <div>
+            <label>Add Permission</label>
+            <div class="mt-2">
+              <TailSelect
+                v-model="select"
+                :options="{
+                  search: true,
+                  classNames: 'w-full'
+                }"
+              >
+                <option :value="permission.id" v-for="permission in fetchSelectablePermissions()" v-bind:key="permission.id">{{ permission.name }}</option>
+              </TailSelect>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm w-20 mt-3">
+              Save
+            </button>
+          </div>
+        </div>
+        <!-- END: Add Permission -->
       </div>
-      <!-- END: Post Info -->
+      <!-- END: Role Info -->
     </div>
   </div>
 </template>
@@ -227,19 +249,25 @@ export default defineComponent({
   data() {
     return {
       role: {},
+      role_permissions: [],
+      all_permissions: [],
       pagination: {}
     }
   },
   mounted() {
     this.fetchRole(this.$route.params.id)
+    this.fetchRolePermissions(this.$route.params.id)
+    this.fetchPermissions()
   },
   methods: {
-    makePagination(meta) {
+    makePagination(meta, links) {
       const pagination = {
         current_page: meta.current_page,
         last_page: meta.last_page,
-        next_page_url: meta.next_page_url,
-        prev_page_url: meta.prev_page_url
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev
       }
       this.pagination = pagination
     },
@@ -277,12 +305,59 @@ export default defineComponent({
         .then(response => {
           this.role = response.data.data
           loader.hide()
-          this.makePagination(response.data.data)
         })
         .catch(error => {
           console.error(error)
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
+        })
+    },
+    fetchRolePermissions(id) {
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/roles/' + id + '/permissions')
+        .then(response => {
+          this.role_permissions = response.data.data
+          loader.hide()
+          this.makePagination(response.data.meta, response.data.links)
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
+        })
+    },
+    deletePermission(permission) {
+      const loader = this.$loading.show()
+      axios.delete('http://localhost:8000/api/roles/' + this.role.id + '/permissions/' + permission.id)
+        .then(response => {
+          loader.hide()
+          this.fetchRolePermissions(this.role.id)
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
+        })
+    },
+    fetchPermissions() {
+      axios.get('http://localhost:8000/api/permissions')
+        .then(response => {
+          this.all_permissions = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchSelectablePermissions() {
+      return this.all_permissions.filter(all => !this.role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
+    },
+    addPermission(name) {
+      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions', {
+        name: name
+      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   }
