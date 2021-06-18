@@ -86,12 +86,8 @@ class UserBadgesController extends BaseController
 
         foreach ($user->badges as $badge) {
             if ($badge->id == $badge_id) {
-                $found_badge = Badge::find($badge_id);
-
-                if (!is_null($found_badge)) {
-                    $found_badge->delete();
-                    return $this->sendResponse([], 'Badge has been removed from user');
-                }
+                $user->badges()->detach($badge_id);
+                return $this->sendResponse([], 'Successfully removed badge from user');
             }
         }
 

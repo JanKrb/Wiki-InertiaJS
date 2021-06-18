@@ -101,7 +101,8 @@ class RolesPermissionsController extends BaseController
 
         foreach ($role->permissions as $permission) {
             if ($permission->id == $permission_id) {
-                $role->permissions = $role->permissions->where('id', '!=', $permission->id);
+                $role->permissions()->detach($permission_id);
+                return $this->sendResponse([], 'Successfully removed permission from role');
             }
         }
 
