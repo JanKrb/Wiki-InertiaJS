@@ -40,7 +40,7 @@ const fakers = {
       return {
         name: user.name,
         gender: user.gender,
-        email: _.toLower(_.replace(user.name, / /g, '') + '@left4code.com')
+        email: _.toLower(_.replace(user.name, / /g, '') + '@krb-development.com')
       }
     })
   },

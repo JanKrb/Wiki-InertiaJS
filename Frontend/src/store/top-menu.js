@@ -60,7 +60,7 @@ const state = () => {
           },
           {
             icon: 'UsersIcon',
-            pageName: 'dashboard',
+            pageName: 'admin.accounts',
             title: 'Accounts'
           },
           {
