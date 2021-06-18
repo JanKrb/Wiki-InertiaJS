@@ -20,6 +20,7 @@ class Category extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'thumbnail' => $this->thumbnail,
+            'user' => $this->creator,
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];

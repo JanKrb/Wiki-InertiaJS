@@ -23,6 +23,7 @@ class Badge extends JsonResource
             'color' => $this->color,
             'is_role_badge' => $this->is_role_badge,
             'role_id' => $this->role_id,
+            'user' => $this->creator,
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
