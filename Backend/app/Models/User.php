@@ -127,4 +127,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Role::class, 'user_id');
     }
+
+    public function created_categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'user_id');
+    }
 }

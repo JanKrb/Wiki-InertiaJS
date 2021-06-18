@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\BadgeController;
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
@@ -67,16 +67,25 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Badges System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('badges', [BadgeController::class, 'index'])->name('badges.index');
-    Route::post('badges', [BadgeController::class, 'store'])->name('badges.store');
-    Route::put('badges/{badge}', [BadgeController::class, 'update'])->name('badges.update');
-    Route::delete('badges/{badge}', [BadgeController::class, 'destroy'])->name('badges.destroy');
-    Route::get('badges/{badge}', [BadgeController::class, 'show'])->name('badges.show');
+    Route::get('badges', [CategoryController::class, 'index'])->name('badges.index');
+    Route::post('badges', [CategoryController::class, 'store'])->name('badges.store');
+    Route::put('badges/{badge}', [CategoryController::class, 'update'])->name('badges.update');
+    Route::delete('badges/{badge}', [CategoryController::class, 'destroy'])->name('badges.destroy');
+    Route::get('badges/{badge}', [CategoryController::class, 'show'])->name('badges.show');
 
     Route::get('users/{user}/badges', [UserBadgesController::class, 'index'])->name('users.badges.index');
     Route::post('users/{user}/badges', [UserBadgesController::class, 'store'])->name('users.badges.store');
     Route::get('users/{user}/badges/{badge}', [UserBadgesController::class, 'show'])->name('users.badges.show');
     Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'destroy'])->name('users.badges.destroy');
+});
+
+// Categories System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 });
 
 // Debugging
