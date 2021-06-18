@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\User as UserResource;
 
 class Role extends JsonResource
 {
@@ -20,7 +21,7 @@ class Role extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'color' => $this->color,
-            'user' => $this->creator,
+            'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
