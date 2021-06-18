@@ -33,7 +33,7 @@ class RolesAuth
                     'issuer_id' => 1,
                     'short' => 'Unauthenticated access',
                     'details' => $request->user()->name . " [" . $request->user()->id . "] tried to access on " . url()->full() . " without permissions.",
-                    'attributes' => $request->json()
+                    'attributes' => '{}'
                 ]);
 
                 return response()->json($response, 401);
