@@ -38,6 +38,8 @@ class BadgeController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
         }
 
+        $input['user_id'] = auth()->user()->id;
+
         $badge = Badge::create($input);
         return $this->sendResponse(new BadgeResource($badge), 'Badge created successfully');
     }

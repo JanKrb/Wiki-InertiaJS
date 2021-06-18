@@ -35,6 +35,8 @@ class RoleController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
         }
 
+        $input['user_id'] = auth()->user()->id;
+
         $role = Role::create($input);
         return $this->sendResponse(new RoleResource($role), 'Role created successfully');
     }

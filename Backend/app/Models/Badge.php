@@ -22,7 +22,8 @@ class Badge extends Model
         'icon',
         'color',
         'is_role_badge',
-        'role_id'
+        'role_id',
+        'user_id'
     ];
 
     /**

@@ -33,6 +33,8 @@ class PermissionController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
         }
 
+        $input['user_id'] = auth()->user()->id;
+
         $permission = Permission::create($input);
         return $this->sendResponse(new PermissionResource($permission), 'Permission created successfully');
     }
