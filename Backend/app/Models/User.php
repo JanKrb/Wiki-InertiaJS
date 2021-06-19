@@ -132,4 +132,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class, 'user_id');
     }
+
+    public function created_posts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
+
+    public function created_post_histories(): HasMany
+    {
+        return $this->hasMany(PostHistory::class, 'user_id');
+    }
+
+    public function post_votes(): HasMany
+    {
+        return $this->hasMany(PostVote::class, 'user_id');
+    }
+
+    public function bans(): HasMany
+    {
+        return $this->hasMany(Ban::class, 'target_id');
+    }
+
+    public function staff_bans(): HasMany
+    {
+        return $this->hasMany(Ban::class, 'staff_id');
+    }
 }
