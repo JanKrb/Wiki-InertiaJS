@@ -250,4 +250,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('users.update')
         ->middleware(['permission:users_update'])
     ;
+
+    Route::post('users/{user}/reset_password', [UserMgmtController::class, 'sendPasswordResetNotification'])
+        ->name('users.reset_password')
+        ->middleware(['permission:users_reset_password'])
+    ;
+
+    Route::post('users/{user}/verify_email', [UserMgmtController::class, 'sendEmailVerificationNotification'])
+        ->name('users.verify_email')
+        ->middleware(['permission:users_verify_email'])
+    ;
+
+    Route::post('users/{user}/change_password', [UserMgmtController::class, 'changePassword'])
+        ->name('users.change_password')
+        ->middleware(['permission:users_change_password'])
+    ;
 });
