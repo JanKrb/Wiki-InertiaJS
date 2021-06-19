@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7203d2e-ec6c-4c36-b66e-1fdacd4df338" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Frontend/src/views/account/AccountInformations.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/src/views/account/AccountSettings.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/src/views/account/Components/Sidebar.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/src/views/accounts/Main.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/src/views/account/AccountPostings.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/src/store/top-menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/store/top-menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/src/utils/faker.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/utils/faker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/views/account/AccountInformations.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/views/account/AccountInformations.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/views/account/Components/Sidebar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/views/account/Components/Sidebar.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" doNotAsk="true">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/Backend/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -211,7 +211,8 @@
       <workItem from="1623927821973" duration="7780000" />
       <workItem from="1623958703793" duration="7550000" />
       <workItem from="1623967864820" duration="2309000" />
-      <workItem from="1624004438699" duration="34453000" />
+      <workItem from="1624004438699" duration="36554000" />
+      <workItem from="1624101748572" duration="804000" />
     </task>
     <servers />
   </component>
