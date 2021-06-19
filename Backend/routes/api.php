@@ -158,14 +158,14 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:user_badges_get_all'])
     ;
 
-    Route::post('users/{user}/badges', [UserBadgesController::class, 'store'])
-        ->name('users.badges.store')
-        ->middleware(['permission:user_badges_store'])
-    ;
-
     Route::post('users/{user}/badges/multiple', [UserBadgesController::class, 'storeArray'])
         ->name('users.badges.store_array')
         ->middleware(['permission:user_badges_store_array'])
+    ;
+
+    Route::post('users/{user}/badges', [UserBadgesController::class, 'store'])
+        ->name('users.badges.store')
+        ->middleware(['permission:user_badges_store'])
     ;
 
     Route::get('users/{user}/badges/{badge}', [UserBadgesController::class, 'show'])
@@ -173,14 +173,14 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:user_badges_get_single'])
     ;
 
-    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'destroy'])
-        ->name('users.badges.destroy')
-        ->middleware(['permission:user_badges_destroy'])
-    ;
-
     Route::delete('users/{user}/badges/multiple', [UserBadgesController::class, 'destroyArray'])
         ->name('users.badges.destroy_array')
         ->middleware(['permission:user_badges_destroy_array'])
+    ;
+
+    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'destroy'])
+        ->name('users.badges.destroy')
+        ->middleware(['permission:user_badges_destroy'])
     ;
 });
 
