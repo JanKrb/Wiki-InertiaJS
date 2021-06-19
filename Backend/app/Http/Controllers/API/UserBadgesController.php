@@ -141,7 +141,7 @@ class UserBadgesController extends BaseController
 
         $badges = $input['badges'];
         foreach ($badges as $badge_id) {
-            foreach ($user->badges() as $badge) {
+            foreach ($user->badges as $badge) {
                 if ($badge->id == $badge_id) {
                     $user->badges()->detach($badge_id);
                 }
