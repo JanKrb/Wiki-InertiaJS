@@ -4,43 +4,8 @@
       <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
-      <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
-        <!-- BEGIN: Sidebar -->
-        <Sidebar></Sidebar>
-        <!-- END: Sidebar -->
-        <!-- BEGIN: Account Informations -->
-        <div class="intro-y box mt-5 p-5">
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
-            <div>
-              <div class="text-gray-600">Name</div>
-              <div class="mt-1">Nino Gralla</div>
-            </div>
-            <UserIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
-            <div>
-              <div class="text-gray-600">Role</div>
-              <div class="mt-1">Administrator</div>
-            </div>
-            <ShieldIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
-            <div>
-              <div class="text-gray-600">Updated at</div>
-              <div class="mt-1">02/06/20 02:10 PM</div>
-            </div>
-            <ClockIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center pt-5">
-            <div>
-              <div class="text-gray-600">Created at</div>
-              <div class="mt-1">02/06/20 02:10 PM</div>
-            </div>
-            <UserPlusIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-        </div>
-        <!-- END: Account Informations -->
-      </div>
+      <!-- BEGIN: Sidebar -->
+      <Sidebar :user="this.user"></Sidebar>
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Roles & Tags -->
@@ -89,9 +54,8 @@
                         }"
                           multiple
                         >
-                          <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id">{{ badge.title }}</option>
+                          <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id" :selected="this.user_badges.map((item) => { return item.id }).includes(badge.id)">{{ badge.title }}</option>
                         </TailSelect>
-                        {{new_badges}}
                       </div>
                     </div>
                   </div>
@@ -198,15 +162,17 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchRoles()
-    this.fetchBadges()
     this.fetchUser(this.$route.params.id)
     this.fetchUserBadges(this.$route.params.id)
+    this.fetchRoles()
+    this.fetchBadges()
+  },
+  created() {
+    // this.fetchRoles()
+    // this.fetchBadges()
   },
   methods: {
     submitCredentials(user) {
-      const loader = this.$loading.show()
-
       // update Userrole
       this.updateUser(user)
 
@@ -229,10 +195,6 @@ export default defineComponent({
           createBadges.push(badge)
         }
       }
-      console.log('Creating Badges:')
-      console.log(createBadges)
-      console.log('Deleting Badges:')
-      console.log(deleteBadges)
 
       // Delete old Badges
       if (deleteBadges.length > 0) {
@@ -243,19 +205,20 @@ export default defineComponent({
       if (createBadges.length > 0) {
         this.createUserBadges(createBadges)
       }
-      loader.hide()
     },
     deleteUserBadges(badges) {
       const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/users/' + this.$route.params.id + '/badges/multiple', {
-        badges: badges
+        data: {
+          badges: badges
+        }
       })
         .then(response => {
-          console.log(response)
+          this.fetchUserBadges(this.$route.params.id)
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
+          console.log(error)
           loader.hide()
         })
     },
@@ -265,7 +228,7 @@ export default defineComponent({
         badges: badges
       })
         .then(response => {
-          console.log(response)
+          this.fetchUserBadges(this.$route.params.id)
           loader.hide()
         })
         .catch(error => {
@@ -274,7 +237,8 @@ export default defineComponent({
         })
     },
     updateUser(user) {
-      axios.put('http://localhost:8000/api/users/' + user.id, {
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/users/' + this.$route.params.id, {
         name: user.name,
         pre_name: user.pre_name,
         last_name: user.last_name,
@@ -282,10 +246,11 @@ export default defineComponent({
         role_id: this.user_role
       })
         .then(response => {
-          console.log(response)
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
     fetchUser(id) {
@@ -302,15 +267,12 @@ export default defineComponent({
         })
     },
     fetchRoles() {
-      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/roles')
         .then(response => {
           this.roles = response.data.data
-          loader.hide()
         })
         .catch(error => {
           console.error(error)
-          loader.hide()
         })
     },
     fetchBadges() {
@@ -326,15 +288,12 @@ export default defineComponent({
         })
     },
     fetchUserBadges(id) {
-      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id + '/badges')
         .then(response => {
           this.user_badges = response.data.data
-          loader.hide()
         })
         .catch(error => {
           console.error(error)
-          loader.hide()
         })
     }
   }
