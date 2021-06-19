@@ -8,6 +8,13 @@ use App\Http\Resources\User as UserResource;
 
 class Role extends JsonResource
 {
+    private $exclude_creator;
+
+    public function __construct($resource, $exclude_creator=false) {
+        parent::__construct($resource);
+        $this->exclude_creator = $exclude_creator;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -16,14 +23,19 @@ class Role extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'color' => $this->color,
-            'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
+
+        if (!$this->exclude_creator) {
+            $data['user'] = new UserResource($this->user);
+        }
+
+        return $data;
     }
 }
