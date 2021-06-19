@@ -91,7 +91,7 @@ class BanController extends BaseController
         if (is_null($ban)) {
             return $this->sendError('Ban does not exists.');
         }
-        
+
         $ban->delete();
         return $this->sendResponse([], 'Ban soft-deleted successfully.');
     }
