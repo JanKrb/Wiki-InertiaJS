@@ -140,10 +140,10 @@
                     </div>
                   </div>
                   <div class="flex justify-end mt-4">
-                    <button type="button" class="btn btn-primary w-20 mr-auto">
+                    <button type="submit" class="btn btn-primary w-20 mr-auto">
                       Save
                     </button>
-                    <a href="" class="text-theme-6 flex items-center">
+                    <a href="javascript:;" @click="deleteUser" class="text-theme-6 flex items-center">
                       <Trash2Icon class="w-4 h-4 mr-1"/> Delete Account
                     </a>
                   </div>
@@ -208,15 +208,20 @@ export default defineComponent({
   },
   methods: {
     fetchUser(id) {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id)
         .then(response => {
           this.user = response.data.data
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
+          this.$router.push({ name: 'admin.accounts' })
         })
     },
     updatedUser(user) {
+      const loader = this.$loading.show()
       axios.put('http://localhost:8000/api/users/' + user.id, {
         name: user.name,
         pre_name: user.pre_name,
@@ -225,9 +230,23 @@ export default defineComponent({
         profile_picture: user.profile_picture
       })
         .then(response => {
+          loader.hide()
           this.fetchUser(this.$route.params.id)
         })
         .catch(error => {
+          loader.hide()
+          console.error(error)
+        })
+    },
+    deleteUser() {
+      const loader = this.$loading.show()
+      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/delete')
+        .then(response => {
+          loader.hide()
+          this.$router.push({ name: 'admin.accounts' })
+        })
+        .error(error => {
+          loader.hide()
           console.error(error)
         })
     }
