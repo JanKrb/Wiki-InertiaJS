@@ -177,6 +177,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('users.badges.destroy')
         ->middleware(['permission:user_badges_destroy'])
     ;
+
+    Route::delete('users/{user}/badges/multiple', [UserBadgesController::class, 'destroyArray'])
+        ->name('users.badges.destroy_array')
+        ->middleware(['permission:user_badges_destroy_array'])
+    ;
 });
 
 // Categories System
