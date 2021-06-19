@@ -39,7 +39,8 @@ class UserMgmtController extends BaseController
             'pre_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,' . $account_id,
-            'profile_picture' => ''
+            'profile_picture' => '',
+            'role_id' => 'integer'
         ]);
 
         if ($validator->fails()) {
