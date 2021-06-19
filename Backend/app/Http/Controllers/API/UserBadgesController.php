@@ -69,7 +69,7 @@ class UserBadgesController extends BaseController
 
         $validator = Validator::make($input, [
             'badges' => 'required|array',
-            'badges.*' => 'exists:badges,id'
+            'badges.*' => 'exists:badges,id|unique:user_badges,badge_id,NULL,id,user_id,'.$user_id
         ]);
 
         if ($validator->fails()) {
@@ -81,7 +81,7 @@ class UserBadgesController extends BaseController
             $user->badges()->save(Badge::find($badge));
         }
 
-        return $this->sendResponse(new BadgeCollection($badges), 'Successfully added badges to user');
+        return $this->sendResponse(new BadgeCollection($user->badges), 'Successfully added badges to user');
     }
 
     public function show($user_id, $badge_id) {
@@ -148,6 +148,6 @@ class UserBadgesController extends BaseController
             }
         }
 
-        return $this->sendResponse($debug, 'Successfully removed badges from user');
+        return $this->sendResponse([], 'Successfully removed badges from user');
     }
 }
