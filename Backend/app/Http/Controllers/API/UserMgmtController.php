@@ -110,8 +110,15 @@ class UserMgmtController extends BaseController
         return $this->sendResponse([], 'Password changed successfully');
     }
 
-    public function delete($account) {
+    public function delete(Request $request, $account_id) {
+        $account = User::find($account_id);
+
+        if (is_null($account)) {
+            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+        }
+
         $account->delete();
+        
         return $this->sendResponse([], 'Account soft-deleted successfully.');
     }
 }
