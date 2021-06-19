@@ -118,7 +118,7 @@ class UserBadgesController extends BaseController
             }
         }
 
-        return $this->sendError('User has no badge with this id', ['user_id' => $user_id->id, 'badge_id' => $badge_id]);
+        return $this->sendError('User has no badge with this id', ['user_id' => $user_id, 'badge_id' => $badge_id]);
     }
 
     public function destroyArray(Request $request, $user_id) {
@@ -141,7 +141,7 @@ class UserBadgesController extends BaseController
 
         $badges = $input['badges'];
         foreach ($badges as $badge_id) {
-            foreach ($user->badges as $badge) {
+            foreach ($user->badges() as $badge) {
                 if ($badge->id == $badge_id) {
                     $user->badges()->detach($badge_id);
                 }
