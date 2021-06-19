@@ -68,9 +68,11 @@
       </router-link>
     </div>
     <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-      <a class="flex items-center" href="">
-        <PaperclipIcon class="w-4 h-4 mr-2" /> Postings
-      </a>
+      <router-link :to="{ 'name': 'admin.accounts.postings', 'params': { id: '1' }}">
+        <a class="flex items-center" href="">
+          <PaperclipIcon class="w-4 h-4 mr-2" /> Postings
+        </a>
+      </router-link>
       <a class="flex items-center mt-5" href="">
         <SlashIcon class="w-4 h-4 mr-2" /> Bans
       </a>
