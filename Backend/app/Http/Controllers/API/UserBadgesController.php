@@ -146,10 +146,8 @@ class UserBadgesController extends BaseController
                     $user->badges()->detach($badge_id);
                 }
             }
-
-            return $this->sendResponse([], 'Successfully removed badges from user');
         }
 
-        return $this->sendError('Unknown error on deleting badges of user', ['user_id' => $user_id->id, 'badge_id' => $badge_id]);
+        return $this->sendResponse($debug, 'Successfully removed badges from user');
     }
 }
