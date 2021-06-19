@@ -8,8 +8,9 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolesPermissionsController;
 use App\Http\Controllers\API\TagController;
 use App\Http\Controllers\API\UserBadgesController;
-use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserBansController;
 use App\Http\Controllers\API\UserMgmtController;
+use App\Http\Controllers\API\BanController;
 use Orion\Facades\Orion;
 use Illuminate\Support\Facades\Route;
 
@@ -269,5 +270,53 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('users/{user}/delete', [UserMgmtController::class, 'delete'])
         ->name('users.delete')
         ->middleware(['permission:users_delete'])
+    ;
+});
+
+// Ban System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('bans', [BanController::class, 'index'])
+        ->name('bans.index')
+        ->middleware(['permission:bans_get_all'])
+    ;
+
+    Route::post('bans', [BanController::class, 'store'])
+        ->name('bans.store')
+        ->middleware(['permission:bans_store'])
+    ;
+
+    Route::put('bans/{ban}', [BanController::class, 'update'])
+        ->name('bans.update')
+        ->middleware(['permission:bans_update'])
+    ;
+
+    Route::delete('bans/{ban}', [BanController::class, 'destroy'])
+        ->name('bans.destroy')
+        ->middleware(['permission:bans_destroy'])
+    ;
+
+    Route::get('bans/{ban}', [BanController::class, 'show'])
+        ->name('bans.show')
+        ->middleware(['permission:bans_get_single'])
+    ;
+
+    Route::get('users/{user}/bans', [UserBansController::class, 'index'])
+        ->name('users.bans.index')
+        ->middleware(['permission:user_bans_get_all'])
+    ;
+
+    Route::post('users/{user}/bans', [UserBansController::class, 'store'])
+        ->name('users.bans.store')
+        ->middleware(['permission:user_bans_store'])
+    ;
+
+    Route::get('users/{user}/bans/{ban}', [UserBansController::class, 'show'])
+        ->name('users.bans.show')
+        ->middleware(['permission:user_bans_get_single'])
+    ;
+
+    Route::delete('users/{user}/bans/{ban}', [UserBansController::class, 'destroy'])
+        ->name('users.bans.destroy')
+        ->middleware(['permission:user_bans_destroy'])
     ;
 });

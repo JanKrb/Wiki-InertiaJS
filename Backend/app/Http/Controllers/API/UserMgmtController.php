@@ -118,7 +118,7 @@ class UserMgmtController extends BaseController
         }
 
         $account->delete();
-        
+
         return $this->sendResponse([], 'Account soft-deleted successfully.');
     }
 }
