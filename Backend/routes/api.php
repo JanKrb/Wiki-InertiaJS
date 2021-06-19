@@ -163,6 +163,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:user_badges_store'])
     ;
 
+    Route::post('users/{user}/badges/multiple', [UserBadgesController::class, 'storeArray'])
+        ->name('users.badges.store_array')
+        ->middleware(['permission:user_badges_store_array'])
+    ;
+
     Route::get('users/{user}/badges/{badge}', [UserBadgesController::class, 'show'])
         ->name('users.badges.show')
         ->middleware(['permission:user_badges_get_single'])
