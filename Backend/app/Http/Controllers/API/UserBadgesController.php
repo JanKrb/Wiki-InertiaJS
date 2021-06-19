@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\BadgeCollection;
 use App\Http\Resources\UserBadgeCollection;
 use \App\Http\Resources\Badge as BadgeResource;
 use App\Models\Badge;
@@ -55,6 +56,32 @@ class UserBadgesController extends BaseController
         $user->badges()->save($badge);
 
         return $this->sendResponse(new BadgeResource($badge), 'Successfully added badge to user');
+    }
+
+    public function storeArray(Request $request, $user_id) {
+        $user = User::find($user_id);
+
+        if (is_null($user)) {
+            return  $this->sendError('Invalid user id.', ['user_id' => $user_id]);
+        }
+
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'badges' => 'required|array',
+            'badges.*' => 'exists:badges,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+        }
+
+        $badges = $input['badges'];
+        foreach ($badges as $badge) {
+            $user->badges()->save(Badge::find($badge));
+        }
+
+        return $this->sendResponse(new BadgeCollection($badges), 'Successfully added badges to user');
     }
 
     public function show($user_id, $badge_id) {
