@@ -9,6 +9,7 @@ use App\Http\Controllers\API\RolesPermissionsController;
 use App\Http\Controllers\API\TagController;
 use App\Http\Controllers\API\UserBadgesController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserMgmtController;
 use Orion\Facades\Orion;
 use Illuminate\Support\Facades\Route;
 
@@ -230,5 +231,23 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('tags/{tag}', [TagController::class, 'show'])
         ->name('tags.show')
         ->middleware(['permission:tags_get_single'])
+    ;
+});
+
+// User Management System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('users', [UserMgmtController::class, 'index'])
+        ->name('users.index')
+        ->middleware(['permission:users_get_all'])
+    ;
+
+    Route::get('users/{user}', [UserMgmtController::class, 'show'])
+        ->name('users.show')
+        ->middleware(['permission:users_get_single'])
+    ;
+
+    Route::put('users/{user}', [UserMgmtController::class, 'update'])
+        ->name('users.update')
+        ->middleware(['permission:users_update'])
     ;
 });
