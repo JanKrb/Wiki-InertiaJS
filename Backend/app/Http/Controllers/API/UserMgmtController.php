@@ -109,4 +109,9 @@ class UserMgmtController extends BaseController
 
         return $this->sendResponse([], 'Password changed successfully');
     }
+
+    public function delete($account) {
+        $account->delete();
+        return $this->sendResponse([], 'Account soft-deleted successfully.');
+    }
 }

@@ -265,4 +265,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('users.change_password')
         ->middleware(['permission:users_change_password'])
     ;
+
+    Route::post('users/{user}/delete', [UserMgmtController::class, 'delete'])
+        ->name('users.delete')
+        ->middleware(['permission:users_delete'])
+    ;
 });
