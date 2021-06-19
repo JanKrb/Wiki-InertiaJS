@@ -4,43 +4,8 @@
       <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
-      <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
-        <!-- BEGIN: Sidebar -->
-        <Sidebar></Sidebar>
-        <!-- END: Sidebar -->
-        <!-- BEGIN: Account Informations -->
-        <div class="intro-y box mt-5 p-5">
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
-            <div>
-              <div class="text-gray-600">Name</div>
-              <div class="mt-1">Nino Gralla</div>
-            </div>
-            <UserIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
-            <div>
-              <div class="text-gray-600">Role</div>
-              <div class="mt-1">Administrator</div>
-            </div>
-            <ShieldIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
-            <div>
-              <div class="text-gray-600">Updated at</div>
-              <div class="mt-1">02/06/20 02:10 PM</div>
-            </div>
-            <ClockIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-          <div class="flex items-center pt-5">
-            <div>
-              <div class="text-gray-600">Created at</div>
-              <div class="mt-1">02/06/20 02:10 PM</div>
-            </div>
-            <UserPlusIcon class="w-4 h-4 text-gray-600 ml-auto" />
-          </div>
-        </div>
-        <!-- END: Account Informations -->
-      </div>
+      <!-- BEGIN: Sidebar -->
+      <Sidebar :user="this.user"></Sidebar>
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Security / Passwords -->
@@ -147,7 +112,8 @@ export default defineComponent({
   data() {
     return {
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      user: {}
     }
   },
   setup() {
@@ -155,6 +121,9 @@ export default defineComponent({
     return {
       select
     }
+  },
+  mounted() {
+    this.fetchUser(this.$route.params.id)
   },
   methods: {
     sendVerifyMail(id) {
@@ -186,6 +155,19 @@ export default defineComponent({
         password_confirmation: this.password_confirmation
       })
         .then(response => {
+          loader.hide()
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
+        })
+    },
+    fetchUser(id) {
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/users/' + id)
+        .then(response => {
+          this.user = response.data.data
+          this.user_role = response.data.data.role.id
           loader.hide()
         })
         .catch(error => {
