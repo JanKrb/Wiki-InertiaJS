@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\TagCollection;

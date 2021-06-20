@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\API\Post\BaseController;
 use App\Http\Resources\BadgeCollection;
 use App\Http\Resources\UserBadgeCollection;
 use \App\Http\Resources\Badge as BadgeResource;

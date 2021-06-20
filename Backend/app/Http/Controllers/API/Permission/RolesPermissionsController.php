@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Permission;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\API\Post\BaseController;
 use App\Models\Role;
 use Illuminate\Support\Collection;
 use App\Models\Permission;

@@ -1,17 +1,16 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\BadgeController;
-use App\Http\Controllers\API\CategoryController;
-use App\Http\Controllers\API\PermissionController;
-use App\Http\Controllers\API\RoleController;
-use App\Http\Controllers\API\RolesPermissionsController;
-use App\Http\Controllers\API\TagController;
-use App\Http\Controllers\API\UserBadgesController;
-use App\Http\Controllers\API\UserBansController;
-use App\Http\Controllers\API\UserMgmtController;
-use App\Http\Controllers\API\BanController;
-use Orion\Facades\Orion;
+use App\Http\Controllers\API\User\AuthController;
+use App\Http\Controllers\API\User\BadgeController;
+use App\Http\Controllers\API\User\BanController;
+use App\Http\Controllers\API\User\UserBadgesController;
+use App\Http\Controllers\API\User\UserBansController;
+use App\Http\Controllers\API\User\UserMgmtController;
+use App\Http\Controllers\API\Post\CategoryController;
+use App\Http\Controllers\API\Permission\PermissionController;
+use App\Http\Controllers\API\Permission\RoleController;
+use App\Http\Controllers\API\Permission\RolesPermissionsController;
+use App\Http\Controllers\API\Post\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*

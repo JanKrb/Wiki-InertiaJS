@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Post;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\API\Post\BaseController;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;

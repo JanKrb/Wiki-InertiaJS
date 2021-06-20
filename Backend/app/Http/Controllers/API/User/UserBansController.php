@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\API\Post\BaseController;
 use App\Http\Resources\Ban;
 use App\Http\Resources\UserBanCollection;
 use App\Http\Resources\Ban as BanResource;
