@@ -166,6 +166,7 @@ export default defineComponent({
           })
           .catch(error => {
             console.error(error.response)
+            loader.hide()
           })
       }
     },
