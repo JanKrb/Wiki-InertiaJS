@@ -86,8 +86,15 @@
     <div class="intro-y box mt-5 p-5">
       <div class="flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
         <div>
-          <div class="text-gray-600">Name</div>
+          <div class="text-gray-600">Username</div>
           <div class="mt-1">{{ this.user.name }}</div>
+        </div>
+        <TagIcon class="w-4 h-4 text-gray-600 ml-auto" />
+      </div>
+      <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
+        <div>
+          <div class="text-gray-600">Fullname</div>
+          <div class="mt-1">{{ this.user.pre_name }} {{ this.user.last_name }}</div>
         </div>
         <UserIcon class="w-4 h-4 text-gray-600 ml-auto" />
       </div>
