@@ -52,31 +52,33 @@
         </div>
       </div>
       <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-        <router-link :to="{ 'name': 'admin.accounts.informations', 'params': { id: '1' }}">
+        <router-link :to="{ 'name': 'admin.accounts.informations', 'params': { id: this.$route.params.id }}">
           <a :class="'flex items-center ' + (this.$route.name === 'admin.accounts.informations' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
             <UserIcon class="w-4 h-4 mr-2"/> Account Informations
           </a>
         </router-link>
-        <router-link :to="{ 'name': 'admin.accounts.settings', 'params': { id: '1' }}">
+        <router-link :to="{ 'name': 'admin.accounts.settings', 'params': { id: this.$route.params.id }}">
           <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.settings' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
             <BoxIcon class="w-4 h-4 mr-2"/> Account Settings
           </a>
         </router-link>
-        <router-link :to="{ 'name': 'admin.accounts.security', 'params': { id: '1' }}">
+        <router-link :to="{ 'name': 'admin.accounts.security', 'params': { id: this.$route.params.id }}">
           <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.security' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
             <LockIcon class="w-4 h-4 mr-2"/> Change Password
           </a>
         </router-link>
       </div>
       <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-        <router-link :to="{ 'name': 'admin.accounts.postings', 'params': { id: '1' }}">
-          <a class="flex items-center" href="">
+        <router-link :to="{ 'name': 'admin.accounts.postings', 'params': { id: this.$route.params.id }}">
+          <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.postings' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
             <PaperclipIcon class="w-4 h-4 mr-2"/> Postings
           </a>
         </router-link>
-        <a class="flex items-center mt-5" href="">
-          <SlashIcon class="w-4 h-4 mr-2"/> Bans
-        </a>
+        <router-link :to="{ 'name': 'admin.accounts.bans', 'params': { id: this.$route.params.id }}">
+          <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.bans' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
+            <SlashIcon class="w-4 h-4 mr-2"/> Bans
+          </a>
+        </router-link>
       </div>
     </div>
     <!-- END: Sidebar navigation -->
