@@ -35,7 +35,7 @@
     <!-- BEGIN: Create Modal -->
     <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
-        <form @submit.prevent="createAccount(this.account)">
+        <form @submit.prevent="handleSubmit">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
@@ -121,9 +121,9 @@
               />
             </div>
             <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-              <a href="" class="font-medium">{{ account.name }}</a>
+              <a href="" class="font-medium">{{ account?.name }}</a>
               <div class="text-gray-600 text-xs mt-0.5">
-                {{ account.role.name }}
+                {{ account.role?.name }}
               </div>
             </div>
             <div class="flex mt-4 lg:mt-0">
@@ -136,12 +136,12 @@
                 <div class="dropdown-menu w-40">
                   <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
                     <router-link :to="{ 'name': 'admin.accounts.informations', 'params': { 'id': account.id }}">
-                      <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                      <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                         <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                       </a>
                     </router-link>
                     <router-link :to="{ 'name': 'admin.accounts.bans', 'params': { 'id': account.id }}">
-                      <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                      <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                         <SlashIcon class="w-4 h-4 mr-2"/> Bans
                       </a>
                     </router-link>
@@ -197,7 +197,15 @@ export default defineComponent({
     return {
       pagination: {},
       accounts: {},
-      account: {}
+      account: {
+        name: '',
+        pre_name: '',
+        last_name: '',
+        email: '',
+        role: {
+          name: 'Not set'
+        }
+      }
     }
   },
   mounted() {
@@ -232,25 +240,31 @@ export default defineComponent({
       }
       this.pagination = pagination
     },
-    createAccount(account) {
-      const loader = this.$loading.show()
-      if (account.password === account.password_confirmation && account.password.length > 0) {
+    handleSubmit(e) {
+      e.preventDefault()
+      if (this.account.password === this.account.password_confirmation && this.account.password.length > 0) {
+        const loader = this.$loading.show()
+        console.log(this.account)
         axios.post('http://127.0.0.1:8000/api/auth/register', {
-          name: account.name,
-          email: account.email,
-          password: account.password,
-          password_confirmation: account.password_confirmation
+          name: this.account.name,
+          pre_name: this.account.pre_name,
+          last_name: this.account.last_name,
+          email: this.account.email,
+          password: this.account.password,
+          password_confirmation: this.account.password_confirmation
         })
           .then(response => {
-            console.log(response)
             loader.hide()
+            console.log(this.pagination.current_page)
+            this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
           })
           .catch(error => {
-            console.error(error)
+            console.log(error)
             loader.hide()
           })
       } else {
-        console.log('Passwords doesn`t match')
+        this.account.password = ''
+        this.account.password_confirmation = ''
       }
     }
   }
