@@ -397,6 +397,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_get_all'])
     ;
 
+    Route::get('posts/recent', [PostController::class, 'recent_posts'])
+        ->name('posts.recent')
+        ->middleware(['permission:posts_recent'])
+    ;
+
     Route::get('posts/{post}', [PostController::class, 'show'])
         ->name('posts.show')
         ->middleware(['permission:posts_get_single'])
