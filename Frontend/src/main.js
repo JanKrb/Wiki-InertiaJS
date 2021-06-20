@@ -11,7 +11,7 @@ import moment from 'moment'
 
 // SASS Theme
 import './assets/sass/app.scss'
-import { DateTime } from 'litepicker/dist/types/datetime'
+// import { DateTime } from 'litepicker/dist/types/datetime'
 
 const app = createApp(App)
   .use(store)
