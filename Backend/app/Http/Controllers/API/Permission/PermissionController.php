@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Permission;
 
-use App\Http\Controllers\API\Post\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Resources\PermissionCollection;
 use App\Models\Permission;
 use App\Http\Resources\Permission as PermissionResource;
