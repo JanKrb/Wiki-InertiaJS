@@ -54,7 +54,7 @@
                 <input
                   type="text"
                   class="intro-x login__input form-control py-3 px-4 border-gray-300 block"
-                  placeholder="Email"
+                  placeholder="Email / Username"
                   v-model="email"
                 />
                 <input
@@ -141,10 +141,18 @@ export default defineComponent({
       e.preventDefault()
       if (this.password.length > 0) {
         const loader = this.$loading.show()
-        axios.post('http://127.0.0.1:8000/api/auth/login', {
-          email: this.email,
+
+        const data = {
           password: this.password
-        })
+        }
+
+        if (this.isMail()) {
+          data.email = this.email
+        } else {
+          data.name = this.email
+        }
+
+        axios.post('http://127.0.0.1:8000/api/auth/login', data)
           .then(response => {
             console.log(response)
             localStorage.setItem('user', JSON.stringify(response.data.data.user))
@@ -160,6 +168,10 @@ export default defineComponent({
             console.error(error.response)
           })
       }
+    },
+    isMail: function () {
+      const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+      return reg.test(this.email)
     }
   }
 })
