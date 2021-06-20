@@ -2,26 +2,6 @@
   <div class="grid grid-cols-12 gap-5">
     <div class="col-span-12 xxl:col-span-10">
       <div class="grid grid-cols-12 gap-5">
-        <!-- BEGIN: Notification -->
-        <div class="col-span-12 mt-6 -mb-6 intro-y">
-          <div
-            class="alert alert-dismissible show box bg-theme-3 text-white flex items-center mb-6"
-            role="alert"
-          >
-            <span>
-              This is our ITA wiki
-            </span>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            >
-              <XIcon class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        <!-- BEGIN: Notification -->
         <!-- BEGIN: Blog Layout -->
         <div
           v-for="(faker, fakerKey) in $_.take($f(), 6)"
@@ -206,43 +186,18 @@
             </div>
           </div>
           <!-- END: Important Notes -->
-          <!-- BEGIN: General Report -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 xl:col-start-1 xl:row-start-2 xxl:col-start-auto xxl:row-start-auto mt-3">
-            <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">Overview</h2>
-            </div>
-            <div class="report-box-2 intro-y mt-12 sm:mt-5">
-              <div class="box sm:flex">
-                <div class="px-8 py-12 flex flex-col justify-center flex-1">
-                  <FileTextIcon class="w-10 h-10 text-theme-12" />
-                  <div class="relative text-3xl font-bold mt-12">
-                    4 Postings
-                  </div>
-                  <div class="mt-4 text-gray-600 dark:text-gray-600">
-                    These are the Wikiposts in all Categories.
-                  </div>
-                  <button class="btn btn-outline-secondary relative justify-start rounded-full mt-12">
-                    Search wiki
-                    <span class="w-8 h-8 absolute flex justify-center items-center bg-theme-1 text-white rounded-full right-0 top-0 bottom-0 my-auto ml-auto mr-0.5">
-                    <ArrowRightIcon class="w-4 h-4" />
-                  </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- END: General Report -->
+
           <!-- BEGIN: Transactions -->
           <div
             class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8"
           >
             <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">Recent Authors</h2>
+              <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
             <div class="mt-5">
               <div
-                v-for="(faker, fakerKey) in $_.take($f(), 5)"
-                :key="fakerKey"
+                v-for="activity in this.recent"
+                :key="activity.id"
                 class="intro-x"
               >
                 <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
@@ -251,15 +206,15 @@
                   >
                     <img
                       alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${faker.photos[0]}`)"
+                      :src="activity?.user?.profile_picture"
                     />
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">
-                      {{ faker.users[0].name }}
+                      {{ activity?.title }}
                     </div>
                     <div class="text-gray-600 text-xs mt-0.5">
-                      {{ faker.dates[0] }}
+                      {{ activity?.user?.name }}
                     </div>
                   </div>
                 </div>
@@ -280,8 +235,29 @@
 
 <script>
 import { defineComponent, ref, provide } from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
+  data() {
+    return {
+      recent: []
+    }
+  },
+  mounted() {
+    this.loadRecent()
+  },
+  methods: {
+    loadRecent() {
+      axios.get('http://localhost:8000/api/posts/recent')
+        .then((res) => {
+          this.recent = res.data.data
+          console.log(this.recent)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
   setup() {
     const importantNotesRef = ref()
 
