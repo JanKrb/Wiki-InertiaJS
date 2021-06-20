@@ -35,7 +35,7 @@
                   <MailIcon class="w-4 h-4 mr-2"/>{{ this.user.email }}
                 </div>
                 <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                  <ShieldIcon class="w-4 h-4 mr-2"/>{{ this.user.role.name }}
+                  <ShieldIcon class="w-4 h-4 mr-2"/>{{ this.user.role?.name }}
                 </div>
                 <div class="truncate sm:whitespace-normal flex items-center mt-3">
                   <HashIcon class="w-4 h-4 mr-2"/>User-ID: {{ this.user.id }}
@@ -45,21 +45,21 @@
             <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-gray-200 dark:border-dark-5 pt-5 lg:pt-0">
               <div class="text-center rounded-md w-40 py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  201
-                </div>
-                <div class="text-gray-600">General Bans</div>
-              </div>
-              <div class="text-center rounded-md w-40 py-3">
-                <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  1k
+                  {{ this.banCount?.global }}
                 </div>
                 <div class="text-gray-600">Global Bans</div>
               </div>
               <div class="text-center rounded-md w-40 py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  492
+                  {{ this.banCount?.comments }}
                 </div>
                 <div class="text-gray-600">Comment Bans</div>
+              </div>
+              <div class="text-center rounded-md w-40 py-3">
+                <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
+                  {{ this.banCount?.posts }}
+                </div>
+                <div class="text-gray-600">Posting Bans</div>
               </div>
             </div>
           </div>
@@ -103,7 +103,7 @@
               <div class="intro-y box col-span-12 lg:col-span-8">
                 <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
                   <h2 class="font-medium text-base mr-auto">Create Ban</h2>
-                  <button class="btn btn-danger btn-sm ml-auto"><UserXIcon class="mr-2 w-5 h-5"></UserXIcon>Submit Ban</button>
+                  <button class="btn btn-primary btn-sm ml-auto" @click="createBan(this.ban)"><SendIcon class="w-4 h-4 mr-3"></SendIcon>Submit</button>
                 </div>
                 <div class="p-5">
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
@@ -146,7 +146,7 @@
                               id="create-date-ban"
                               type="date"
                               class="form-control"
-                              v-model="ban.ban_until.date"
+                              v-model="ban_time.date"
                             />
                           </div>
                         </div>
@@ -159,21 +159,26 @@
                               id="create-time-ban"
                               type="time"
                               class="form-control"
-                              v-model="ban.ban_until.time"
+                              v-model="ban_time.time"
                             />
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
                           <div>
-                            <label for="create-type-ban" class="form-label">
+                            <label for="update-type-ban" class="form-label">
                               Ban type
                             </label>
-                            <input
-                              id="create-type-ban"
-                              type="text"
-                              class="form-control"
-                              v-model="ban.target"
-                            />
+                            <TailSelect
+                              id="update-type-ban"
+                              v-model="ban.type"
+                              :options="{
+                            classNames: 'w-full'
+                          }"
+                            >
+                              <option value="0" :selected="ban.type === 0">Global Ban</option>
+                              <option value="1" :selected="ban.type === 1">Comment Ban</option>
+                              <option value="2" :selected="ban.type === 2">Posting Ban</option>
+                            </TailSelect>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-3 mb-4">
@@ -240,10 +245,10 @@
                                     <LockIcon class="w-4 h-4 mr-2"/>Type: {{ this.lastBan.type === 0 ? 'Global Ban' : this.lastBan.type === 1 ? 'Comment Ban' : 'Post Ban' }}
                                   </div>
                                   <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                                    <AlignLeftIcon class="w-4 h-4 mr-2" />Reason: {{ this.lastBan.reason }}
+                                    <AlignLeftIcon class="w-4 h-4 mr-2"/>Reason: {{ this.lastBan.reason }}
                                   </div>
                                   <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                                    <ClockIcon class="w-4 h-4 mr-2" />Until: {{ this.lastBan.ban_until }}
+                                    <ClockIcon class="w-4 h-4 mr-2"/>Until: {{ this.lastBan.ban_until }}
                                   </div>
                                 </div>
                               </div>
@@ -265,8 +270,8 @@
           >
             <div class="grid grid-cols-12 gap-6 mt-5">
               <div
-                v-for="(faker, fakerKey) in $f()"
-                :key="fakerKey"
+                v-for="ban in this.bans"
+                :key="ban.id"
                 class="intro-y col-span-12 md:col-span-6"
               >
                 <div class="box">
@@ -275,13 +280,13 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="require(`@/assets/images/${faker.photos[0]}`)"
+                        src=""
                       />
                     </div>
                     <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
                       <a href="" class="font-medium">Ban Reason</a>
                       <div class="text-gray-600 text-xs mt-0.5">
-                        {{ faker.users[0].name }}
+                        NAME
                       </div>
                     </div>
                     <div class="lg:ml-2 text-center mt-3 lg:mt-0">
@@ -315,24 +320,22 @@ export default defineComponent({
   },
   data() {
     return {
-      user: {
-        role: {
-          id: 0
-        }
-      },
+      user: {},
       staff: {},
       ban: {
         reason: '',
         description: '',
-        ban_until: {
-          date: '',
-          time: ''
-        },
-        type: null
+        ban_until: {},
+        type: 0
       },
       lastBan: {},
+      banCount: {},
       isBanned: false,
-      bans: []
+      bans: [],
+      ban_time: {
+        date: '',
+        time: ''
+      }
     }
   },
   mounted() {
@@ -345,6 +348,7 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id)
         .then(response => {
+          console.log(response.data.data)
           this.user = response.data.data
           this.user_role = response.data.data.role.id
           loader.hide()
@@ -354,7 +358,17 @@ export default defineComponent({
           loader.hide()
         })
     },
+    fetchBanCount(id) {
+      axios.get('http://localhost:8000/api/users/' + id + '/bans/count')
+        .then(response => {
+          this.banCount = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
     fetchBans(id) {
+      this.isBanned = false
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id + '/bans')
         .then(response => {
@@ -367,19 +381,29 @@ export default defineComponent({
           }
           this.bans = response.data.data
           loader.hide()
+          this.fetchBanCount(id)
         })
         .catch(error => {
           console.error(error)
+          console.log(error.response)
           loader.hide()
         })
     },
     createBan(ban) {
+      console.log(ban)
+      console.log(this.ban_time)
       axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/bans', {
         reason: ban.reason,
         description: ban.description,
-        ban_until: '',
+        ban_until: this.ban_time.date + ' ' + this.ban_time.time + ':00',
         type: ban.type
       })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
+        })
     }
   }
 })

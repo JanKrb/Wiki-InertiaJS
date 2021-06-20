@@ -153,8 +153,8 @@
                     >
                       <img
                         class="rounded-md"
-                        alt="Icewall Tailwind HTML Admin Template"
-                        :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
+                        alt=""
+                        :src="user.profile_picture"
                       />
                       <Tippy
                         tag="div"
