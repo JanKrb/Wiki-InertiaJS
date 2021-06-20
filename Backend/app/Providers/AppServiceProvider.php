@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Announcement;
 use App\Models\Badge;
 use App\Models\Ban;
 use App\Models\Category;
@@ -12,6 +13,7 @@ use App\Models\PostVote;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use App\Observers\AnnouncementObserver;
 use App\Observers\BadgeObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\PermissionObserver;
@@ -61,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
         Post::observe(PostObserver::class);
         PostVote::observe(PostVoteObserver::class);
         PostComment::observe(PostCommentObserver::class);
+
+        Announcement::observe(AnnouncementObserver::class);
 
         /**
          * Paginate a standard Laravel Collection.

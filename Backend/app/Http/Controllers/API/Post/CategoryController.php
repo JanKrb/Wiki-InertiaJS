@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Post;
 
-use App\Http\Controllers\API\Post\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
@@ -61,7 +61,7 @@ class CategoryController extends BaseController
         return $this->sendResponse(new CategoryResource($category), 'Category retrieved successfully.');
     }
 
-    public function update(Request $request, Category $category_id) {
+    public function update(Request $request, $category_id) {
         $category = Category::find($category_id);
 
         if (is_null($category)) {

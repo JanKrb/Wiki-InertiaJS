@@ -145,4 +145,10 @@ class PostController extends BaseController
 
         return $this->sendResponse(new PostHistoryResource($post), 'Post History retrieved successfully.');
     }
+
+    public function recent_posts(Request $request) {
+        $max = $request->get('max', 5);
+        $posts = Post::all()->sortBy('updated_at', SORT_ASC)->take($max);
+        return $this->sendResponse(new PostCollection($posts), 'Recent posts has been retrieved successfully');
+    }
 }

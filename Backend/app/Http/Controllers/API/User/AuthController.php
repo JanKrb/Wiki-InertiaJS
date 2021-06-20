@@ -57,7 +57,7 @@ class AuthController extends BaseController
             'issuer_type' => 0, // 0 => Unknown/Undefined
             'issuer_id' => 1,
             'short' => 'Failed login.',
-            'details' => "{$request->ip()} failed to log in into " . $credentials['name'] == null ? $credentials['email'] : $credentials['name'],
+            'details' => "{$request->ip()} failed to log in into account",
             'attributes' => json_encode($credentials)
         ]);
 

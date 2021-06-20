@@ -1,50 +1,30 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
     <div class="col-span-12 xxl:col-span-10">
-      <div class="grid grid-cols-12 gap-5">
-        <!-- BEGIN: Notification -->
-        <div class="col-span-12 mt-6 -mb-6 intro-y">
-          <div
-            class="alert alert-dismissible show box bg-theme-3 text-white flex items-center mb-6"
-            role="alert"
-          >
-            <span>
-              This is our ITA wiki
-            </span>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            >
-              <XIcon class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        <!-- BEGIN: Notification -->
+      <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Blog Layout -->
         <div
-          v-for="(faker, fakerKey) in $_.take($f(), 6)"
-          :key="fakerKey"
+          v-for="category in this.categories"
+          v-bind:key="category.id"
           class="intro-y blog col-span-12 md:col-span-4 box"
         >
           <div class="blog__preview image-fit">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              :alt="'Thumbnail of ' + category.title"
               class="rounded-t-md"
-              :src="require(`@/assets/images/${faker.images[0]}`)"
+              :src="category.thumbnail"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
-                  alt="Icewall Tailwind HTML Admin Template"
+                  :alt="'Thumbnail of ' + category.title"
                   class="rounded-full"
-                  :src="require(`@/assets/images/${faker.photos[0]}`)"
+                  :src="category.thumbnail"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
-                <a href="" class="font-medium">{{ faker.users[0].name }}</a>
-                <div class="text-xs mt-0.5">{{ faker.formattedTimes[0] }}</div>
+                <a href="" class="font-medium">{{ category.user?.name }}</a>
+                <div class="text-xs mt-0.5">{{ category.updated_at }}</div>
               </div>
               <div class="dropdown ml-3">
                 <a
@@ -65,40 +45,12 @@
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
               <a href="" class="block font-medium text-xl mt-3">{{
-                  faker.news[0].title
+                  category.title
                 }}</a>
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ faker.news[0].shortContent }}
-          </div>
-          <div class="flex items-center px-5 py-3 border-t border-gray-200 dark:border-dark-5 text-gray-600">
-            <div class="mr-2">
-              Comments:
-              <span class="font-medium">{{ faker.totals[0] }}</span>
-            </div>
-            <div class="mr-2">
-              Posts: <span class="font-medium">{{ faker.totals[1] }}k</span>
-            </div>
-            <div class="mr-2">
-              Likes: <span class="font-medium">{{ faker.totals[2] }}k</span>
-            </div>
-            <Tippy
-              tag="a"
-              href=""
-              class="intro-x w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 dark:border-dark-5 dark:bg-dark-5 dark:text-gray-300 text-gray-600 ml-auto"
-              content="Bookmark"
-            >
-              <BookmarkIcon class="w-3 h-3" />
-            </Tippy>
-            <Tippy
-              tag="a"
-              href=""
-              class="intro-x w-8 h-8 flex items-center justify-center rounded-full bg-theme-14 dark:bg-dark-5 dark:text-gray-300 text-theme-10 ml-2"
-              content="Share"
-            >
-              <Share2Icon class="w-3 h-3" />
-            </Tippy>
+            {{ category.description }}
           </div>
         </div>
         <!-- END: Blog Layout -->
@@ -107,13 +59,13 @@
     <div class="col-span-12 xxl:col-span-2">
       <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
-          <!-- BEGIN: Important Notes -->
+          <!-- BEGIN: Announcements -->
           <div
             class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3"
           >
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-auto">
-                Important Notes
+                Announcements
               </h2>
               <button
                 data-carousel="important-notes"
@@ -134,115 +86,37 @@
             </div>
             <div class="mt-5 intro-x">
               <div class="box zoom-in">
-                <TinySlider ref-key="importantNotesRef">
-                  <div class="p-5">
+                <TinySlider ref-key="announcementsRef" v-if='!this.announcementsLoading'>
+                  <div
+                    class="p-5"
+                    v-for='announce in this.announcements'
+                    v-bind:key='announce.id'
+                  >
                     <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
+                      {{ announce.title }}
                     </div>
                     <div class="text-gray-500 mt-1">20 Hours ago</div>
                     <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                  </div>
-                  <div class="p-5">
-                    <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
-                    </div>
-                    <div class="text-gray-500 mt-1">20 Hours ago</div>
-                    <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                  </div>
-                  <div class="p-5">
-                    <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
-                    </div>
-                    <div class="text-gray-500 mt-1">20 Hours ago</div>
-                    <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
+                      {{ announce.description }}
                     </div>
                   </div>
                 </TinySlider>
               </div>
             </div>
           </div>
-          <!-- END: Important Notes -->
-          <!-- BEGIN: General Report -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 xl:col-start-1 xl:row-start-2 xxl:col-start-auto xxl:row-start-auto mt-3">
-            <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">Overview</h2>
-            </div>
-            <div class="report-box-2 intro-y mt-12 sm:mt-5">
-              <div class="box sm:flex">
-                <div class="px-8 py-12 flex flex-col justify-center flex-1">
-                  <FileTextIcon class="w-10 h-10 text-theme-12" />
-                  <div class="relative text-3xl font-bold mt-12">
-                    4 Postings
-                  </div>
-                  <div class="mt-4 text-gray-600 dark:text-gray-600">
-                    These are the Wikiposts in all Categories.
-                  </div>
-                  <button class="btn btn-outline-secondary relative justify-start rounded-full mt-12">
-                    Search wiki
-                    <span class="w-8 h-8 absolute flex justify-center items-center bg-theme-1 text-white rounded-full right-0 top-0 bottom-0 my-auto ml-auto mr-0.5">
-                    <ArrowRightIcon class="w-4 h-4" />
-                  </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- END: General Report -->
+          <!-- END: Announcements -->
+
           <!-- BEGIN: Transactions -->
           <div
             class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8"
           >
             <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">Recent Authors</h2>
+              <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
             <div class="mt-5">
               <div
-                v-for="(faker, fakerKey) in $_.take($f(), 5)"
-                :key="fakerKey"
+                v-for="activity in this.recent"
+                :key="activity.id"
                 class="intro-x"
               >
                 <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
@@ -251,15 +125,15 @@
                   >
                     <img
                       alt="Icewall Tailwind HTML Admin Template"
-                      :src="require(`@/assets/images/${faker.photos[0]}`)"
+                      :src="activity?.user?.profile_picture"
                     />
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">
-                      {{ faker.users[0].name }}
+                      {{ activity?.title }}
                     </div>
                     <div class="text-gray-600 text-xs mt-0.5">
-                      {{ faker.dates[0] }}
+                      {{ activity?.user?.name }}
                     </div>
                   </div>
                 </div>
@@ -280,21 +154,65 @@
 
 <script>
 import { defineComponent, ref, provide } from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
+  data() {
+    return {
+      recent: [],
+      announcements: [],
+      categories: [],
+      announcementsLoading: true
+    }
+  },
+  mounted() {
+    this.loadCategories()
+    this.loadAnnouncements()
+    this.loadRecent()
+  },
+  methods: {
+    loadRecent() {
+      axios.get('http://localhost:8000/api/posts/recent')
+        .then((res) => {
+          this.recent = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    loadAnnouncements() {
+      axios.get('http://localhost:8000/api/announcements')
+        .then((res) => {
+          this.announcements = res.data.data
+          this.announcementsLoading = false
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    loadCategories() {
+      axios.get('http://localhost:8000/api/categories')
+        .then((res) => {
+          this.categories = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
   setup() {
-    const importantNotesRef = ref()
+    const announcementsRef = ref()
 
-    provide('bind[importantNotesRef]', el => {
-      importantNotesRef.value = el
+    provide('bind[announcementsRef]', el => {
+      announcementsRef.value = el
     })
 
     const prevImportantNotes = () => {
-      const el = importantNotesRef.value
+      const el = announcementsRef.value
       el.tns.goTo('prev')
     }
     const nextImportantNotes = () => {
-      const el = importantNotesRef.value
+      const el = announcementsRef.value
       el.tns.goTo('next')
     }
 

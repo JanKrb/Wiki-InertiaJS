@@ -2,7 +2,7 @@
   .breadcrumb {
     @apply flex items-center text-theme-1 dark:text-theme-10;
     &.breadcrumb--light {
-      @apply h-full ml-10 pl-10 border-l border-theme-29 text-theme-22 dark:border-dark-3 dark:text-theme-10;
+      @apply h-full ml-10 pl-10 text-theme-22 dark:text-theme-10;
       @include media-breakpoint-down(md) {
         @apply ml-0 pl-0 border-l-0;
       }

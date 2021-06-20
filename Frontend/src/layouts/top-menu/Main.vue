@@ -4,7 +4,7 @@
     <MobileMenu />
     <!-- BEGIN: Top Bar -->
     <div
-      class="border-b border-theme-29 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2"
+      class="-mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2"
     >
       <div class="top-bar-boxed flex items-center">
         <!-- BEGIN: Logo -->
@@ -23,6 +23,7 @@
           </span>
         </router-link>
         <!-- END: Logo -->
+
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
           <a href="" class="">Application</a>
@@ -117,7 +118,7 @@
         </div>
         <!-- END: Search -->
         <!-- BEGIN: Notifications -->
-        <div class="intro-x dropdown mr-4 sm:mr-6">
+        <div class="intro-x dropdown mr-4 sm:mr-6" v-show='this.loggedIn'>
           <div
             class="dropdown-toggle notification notification--light notification--bullet cursor-pointer"
             role="button"
@@ -167,7 +168,7 @@
         </div>
         <!-- END: Notifications -->
         <!-- BEGIN: Account Menu -->
-        <div class="intro-x dropdown w-8 h-8">
+        <div class="intro-x dropdown w-8 h-8" v-show='this.loggedIn'>
           <div
             class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
             role="button"
@@ -199,9 +200,6 @@
                     <LockIcon class="w-4 h-4 mr-2" /> Change Password
                   </a>
                 </router-link>
-                <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                  <HelpCircleIcon class="w-4 h-4 mr-2"/> Help
-                </a>
               </div>
               <div class="p-2 border-t border-theme-27 dark:border-dark-3">
                 <a v-on:click="logout" href="#" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
@@ -212,6 +210,21 @@
           </div>
         </div>
         <!-- END: Account Menu -->
+        <!-- BEGIN: Login Icon -->
+        <router-link
+          :to="{ name: 'login' }"
+          tag="a"
+          class="intro-x mr-4 sm:mr-6"
+          v-show='!this.loggedIn'
+        >
+          <div
+            class="notification notification--light notification--bullet cursor-pointer"
+            role="button"
+          >
+            <LogInIcon class="dark:text-gray-300" />
+          </div>
+        </router-link>
+        <!-- END: Login Icon -->
       </div>
     </div>
     <!-- END: Top Bar -->
@@ -328,11 +341,14 @@ export default defineComponent({
   },
   data() {
     return {
-      user: {}
+      user: {},
+      loggedIn: false
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
+
+    if (this.user) this.loggedIn = true
   },
   methods: {
     logout() {

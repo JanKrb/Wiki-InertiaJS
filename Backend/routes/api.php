@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\User\AuthController;
@@ -397,6 +398,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_get_all'])
     ;
 
+    Route::get('posts/recent', [PostController::class, 'recent_posts'])
+        ->name('posts.recent')
+        ->middleware(['permission:posts_recent'])
+    ;
+
     Route::get('posts/{post}', [PostController::class, 'show'])
         ->name('posts.show')
         ->middleware(['permission:posts_get_single'])
@@ -415,5 +421,33 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('posts/{post}', [PostController::class, 'destroy'])
         ->name('posts.destroy')
         ->middleware(['permission:posts_destroy'])
+    ;
+});
+
+// Announcement System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('announcements', [AnnouncementController::class, 'index'])
+        ->name('announcements.index')
+        ->middleware(['permission:announcements_get_all'])
+    ;
+
+    Route::post('announcements', [AnnouncementController::class, 'store'])
+        ->name('announcements.store')
+        ->middleware(['permission:announcements_store'])
+    ;
+
+    Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])
+        ->name('announcements.update')
+        ->middleware(['permission:announcements_update'])
+    ;
+
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])
+        ->name('announcements.destroy')
+        ->middleware(['permission:announcements_destroy'])
+    ;
+
+    Route::get('announcements/{announcement}', [announcementController::class, 'show'])
+        ->name('announcements.show')
+        ->middleware(['permission:announcements_get_single'])
     ;
 });
