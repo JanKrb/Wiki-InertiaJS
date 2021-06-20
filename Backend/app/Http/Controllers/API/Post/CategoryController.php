@@ -61,7 +61,13 @@ class CategoryController extends BaseController
         return $this->sendResponse(new CategoryResource($category), 'Category retrieved successfully.');
     }
 
-    public function update(Request $request, Category $category) {
+    public function update(Request $request, Category $category_id) {
+        $category = Category::find($category_id);
+
+        if (is_null($category)) {
+            return $this->sendError('Category does not exists.');
+        }
+
         $input = $request->all();
 
         $validator = Validator::make($input, [
