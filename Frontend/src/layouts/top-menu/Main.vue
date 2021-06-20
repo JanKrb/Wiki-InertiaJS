@@ -66,9 +66,7 @@
                   <div class="ml-3">Users & Permissions</div>
                 </a>
                 <a href class="flex items-center mt-2">
-                  <div
-                    class="w-8 h-8 bg-theme-14 text-theme-10 flex items-center justify-center rounded-full"
-                  >
+                  <div class="w-8 h-8 bg-theme-14 text-theme-10 flex items-center justify-center rounded-full">
                     <CreditCardIcon class="w-4 h-4" />
                   </div>
                   <div class="ml-3">Transactions Report</div>
@@ -90,9 +88,7 @@
                     />
                   </div>
                   <div class="ml-3">{{ faker.users[0].name }}</div>
-                  <div
-                    class="ml-auto w-48 truncate text-gray-600 text-xs text-right"
-                  >
+                  <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right">
                     {{ faker.users[0].email }}
                   </div>
                 </a>
@@ -112,9 +108,7 @@
                   />
                 </div>
                 <div class="ml-3">{{ faker.products[0].name }}</div>
-                <div
-                  class="ml-auto w-48 truncate text-gray-600 text-xs text-right"
-                >
+                <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right">
                   {{ faker.products[0].category }}
                 </div>
               </a>
