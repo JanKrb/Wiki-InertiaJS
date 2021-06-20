@@ -13,11 +13,12 @@ import AccountSettings from '../views/account/AccountSettings.vue'
 import AccountSecurity from '../views/account/AccountSecurity.vue'
 import AccountPostings from '../views/account/AccountPostings.vue'
 import AccountBans from '../views/account/AccountBans.vue'
+import SettingsGeneral from '../views/settings/Main.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
-import UpdateProfile from '../views/update-profile/Main.vue'
-import ChangePassword from '../views/change-password/Main.vue'
+import ProfileInformations from '../views/profile/ProfileInformations.vue'
+import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 
 const routes = [
   {
@@ -41,8 +42,8 @@ const routes = [
       },
       {
         path: 'profile',
-        name: 'profile.personal',
-        component: UpdateProfile,
+        name: 'profile.informations',
+        component: ProfileInformations,
         meta: {
           title: 'Profile',
           auth: true,
@@ -51,8 +52,8 @@ const routes = [
       },
       {
         path: 'profile/change-password',
-        name: 'profile.password',
-        component: ChangePassword,
+        name: 'profile.security',
+        component: ProfileSecurity,
         meta: {
           title: 'Change Password',
           auth: true,
@@ -176,6 +177,16 @@ const routes = [
         component: AccountBans,
         meta: {
           title: 'Wiki Account',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'settings/general',
+        name: 'admin.settings.general',
+        component: SettingsGeneral,
+        meta: {
+          title: 'Wiki Settings',
           auth: true,
           isAuth: false
         }
