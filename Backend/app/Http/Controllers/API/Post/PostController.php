@@ -7,5 +7,13 @@ use Illuminate\Http\Request;
 
 class PostController extends BaseController
 {
-    //
+    # GET POSTS
+    # GET POST
+    # STORE POST
+    # UPDATE POST
+    # DELETE POST
+
+    # GET HISTORY
+    # GET HISTORY VERSION
+    # STORE HISTORY
 }
