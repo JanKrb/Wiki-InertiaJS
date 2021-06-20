@@ -23,6 +23,13 @@ class PostHistory extends Model
     ];
 
     /**
+     * Post relation
+     */
+    public function post() {
+        return $this->belongsTo(Post::class);
+    }
+
+    /**
      * User relation
      */
     public function user() {

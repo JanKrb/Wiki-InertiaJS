@@ -38,4 +38,19 @@ class Post extends Model
     {
         return $this->belongsToMany(Tag::class, 'post_tags');
     }
+
+    /**
+     * Post relations
+     */
+    public function histories() {
+        return $this->hasMany(PostHistory::class);
+    }
+
+    public function votes() {
+        return $this->hasMany(PostVote::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(PostComment::class);
+    }
 }
