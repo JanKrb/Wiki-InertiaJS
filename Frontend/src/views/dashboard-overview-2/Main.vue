@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
     <div class="col-span-12 xxl:col-span-10">
-      <div class="grid grid-cols-12 gap-5">
+      <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Blog Layout -->
         <div
           v-for="(faker, fakerKey) in $_.take($f(), 6)"
