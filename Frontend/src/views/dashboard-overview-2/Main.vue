@@ -87,13 +87,13 @@
     <div class="col-span-12 xxl:col-span-2">
       <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
-          <!-- BEGIN: Important Notes -->
+          <!-- BEGIN: Announcements -->
           <div
             class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3"
           >
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-auto">
-                Important Notes
+                Announcements
               </h2>
               <button
                 data-carousel="important-notes"
@@ -114,78 +114,25 @@
             </div>
             <div class="mt-5 intro-x">
               <div class="box zoom-in">
-                <TinySlider ref-key="importantNotesRef">
-                  <div class="p-5">
+                <TinySlider ref-key="importantNotesRef" v-if='!this.announcementsLoading'>
+                  <div
+                    class="p-5"
+                    v-for='announce in this.announcements'
+                    v-bind:key='announce.id'
+                  >
                     <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
+                      {{ announce.title }}
                     </div>
                     <div class="text-gray-500 mt-1">20 Hours ago</div>
                     <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                  </div>
-                  <div class="p-5">
-                    <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
-                    </div>
-                    <div class="text-gray-500 mt-1">20 Hours ago</div>
-                    <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                  </div>
-                  <div class="p-5">
-                    <div class="text-base font-medium truncate">
-                      Lorem Ipsum is simply dummy text
-                    </div>
-                    <div class="text-gray-500 mt-1">20 Hours ago</div>
-                    <div class="text-gray-600 text-justify mt-1">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </div>
-                    <div class="font-medium flex mt-5">
-                      <button type="button" class="btn btn-secondary py-1 px-2">
-                        View Notes
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary py-1 px-2 ml-auto ml-auto"
-                      >
-                        Dismiss
-                      </button>
+                      {{ announce.description }}
                     </div>
                   </div>
                 </TinySlider>
               </div>
             </div>
           </div>
-          <!-- END: Important Notes -->
+          <!-- END: Announcements -->
 
           <!-- BEGIN: Transactions -->
           <div
@@ -240,18 +187,30 @@ import axios from 'axios'
 export default defineComponent({
   data() {
     return {
-      recent: []
+      recent: [],
+      announcements: [],
+      announcementsLoading: true
     }
   },
   mounted() {
     this.loadRecent()
+    this.loadAnnouncements()
   },
   methods: {
     loadRecent() {
       axios.get('http://localhost:8000/api/posts/recent')
         .then((res) => {
           this.recent = res.data.data
-          console.log(this.recent)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    loadAnnouncements() {
+      axios.get('http://localhost:8000/api/announcements')
+        .then((res) => {
+          this.announcements = res.data.data
+          this.announcementsLoading = false
         })
         .catch((err) => {
           console.log(err)
