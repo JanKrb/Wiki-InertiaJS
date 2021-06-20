@@ -4,27 +4,27 @@
       <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Blog Layout -->
         <div
-          v-for="(faker, fakerKey) in $_.take($f(), 6)"
-          :key="fakerKey"
+          v-for="category in this.categories"
+          v-bind:key="category.id"
           class="intro-y blog col-span-12 md:col-span-4 box"
         >
           <div class="blog__preview image-fit">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              :alt="'Thumbnail of ' + category.title"
               class="rounded-t-md"
-              :src="require(`@/assets/images/${faker.images[0]}`)"
+              :src="category.thumbnail"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
-                  alt="Icewall Tailwind HTML Admin Template"
+                  :alt="'Thumbnail of ' + category.title"
                   class="rounded-full"
-                  :src="require(`@/assets/images/${faker.photos[0]}`)"
+                  :src="category.thumbnail"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
-                <a href="" class="font-medium">{{ faker.users[0].name }}</a>
-                <div class="text-xs mt-0.5">{{ faker.formattedTimes[0] }}</div>
+                <a href="" class="font-medium">{{ category.user?.name }}</a>
+                <div class="text-xs mt-0.5">{{ category.updated_at }}</div>
               </div>
               <div class="dropdown ml-3">
                 <a
@@ -45,40 +45,12 @@
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
               <a href="" class="block font-medium text-xl mt-3">{{
-                  faker.news[0].title
+                  category.title
                 }}</a>
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ faker.news[0].shortContent }}
-          </div>
-          <div class="flex items-center px-5 py-3 border-t border-gray-200 dark:border-dark-5 text-gray-600">
-            <div class="mr-2">
-              Comments:
-              <span class="font-medium">{{ faker.totals[0] }}</span>
-            </div>
-            <div class="mr-2">
-              Posts: <span class="font-medium">{{ faker.totals[1] }}k</span>
-            </div>
-            <div class="mr-2">
-              Likes: <span class="font-medium">{{ faker.totals[2] }}k</span>
-            </div>
-            <Tippy
-              tag="a"
-              href=""
-              class="intro-x w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 dark:border-dark-5 dark:bg-dark-5 dark:text-gray-300 text-gray-600 ml-auto"
-              content="Bookmark"
-            >
-              <BookmarkIcon class="w-3 h-3" />
-            </Tippy>
-            <Tippy
-              tag="a"
-              href=""
-              class="intro-x w-8 h-8 flex items-center justify-center rounded-full bg-theme-14 dark:bg-dark-5 dark:text-gray-300 text-theme-10 ml-2"
-              content="Share"
-            >
-              <Share2Icon class="w-3 h-3" />
-            </Tippy>
+            {{ category.description }}
           </div>
         </div>
         <!-- END: Blog Layout -->
@@ -114,7 +86,7 @@
             </div>
             <div class="mt-5 intro-x">
               <div class="box zoom-in">
-                <TinySlider ref-key="importantNotesRef" v-if='!this.announcementsLoading'>
+                <TinySlider ref-key="announcementsRef" v-if='!this.announcementsLoading'>
                   <div
                     class="p-5"
                     v-for='announce in this.announcements'
@@ -189,12 +161,14 @@ export default defineComponent({
     return {
       recent: [],
       announcements: [],
+      categories: [],
       announcementsLoading: true
     }
   },
   mounted() {
-    this.loadRecent()
+    this.loadCategories()
     this.loadAnnouncements()
+    this.loadRecent()
   },
   methods: {
     loadRecent() {
@@ -215,21 +189,30 @@ export default defineComponent({
         .catch((err) => {
           console.log(err)
         })
+    },
+    loadCategories() {
+      axios.get('http://localhost:8000/api/categories')
+        .then((res) => {
+          this.categories = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   setup() {
-    const importantNotesRef = ref()
+    const announcementsRef = ref()
 
-    provide('bind[importantNotesRef]', el => {
-      importantNotesRef.value = el
+    provide('bind[announcementsRef]', el => {
+      announcementsRef.value = el
     })
 
     const prevImportantNotes = () => {
-      const el = importantNotesRef.value
+      const el = announcementsRef.value
       el.tns.goTo('prev')
     }
     const nextImportantNotes = () => {
-      const el = importantNotesRef.value
+      const el = announcementsRef.value
       el.tns.goTo('next')
     }
 
