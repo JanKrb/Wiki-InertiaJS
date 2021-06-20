@@ -107,6 +107,8 @@ class PostController extends BaseController
             return $this->sendError('Post does not exists.');
         }
 
+        $post->delete();
+
         return $this->sendResponse([], 'Post soft-deleted successfully.');
     }
 
