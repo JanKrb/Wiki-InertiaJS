@@ -95,4 +95,15 @@ class BanController extends BaseController
         $ban->delete();
         return $this->sendResponse([], 'Ban soft-deleted successfully.');
     }
+
+    public function count_bans() {
+        # 0 => Global; 1 => Comments; 2 => Posts
+        $bans = Ban::all();
+        return $this->sendResponse([
+            'global' => $bans->where('type', '=', 0)->count(),
+            'comments' => $bans->where('type', '=', 1)->count(),
+            'posts' => $bans->where('type', '=', 2)->count()
+        ],
+        'Ban count retrieved successfully');
+    }
 }

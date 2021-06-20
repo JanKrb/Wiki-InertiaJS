@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Resources\Ban;
+use App\Models\Ban;
 use App\Http\Resources\UserBanCollection;
 use App\Http\Resources\Ban as BanResource;
 use App\Models\User;
@@ -90,5 +90,16 @@ class UserBansController extends BaseController
         }
 
         return $this->sendError('User has no ban with this id', ['user_id' => $user_id->id, 'ban_id' => $ban_id]);
+    }
+
+    public function count_bans($user_id) {
+        # 0 => Global; 1 => Comments; 2 => Posts
+        $bans = Ban::where('target_id', $user_id)->get();
+        return $this->sendResponse([
+            'global' => $bans->where('type', '=', 0)->count(),
+            'comments' => $bans->where('type', '=', 1)->count(),
+            'posts' => $bans->where('type', '=', 2)->count()
+        ],
+            'Ban count retrieved successfully');
     }
 }

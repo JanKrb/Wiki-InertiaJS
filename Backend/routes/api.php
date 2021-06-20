@@ -296,6 +296,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:bans_store'])
     ;
 
+    Route::get('bans/count', [BanController::class, 'count_bans'])
+        ->name('bans.count')
+        ->middleware(['permission:bans_count'])
+    ;
+
     Route::put('bans/{ban}', [BanController::class, 'update'])
         ->name('bans.update')
         ->middleware(['permission:bans_update'])
@@ -319,6 +324,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('users/{user}/bans', [UserBansController::class, 'store'])
         ->name('users.bans.store')
         ->middleware(['permission:user_bans_store'])
+    ;
+
+    Route::get('users/{user}/bans/count', [UserBansController::class, 'count_bans'])
+        ->name('users.bans.count')
+        ->middleware(['permission:user_bans_count'])
     ;
 
     Route::get('users/{user}/bans/{ban}', [UserBansController::class, 'show'])
