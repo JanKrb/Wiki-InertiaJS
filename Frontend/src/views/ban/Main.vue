@@ -42,19 +42,19 @@
             <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-gray-200 dark:border-dark-5 pt-5 lg:pt-0">
               <div class="text-center rounded-md w-40 py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  {{ this.bancount.global }}
+                  {{ this.banCount.global }}
                 </div>
                 <div class="text-gray-600">Global Bans</div>
               </div>
               <div class="text-center rounded-md w-40 py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  {{ this.bancount.comments }}
+                  {{ this.banCount.comments }}
                 </div>
                 <div class="text-gray-600">Comment Bans</div>
               </div>
               <div class="text-center rounded-md w-40 py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
-                  {{ this.bancount.posts }}
+                  {{ this.banCount.posts }}
                 </div>
                 <div class="text-gray-600">Posting Bans</div>
               </div>
@@ -68,7 +68,7 @@
           <div class="intro-y box col-span-12 lg:col-span-9">
             <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
               <h2 class="font-medium text-base mr-auto">Selected Ban</h2>
-              <button class="btn btn-primary btn-sm ml-auto"><SaveIcon class="w-4 h-4 mr-3"></SaveIcon>Update</button>
+              <button class="btn btn-primary btn-sm ml-auto" @click="updateBan(this.ban)"><SaveIcon class="w-4 h-4 mr-3"></SaveIcon>Update</button>
             </div>
             <div class="p-5">
               <div class="flex flex-col-reverse xl:flex-row flex-col">
@@ -76,11 +76,11 @@
                   <div class="grid grid-cols-12 gap-x-5 mb-4">
                     <div class="col-span-12 xxl:col-span-12 mb-4">
                       <div>
-                        <label for="create-reason-ban" class="form-label">
+                        <label for="update-reason-ban" class="form-label">
                           Reason
                         </label>
                         <input
-                          id="create-reason-ban"
+                          id="update-reason-ban"
                           type="text"
                           class="form-control"
                           placeholder="Enter ban reason"
@@ -90,11 +90,11 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-12 mb-4">
                       <div>
-                        <label for="create-description-ban" class="form-label">
+                        <label for="update-description-ban" class="form-label">
                           Description
                         </label>
                         <textarea
-                          id="create-description-ban"
+                          id="update-description-ban"
                           type="text"
                           class="form-control"
                           placeholder="Enter a ban description"
@@ -104,11 +104,11 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
                       <div>
-                        <label for="create-date-ban" class="form-label">
+                        <label for="update-date-ban" class="form-label">
                           Unban Date
                         </label>
                         <input
-                          id="create-date-ban"
+                          id="update-date-ban"
                           type="date"
                           class="form-control"
                           v-model="ban_time.date"
@@ -117,11 +117,11 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
                       <div>
-                        <label for="create-time-ban" class="form-label">
+                        <label for="update-time-ban" class="form-label">
                           Ban Time
                         </label>
                         <input
-                          id="create-time-ban"
+                          id="update-time-ban"
                           type="time"
                           class="form-control"
                           v-model="ban_time.time"
@@ -130,28 +130,29 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
                       <div>
-                        <label for="create-type-ban" class="form-label">
+                        <label for="update-type-ban" class="form-label">
                           Ban type
                         </label>
                         <TailSelect
+                          id="update-type-ban"
                           v-model="ban.type"
                           :options="{
                             classNames: 'w-full'
                           }"
                         >
-                          <option :selected="ban.type === 0">Global Ban</option>
-                          <option :selected="ban.type === 1">Comment Ban</option>
-                          <option :selected="ban.type === 2">Posting Ban</option>
+                          <option value="0" :selected="ban.type === 0">Global Ban</option>
+                          <option value="1" :selected="ban.type === 1">Comment Ban</option>
+                          <option value="2" :selected="ban.type === 2">Posting Ban</option>
                         </TailSelect>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-3 mb-4">
                       <div>
-                        <label for="create-target-ban" class="form-label">
+                        <label for="update-target-ban" class="form-label">
                           Target
                         </label>
                         <input
-                          id="create-target-ban"
+                          id="update-target-ban"
                           type="text"
                           class="form-control"
                           :value="ban.target.name"
@@ -161,11 +162,11 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-3 mb-4">
                       <div>
-                        <label for="create-staff-ban" class="form-label">
+                        <label for="update-staff-ban" class="form-label">
                           Staff
                         </label>
                         <input
-                          id="create-staff-ban"
+                          id="update-staff-ban"
                           type="text"
                           class="form-control"
                           :value="ban.staff.name"
@@ -181,18 +182,41 @@
           <div class="intro-y box col-span-12 lg:col-span-3">
             <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
               <h2 class="font-medium text-base mr-auto">Current Ban</h2>
-              <button class="btn btn-danger btn-sm ml-auto"><Trash2Icon class="mr-2 w-5 h-5"></Trash2Icon>Delete</button>
             </div>
             <div class="p-5">
               <div class="flex flex-col-reverse xl:flex-row flex-col">
                 <div class="flex-1 mt-6 xl:mt-0">
                   <div class="grid grid-cols-12 gap-x-5 mb-4">
                     <div class="col-span-12">
-                      <div class="p-5 text-center">
-                        <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3" />
+                      <div v-if="this.isBanned === false" class="p-5 text-center">
+                        <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3"/>
                         <div class="text-3xl mt-5">Unbanned</div>
                         <div class="text-gray-600 mt-2">
                           This user is currently Unbanned!
+                        </div>
+                      </div>
+                      <div v-else class="p-5 text-center">
+                        <XCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3"/>
+                        <div class="text-3xl mt-5">Banned</div>
+                        <div class="text-gray-600 mt-2">
+                          This user is currently Banned!
+                          <hr class="mt-4">
+                          <div class="mt-4 flex-1 dark:text-gray-300 px-5 pt-5 lg:pt-0">
+                            <div class="font-medium text-center lg:text-left lg:mt-3">
+                              Most recent Ban:
+                            </div>
+                            <div class="flex flex-col justify-center items-center lg:items-start mt-4">
+                              <div class="truncate sm:whitespace-normal flex items-center">
+                                <LockIcon class="w-4 h-4 mr-2"/>Type: {{ this.lastBan.type === 0 ? 'Global Ban' : this.lastBan.type === 1 ? 'Comment Ban' : 'Post Ban' }}
+                              </div>
+                              <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                                <AlignLeftIcon class="w-4 h-4 mr-2" />Reason: {{ this.lastBan.reason }}
+                              </div>
+                              <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                                <ClockIcon class="w-4 h-4 mr-2" />Until: {{ this.lastBan.ban_until }}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -214,7 +238,9 @@ import axios from 'axios'
 export default defineComponent({
   data() {
     return {
-      bancount: {},
+      banCount: {},
+      isBanned: false,
+      lastBan: {},
       ban_time: {
         date: '',
         time: ''
@@ -275,6 +301,7 @@ export default defineComponent({
           loader.hide()
           this.fetchBanCount(response.data.data.target.id)
           this.fetchRole(response.data.data.target.role_id)
+          this.checkBans(response.data.data.target.id)
         })
         .catch(error => {
           console.error(error)
@@ -284,7 +311,7 @@ export default defineComponent({
     fetchBanCount(id) {
       axios.get('http://localhost:8000/api/users/' + id + '/bans/count')
         .then(response => {
-          this.bancount = response.data.data
+          this.banCount = response.data.data
         })
         .catch(error => {
           console.error(error)
@@ -297,6 +324,43 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+        })
+    },
+    updateBan(ban) {
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/bans/' + this.$route.params.id, {
+        target_id: ban.target.id,
+        reason: ban.reason,
+        description: ban.description,
+        type: ban.type,
+        ban_until: this.ban_time.date + ' ' + this.ban_time.time
+      })
+        .then(response => {
+          this.checkBans(ban.target.id)
+          loader.hide()
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
+        })
+    },
+    checkBans(id) {
+      this.isBanned = false
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/users/' + id + '/bans')
+        .then(response => {
+          for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
+            ban = response.data.data[ban]
+            if (ban.active === true) {
+              this.isBanned = true
+              this.lastBan = ban
+            }
+          }
+          loader.hide()
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
         })
     }
   }
