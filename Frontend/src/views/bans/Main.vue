@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="intro-y text-lg font-medium mt-10">Wiki Accounts</h2>
+    <h2 class="intro-y text-lg font-medium mt-10">Wiki Bans</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <a href="javascript:;" @click="fetchBans('http://localhost:8000/api/bans?page=' + pagination.current_page)" class="btn btn-primary btn-sm"><RepeatIcon class="w-4 h-4"></RepeatIcon></a>
@@ -50,9 +50,11 @@
             </a>
             <div class="dropdown-menu w-40">
               <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                  <SlashIcon class="w-4 h-4 mr-2"/> View Ban
-                </a>
+                <router-link :to="{ name: 'admin.ban', params: { 'id': ban.id }}">
+                  <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                    <SlashIcon class="w-4 h-4 mr-2"/> View Ban
+                  </a>
+                </router-link>
                 <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': ban.target.id }}">
                   <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                     <UserIcon class="w-4 h-4 mr-2"/> View Account
