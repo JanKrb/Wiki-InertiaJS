@@ -14,9 +14,9 @@
             <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
               <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
                 <img
-                  alt="Icewall Tailwind HTML Admin Template"
+                  alt=""
                   class="rounded-full"
-                  :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
+                  :src="this.user.profile_picture"
                 />
               </div>
               <div class="ml-5">
@@ -100,7 +100,7 @@
           >
             <div class="grid grid-cols-12 gap-6">
               <!-- BEGIN: Latest Uploads -->
-              <div class="intro-y box col-span-12 lg:col-span-9">
+              <div class="intro-y box col-span-12 lg:col-span-8">
                 <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
                   <h2 class="font-medium text-base mr-auto">Create Ban</h2>
                   <button class="btn btn-danger btn-sm ml-auto"><UserXIcon class="mr-2 w-5 h-5"></UserXIcon>Submit Ban</button>
@@ -209,21 +209,44 @@
                   </div>
                 </div>
               </div>
-              <div class="intro-y box col-span-12 lg:col-span-3">
+              <div class="intro-y box col-span-12 lg:col-span-4">
                 <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
                   <h2 class="font-medium text-base mr-auto">Current Ban</h2>
-                  <button class="btn btn-danger btn-sm ml-auto"><Trash2Icon class="mr-2 w-5 h-5"></Trash2Icon>Delete</button>
                 </div>
                 <div class="p-5">
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
                       <div class="grid grid-cols-12 gap-x-5 mb-4">
                         <div class="col-span-12">
-                          <div class="p-5 text-center">
-                            <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3" />
+                          <div v-if="this.isBanned === false" class="p-5 text-center">
+                            <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3"/>
                             <div class="text-3xl mt-5">Unbanned</div>
                             <div class="text-gray-600 mt-2">
                               This user is currently Unbanned!
+                            </div>
+                          </div>
+                          <div v-else class="p-5 text-center">
+                            <XCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3"/>
+                            <div class="text-3xl mt-5">Banned</div>
+                            <div class="text-gray-600 mt-2">
+                              This user is currently Banned!
+                              <hr class="mt-4">
+                              <div class="mt-4 flex-1 dark:text-gray-300 px-5 pt-5 lg:pt-0">
+                                <div class="font-medium text-center lg:text-left lg:mt-3">
+                                  Most recent Ban:
+                                </div>
+                                <div class="flex flex-col justify-center items-center lg:items-start mt-4">
+                                  <div class="truncate sm:whitespace-normal flex items-center">
+                                    <LockIcon class="w-4 h-4 mr-2"/>Type: {{ this.lastBan.type === 0 ? 'Global Ban' : this.lastBan.type === 1 ? 'Comment Ban' : 'Post Ban' }}
+                                  </div>
+                                  <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                                    <AlignLeftIcon class="w-4 h-4 mr-2" />Reason: {{ this.lastBan.reason }}
+                                  </div>
+                                  <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                                    <ClockIcon class="w-4 h-4 mr-2" />Until: {{ this.lastBan.ban_until }}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -306,11 +329,15 @@ export default defineComponent({
           time: ''
         },
         type: null
-      }
+      },
+      lastBan: {},
+      isBanned: false,
+      bans: []
     }
   },
   mounted() {
     this.fetchUser(this.$route.params.id)
+    this.fetchBans(this.$route.params.id)
     this.staff = JSON.parse(localStorage.getItem('user'))
   },
   methods: {
@@ -326,6 +353,33 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    },
+    fetchBans(id) {
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/users/' + id + '/bans')
+        .then(response => {
+          for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
+            ban = response.data.data[ban]
+            if (ban.active === true) {
+              this.isBanned = true
+              this.lastBan = ban
+            }
+          }
+          this.bans = response.data.data
+          loader.hide()
+        })
+        .catch(error => {
+          console.error(error)
+          loader.hide()
+        })
+    },
+    createBan(ban) {
+      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/bans', {
+        reason: ban.reason,
+        description: ban.description,
+        ban_until: '',
+        type: ban.type
+      })
     }
   }
 })
