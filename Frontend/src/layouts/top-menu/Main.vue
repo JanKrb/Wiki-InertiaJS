@@ -3,18 +3,15 @@
     <DarkModeSwitcher />
     <MobileMenu />
     <!-- BEGIN: Top Bar -->
-    <div
-      class="border-b border-theme-29 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2"
-    >
+    <div class="-mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2">
       <div class="top-bar-boxed flex items-center">
         <!-- BEGIN: Logo -->
         <router-link
           :to="{ name: 'dashboard' }"
-          tag="a"
           class="-intro-x hidden md:flex"
         >
           <img
-            alt="Icewall Tailwind HTML Admin Template"
+            alt=""
             class="w-6"
             src="@/assets/images/logo.svg"
           />
