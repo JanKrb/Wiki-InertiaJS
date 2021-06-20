@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
@@ -333,6 +334,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Posts System
 Route::group(['middleware' => 'auth:api'], function() {
+    // History
     Route::get('posts/histories', [PostController::class, 'history'])
         ->name('posts_history.get_all')
         ->middleware(['permission:posts_history_get_all'])
@@ -348,6 +350,38 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_history_get_single'])
     ;
 
+    // Comments
+    Route::get('posts/comments', [PostCommentController::class, 'index'])
+        ->name('posts_comments.get_all')
+        ->middleware(['permission:posts_comments_get_all'])
+    ;
+
+    Route::get('posts/{post}/comments', [PostCommentController::class, 'post_comments'])
+        ->name('posts.comments')
+        ->middleware(['permission:posts_comments_get_post'])
+    ;
+
+    Route::get('posts/comments/{comment}', [PostCommentController::class, 'show'])
+        ->name('posts.comment')
+        ->middleware(['permission:posts_comments_get_single'])
+    ;
+
+    Route::post('posts/{post}/comments', [PostCommentController::class, 'store'])
+        ->name('posts.comment.store')
+        ->middleware(['permission:posts_comments_store'])
+    ;
+
+    Route::put('posts/comments/{comment}', [PostCommentController::class, 'update'])
+        ->name('posts.comment.update')
+        ->middleware(['permission:posts_comments_update'])
+    ;
+
+    Route::delete('posts/comments/{comment}', [PostCommentController::class, 'destroy'])
+        ->name('posts.comment.destroy')
+        ->middleware(['permission:posts_comments_destroy'])
+    ;
+
+    // Posts
     Route::get('posts', [PostController::class, 'index'])
         ->name('posts.index')
         ->middleware(['permission:posts_get_all'])
