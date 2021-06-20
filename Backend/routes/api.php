@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
 use App\Http\Controllers\API\User\BanController;
@@ -327,5 +328,48 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('users/{user}/bans/{ban}', [UserBansController::class, 'destroy'])
         ->name('users.bans.destroy')
         ->middleware(['permission:user_bans_destroy'])
+    ;
+});
+
+// Posts System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('posts/histories', [PostController::class, 'history'])
+        ->name('posts_history.get_all')
+        ->middleware(['permission:posts_history_get_all'])
+    ;
+
+    Route::get('posts/{post}/histories', [PostController::class, 'post_history'])
+        ->name('posts.histories')
+        ->middleware(['permission:posts_history_get_post'])
+    ;
+
+    Route::get('posts/histories/{history}', [PostController::class, 'history_show'])
+        ->name('posts.history')
+        ->middleware(['permission:posts_history_get_single'])
+    ;
+
+    Route::get('posts', [PostController::class, 'index'])
+        ->name('posts.index')
+        ->middleware(['permission:posts_get_all'])
+    ;
+
+    Route::get('posts/{post}', [PostController::class, 'show'])
+        ->name('posts.show')
+        ->middleware(['permission:posts_get_single'])
+    ;
+
+    Route::post('posts', [PostController::class, 'store'])
+        ->name('posts.store')
+        ->middleware(['permission:posts_store'])
+    ;
+
+    Route::put('posts/{post}', [PostController::class, 'update'])
+        ->name('posts.update')
+        ->middleware(['permission:posts_update'])
+    ;
+
+    Route::delete('posts/{post}', [PostController::class, 'destroy'])
+        ->name('posts.destroy')
+        ->middleware(['permission:posts_destroy'])
     ;
 });
