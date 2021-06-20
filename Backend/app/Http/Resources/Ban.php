@@ -17,12 +17,12 @@ class Ban extends JsonResource
         return [
             'id' => $this->id,
             'target' => $this->target,
-            'staff_id' => $this->staff,
+            'staff' => $this->staff,
             'reason' => $this->reason,
             'description' => $this->description,
             'ban_until' => $this->ban_until,
             'type' => $this->type,
-            'active' => $this->is_active,
+            'active' => $this->is_active(),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];

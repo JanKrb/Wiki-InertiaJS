@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,7 +44,10 @@ class Ban extends Model
      */
     public function is_active(): bool {
         if (is_null($this->ban_until)) return true;
-        $diff = abs($this->ban_until - now());
+
+        $now = new DateTime();
+        $date = new DateTime($this->ban_until);
+        $diff = $date->getTimestamp() - $now->getTimestamp();
         return $diff > 0;
     }
 }
