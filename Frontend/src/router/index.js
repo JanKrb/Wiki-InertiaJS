@@ -10,6 +10,7 @@ import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
 import AccountSecurity from '../views/account/AccountSecurity.vue'
 import AccountPostings from '../views/account/AccountPostings.vue'
+import AccountBans from '../views/account/AccountBans.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
@@ -141,6 +142,16 @@ const routes = [
         path: 'accounts/:id/postings',
         name: 'admin.accounts.postings',
         component: AccountPostings,
+        meta: {
+          title: 'Wiki Account',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'accounts/:id/bans',
+        name: 'admin.accounts.bans',
+        component: AccountBans,
         meta: {
           title: 'Wiki Account',
           auth: true,

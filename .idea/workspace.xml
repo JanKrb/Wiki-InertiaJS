@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c7203d2e-ec6c-4c36-b66e-1fdacd4df338" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/src/views/account/AccountSettings.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/views/account/AccountSettings.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/views/account/Components/Sidebar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/views/account/Components/Sidebar.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

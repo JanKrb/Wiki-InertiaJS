@@ -35,7 +35,7 @@
     <!-- BEGIN: Create Modal -->
     <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
-        <form @submit.prevent="">
+        <form @submit.prevent="createAccount(this.account)">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
@@ -48,27 +48,27 @@
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
                 <label for="create-account-modal-username" class="form-label">Username</label>
-                <input id="create-account-modal-username" type="text" class="form-control" placeholder="Your Username"/>
+                <input id="create-account-modal-username" type="text" class="form-control" placeholder="Your Username" v-model="account.name"/>
               </div>
               <div class="col-span-6">
                 <label for="create-account-modal-firstname" class="form-label">Firstname</label>
-                <input id="create-account-modal-firstname" type="text" class="form-control" placeholder="Your Firstname"/>
+                <input id="create-account-modal-firstname" type="text" class="form-control" placeholder="Your Firstname" v-model="account.pre_name"/>
               </div>
               <div class="col-span-6">
                 <label for="create-account-modal-lastname" class="form-label">Lastname</label>
-                <input id="create-account-modal-lastname" type="text" class="form-control" placeholder="Your Lastname"/>
+                <input id="create-account-modal-lastname" type="text" class="form-control" placeholder="Your Lastname" v-model="account.last_name"/>
               </div>
               <div class="col-span-12">
                 <label for="create-account-modal-email" class="form-label">Email</label>
-                <input id="create-account-modal-email" type="text" class="form-control" placeholder="Your Email address"/>
+                <input id="create-account-modal-email" type="text" class="form-control" placeholder="Your Email address" v-model="account.email"/>
               </div>
               <div class="col-span-6">
                 <label for="create-account-modal-password" class="form-label">Password</label>
-                <input id="create-account-modal-password" type="password" class="form-control" placeholder="Your Password"/>
+                <input id="create-account-modal-password" type="password" class="form-control" placeholder="Your Password" v-model="account.password"/>
               </div>
               <div class="col-span-6">
                 <label for="create-account-modal-password_confirmation" class="form-label">Password Confirmation</label>
-                <input id="create-account-modal-password_confirmation" type="password" class="form-control" placeholder="Your Password again"/>
+                <input id="create-account-modal-password_confirmation" type="password" class="form-control" placeholder="Your Password again" v-model="account.password_confirmation"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -92,7 +92,7 @@
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <a href="javascript:;" data-toggle="modal" data-target="#create-account-modal" class="btn btn-primary">Create new Account</a>
         <div class="hidden md:block mx-auto text-gray-600">
-          Showing 1 to 10 of 150 entries
+          Showing {{ this.pagination.showing_from }} to {{ this.pagination.showing_to }} of {{ this.pagination.total }} entries
         </div>
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
           <div class="w-56 relative text-gray-700 dark:text-gray-300">
@@ -107,25 +107,23 @@
       </div>
       <!-- BEGIN: Users Layout -->
       <div
-        v-for="(faker, fakerKey) in $f()"
-        :key="fakerKey"
+        v-for="account in this.accounts"
+        v-bind:key="account.id"
         class="intro-y col-span-12 md:col-span-6"
       >
         <div class="box">
           <div class="flex flex-col lg:flex-row items-center p-5">
             <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
               <img
-                alt="Icewall Tailwind HTML Admin Template"
+                alt=""
                 class="rounded-full"
-                :src="require(`@/assets/images/${faker.photos[0]}`)"
+                :src="account.profile_picture"
               />
             </div>
-            <div
-              class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0"
-            >
-              <a href="" class="font-medium">{{ faker.users[0].name }}</a>
+            <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
+              <a href="" class="font-medium">{{ account.name }}</a>
               <div class="text-gray-600 text-xs mt-0.5">
-                {{ faker.jobs[0] }}
+                {{ account.role.name }}
               </div>
             </div>
             <div class="flex mt-4 lg:mt-0">
@@ -137,20 +135,16 @@
                 </button>
                 <div class="dropdown-menu w-40">
                   <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                    <a :href="'http://localhost:8080/admin/accounts/' + faker.totals[0] + '/view'" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                      <Edit2Icon class="w-4 h-4 mr-2"/> Edit
-                    </a>
-                    <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                      <SlashIcon class="w-4 h-4 mr-2"/> Bans
-                    </a>
-                    <a
-                      href="javascript:;"
-                      class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                      data-toggle="modal"
-                      data-target="#create-account-modal"
-                    >
-                      <Trash2Icon class="w-4 h-4 mr-2"/> Delete
-                    </a>
+                    <router-link :to="{ 'name': 'admin.accounts.informations', 'params': { 'id': account.id }}">
+                      <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                        <Edit2Icon class="w-4 h-4 mr-2"/> Edit
+                      </a>
+                    </router-link>
+                    <router-link :to="{ 'name': 'admin.accounts.bans', 'params': { 'id': account.id }}">
+                      <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                        <SlashIcon class="w-4 h-4 mr-2"/> Bans
+                      </a>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -159,74 +153,105 @@
         </div>
       </div>
       <!-- BEGIN: Users Layout -->
-      <!-- END: Pagination -->
-      <div
-        class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center"
-      >
-        <ul class="pagination">
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronsLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">...</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">1</a>
-          </li>
-          <li>
-            <a class="pagination__link pagination__link--active" href="">2</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">3</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">...</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronsRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-        </ul>
-        <select class="w-20 form-select box mt-3 sm:mt-0">
-          <option>10</option>
-          <option>25</option>
-          <option>35</option>
-          <option>50</option>
-        </select>
+      <!-- BEGIN: Datatable Pagination -->
+      <div class="intro-y col-span-12 items-center">
+        <div class="flex flex-col items-center mt-5">
+          <ul class="flex">
+            <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+              <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchAccounts(pagination.first_page_url)">
+                <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
+              </button>
+            </li>
+            <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+              <button class="flex items-center font-bold" @click="fetchAccounts(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+                <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
+              </button>
+            </li>
+            <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+              <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+            </li>
+            <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+              <button class="flex items-center font-bold" @click="fetchAccounts(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+                <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
+              </button>
+            </li>
+            <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+              <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchAccounts(pagination.last_page_url)">
+                <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- END: Pagination -->
+    <!-- END: Datatable Pagination -->
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
   data() {
     return {
-      users: {}
+      pagination: {},
+      accounts: {},
+      account: {}
     }
   },
   mounted() {
-    this.fetchAccounts()
+    this.fetchAccounts('http://localhost:8000/api/users')
   },
   methods: {
-    fetchAccounts() {
-      console.log('Fetch Accounts')
+    fetchAccounts(url) {
+      const loader = this.$loading.show()
+      axios.get(url)
+        .then(response => {
+          console.log(response)
+          this.accounts = response.data.data
+          loader.hide()
+          this.makePagination(response.data.meta, response.data.links)
+        })
+        .catch(error => {
+          console.log(error)
+          loader.hide()
+        })
+    },
+    makePagination(meta, links) {
+      const pagination = {
+        current_page: meta.current_page,
+        last_page: meta.last_page,
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev,
+        showing_from: meta.from,
+        showing_to: meta.to,
+        total: meta.total
+      }
+      this.pagination = pagination
+    },
+    createAccount(account) {
+      const loader = this.$loading.show()
+      if (account.password === account.password_confirmation && account.password.length > 0) {
+        axios.post('http://127.0.0.1:8000/api/auth/register', {
+          name: account.name,
+          email: account.email,
+          password: account.password,
+          password_confirmation: account.password_confirmation
+        })
+          .then(response => {
+            console.log(response)
+            loader.hide()
+          })
+          .catch(error => {
+            console.error(error)
+            loader.hide()
+          })
+      } else {
+        console.log('Passwords doesn`t match')
+      }
     }
   }
 })
