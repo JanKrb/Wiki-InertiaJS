@@ -12,7 +12,7 @@
           class="-intro-x hidden md:flex"
         >
           <img
-            alt="Icewall Tailwind HTML Admin Template"
+            alt=""
             class="w-6"
             src="@/assets/images/logo.svg"
           />
@@ -81,7 +81,7 @@
                 >
                   <div class="w-8 h-8 image-fit">
                     <img
-                      alt="Icewall Tailwind HTML Admin Template"
+                      alt=""
                       class="rounded-full"
                       :src="require(`@/assets/images/${faker.photos[0]}`)"
                     />
@@ -173,8 +173,8 @@
             aria-expanded="false"
           >
             <img
-              alt="Icewall Tailwind HTML Admin Template"
-              :src="require(`@/assets/images/${$f()[9].photos[0]}`)"
+              alt=""
+              :src="user.profile_picture"
             />
           </div>
           <div class="dropdown-menu w-56">
@@ -188,12 +188,12 @@
                 </div>
               </div>
               <div class="p-2">
-                <router-link :to="{ name: 'profile.personal' }">
+                <router-link :to="{ name: 'profile.informations' }">
                   <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <UserIcon class="w-4 h-4 mr-2" /> Profile
                   </a>
                 </router-link>
-                <router-link :to="{ name: 'profile.password' }">
+                <router-link :to="{ name: 'profile.security' }">
                   <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <LockIcon class="w-4 h-4 mr-2" /> Change Password
                   </a>
@@ -345,7 +345,6 @@ export default defineComponent({
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
-
     if (this.user) this.loggedIn = true
   },
   methods: {

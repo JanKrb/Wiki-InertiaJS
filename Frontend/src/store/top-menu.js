@@ -67,6 +67,11 @@ const state = () => {
             icon: 'SlashIcon',
             pageName: 'admin.bans',
             title: 'Bans'
+          },
+          {
+            icon: 'ServerIcon',
+            pageName: 'admin.settings.general',
+            title: 'Settings'
           }
         ]
       }
