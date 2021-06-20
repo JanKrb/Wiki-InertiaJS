@@ -7,6 +7,7 @@ use App\Models\Ban;
 use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Post;
+use App\Models\PostComment;
 use App\Models\PostVote;
 use App\Models\Role;
 use App\Models\Tag;
@@ -14,6 +15,7 @@ use App\Models\User;
 use App\Observers\BadgeObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\PermissionObserver;
+use App\Observers\PostCommentObserver;
 use App\Observers\PostObserver;
 use App\Observers\PostVoteObserver;
 use App\Observers\RoleObserver;
@@ -51,12 +53,14 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Role::observe(RoleObserver::class);
         Permission::observe(PermissionObserver::class);
-        Badge::observe(BadgeObserver::class);
-        Tag::observe(TagObserver::class);
-        PostVote::observe(PostVoteObserver::class);
-        Post::observe(PostObserver::class);
-        Category::observe(CategoryObserver::class);
         Ban::observe(Ban::class);
+        Badge::observe(BadgeObserver::class);
+
+        Category::observe(CategoryObserver::class);
+        Tag::observe(TagObserver::class);
+        Post::observe(PostObserver::class);
+        PostVote::observe(PostVoteObserver::class);
+        PostComment::observe(PostCommentObserver::class);
 
         /**
          * Paginate a standard Laravel Collection.
