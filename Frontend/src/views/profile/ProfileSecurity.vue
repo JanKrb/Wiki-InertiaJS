@@ -4,50 +4,9 @@
       <h2 class="text-lg font-medium mr-auto">Change Password</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
-      <!-- BEGIN: Profile Menu -->
-      <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
-        <div class="intro-y box mt-5">
-          <div class="relative flex items-center p-5">
-            <div class="w-12 h-12 image-fit">
-              <img
-                alt="Icewall Tailwind HTML Admin Template"
-                class="rounded-full"
-                :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
-              />
-            </div>
-            <div class="ml-4 mr-auto">
-              <div class="font-medium text-base">
-                {{ user.name }}
-              </div>
-              <div class="text-gray-600">{{ user.email }}</div>
-            </div>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <router-link :to="{ name: 'profile.personal' }">
-              <a class="flex items-center mt-3" href="">
-                <UserIcon class="w-4 h-4 mr-2"/> Personal Information
-              </a>
-            </router-link>
-            <router-link :to="{ name: 'profile.password' }">
-              <a class="flex items-center text-theme-1 dark:text-theme-10 font-medium mt-3" href="">
-                <LockIcon class="w-4 h-4 mr-2"/> Change Password
-              </a>
-            </router-link>
-            <a class="flex items-center mt-3" href="">
-              <MailIcon class="w-4 h-4 mr-2"/> Email Settings
-            </a>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <a class="flex items-center" href="">
-              <BookIcon class="w-4 h-4 mr-2"/> Terms of service
-            </a>
-            <a class="flex items-center mt-3" href="">
-              <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- END: Profile Menu -->
+      <!-- BEGIN: Sidebar -->
+      <Sidebar :user="this.user"></Sidebar>
+      <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Change Password -->
         <div class="intro-y box lg:mt-5">
@@ -109,11 +68,14 @@
 <script>
 import axios from 'axios'
 import { defineComponent } from 'vue'
+import Sidebar from './Components/Sidebar'
 
 export default defineComponent({
+  components: {
+    Sidebar
+  },
   data() {
     return {
-      email: JSON.parse(localStorage.getItem('user')).email,
       old_password: '',
       password: '',
       password_confirmation: '',
@@ -121,7 +83,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchUser()
   },
   methods: {
     handleSubmit(e) {
@@ -129,7 +91,7 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.post('http://127.0.0.1:8000/api/auth/password/change', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        email: this.email,
+        email: this.user.email,
         old_password: this.old_password,
         password: this.password,
         password_confirmation: this.password_confirmation
@@ -140,6 +102,19 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error.message)
+        })
+    },
+    fetchUser() {
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/auth/user')
+        .then(response => {
+          console.log(response)
+          this.user = response.data.data.user
+          loader.hide()
+        })
+        .catch(error => {
+          console.log(error)
+          loader.hide()
         })
     }
   }

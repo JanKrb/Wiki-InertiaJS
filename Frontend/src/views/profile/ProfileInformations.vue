@@ -4,50 +4,9 @@
       <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
-      <!-- BEGIN: Profile Menu -->
-      <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
-        <div class="intro-y box mt-5">
-          <div class="relative flex items-center p-5">
-            <div class="w-12 h-12 image-fit">
-              <img
-                alt="Icewall Tailwind HTML Admin Template"
-                class="rounded-full"
-                :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
-              />
-            </div>
-            <div class="ml-4 mr-auto">
-              <div class="font-medium text-base">
-                {{ user.name }}
-              </div>
-              <div class="text-gray-600">{{ user.email }}</div>
-            </div>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <router-link :to="{ name: 'profile.personal' }">
-              <a class="flex items-center text-theme-1 dark:text-theme-10 font-medium" href="">
-                <UserIcon class="w-4 h-4 mr-2"/> Personal Information
-              </a>
-            </router-link>
-            <router-link :to="{ name: 'profile.password' }">
-              <a class="flex items-center mt-3" href="">
-                <LockIcon class="w-4 h-4 mr-2"/> Change Password
-              </a>
-            </router-link>
-            <a class="flex items-center mt-3" href="">
-              <MailIcon class="w-4 h-4 mr-2"/> Email Settings
-            </a>
-          </div>
-          <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-            <a class="flex items-center" href="">
-              <BookIcon class="w-4 h-4 mr-2"/> Terms of service
-            </a>
-            <a class="flex items-center mt-3" href="">
-              <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- END: Profile Menu -->
+      <!-- BEGIN: Sidebar -->
+      <Sidebar :user="this.user"></Sidebar>
+      <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Display Information -->
         <div class="intro-y box lg:mt-5">
@@ -63,11 +22,11 @@
                   <div class="grid grid-cols-12 gap-x-5">
                     <div class="col-span-12 xxl:col-span-6">
                       <div>
-                        <label for="update-profile-form-1" class="form-label">
+                        <label for="update-profile-firstname" class="form-label">
                           Firstname
                         </label>
                         <input
-                          id="update-profile-form-1"
+                          id="update-profile-firstname"
                           type="text"
                           class="form-control"
                           placeholder="Firstname"
@@ -75,11 +34,11 @@
                         />
                       </div>
                       <div class="mt-3">
-                        <label for="update-profile-form-1" class="form-label">
+                        <label for="update-profile-username" class="form-label">
                           Username
                         </label>
                         <input
-                          id="update-profile-form-2"
+                          id="update-profile-username"
                           type="text"
                           class="form-control"
                           placeholder="Username"
@@ -89,11 +48,11 @@
                     </div>
                     <div class="col-span-12 xxl:col-span-6">
                       <div class="mt-3 xxl:mt-0">
-                        <label for="update-profile-form-1" class="form-label">
+                        <label for="update-profile-lastname" class="form-label">
                           Lastname
                         </label>
                         <input
-                          id="update-profile-form-3"
+                          id="update-profile-lastname"
                           type="text"
                           class="form-control"
                           placeholder="Lastname"
@@ -101,11 +60,11 @@
                         />
                       </div>
                       <div class="mt-3">
-                        <label for="update-profile-form-4" class="form-label">
+                        <label for="update-profile-email" class="form-label">
                           Email
                         </label>
                         <input
-                          id="update-profile-form-5"
+                          id="update-profile-email"
                           type="text"
                           class="form-control"
                           placeholder="Email"
@@ -127,15 +86,15 @@
                     >
                       <img
                         class="rounded-md"
-                        alt="Icewall Tailwind HTML Admin Template"
-                        :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
+                        alt=""
+                        :src="this.user.profile_picture"
                       />
                       <Tippy
                         tag="div"
                         content="Remove this profile photo?"
                         class="w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2"
                       >
-                        <xIcon class="w-4 h-4" />
+                        <xIcon class="w-4 h-4"/>
                       </Tippy>
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
@@ -160,17 +119,21 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import axios from 'axios'
+import Sidebar from './Components/Sidebar'
 
 export default defineComponent({
+  components: {
+    Sidebar
+  },
   data() {
     return {
       user: {}
     }
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchUser()
   },
   methods: {
     handleSubmit(e) {
@@ -191,20 +154,17 @@ export default defineComponent({
         })
     },
     fetchUser() {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
-          localStorage.setItem('user', JSON.stringify(response.data.data.user))
+          console.log(response)
+          this.user = response.data.data.user
+          loader.hide()
         })
         .catch(error => {
           console.log(error)
+          loader.hide()
         })
-    }
-  },
-  setup() {
-    const select = ref('1')
-
-    return {
-      select
     }
   }
 })
