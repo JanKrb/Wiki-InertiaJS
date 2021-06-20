@@ -189,7 +189,6 @@ export default defineComponent({
       axios.get(page)
         .then(response => {
           this.roles = response.data.data
-          console.log(response)
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })
