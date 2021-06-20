@@ -5,6 +5,8 @@ import DashboardOverview2 from '../views/dashboard-overview-2/Main.vue'
 import Roles from '../views/roles/Main.vue'
 import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
+import Bans from '../views/bans/Main.vue'
+import Ban from '../views/ban/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
 import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
@@ -94,6 +96,26 @@ const routes = [
         component: Permissions,
         meta: {
           title: 'Wiki Permissions',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'bans',
+        name: 'admin.bans',
+        component: Bans,
+        meta: {
+          title: 'Wiki Bans',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'bans/:id/view',
+        name: 'admin.ban',
+        component: Ban,
+        meta: {
+          title: 'Wiki Ban',
           auth: true,
           isAuth: false
         }
