@@ -9,53 +9,224 @@
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Roles & Tags -->
-        <form @submit.prevent="submitCredentials(this.user)">
-          <div class="intro-y box lg:mt-5">
-            <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
-              <h2 class="font-medium text-base mr-auto">Roles & Tags</h2>
-              <button class="btn btn-primary btn-sm ml-auto" type="submit"><SaveIcon class="mr-2 w-5 h-5"></SaveIcon>Save</button>
+        <div class="intro-y box px-5 pt-5 mt-5">
+          <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5 pb-5 -mx-5">
+            <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
+                <img
+                  alt="Icewall Tailwind HTML Admin Template"
+                  class="rounded-full"
+                  :src="require(`@/assets/images/${$f()[0].photos[0]}`)"
+                />
+              </div>
+              <div class="ml-5">
+                <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
+                  {{ this.user.name }}
+                </div>
+                <div class="text-gray-600">{{ this.user.pre_name }} {{ this.user.last_name }}</div>
+              </div>
             </div>
-            <div class="p-5">
-              <div class="flex flex-col-reverse xl:flex-row flex-col">
-                <div class="flex-1 mt-6 xl:mt-0">
-                  <div class="grid grid-cols-12 gap-x-5">
-                    <div class="col-span-12 xxl:col-span-6">
-                      <div>
-                        <label class="form-label">
-                          Role
-                        </label>
-                        <TailSelect
-                          v-model="user_role"
-                          :options="{
-                            search: true,
-                            classNames: 'w-full'
-                          }"
-                        >
-                          <option :value="role.id" v-for="role in roles" v-bind:key="role.id" :selected="role.id === this.user.role.id">{{ role.name }}</option>
-                        </TailSelect>
+            <div class="mt-6 lg:mt-0 flex-1 dark:text-gray-300 px-5 border-l border-r border-gray-200 dark:border-dark-5 border-t lg:border-t-0 pt-5 lg:pt-0">
+              <div class="font-medium text-center lg:text-left lg:mt-3">
+                User Details
+              </div>
+              <div class="flex flex-col justify-center items-center lg:items-start mt-4">
+                <div class="truncate sm:whitespace-normal flex items-center">
+                  <MailIcon class="w-4 h-4 mr-2"/>{{ this.user.email }}
+                </div>
+                <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                  <ShieldIcon class="w-4 h-4 mr-2"/>{{ this.user.role.name }}
+                </div>
+                <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                  <HashIcon class="w-4 h-4 mr-2"/>User-ID: {{ this.user.id }}
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-gray-200 dark:border-dark-5 pt-5 lg:pt-0">
+              <div class="text-center rounded-md w-40 py-3">
+                <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
+                  201
+                </div>
+                <div class="text-gray-600">General Bans</div>
+              </div>
+              <div class="text-center rounded-md w-40 py-3">
+                <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
+                  1k
+                </div>
+                <div class="text-gray-600">Global Bans</div>
+              </div>
+              <div class="text-center rounded-md w-40 py-3">
+                <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
+                  492
+                </div>
+                <div class="text-gray-600">Comment Bans</div>
+              </div>
+            </div>
+          </div>
+          <div class="nav nav-tabs flex-col sm:flex-row justify-center lg:justify-start" role="tablist">
+            <a
+              id="settings-tab"
+              data-toggle="tab"
+              data-target="#settings"
+              href="javascript:;"
+              class="py-4 sm:mr-8 flex items-center active"
+              role="tab"
+              aria-controls="settings"
+              aria-selected="true"
+            >
+              <SlidersIcon class="w-4 h-4 mr-2" /> Settings
+            </a>
+            <a
+              id="history-tab"
+              data-toggle="tab"
+              data-target="#history"
+              href="javascript:;"
+              class="py-4 sm:mr-8 flex items-center"
+              role="tab"
+              aria-selected="false"
+            >
+              <ArchiveIcon class="w-4 h-4 mr-2" /> History
+            </a>
+          </div>
+        </div>
+        <!-- END: Roles & Tags -->
+        <!-- BEGIN: Settings -->
+        <div class="tab-content mt-5">
+          <div
+            id="settings"
+            class="tab-pane active"
+            role="tabpanel"
+            aria-labelledby="settings-tab"
+          >
+            <div class="grid grid-cols-12 gap-6">
+              <!-- BEGIN: Latest Uploads -->
+              <div class="intro-y box col-span-12 lg:col-span-9">
+                <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
+                  <h2 class="font-medium text-base mr-auto">Create Ban</h2>
+                  <button class="btn btn-danger btn-sm ml-auto"><UserXIcon class="mr-2 w-5 h-5"></UserXIcon>Submit Ban</button>
+                </div>
+                <div class="p-5">
+                  <div class="flex flex-col-reverse xl:flex-row flex-col">
+                    <div class="flex-1 mt-6 xl:mt-0">
+                      <div class="grid grid-cols-12 gap-x-5 mb-4">
+                        <div class="col-span-12 xxl:col-span-12 mb-4">
+                          <div>
+                            <label for="create-reason-ban" class="form-label">
+                              Reason
+                            </label>
+                            <input
+                              id="create-reason-ban"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter ban reason"
+                              v-model="ban.reason"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-12 mb-4">
+                          <div>
+                            <label for="create-description-ban" class="form-label">
+                              Description
+                            </label>
+                            <textarea
+                              id="create-description-ban"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter a ban description"
+                              v-model="ban.description"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-6 mb-4">
+                          <div>
+                            <label for="create-date-ban" class="form-label">
+                              Unban Date
+                            </label>
+                            <input
+                              id="create-date-ban"
+                              type="date"
+                              class="form-control"
+                              v-model="ban.ban_until.date"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-6 mb-4">
+                          <div>
+                            <label for="create-time-ban" class="form-label">
+                              Ban Time
+                            </label>
+                            <input
+                              id="create-time-ban"
+                              type="time"
+                              class="form-control"
+                              v-model="ban.ban_until.time"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-6 mb-4">
+                          <div>
+                            <label for="create-type-ban" class="form-label">
+                              Ban type
+                            </label>
+                            <input
+                              id="create-type-ban"
+                              type="text"
+                              class="form-control"
+                              v-model="ban.target"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-3 mb-4">
+                          <div>
+                            <label for="create-target-ban" class="form-label">
+                              Target
+                            </label>
+                            <input
+                              id="create-target-ban"
+                              type="text"
+                              class="form-control"
+                              :value="this.user.name"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-12 xxl:col-span-3 mb-4">
+                          <div>
+                            <label for="create-staff-ban" class="form-label">
+                              Staff
+                            </label>
+                            <input
+                              id="create-staff-ban"
+                              type="text"
+                              class="form-control"
+                              :value="this.staff.name"
+                              disabled
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-span-12 xxl:col-span-6">
-                      <div>
-                        <label class="form-label">
-                          Tags
-                        </label>
-                        <TailSelect
-                          v-model="new_badges"
-                          :options="{
-                          search: true,
-                          descriptions: true,
-                          hideSelected: true,
-                          hideDisabled: true,
-                          multiLimit: 15,
-                          multiShowCount: false,
-                          multiContainer: true,
-                          classNames: 'w-full'
-                        }"
-                          multiple
-                        >
-                          <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id" :selected="this.user_badges.map((item) => { return item.id }).includes(badge.id)">{{ badge.title }}</option>
-                        </TailSelect>
+                  </div>
+                </div>
+              </div>
+              <div class="intro-y box col-span-12 lg:col-span-3">
+                <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
+                  <h2 class="font-medium text-base mr-auto">Current Ban</h2>
+                  <button class="btn btn-danger btn-sm ml-auto"><Trash2Icon class="mr-2 w-5 h-5"></Trash2Icon>Delete</button>
+                </div>
+                <div class="p-5">
+                  <div class="flex flex-col-reverse xl:flex-row flex-col">
+                    <div class="flex-1 mt-6 xl:mt-0">
+                      <div class="grid grid-cols-12 gap-x-5 mb-4">
+                        <div class="col-span-12">
+                          <div class="p-5 text-center">
+                            <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3" />
+                            <div class="text-3xl mt-5">Unbanned</div>
+                            <div class="text-gray-600 mt-2">
+                              This user is currently Unbanned!
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -63,68 +234,40 @@
               </div>
             </div>
           </div>
-        </form>
-        <!-- END: Roles & Tags -->
-        <!-- BEGIN: Settings -->
-        <div class="intro-y box lg:mt-5">
-          <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
-            <h2 class="font-medium text-base mr-auto">Account Settings</h2>
-            <button class="btn btn-primary btn-sm ml-auto"><SaveIcon class="mr-2 w-5 h-5"></SaveIcon>Save</button>
-          </div>
-          <div class="p-5">
-            <div class="flex flex-col-reverse xl:flex-row flex-col">
-              <div class="flex-1 mt-6 xl:mt-0">
-                <div class="grid grid-cols-12 gap-x-5 mb-4">
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="flex items-center">
-                      <div class="border-l-2 border-theme-1 pl-4">
-                        <a href="" class="font-medium">
-                          Verified Emailaddress
-                        </a>
-                        <div class="text-gray-600">
-                          Is the account-email verified?
-                        </div>
-                      </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+          <div
+            id="history"
+            class="tab-pane"
+            role="tabpanel"
+            aria-labelledby="history-tab"
+          >
+            <div class="grid grid-cols-12 gap-6 mt-5">
+              <div
+                v-for="(faker, fakerKey) in $f()"
+                :key="fakerKey"
+                class="intro-y col-span-12 md:col-span-6"
+              >
+                <div class="box">
+                  <div class="flex flex-col lg:flex-row items-center p-5">
+                    <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
+                      <img
+                        alt=""
+                        class="rounded-full"
+                        :src="require(`@/assets/images/${faker.photos[0]}`)"
+                      />
                     </div>
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6 mb-4">
-                    <div class="flex items-center">
-                      <div class="border-l-2 border-theme-1 pl-4">
-                        <a href="" class="font-medium">
-                          Newsletter
-                        </a>
-                        <div class="text-gray-600">
-                          Does the user get newsletter?
-                        </div>
+                    <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
+                      <a href="" class="font-medium">Ban Reason</a>
+                      <div class="text-gray-600 text-xs mt-0.5">
+                        {{ faker.users[0].name }}
                       </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
                     </div>
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="flex items-center">
-                      <div class="border-l-2 border-theme-1 pl-4">
-                        <a href="" class="font-medium">
-                          Security Alerts
-                        </a>
-                        <div class="text-gray-600">
-                          Does the user get Security alerts
-                        </div>
-                      </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+                    <div class="lg:ml-2 text-center mt-3 lg:mt-0">
+                      <small><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></small>
                     </div>
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="flex items-center">
-                      <div class="border-l-2 border-theme-1 pl-4">
-                        <a href="" class="font-medium">
-                          Posting Informations
-                        </a>
-                        <div class="text-gray-600">
-                          Does the user get Informations about recent Postings?
-                        </div>
-                      </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+                    <div class="flex mt-4 lg:mt-0">
+                      <button class="btn btn-outline-secondary py-1 px-2">
+                        View
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -149,110 +292,28 @@ export default defineComponent({
   },
   data() {
     return {
-      user_role: '',
-      new_badges: [],
-      user_badges: [],
       user: {
         role: {
           id: 0
         }
       },
-      badges: [],
-      roles: []
+      staff: {},
+      ban: {
+        reason: '',
+        description: '',
+        ban_until: {
+          date: '',
+          time: ''
+        },
+        type: null
+      }
     }
   },
   mounted() {
     this.fetchUser(this.$route.params.id)
-    this.fetchUserBadges(this.$route.params.id)
-    this.fetchRoles()
-    this.fetchBadges()
-  },
-  created() {
-    // this.fetchRoles()
-    // this.fetchBadges()
+    this.staff = JSON.parse(localStorage.getItem('user'))
   },
   methods: {
-    submitCredentials(user) {
-      // update Userrole
-      this.updateUser(user)
-
-      // Filter Badges
-      const deleteBadges = []
-      const createBadges = []
-
-      for (const item in this.user_badges) {
-        const badge = this.user_badges[item]
-        if (!this.new_badges.map((item) => { return parseInt(item) }).includes(badge.id)) {
-          deleteBadges.push(badge.id)
-        }
-      }
-
-      const userBadgesId = this.user_badges.map((item) => { return item.id })
-
-      for (const item in this.new_badges) {
-        const badge = this.new_badges[item]
-        if (!userBadgesId.includes(parseInt(badge))) {
-          createBadges.push(badge)
-        }
-      }
-
-      // Delete old Badges
-      if (deleteBadges.length > 0) {
-        this.deleteUserBadges(deleteBadges)
-      }
-
-      // Create new Badges
-      if (createBadges.length > 0) {
-        this.createUserBadges(createBadges)
-      }
-    },
-    deleteUserBadges(badges) {
-      const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/users/' + this.$route.params.id + '/badges/multiple', {
-        data: {
-          badges: badges
-        }
-      })
-        .then(response => {
-          this.fetchUserBadges(this.$route.params.id)
-          loader.hide()
-        })
-        .catch(error => {
-          console.log(error)
-          loader.hide()
-        })
-    },
-    createUserBadges(badges) {
-      const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/badges/multiple', {
-        badges: badges
-      })
-        .then(response => {
-          this.fetchUserBadges(this.$route.params.id)
-          loader.hide()
-        })
-        .catch(error => {
-          console.error(error)
-          loader.hide()
-        })
-    },
-    updateUser(user) {
-      const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/users/' + this.$route.params.id, {
-        name: user.name,
-        pre_name: user.pre_name,
-        last_name: user.last_name,
-        email: user.email,
-        role_id: this.user_role
-      })
-        .then(response => {
-          loader.hide()
-        })
-        .catch(error => {
-          console.error(error)
-          loader.hide()
-        })
-    },
     fetchUser(id) {
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id)
@@ -264,36 +325,6 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
           loader.hide()
-        })
-    },
-    fetchRoles() {
-      axios.get('http://localhost:8000/api/roles')
-        .then(response => {
-          this.roles = response.data.data
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    },
-    fetchBadges() {
-      const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/badges')
-        .then(response => {
-          this.badges = response.data.data
-          loader.hide()
-        })
-        .catch(error => {
-          console.error(error)
-          loader.hide()
-        })
-    },
-    fetchUserBadges(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/badges')
-        .then(response => {
-          this.user_badges = response.data.data
-        })
-        .catch(error => {
-          console.error(error)
         })
     }
   }
