@@ -44,6 +44,33 @@ const state = () => {
         ]
       },
       {
+        icon: 'ToolIcon',
+        pageName: 'mod.tags',
+        title: 'Moderation',
+        subMenu: [
+          {
+            icon: 'TagIcon',
+            pageName: 'moderation.tags',
+            title: 'Tags'
+          },
+          {
+            icon: 'FilterIcon',
+            pageName: 'moderation.tags',
+            title: 'Authorization'
+          },
+          {
+            icon: 'BellIcon',
+            pageName: 'moderation.announcements',
+            title: 'Announcements'
+          },
+          {
+            icon: 'ClipboardIcon',
+            pageName: 'moderation.tags',
+            title: 'Tickets'
+          }
+        ]
+      },
+      {
         icon: 'SlidersIcon',
         pageName: 'admin.roles',
         title: 'Administration',
@@ -57,6 +84,11 @@ const state = () => {
             icon: 'KeyIcon',
             pageName: 'admin.permissions',
             title: 'Permissions'
+          },
+          {
+            icon: 'CreditCardIcon',
+            pageName: 'admin.permissions',
+            title: 'Badges'
           },
           {
             icon: 'UsersIcon',
