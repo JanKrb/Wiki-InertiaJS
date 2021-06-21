@@ -2,7 +2,7 @@
   <div class="grid grid-cols-12 gap-6 mt-8">
     <div class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <h2 class="intro-y text-lg font-medium mr-auto mt-2">Wiki Settings</h2>
-      <Sidebar></Sidebar>
+      <Sidebar :title="this.details.name"></Sidebar>
     </div>
     <div class="col-span-12 lg:col-span-9 xxl:col-span-10">
       <div class="intro-y text-right items-center">
@@ -87,7 +87,7 @@
                 <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                   <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
                     <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                      <img class="rounded-md" alt="" src=""/>
+                      <img class="rounded-md" alt="" :src="this.details.logo"/>
                       <Tippy
                         tag="div"
                         content="Remove this logo?"
