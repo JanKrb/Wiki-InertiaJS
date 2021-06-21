@@ -55,41 +55,47 @@
               <div class="intro-x mt-8">
                 <input
                   type="text"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.name != null ? ' border-theme-6' : '')"
                   placeholder="Username"
                   v-model="name"
                 />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.name != null'>
+                  {{ this.validation_error?.name[0] }}
+                </div>
+
                 <input
                   type="text"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.email != null ? ' border-theme-6' : '')"
                   placeholder="Email"
                   v-model="email"
                 />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.email != null'>
+                  {{ this.validation_error?.email[0] }}
+                </div>
+
                 <input
                   type="text"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password != null ? ' border-theme-6' : '')"
                   placeholder="Password"
                   v-model="password"
                 />
-                <div class="intro-x w-full grid grid-cols-12 gap-4 h-1 mt-3">
-                  <div class="col-span-3 h-full rounded bg-theme-9"></div>
-                  <div class="col-span-3 h-full rounded bg-theme-9"></div>
-                  <div class="col-span-3 h-full rounded bg-theme-9"></div>
-                  <div
-                    class="col-span-3 h-full rounded bg-gray-200 dark:bg-dark-2"
-                  ></div>
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.password != null'>
+                  {{ this.validation_error?.password[0] }}
                 </div>
-                <a
-                  href=""
-                  class="intro-x text-gray-600 block mt-2 text-xs sm:text-sm"
-                  >What is a secure password?</a
-                >
+
                 <input
                   type="text"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password_confirmation != null ? ' border-theme-6' : '')"
                   placeholder="Password Confirmation"
                   v-model="password_confirmation"
                 />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.password_confirmation != null'>
+                  {{ this.validation_error?.password_confirmation[0] }}
+                </div>
               </div>
               <div
                 class="intro-x flex items-center text-gray-700 dark:text-gray-600 mt-4 text-xs sm:text-sm"
@@ -132,6 +138,8 @@
 import { defineComponent, onMounted } from 'vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -150,35 +158,33 @@ export default defineComponent({
       name: '',
       email: '',
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      validation_error: {}
     }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      if (this.password === this.password_confirmation && this.password.length > 0) {
-        const loader = this.$loading.show()
-        axios.post('http://127.0.0.1:8000/api/auth/register', {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.password_confirmation
+      const loader = this.$loading.show()
+      axios.post('http://127.0.0.1:8000/api/auth/register', {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.password_confirmation
+      })
+        .then(response => {
+          localStorage.setItem('user', JSON.stringify(response.data.data.user))
+          localStorage.setItem('token', response.data.data.token)
+          if (localStorage.getItem('token') != null) {
+            loader.hide()
+            this.$router.push({ name: 'dashboard' })
+          }
         })
-          .then(response => {
-            localStorage.setItem('user', JSON.stringify(response.data.data.user))
-            localStorage.setItem('token', response.data.data.token)
-            if (localStorage.getItem('token') != null) {
-              loader.hide()
-              this.$router.push({ name: 'dashboard' })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      } else {
-        this.password = ''
-        this.password_confirmation = ''
-      }
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.data.error)
+          loader.hide()
+        })
     }
   }
 })
