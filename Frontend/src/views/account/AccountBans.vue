@@ -280,22 +280,25 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        src=""
+                        :src="ban.staff.profile_picture"
                       />
                     </div>
                     <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-                      <a href="" class="font-medium">Ban Reason</a>
+                      <a href="" class="font-medium">{{ ban.reason }}</a>
                       <div class="text-gray-600 text-xs mt-0.5">
-                        NAME
+                        {{ ban.staff.name }}
                       </div>
                     </div>
                     <div class="lg:ml-2 text-center mt-3 lg:mt-0">
-                      <small><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></small>
+                      <small v-if="ban.active"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Active</span></small>
+                      <small v-else><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Closed</span></small>
                     </div>
                     <div class="flex mt-4 lg:mt-0">
-                      <button class="btn btn-outline-secondary py-1 px-2">
-                        View
-                      </button>
+                      <router-link :to="{ name: 'admin.ban', params: { 'id': ban.id } }">
+                        <button class="btn btn-outline-secondary py-1 px-2">
+                          View
+                        </button>
+                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -385,13 +388,11 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
           loader.hide()
         })
     },
     createBan(ban) {
-      console.log(ban)
-      console.log(this.ban_time)
+      const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/bans', {
         reason: ban.reason,
         description: ban.description,
@@ -399,10 +400,12 @@ export default defineComponent({
         type: ban.type
       })
         .then(response => {
-          console.log(response)
+          this.fetchBans(this.$route.params.id)
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     }
   }
