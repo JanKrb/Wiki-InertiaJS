@@ -1,37 +1,41 @@
 <template>
   <div>
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Wiki Roles</h2>
+      <h2 class="text-lg font-medium mr-auto">Wiki Tags</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Role</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Tag</a>
       </div>
     </div>
 
-    <!-- BEGIN: Create Role Modal -->
+    <!-- BEGIN: Create Tag Modal -->
     <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
-        <form @submit.prevent="addRole(this.role)">
+        <form @submit.prevent="addTag(this.tag)">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
               <h2 class="font-medium text-base mr-auto">
-                Create a new Role
+                Create a new Tag
               </h2>
             </div>
             <!-- END: Modal Header -->
             <!-- BEGIN: Modal Body -->
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
-                <label for="create-role-modal-name" class="form-label">Name</label>
-                <input id="create-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="role.name"/>
+                <label for="create-tag-modal-name" class="form-label">Name</label>
+                <input id="create-tag-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="tag.name"/>
               </div>
               <div class="col-span-12">
-                <label for="create-role-modal-description" class="form-label">Description</label>
-                <textarea id="create-role-modal-description" class="form-control" placeholder="Your Description" v-model="role.description"/>
+                <label for="create-tag-modal-description" class="form-label">Description</label>
+                <textarea id="create-tag-modal-description" class="form-control" placeholder="Your Description" v-model="tag.description"/>
               </div>
               <div class="col-span-12">
-                <label for="create-role-modal-color" class="form-label">Color</label>
-                <input id="create-role-modal-color" type="color" class="form-control" v-model="role.color"/>
+                <label for="create-tag-modal-color" class="form-label">Color</label>
+                <input id="create-tag-modal-color" type="color" class="form-control" v-model="tag.color"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-tag-modal-icon" class="form-label">Icon</label>
+                <input id="create-tag-modal-icon" type="text" class="form-control" placeholder="Your Icon" v-model="tag.icon"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -49,32 +53,36 @@
         </form>
       </div>
     </div>
-    <!-- END: Create Role Modal -->
-    <!-- BEGIN: Edit Role Modal -->
+    <!-- END: Create Tag Modal -->
+    <!-- BEGIN: Edit Tag Modal -->
     <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
       <div class="modal-dialog">
-        <form @submit.prevent="editRole">
+        <form @submit.prevent="editTag">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
               <h2 class="font-medium text-base mr-auto">
-                Edit a Role
+                Edit a Tag
               </h2>
             </div>
             <!-- END: Modal Header -->
             <!-- BEGIN: Modal Body -->
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
               <div class="col-span-12">
-                <label for="edit-role-modal-name" class="form-label">Name</label>
-                <input id="edit-role-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_role.name"/>
+                <label for="edit-tag-modal-name" class="form-label">Name</label>
+                <input id="edit-tag-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_tag.name"/>
               </div>
               <div class="col-span-12">
-                <label for="edit-role-modal-description" class="form-label">Description</label>
-                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="edit_role.description"/>
+                <label for="edit-tag-modal-description" class="form-label">Description</label>
+                <textarea id="edit-tag-modal-description" class="form-control" placeholder="Your Description" v-model="edit_tag.description"/>
               </div>
               <div class="col-span-12">
-                <label for="edit-role-modal-color" class="form-label">Color</label>
-                <input id="edit-role-modal-color" type="color" class="form-control" v-model="edit_role.color"/>
+                <label for="edit-tag-modal-color" class="form-label">Color</label>
+                <input id="edit-tag-modal-color" type="color" class="form-control" v-model="edit_tag.color"/>
+              </div>
+              <div class="col-span-12">
+                <label for="edit-tag-modal-icon" class="form-label">Icon</label>
+                <input id="edit-tag-modal-icon" type="text" class="form-control" placeholder="Your Name" v-model="edit_tag.icon"/>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -92,7 +100,7 @@
         </form>
       </div>
     </div>
-    <!-- END: Edit Role Modal -->
+    <!-- END: Edit Tag Modal -->
     <!-- BEGIN: Datatable -->
     <table class="table mt-5">
       <thead>
@@ -101,29 +109,26 @@
           <th class="whitespace-nowrap">Name</th>
           <th class="whitespace-nowrap">Description</th>
           <th class="whitespace-nowrap">Color</th>
+          <th class="whitespace-nowrap">Icon</th>
           <th class="whitespace-nowrap">Updated at</th>
           <th class="whitespace-nowrap">Created at</th>
           <th class="whitespace-nowrap"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="role in this.roles" v-bind:key="role.id">
-          <td class="border-b dark:border-dark-5">{{ role.id }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.name }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.description }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.color }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
+        <tr v-for="tag in this.tags" v-bind:key="tag.id">
+          <td class="border-b dark:border-dark-5">{{ tag.id }}</td>
+          <td class="border-b dark:border-dark-5">{{ tag.name }}</td>
+          <td class="border-b dark:border-dark-5">{{ tag.description }}</td>
+          <td class="border-b dark:border-dark-5"><span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ tag.color">{{ tag.color }}</span></td>
+          <td class="border-b dark:border-dark-5">{{ tag.icon }}</td>
+          <td class="border-b dark:border-dark-5">{{ tag.updated_at }}</td>
+          <td class="border-b dark:border-dark-5">{{ tag.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <router-link :to="{ 'name': 'admin.role.view', 'params': { id: role.id }}">
-              <a href="javascript:;" class="text-small">
-                <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
-              </a>
-            </router-link>
-            <a href="javascript:;" @click="this.edit_role = role" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+            <a href="javascript:;" @click="this.edit_tag = tag" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
               <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
             </a>
-            <a href="javascript:;" @click="deleteRole(role.id)" class="text-small">
+            <a href="javascript:;" @click="deleteTag(tag.id)" class="text-small">
               <Trash2Icon class="w-5 h-5 hover:text-blue-700"></Trash2Icon>
             </a>
           </td>
@@ -135,12 +140,12 @@
     <div class="flex flex-col items-center mt-5">
       <ul class="flex">
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchRoles(pagination.first_page_url)">
+          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchTags(pagination.first_page_url)">
             <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
           </button>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" @click="fetchRoles(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+          <button class="flex items-center font-bold" @click="fetchTags(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
             <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
           </button>
         </li>
@@ -148,12 +153,12 @@
           <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" @click="fetchRoles(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+          <button class="flex items-center font-bold" @click="fetchTags(pagination.next_page_url)" :disabled="!pagination.next_page_url">
             <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
           </button>
         </li>
         <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchRoles(pagination.last_page_url)">
+          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchTags(pagination.last_page_url)">
             <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
           </button>
         </li>
@@ -166,29 +171,33 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
     return {
-      roles: [],
-      edit_role: {},
-      role: {
-        name: 'New Role',
-        description: null,
-        color: '#000000'
+      tags: [],
+      edit_tag: {},
+      tag: {
+        name: 'New Tag',
+        description: 'New Description',
+        color: '#000000',
+        icon: 'TagIcon'
       },
-      pagination: {}
+      pagination: {},
+      validation_error: {}
     }
   },
   mounted() {
-    this.fetchRoles('http://localhost:8000/api/roles')
+    this.fetchTags('http://localhost:8000/api/tags')
   },
   methods: {
-    fetchRoles(page) {
+    fetchTags(page) {
       const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
-          this.roles = response.data.data
+          this.tags = response.data.data
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })
@@ -196,7 +205,6 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
-      return this.roles
     },
     makePagination(meta, links) {
       const pagination = {
@@ -209,47 +217,56 @@ export default defineComponent({
       }
       this.pagination = pagination
     },
-    deleteRole(id) {
+    deleteTag(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/roles/' + id)
+      axios.delete('http://localhost:8000/api/tags/' + id)
         .then(response => {
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          toast.success('Tag successfully deleted')
           loader.hide()
+          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
-    addRole(role) {
+    addTag(tag) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/roles', {
-        name: role.name,
-        description: role.description,
-        color: role.color
+      axios.post('http://localhost:8000/api/tags', {
+        name: tag.name,
+        description: tag.description,
+        color: tag.color,
+        icon: tag.icon
       })
         .then(response => {
+          toast.success('Tag successfully added')
           loader.hide()
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          console.log(error.response)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
-    editRole() {
+    editTag() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
-        name: this.edit_role.name,
-        description: this.edit_role.description,
-        color: this.edit_role.color
+      axios.put('http://localhost:8000/api/tags/' + this.edit_tag.id, {
+        name: this.edit_tag.name,
+        description: this.edit_tag.description,
+        color: this.edit_tag.color,
+        icon: this.edit_tag.icon
       })
         .then(response => {
+          toast.success('Tag successfully updated')
           loader.hide()
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     }
