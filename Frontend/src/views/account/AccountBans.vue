@@ -284,6 +284,17 @@
             aria-labelledby="history-tab"
           >
             <div class="grid grid-cols-12 gap-6 mt-5">
+              <div v-if="this.bans.length <= 0" class="intro-y col-span-12">
+                <div class="box">
+                  <div class="p-5 text-center">
+                    <ArchiveIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
+                    <div class="text-3xl mt-5">No recent Bans</div>
+                    <div class="text-gray-600 mt-2 mb-5">
+                      This user have no recent bans!
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div
                 v-for="ban in this.bans"
                 :key="ban.id"

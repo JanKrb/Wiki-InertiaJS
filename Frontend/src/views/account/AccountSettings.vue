@@ -26,6 +26,7 @@
                         </label>
                         <TailSelect
                           v-model="user_role"
+                          :class="'form-control' + (this.validation_error?.role_id != null ? ' border-theme-6' : '')"
                           :options="{
                             search: true,
                             classNames: 'w-full'
@@ -33,29 +34,36 @@
                         >
                           <option :value="role.id" v-for="role in roles" v-bind:key="role.id" :selected="role.id === this.user.role.id">{{ role.name }}</option>
                         </TailSelect>
+                        <div v-if="this.validation_error?.role_id != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.role_id[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6">
                       <div>
                         <label class="form-label">
-                          Tags
+                          Badges
                         </label>
                         <TailSelect
+                          :class="'form-control' + (this.validation_error?.badges != null ? ' border-theme-6' : '')"
                           v-model="new_badges"
                           :options="{
-                          search: true,
-                          descriptions: true,
-                          hideSelected: true,
-                          hideDisabled: true,
-                          multiLimit: 15,
-                          multiShowCount: false,
-                          multiContainer: true,
-                          classNames: 'w-full'
-                        }"
+                            search: true,
+                            descriptions: true,
+                            hideSelected: true,
+                            hideDisabled: true,
+                            multiLimit: 15,
+                            multiShowCount: false,
+                            multiContainer: true,
+                            classNames: 'w-full'
+                          }"
                           multiple
                         >
                           <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id" :selected="this.user_badges.map((item) => { return item.id }).includes(badge.id)">{{ badge.title }}</option>
                         </TailSelect>
+                        <div v-if="this.validation_error?.badges != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.badges[0] }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -152,6 +160,7 @@ export default defineComponent({
   data() {
     return {
       user_role: '',
+      validation_error: {},
       new_badges: [],
       user_badges: [],
       user: {
@@ -216,7 +225,8 @@ export default defineComponent({
           loader.hide()
         })
         .catch(error => {
-          console.log(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
@@ -230,7 +240,8 @@ export default defineComponent({
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
@@ -244,13 +255,14 @@ export default defineComponent({
         role_id: this.user_role
       })
         .then(response => {
+          toast.success('Role successfully updated')
           loader.hide()
-          toast.success('Update user Role')
+          this.fetchUserBadges(this.$route.params.id)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          toast.error('Action failed')
         })
     },
     fetchUser(id) {
