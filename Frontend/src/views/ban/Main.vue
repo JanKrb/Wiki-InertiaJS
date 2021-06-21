@@ -82,10 +82,13 @@
                         <input
                           id="update-reason-ban"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.reason != null ? ' border-theme-6' : '')"
                           placeholder="Enter ban reason"
                           v-model="ban.reason"
                         />
+                        <div v-if="this.validation_error?.reason != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.reason[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-12 mb-4">
@@ -95,11 +98,13 @@
                         </label>
                         <textarea
                           id="update-description-ban"
-                          type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.description != null ? ' border-theme-6' : '')"
                           placeholder="Enter a ban description"
                           v-model="ban.description"
                         />
+                        <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.description[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -110,9 +115,12 @@
                         <input
                           id="update-date-ban"
                           type="date"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.ban_until != null ? ' border-theme-6' : '')"
                           v-model="ban_time.date"
                         />
+                        <div v-if="this.validation_error?.ban_until != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.ban_until[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -123,9 +131,12 @@
                         <input
                           id="update-time-ban"
                           type="time"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.ban_until != null ? ' border-theme-6' : '')"
                           v-model="ban_time.time"
                         />
+                        <div v-if="this.validation_error?.ban_until != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.ban_until[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -136,14 +147,18 @@
                         <TailSelect
                           id="update-type-ban"
                           v-model="ban.type"
+                          :class="'form-control' + (this.validation_error?.type != null ? ' border-theme-6' : '')"
                           :options="{
                             classNames: 'w-full'
-                          }"
-                        >
+                            }"
+                          >
                           <option value="0" :selected="ban.type === 0">Global Ban</option>
                           <option value="1" :selected="ban.type === 1">Comment Ban</option>
                           <option value="2" :selected="ban.type === 2">Posting Ban</option>
                         </TailSelect>
+                        <div v-if="this.validation_error?.type != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.type[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-3 mb-4">
@@ -234,11 +249,14 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
     return {
       banCount: {},
+      validation_error: {},
       isBanned: false,
       lastBan: {},
       ban_time: {
@@ -337,10 +355,12 @@ export default defineComponent({
       })
         .then(response => {
           this.checkBans(ban.target.id)
+          toast.success('Ban successfully updated')
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
