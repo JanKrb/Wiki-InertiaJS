@@ -53,16 +53,25 @@
               <div class="intro-x mt-8">
                 <input
                   type="text"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block' + (this.validation_error?.email != null || this.validation_error?.user != null ? ' border-theme-6' : '')"
                   placeholder="Email / Username"
                   v-model="email"
                 />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.email != null || this.validation_error?.name != null'>
+                  {{ this.validation_error?.email != null ? this.validation_error?.email[0] : this.validation_error?.name[0] }}
+                </div>
+
                 <input
                   type="password"
-                  class="intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password != null ? ' border-theme-6' : '')"
                   placeholder="Password"
                   v-model="password"
                 />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.password != null'>
+                  {{ this.validation_error?.password[0] }}
+                </div>
               </div>
               <div
                 class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
@@ -117,6 +126,8 @@
 import { defineComponent, onMounted } from 'vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -133,42 +144,44 @@ export default defineComponent({
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      validation_error: {}
     }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      if (this.password.length > 0) {
-        const loader = this.$loading.show()
+      this.validation_error = {}
 
-        const data = {
-          password: this.password
-        }
+      const loader = this.$loading.show()
 
-        if (this.isMail()) {
-          data.email = this.email
-        } else {
-          data.name = this.email
-        }
-
-        axios.post('http://127.0.0.1:8000/api/auth/login', data)
-          .then(response => {
-            console.log(response)
-            localStorage.setItem('user', JSON.stringify(response.data.data.user))
-            localStorage.setItem('token', response.data.data.token)
-            if (localStorage.getItem('token') != null) {
-              axios.defaults.headers.common['Content-Type'] = 'application/json'
-              axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.data.token
-              loader.hide()
-              this.$router.push({ name: 'dashboard' })
-            }
-          })
-          .catch(error => {
-            console.error(error.response)
-            loader.hide()
-          })
+      const data = {
+        password: this.password
       }
+
+      if (this.isMail()) {
+        data.email = this.email
+      } else {
+        data.name = this.email
+      }
+
+      axios.post('http://127.0.0.1:8000/api/auth/login', data)
+        .then(response => {
+          localStorage.setItem('user', JSON.stringify(response.data.data.user))
+          localStorage.setItem('token', response.data.data.token)
+
+          if (localStorage.getItem('token') != null) {
+            axios.defaults.headers.common['Content-Type'] = 'application/json'
+            axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.data.token
+            loader.hide()
+            this.$router.push({ name: 'dashboard' })
+          }
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
     },
     isMail: function () {
       const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
