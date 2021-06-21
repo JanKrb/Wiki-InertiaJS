@@ -172,8 +172,22 @@ export default defineComponent({
   components: {
     Sidebar
   },
+  data() {
+    return {
+      details: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO,
+        description: process.env.VUE_APP_DESCRIPTION
+      }
+    }
+  },
   mounted() {
     console.log('Wikisettings')
+  },
+  methods: {
+    changeDetails() {
+      console.log('ChangeDetails')
+    }
   }
 })
 </script>
