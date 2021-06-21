@@ -161,8 +161,8 @@ export default defineComponent({
         email: this.user.email
       })
         .then(response => {
-          loader.hide()
           toast.success('Profile successfully updated')
+          loader.hide()
           this.fetchUser()
         })
         .catch(error => {

@@ -199,6 +199,7 @@ export default defineComponent({
     return {
       pagination: {},
       accounts: {},
+      validation_error: {},
       account: {
         name: '',
         pre_name: '',
@@ -256,14 +257,14 @@ export default defineComponent({
           password_confirmation: this.account.password_confirmation
         })
           .then(response => {
-            loader.hide()
             toast.success('Account successfully created')
+            loader.hide()
             this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
           })
           .catch(error => {
-            console.log(error)
-            loader.hide()
+            this.validation_error = error.response.data.data.errors
             toast.error('Action failed')
+            loader.hide()
           })
       } else {
         this.account.password = ''
