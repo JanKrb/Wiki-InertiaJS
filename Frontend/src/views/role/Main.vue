@@ -252,15 +252,17 @@ export default defineComponent({
     return {
       role: {},
       role_permissions: [],
+      page_role_permissions: [],
       all_permissions: [],
+      all_role_permissions: [],
       pagination: {},
       newPermission: 'NewPermission'
     }
   },
   mounted() {
     this.fetchRole(this.$route.params.id)
-    this.fetchRolePermissions(this.$route.params.id)
-    this.fetchPermissions()
+    this.fetchRolePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+    this.fetchPermissions('http://localhost:8000/api/permissions')
   },
   methods: {
     makePagination(meta, links) {
@@ -319,9 +321,9 @@ export default defineComponent({
           this.$router.push({ name: 'admin.roles' })
         })
     },
-    fetchRolePermissions(id) {
+    fetchRolePermissions(page) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/roles/' + id + '/permissions')
+      axios.get(page)
         .then(response => {
           this.role_permissions = response.data.data
           loader.hide()
@@ -346,8 +348,8 @@ export default defineComponent({
           toast.error('Removed failed')
         })
     },
-    fetchPermissions() {
-      axios.get('http://localhost:8000/api/permissions')
+    fetchPermissions(page) {
+      axios.get(page)
         .then(response => {
           this.all_permissions = response.data.data
         })
@@ -356,7 +358,7 @@ export default defineComponent({
         })
     },
     fetchSelectablePermissions() {
-      return this.all_permissions.filter(all => !this.role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
+      return this.all_permissions.filter(all => !this.all_role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
     },
     addPermission() {
       const loader = this.$loading.show()

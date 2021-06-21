@@ -111,7 +111,7 @@
           <td class="border-b dark:border-dark-5">{{ role.id }}</td>
           <td class="border-b dark:border-dark-5">{{ role.name }}</td>
           <td class="border-b dark:border-dark-5">{{ role.description }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.color }}</td>
+          <td class="border-b dark:border-dark-5"><span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ role.color">{{ role.color }}</span></td>
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
@@ -217,13 +217,13 @@ export default defineComponent({
       axios.delete('http://localhost:8000/api/roles/' + id)
         .then(response => {
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
-          loader.hide()
           toast.success('Role successfully deleted')
+          loader.hide()
         })
         .catch(error => {
-          loader.hide()
           toast.error(error.response.data.message)
           this.validation_error = error.response.data.data.errors
+          loader.hide()
         })
     },
     addRole(role) {
@@ -234,14 +234,14 @@ export default defineComponent({
         color: role.color
       })
         .then(response => {
-          loader.hide()
           toast.success('Role was created successfully')
+          loader.hide()
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           toast.error(error.response.data.message)
-          this.validation_error = error.response.data.data.errors
           loader.hide()
+          this.validation_error = error.response.data.data.errors
         })
     },
     editRole() {
@@ -252,8 +252,8 @@ export default defineComponent({
         color: this.edit_role.color
       })
         .then(response => {
-          loader.hide()
           toast.info('Role was successfully edited')
+          loader.hide()
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
