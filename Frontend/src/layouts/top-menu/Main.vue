@@ -1,6 +1,7 @@
 <template>
   <div>
     <DarkModeSwitcher />
+    <Notification pref="notification" title="Willkommen" message="Du bist super duper geil" type="success"></Notification>
     <MobileMenu />
     <!-- BEGIN: Top Bar -->
     <div class="-mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2">
@@ -324,6 +325,7 @@ import TopBar from '@/components/top-bar/Main.vue'
 import MobileMenu from '@/components/mobile-menu/Main.vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import axios from 'axios'
+import Notification from '@/global-components/notification/Main.vue'
 import {
   searchDropdown,
   showSearchDropdown,
@@ -335,7 +337,8 @@ export default defineComponent({
   components: {
     TopBar,
     MobileMenu,
-    DarkModeSwitcher
+    DarkModeSwitcher,
+    Notification
   },
   data() {
     return {
@@ -360,6 +363,9 @@ export default defineComponent({
         .catch(error => {
           console.error(error.message)
         })
+    },
+    welcomeUser() {
+
     }
   },
   setup() {
