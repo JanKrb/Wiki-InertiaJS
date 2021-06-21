@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\User as UserResource;
 
 class Ban extends JsonResource
 {
@@ -16,8 +17,8 @@ class Ban extends JsonResource
     {
         return [
             'id' => $this->id,
-            'target' => $this->target,
-            'staff' => $this->staff,
+            'target' => new UserResource($this->target),
+            'staff' => new UserResource($this->staff),
             'reason' => $this->reason,
             'description' => $this->description,
             'ban_until' => $this->ban_until,
