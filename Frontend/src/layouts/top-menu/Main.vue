@@ -332,8 +332,6 @@ import {
   hideSearchDropdown
 } from './index'
 import { nestedMenu, linkTo } from '@/layouts/side-menu'
-import { useToast } from 'vue-toastification'
-const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -350,7 +348,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    toast.success('KEKW')
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
   },
@@ -365,9 +362,6 @@ export default defineComponent({
         .catch(error => {
           console.error(error.message)
         })
-    },
-    welcomeUser() {
-
     }
   },
   setup() {
