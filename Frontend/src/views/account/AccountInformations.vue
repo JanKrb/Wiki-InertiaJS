@@ -189,6 +189,8 @@
 import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -227,10 +229,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Account successfully updated')
           this.fetchUser(this.$route.params.id)
         })
         .catch(error => {
           loader.hide()
+          toast.error('Action failed')
           console.error(error)
         })
     },
@@ -239,10 +243,12 @@ export default defineComponent({
       axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/delete')
         .then(response => {
           loader.hide()
+          toast.success('Account successfully deleted')
           this.$router.push({ name: 'admin.accounts' })
         })
         .error(error => {
           loader.hide()
+          toast.error('Account deleted failed')
           console.error(error)
         })
     }

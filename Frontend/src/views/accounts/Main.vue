@@ -191,6 +191,8 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -255,12 +257,13 @@ export default defineComponent({
         })
           .then(response => {
             loader.hide()
-            console.log(this.pagination.current_page)
+            toast.success('Account successfully created')
             this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
           })
           .catch(error => {
             console.log(error)
             loader.hide()
+            toast.error('Action failed')
           })
       } else {
         this.account.password = ''

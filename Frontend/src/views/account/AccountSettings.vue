@@ -142,6 +142,8 @@
 import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -167,13 +169,9 @@ export default defineComponent({
     this.fetchRoles()
     this.fetchBadges()
   },
-  created() {
-    // this.fetchRoles()
-    // this.fetchBadges()
-  },
   methods: {
     submitCredentials(user) {
-      // update Userrole
+      // update User Role
       this.updateUser(user)
 
       // Filter Badges
@@ -247,10 +245,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Update user Role')
         })
         .catch(error => {
           console.error(error)
           loader.hide()
+          toast.error('Action failed')
         })
     },
     fetchUser(id) {
