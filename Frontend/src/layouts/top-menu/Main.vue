@@ -14,10 +14,10 @@
           <img
             alt=""
             class="w-6"
-            src="@/assets/images/logo.svg"
+            :src="wiki_logo"
           />
           <span class="text-white text-lg ml-3">
-            Ru<span class="font-medium">bick</span>
+            <span class="font-medium">{{ wiki_name }}</span>
           </span>
         </router-link>
         <!-- END: Logo -->
@@ -340,7 +340,9 @@ export default defineComponent({
   data() {
     return {
       user: {},
-      loggedIn: false
+      loggedIn: false,
+      wiki_name: process.env.VUE_APP_NAME,
+      wiki_logo: process.env.VUE_APP_LOGO
     }
   },
   mounted() {
