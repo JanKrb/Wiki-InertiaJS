@@ -8,13 +8,16 @@ import Permissions from '../views/permissions/Main.vue'
 import Bans from '../views/bans/Main.vue'
 import Ban from '../views/ban/Main.vue'
 import Tags from '../views/tags/Main.vue'
+import Announcements from '../views/announcements/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
 import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
 import AccountSecurity from '../views/account/AccountSecurity.vue'
 import AccountPostings from '../views/account/AccountPostings.vue'
 import AccountBans from '../views/account/AccountBans.vue'
-import SettingsGeneral from '../views/settings/Main.vue'
+import SettingsGeneral from '../views/settings/SettingsGeneral.vue'
+import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
+import SettingsMail from '../views/settings/SettingsMail.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
@@ -193,11 +196,62 @@ const routes = [
         }
       },
       {
+        path: 'settings/database',
+        name: 'admin.settings.database',
+        component: SettingsDatabase,
+        meta: {
+          title: 'Wiki Settings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'settings/mail',
+        name: 'admin.settings.mail',
+        component: SettingsMail,
+        meta: {
+          title: 'Wiki Settings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
         path: 'accounts/tags',
         name: 'admin.tags',
         component: Tags,
         meta: {
           title: 'Wiki Tags',
+          auth: true,
+          isAuth: false
+        }
+      }
+    ]
+  },
+  {
+    path: '/moderation',
+    component: TopMenu,
+    meta: {
+      title: 'Moderation',
+      auth: false,
+      isAuth: false
+    },
+    children: [
+      {
+        path: 'tags',
+        name: 'moderation.tags',
+        component: Tags,
+        meta: {
+          title: 'Wiki Roles',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'announcements',
+        name: 'moderation.announcements',
+        component: Announcements,
+        meta: {
+          title: 'Wiki Announcements',
           auth: true,
           isAuth: false
         }
