@@ -244,6 +244,8 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -276,11 +278,13 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/roles/' + this.role.id)
         .then(response => {
+          toast.success('Role was successfully deleted')
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
         })
         .catch(error => {
           console.error(error)
+          toast.error('Delete failed')
           loader.hide()
         })
     },
@@ -293,12 +297,13 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Role was successfully edited')
           this.fetchRole(this.role.id)
         })
         .catch(error => {
-          // console.error(error)
-          console.log(error.response)
+          console.error(error)
           loader.hide()
+          toast.error('Editing failed')
         })
     },
     fetchRole(id) {
@@ -332,11 +337,13 @@ export default defineComponent({
       axios.delete('http://localhost:8000/api/roles/' + this.role.id + '/permissions/' + permission.id)
         .then(response => {
           loader.hide()
+          toast.success('Permission was successfully removed')
           this.fetchRolePermissions(this.role.id)
         })
         .catch(error => {
           console.error(error)
           loader.hide()
+          toast.error('Removed failed')
         })
     },
     fetchPermissions() {
@@ -358,10 +365,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Permission successfully added')
           this.fetchRolePermissions(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
+          toast.error('Failed to add Permission')
         })
     }
   }

@@ -40,7 +40,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -166,6 +166,8 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -177,7 +179,8 @@ export default defineComponent({
         description: null,
         color: '#000000'
       },
-      pagination: {}
+      pagination: {},
+      validation_error: {}
     }
   },
   mounted() {
@@ -215,10 +218,12 @@ export default defineComponent({
         .then(response => {
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
           loader.hide()
+          toast.success('Role successfully deleted')
         })
         .catch(error => {
-          console.error(error)
           loader.hide()
+          toast.error(error.response.data.message)
+          this.validation_error = error.response.data.data.errors
         })
     },
     addRole(role) {
@@ -230,10 +235,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Role was created successfully')
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          toast.error(error.response.data.message)
+          this.validation_error = error.response.data.data.errors
           loader.hide()
         })
     },
@@ -246,10 +253,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.info('Role was successfully edited')
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          toast.error(error.response.data.message)
+          this.validation_error = error.response.data.data.errors
           loader.hide()
         })
     }
