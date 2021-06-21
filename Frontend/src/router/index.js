@@ -7,6 +7,7 @@ import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Bans from '../views/bans/Main.vue'
 import Ban from '../views/ban/Main.vue'
+import Tags from '../views/tags/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
 import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
@@ -187,6 +188,16 @@ const routes = [
         component: SettingsGeneral,
         meta: {
           title: 'Wiki Settings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'accounts/tags',
+        name: 'admin.tags',
+        component: Tags,
+        meta: {
+          title: 'Wiki Tags',
           auth: true,
           isAuth: false
         }
