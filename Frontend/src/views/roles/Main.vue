@@ -111,7 +111,7 @@
           <td class="border-b dark:border-dark-5">{{ role.id }}</td>
           <td class="border-b dark:border-dark-5">{{ role.name }}</td>
           <td class="border-b dark:border-dark-5">{{ role.description }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.color_code }}</td>
+          <td class="border-b dark:border-dark-5">{{ role.color }}</td>
           <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
           <td class="border-b dark:border-dark-5">
@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import axios from 'axios'
 
 export default defineComponent({
@@ -175,7 +175,7 @@ export default defineComponent({
       role: {
         name: 'New Role',
         description: null,
-        color_code: '000000'
+        color: '#000000'
       },
       pagination: {}
     }
@@ -226,7 +226,7 @@ export default defineComponent({
       axios.post('http://localhost:8000/api/roles', {
         name: role.name,
         description: role.description,
-        color_code: role.color_code
+        color: role.color
       })
         .then(response => {
           loader.hide()
@@ -242,7 +242,7 @@ export default defineComponent({
       axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
         name: this.edit_role.name,
         description: this.edit_role.description,
-        color_code: this.edit_role.color_code
+        color: this.edit_role.color
       })
         .then(response => {
           loader.hide()
@@ -252,13 +252,6 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
-    }
-  },
-  setup() {
-    const select = ref('1')
-
-    return {
-      select
     }
   }
 })

@@ -79,11 +79,11 @@
                 <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
-                      <label for="lastname" class="bg-white text-gray-600 px-1">Color</label>
+                      <label for="color" class="bg-white text-gray-600 px-1">Color</label>
                     </p>
                   </div>
                   <p>
-                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full" v-model="role.color_code">
+                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full" v-model="role.color">
                   </p>
                 </div>
               </div>
@@ -289,14 +289,15 @@ export default defineComponent({
       axios.put('http://localhost:8000/api/roles/' + this.role.id, {
         name: this.role.name,
         description: this.role.description,
-        color_code: this.role.color_code
+        color: this.role.color
       })
         .then(response => {
           loader.hide()
           this.fetchRole(this.role.id)
         })
         .catch(error => {
-          console.error(error)
+          // console.error(error)
+          console.log(error.response)
           loader.hide()
         })
     },
