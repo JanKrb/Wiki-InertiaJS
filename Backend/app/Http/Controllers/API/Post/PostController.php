@@ -65,6 +65,10 @@ class PostController extends BaseController
             return $this->sendError('Post does not exists.');
         }
 
+        if (!auth()->user()->hasPermission('posts_update') && $post->user_id !== auth()->user()->id) {
+            return $this->sendError('Access denied.', []);
+        }
+
         $input = $request->all();
 
         $validator = Validator::make($input, [

@@ -415,7 +415,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::put('posts/{post}', [PostController::class, 'update'])
         ->name('posts.update')
-        ->middleware(['permission:posts_update'])
     ;
 
     Route::delete('posts/{post}', [PostController::class, 'destroy'])
