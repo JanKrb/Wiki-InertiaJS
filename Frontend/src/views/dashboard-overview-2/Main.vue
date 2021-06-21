@@ -19,7 +19,7 @@
                 <img
                   :alt="'Thumbnail of ' + category.title"
                   class="rounded-full"
-                  :src="category.thumbnail"
+                  :src="category.user?.profile_picture"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ category.description }}
+            {{ category.description.substring(0,200)+"..." }}
           </div>
         </div>
         <!-- END: Blog Layout -->
