@@ -26,7 +26,7 @@
                 <a href="" class="font-medium">{{ category.user?.name }}</a>
                 <div class="text-xs mt-0.5">{{ category.updated_at }}</div>
               </div>
-              <div class="dropdown ml-3">
+              <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
                 <a
                   href="javascript:;"
                   class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
@@ -202,7 +202,7 @@ export default defineComponent({
         })
     },
     testPagePermissions() {
-      axios.get('http://localhost:8000/api/permissions/test', {
+      axios.post('http://localhost:8000/api/permissions/test', {
         permissions: [
           'categories_update'
         ]
