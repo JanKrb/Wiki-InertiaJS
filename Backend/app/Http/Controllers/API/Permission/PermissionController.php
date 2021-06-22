@@ -71,4 +71,25 @@ class PermissionController extends BaseController
         $permission->delete();
         return $this->sendResponse([], 'Permission soft-deleted successfully.');
     }
+
+    public function test_permission(Request $request) {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,name'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+        }
+
+        $response = [];
+        $permissions = $request->input('permissions');
+        foreach ($permissions as $permission) {
+            $response[$permission] = auth()->user()->hasPermission($permission);
+        }
+
+        return $this->sendResponse($response, 'Successfully tested permissions.');
+    }
 }

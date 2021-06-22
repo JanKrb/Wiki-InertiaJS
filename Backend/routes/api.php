@@ -87,6 +87,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:permissions_store'])
     ;
 
+    Route::get('permissions/test', [PermissionController::class, 'test_permission'])
+        ->name('permissions.test')
+        ->middleware(['permission:permissions_test'])
+    ;
+
     Route::put('permissions/{permission}', [PermissionController::class, 'update'])
         ->name('permissions.update')
         ->middleware(['permission:permissions_update'])
