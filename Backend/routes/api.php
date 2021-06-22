@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\EnvironmentController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
+use App\Http\Controllers\API\Post\PostReportController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
 use App\Http\Controllers\API\User\BanController;
@@ -396,6 +397,37 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('posts/comments/{comment}', [PostCommentController::class, 'destroy'])
         ->name('posts.comment.destroy')
         ->middleware(['permission:posts_comments_destroy'])
+    ;
+
+    // Report
+    Route::get('posts/reports', [PostReportController::class, 'index'])
+        ->name('posts.report.get_all')
+        ->middleware(['permission:posts_reports_get_all'])
+    ;
+
+    Route::get('posts/{post}/reports', [PostReportController::class, 'get_posts'])
+        ->name('posts.report.get_post')
+        ->middleware(['permission:posts_reports_get_post'])
+    ;
+
+    Route::get('posts/reports/{report}', [PostReportController::class, 'show'])
+        ->name('posts.report.get_single')
+        ->middleware(['permission:posts_reports_get_single'])
+    ;
+
+    Route::post('posts/{post}/reports', [PostReportController::class, 'store'])
+        ->name('posts.report.store')
+        ->middleware(['permission:posts_report_store'])
+    ;
+
+    Route::put('posts/reports/{report}', [PostReportController::class, 'update'])
+        ->name('posts.report.update')
+        ->middleware(['permission:posts_report_update'])
+    ;
+
+    Route::delete('posts/reports/{report}', [PostReportController::class, 'destroy'])
+        ->name('posts.report.destroy')
+        ->middleware(['permission:posts_report_destroy'])
     ;
 
     // Posts
