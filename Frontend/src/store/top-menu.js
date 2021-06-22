@@ -87,7 +87,7 @@ const state = () => {
           },
           {
             icon: 'CreditCardIcon',
-            pageName: 'admin.permissions',
+            pageName: 'admin.badges',
             title: 'Badges'
           },
           {
