@@ -95,11 +95,11 @@
                 >
                   Login
                 </button>
-                <button
+                <router-link :to="{ name: 'register' }"
                   class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top"
                 >
                   Sign up
-                </button>
+                </router-link>
               </div>
               <div
                 class="intro-x mt-10 xl:mt-24 text-gray-700 dark:text-gray-600 text-center xl:text-left"
