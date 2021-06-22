@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Role as RoleResource;
 
 class Badge extends JsonResource
 {
@@ -23,7 +24,7 @@ class Badge extends JsonResource
             'icon' => $this->icon,
             'color' => $this->color,
             'is_role_badge' => $this->is_role_badge,
-            'role_id' => $this->role_id,
+            'role' => new RoleResource($this->role_id),
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
