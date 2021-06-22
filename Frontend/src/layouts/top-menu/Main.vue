@@ -102,7 +102,7 @@
               >
                 <div class="w-8 h-8 image-fit">
                   <img
-                    alt="Icewall Tailwind HTML Admin Template"
+                    alt=""
                     class="rounded-full"
                     :src="require(`@/assets/images/${faker.images[0]}`)"
                   />
