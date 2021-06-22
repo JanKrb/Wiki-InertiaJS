@@ -3,12 +3,12 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Wiki Tags</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Tag</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-tag-modal" class="btn btn-primary">Add New Tag</a>
       </div>
     </div>
 
     <!-- BEGIN: Create Tag Modal -->
-    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-tag-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <form @submit.prevent="addTag(this.tag)">
           <div class="modal-content">
@@ -55,7 +55,7 @@
     </div>
     <!-- END: Create Tag Modal -->
     <!-- BEGIN: Edit Tag Modal -->
-    <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+    <div id="edit-tag-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-tag-modal">
       <div class="modal-dialog">
         <form @submit.prevent="editTag">
           <div class="modal-content">
@@ -125,7 +125,7 @@
           <td class="border-b dark:border-dark-5">{{ tag.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ tag.created_at }}</td>
           <td class="border-b dark:border-dark-5">
-            <a href="javascript:;" @click="this.edit_tag = tag" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+            <a href="javascript:;" @click="this.edit_tag = tag" data-toggle="modal" data-target="#edit-tag-modal" class="text-small">
               <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
             </a>
             <a href="javascript:;" @click="deleteTag(tag.id)" class="text-small">
