@@ -43,68 +43,36 @@
             <h2
               class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left"
             >
-              Sign In
+              Reset Password
             </h2>
             <div class="intro-x mt-2 text-gray-500 xl:hidden text-center">
-              A few more clicks to sign in to your account. Manage all your
-              e-commerce accounts in one place
+              A few more click to reset your password.
             </div>
             <form @submit.prevent="handleSubmit">
               <div class="intro-x mt-8">
                 <input
-                  type="text"
-                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block' + (this.validation_error?.email != null || this.validation_error?.user != null ? ' border-theme-6' : '')"
-                  placeholder="Email / Username"
+                  type="email"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.email != null ? ' border-theme-6' : '')"
+                  placeholder="E-Mail"
                   v-model="email"
                 />
 
-                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.email != null || this.validation_error?.name != null'>
-                  {{ this.validation_error?.email != null ? this.validation_error?.email[0] : this.validation_error?.name[0] }}
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.email != null'>
+                  {{ this.validation_error?.email[0] }}
                 </div>
-
-                <input
-                  type="password"
-                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password != null ? ' border-theme-6' : '')"
-                  placeholder="Password"
-                  v-model="password"
-                />
-
-                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.password != null'>
-                  {{ this.validation_error?.password[0] }}
-                </div>
-              </div>
-              <div
-                class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
-              >
-                <div class="flex items-center mr-auto">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    class="form-check-input border mr-2"
-                  />
-                  <label class="cursor-pointer select-none" for="remember-me">
-                    Remember me
-                  </label>
-                </div>
-                <router-link :to="{ name: 'password-forgot' }">Forgot Password?</router-link>
               </div>
               <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                 <button
                   class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
                   type="submit"
                 >
-                  Login
+                  Send Link
                 </button>
-                <router-link :to="{ name: 'register' }"
-                  class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top"
-                >
-                  Sign up
-                </router-link>
               </div>
               <div
                 class="intro-x mt-10 xl:mt-24 text-gray-700 dark:text-gray-600 text-center xl:text-left"
               >
-                By signin up, you agree to our <br />
+                By resetting password, you agree to our <br />
                 <a class="text-theme-1 dark:text-theme-10" href="">
                   Terms and Conditions
                 </a>
@@ -144,7 +112,6 @@ export default defineComponent({
   data() {
     return {
       email: '',
-      password: '',
       validation_error: {}
     }
   },
@@ -155,29 +122,15 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      const data = {
-        password: this.password
-      }
-
-      if (this.isMail()) {
-        data.email = this.email
-      } else {
-        data.name = this.email
-      }
-
-      axios.post('http://127.0.0.1:8000/api/auth/login', data)
+      axios.post('http://127.0.0.1:8000/api/auth/password/recover', {
+        email: this.email
+      })
         .then(response => {
-          localStorage.setItem('user', JSON.stringify(response.data.data.user))
-          localStorage.setItem('token', response.data.data.token)
-
-          if (localStorage.getItem('token') != null) {
-            axios.defaults.headers.common['Content-Type'] = 'application/json'
-            axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.data.token
-            loader.hide()
-            this.$router.push({ name: 'dashboard' })
-          }
+          toast.success(response.data.message)
+          loader.hide()
         })
         .catch(error => {
+          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
