@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\PostReport;
 use App\Models\Announcement;
 use App\Models\Badge;
 use App\Models\Ban;
@@ -20,6 +21,7 @@ use App\Observers\CategoryObserver;
 use App\Observers\PermissionObserver;
 use App\Observers\PostCommentObserver;
 use App\Observers\PostObserver;
+use App\Observers\PostReportObserver;
 use App\Observers\PostVoteObserver;
 use App\Observers\RoleObserver;
 use App\Observers\TagObserver;
@@ -64,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
         Post::observe(PostObserver::class);
         PostVote::observe(PostVoteObserver::class);
         PostComment::observe(PostCommentObserver::class);
+        PostReport::observe(PostReportObserver::class);
 
         Announcement::observe(AnnouncementObserver::class);
 
