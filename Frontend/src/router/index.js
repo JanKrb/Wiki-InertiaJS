@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import axios from 'axios'
 import TopMenu from '../layouts/top-menu/Main.vue'
-import Dashboard from '../views/dashboard-overview-2/Main.vue'
+import Dashboard from '../views/dashboard/Main.vue'
 import Roles from '../views/roles/Main.vue'
 import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
