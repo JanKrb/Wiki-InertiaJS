@@ -175,7 +175,7 @@
           >
             <img
               alt=""
-              :src="user.profile_picture"
+              :src="user?.profile_picture"
             />
           </div>
           <div class="dropdown-menu w-56">

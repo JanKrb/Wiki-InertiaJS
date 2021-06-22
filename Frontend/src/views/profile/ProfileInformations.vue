@@ -176,6 +176,7 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
           this.user = response.data.data.user
+          localStorage.setItem('user', JSON.stringify(response.data.data.user))
           loader.hide()
         })
         .catch(error => {
