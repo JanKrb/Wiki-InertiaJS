@@ -31,10 +31,6 @@ class Badge extends Model
      */
     public function role(): ?BelongsTo
     {
-        if (!$this->is_role_badge) {
-            return null;
-        }
-
         return $this->belongsTo(Role::class);
     }
 
