@@ -64,9 +64,14 @@ const state = () => {
             title: 'Announcements'
           },
           {
-            icon: 'ClipboardIcon',
-            pageName: 'moderation.tags',
-            title: 'Tickets'
+            icon: 'AlertOctagonIcon',
+            pageName: 'moderation.reports',
+            title: 'Reports'
+          },
+          {
+            icon: 'InboxIcon',
+            pageName: 'moderation.notifications',
+            title: 'User Notifications'
           }
         ]
       },

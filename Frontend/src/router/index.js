@@ -7,9 +7,11 @@ import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Bans from '../views/bans/Main.vue'
 import Ban from '../views/ban/Main.vue'
+import Reports from '../views/reports/Main.vue'
 import Tags from '../views/tags/Main.vue'
 import Badges from '../views/badges/Main.vue'
 import Announcements from '../views/announcements/Main.vue'
+import Notifications from '../views/notifications/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
 import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
@@ -256,6 +258,26 @@ const routes = [
         component: Announcements,
         meta: {
           title: 'Wiki Announcements',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'reports',
+        name: 'moderation.reports',
+        component: Reports,
+        meta: {
+          title: 'Wiki Reports',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'notifications',
+        name: 'moderation.notifications',
+        component: Notifications,
+        meta: {
+          title: 'Wiki Notifications',
           auth: true,
           isAuth: false
         }
