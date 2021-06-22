@@ -17,8 +17,16 @@ class PostController extends BaseController
 {
     public function index(Request $request)
     {
+
         $per_page = $request->get('per_page', 15);
-        return (new PostCollection(Post::paginate($per_page)))->additional([
+        $target_user = $request->get('user');
+        $data = Post::paginate($per_page);
+
+        if (!is_null($target_user)) {
+            $data = Post::where('user_id', $target_user)->paginate($per_page);
+        }
+
+        return (new PostCollection($data))->additional([
             'success' => true,
             'message' => 'Successfully retrieved posts'
         ]);

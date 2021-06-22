@@ -162,13 +162,15 @@ export default defineComponent({
       recent: [],
       announcements: [],
       categories: [],
-      announcementsLoading: true
+      announcementsLoading: true,
+      permissions: {}
     }
   },
   mounted() {
     this.loadCategories()
     this.loadAnnouncements()
     this.loadRecent()
+    this.testPagePermissions()
   },
   methods: {
     loadRecent() {
@@ -197,6 +199,20 @@ export default defineComponent({
         })
         .catch((err) => {
           console.log(err)
+        })
+    },
+    testPagePermissions() {
+      axios.get('http://localhost:8000/api/permissions/test', {
+        permissions: [
+          'categories_update'
+        ]
+      })
+        .then((response) => {
+          this.permissions = response.data.data
+        })
+        .catch((err) => {
+          console.error(err)
+          console.log(err.response)
         })
     }
   },

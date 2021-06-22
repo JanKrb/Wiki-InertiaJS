@@ -4,9 +4,11 @@ use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\EnvironmentController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
+use App\Http\Controllers\API\Post\PostReportController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
 use App\Http\Controllers\API\User\BanController;
+use App\Http\Controllers\API\User\NotificationController;
 use App\Http\Controllers\API\User\UserBadgesController;
 use App\Http\Controllers\API\User\UserBansController;
 use App\Http\Controllers\API\User\UserMgmtController;
@@ -86,6 +88,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('permissions', [PermissionController::class, 'store'])
         ->name('permissions.store')
         ->middleware(['permission:permissions_store'])
+    ;
+
+    Route::get('permissions/test', [PermissionController::class, 'test_permission'])
+        ->name('permissions.test')
+        ->middleware(['permission:permissions_test'])
     ;
 
     Route::put('permissions/{permission}', [PermissionController::class, 'update'])
@@ -393,6 +400,37 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_comments_destroy'])
     ;
 
+    // Report
+    Route::get('posts/reports', [PostReportController::class, 'index'])
+        ->name('posts.report.get_all')
+        ->middleware(['permission:posts_reports_get_all'])
+    ;
+
+    Route::get('posts/{post}/reports', [PostReportController::class, 'get_posts'])
+        ->name('posts.report.get_post')
+        ->middleware(['permission:posts_reports_get_post'])
+    ;
+
+    Route::get('posts/reports/{report}', [PostReportController::class, 'show'])
+        ->name('posts.report.get_single')
+        ->middleware(['permission:posts_reports_get_single'])
+    ;
+
+    Route::post('posts/{post}/reports', [PostReportController::class, 'store'])
+        ->name('posts.report.store')
+        ->middleware(['permission:posts_report_store'])
+    ;
+
+    Route::put('posts/reports/{report}', [PostReportController::class, 'update'])
+        ->name('posts.report.update')
+        ->middleware(['permission:posts_report_update'])
+    ;
+
+    Route::delete('posts/reports/{report}', [PostReportController::class, 'destroy'])
+        ->name('posts.report.destroy')
+        ->middleware(['permission:posts_report_destroy'])
+    ;
+
     // Posts
     Route::get('posts', [PostController::class, 'index'])
         ->name('posts.index')
@@ -462,5 +500,38 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('environment/mail', [EnvironmentController::class, 'update_mail'])
         ->name('environment.update_mail')
         ->middleware(['permission:environment_update_mail'])
+    ;
+});
+
+// Notification System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index')
+        ->middleware(['permission:notifications_get_all'])
+    ;
+
+    Route::get('users/{user}/notifications', [NotificationController::class, 'get_users'])
+        ->name('notifications.get_users')
+        ->middleware(['permission:notifications_get_user'])
+    ;
+
+    Route::get('notifications/{notification}', [NotificationController::class, 'show'])
+        ->name('notifications.get_single')
+        ->middleware(['permission:notifications_get_single'])
+    ;
+
+    Route::post('notifications', [NotificationController::class, 'create'])
+        ->name('notifications.create')
+        ->middleware(['permission:notifications_create'])
+    ;
+
+    Route::put('notifications/{notification}', [NotificationController::class, 'update'])
+        ->name('notifications.update')
+        ->middleware(['permission:notifications_update'])
+    ;
+
+    Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])
+        ->name('notifications.destroy')
+        ->middleware(['permission:notifications_destroy'])
     ;
 });
