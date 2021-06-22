@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Notification;
 use App\Models\PostReport;
 use App\Models\Announcement;
 use App\Models\Badge;
@@ -18,6 +19,7 @@ use App\Observers\AnnouncementObserver;
 use App\Observers\BadgeObserver;
 use App\Observers\BanObserver;
 use App\Observers\CategoryObserver;
+use App\Observers\NotificationObserver;
 use App\Observers\PermissionObserver;
 use App\Observers\PostCommentObserver;
 use App\Observers\PostObserver;
@@ -69,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         PostReport::observe(PostReportObserver::class);
 
         Announcement::observe(AnnouncementObserver::class);
+        Notification::observe(NotificationObserver::class);
 
         /**
          * Paginate a standard Laravel Collection.

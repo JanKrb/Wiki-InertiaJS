@@ -8,6 +8,7 @@ use App\Http\Controllers\API\Post\PostReportController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
 use App\Http\Controllers\API\User\BanController;
+use App\Http\Controllers\API\User\NotificationController;
 use App\Http\Controllers\API\User\UserBadgesController;
 use App\Http\Controllers\API\User\UserBansController;
 use App\Http\Controllers\API\User\UserMgmtController;
@@ -499,5 +500,38 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('environment/mail', [EnvironmentController::class, 'update_mail'])
         ->name('environment.update_mail')
         ->middleware(['permission:environment_update_mail'])
+    ;
+});
+
+// Notification System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index')
+        ->middleware(['permission:notifications_get_all'])
+    ;
+
+    Route::get('users/{user}/notifications', [NotificationController::class, 'get_users'])
+        ->name('notifications.get_users')
+        ->middleware(['permission:notifications_get_user'])
+    ;
+
+    Route::get('notifications/{notification}', [NotificationController::class, 'show'])
+        ->name('notifications.get_single')
+        ->middleware(['permission:notifications_get_single'])
+    ;
+
+    Route::post('notifications', [NotificationController::class, 'create'])
+        ->name('notifications.create')
+        ->middleware(['permission:notifications_create'])
+    ;
+
+    Route::put('notifications/{notification}', [NotificationController::class, 'update'])
+        ->name('notifications.update')
+        ->middleware(['permission:notifications_update'])
+    ;
+
+    Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])
+        ->name('notifications.destroy')
+        ->middleware(['permission:notifications_destroy'])
     ;
 });
