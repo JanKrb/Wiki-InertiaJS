@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import axios from 'axios'
 import TopMenu from '../layouts/top-menu/Main.vue'
-import Dashboard from '../views/dashboard-overview-2/Main.vue'
+import Dashboard from '../views/dashboard/Main.vue'
 import Roles from '../views/roles/Main.vue'
 import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Bans from '../views/bans/Main.vue'
 import Ban from '../views/ban/Main.vue'
 import Tags from '../views/tags/Main.vue'
+import Badges from '../views/badges/Main.vue'
 import Announcements from '../views/announcements/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
 import AccountInformations from '../views/account/AccountInformations.vue'
@@ -219,11 +220,11 @@ const routes = [
         }
       },
       {
-        path: 'accounts/tags',
-        name: 'admin.tags',
-        component: Tags,
+        path: 'badges',
+        name: 'admin.badges',
+        component: Badges,
         meta: {
-          title: 'Wiki Tags',
+          title: 'Wiki Badges',
           auth: true,
           isAuth: false
         }
