@@ -20,7 +20,9 @@ import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
 import SettingsMail from '../views/settings/SettingsMail.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
+import ForgotPassword from '../views/forgot-password/Main.vue'
 import ResetPassword from '../views/reset-password/Main.vue'
+import EmailVerify from '../views/email-verify/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
@@ -277,6 +279,26 @@ const routes = [
       title: 'Register',
       auth: false,
       isAuth: true
+    }
+  },
+  {
+    path: '/email/verify',
+    name: 'email-verify',
+    component: EmailVerify,
+    meta: {
+      title: 'EmailVerify',
+      auth: false,
+      isAuth: false
+    }
+  },
+  {
+    path: '/password/forgot',
+    name: 'password-forgot',
+    component: ForgotPassword,
+    meta: {
+      title: 'ForgotPassword',
+      auth: false,
+      isAuth: false
     }
   },
   {
