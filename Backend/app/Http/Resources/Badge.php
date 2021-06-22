@@ -24,7 +24,7 @@ class Badge extends JsonResource
             'icon' => $this->icon,
             'color' => $this->color,
             'is_role_badge' => $this->is_role_badge,
-            'role' => $this->role_id != null ? new RoleResource($this->role_id) : null,
+            'role' => $this->role_id != null ? new RoleResource($this->role) : null,
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
