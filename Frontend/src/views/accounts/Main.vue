@@ -191,12 +191,15 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
     return {
       pagination: {},
       accounts: {},
+      validation_error: {},
       account: {
         name: '',
         pre_name: '',
@@ -254,12 +257,13 @@ export default defineComponent({
           password_confirmation: this.account.password_confirmation
         })
           .then(response => {
+            toast.success('Account successfully created')
             loader.hide()
-            console.log(this.pagination.current_page)
             this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
           })
           .catch(error => {
-            console.log(error)
+            this.validation_error = error.response.data.data.errors
+            toast.error('Action failed')
             loader.hide()
           })
       } else {

@@ -28,6 +28,9 @@
                   placeholder="Input old password"
                   v-model="old_password"
                 />
+                <div v-if="this.validation_error?.old_password != null" class="text-theme-6 mt-2 mb-4">
+                  {{ this.validation_error?.old_password[0] }}
+                </div>
               </div>
               <div class="mt-3">
                 <label for="change-password-form-2" class="form-label">
@@ -40,6 +43,9 @@
                   placeholder="Input new password"
                   v-model="password"
                 />
+                <div v-if="this.validation_error?.password != null" class="text-theme-6 mt-2 mb-4">
+                  {{ this.validation_error?.password[0] }}
+                </div>
               </div>
               <div class="mt-3">
                 <label for="change-password-form-3" class="form-label">
@@ -52,6 +58,9 @@
                   placeholder="Input new password again"
                   v-model="password_confirmation"
                 />
+                <div v-if="this.validation_error?.password_confirmation != null" class="text-theme-6 mt-2 mb-4">
+                  {{ this.validation_error?.password_confirmation[0] }}
+                </div>
               </div>
               <button type="submit" class="btn btn-primary mt-4">
                 Change Password
@@ -69,6 +78,8 @@
 import axios from 'axios'
 import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -79,7 +90,8 @@ export default defineComponent({
       old_password: '',
       password: '',
       password_confirmation: '',
-      user: {}
+      user: {},
+      validation_error: {}
     }
   },
   mounted() {
@@ -98,17 +110,19 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
-          console.log(response)
+          toast.success('Password successfully updated')
+          this.fetchUser()
         })
         .catch(error => {
-          console.error(error.message)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
         })
     },
     fetchUser() {
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
-          console.log(response)
           this.user = response.data.data.user
           loader.hide()
         })

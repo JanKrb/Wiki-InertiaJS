@@ -9,7 +9,7 @@
     <!-- BEGIN: Create Permission Modal -->
     <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
-        <form @submit.prevent="addPermission(this.permission)">
+        <form @submit.prevent="createPermission(this.permission)">
           <div class="modal-content">
             <!-- BEGIN: Modal Header -->
             <div class="modal-header">
@@ -138,6 +138,8 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -147,7 +149,8 @@ export default defineComponent({
       permission: {
         name: 'New Permission'
       },
-      pagination: {}
+      pagination: {},
+      validation_error: {}
     }
   },
   mounted() {
@@ -183,44 +186,46 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/permissions/' + id)
         .then(response => {
+          toast.success('Permission successfully deleted')
           loader.hide()
           this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
-    addPermission(permission) {
+    createPermission(permission) {
       const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/permissions', {
-        name: permission.name,
-        description: permission.description,
-        color_code: permission.color_code
+        name: permission.name
       })
         .then(response => {
+          toast.success('Permission successfully created')
           loader.hide()
           this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
     editPermission() {
       const loader = this.$loading.show()
       axios.put('http://localhost:8000/api/permissions/' + this.edit_permission.id, {
-        name: this.edit_permission.name,
-        description: this.edit_permission.description,
-        color_code: this.edit_permission.color_code
+        name: this.edit_permission.name
       })
         .then(response => {
+          toast.success('Permission successfully edited')
           loader.hide()
           this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          console.log(error)
         })
     },
     show_editPermission(permission) {

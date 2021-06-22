@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AnnouncementController;
+use App\Http\Controllers\API\EnvironmentController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\User\AuthController;
@@ -453,5 +454,18 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('announcements/{announcement}', [announcementController::class, 'show'])
         ->name('announcements.show')
         ->middleware(['permission:announcements_get_single'])
+    ;
+});
+
+// Environment System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::post('environment/mysql', [EnvironmentController::class, 'update_mysql'])
+        ->name('environment.update_mysql')
+        ->middleware(['permission:environment_update_mysql'])
+    ;
+
+    Route::post('environment/mail', [EnvironmentController::class, 'update_mail'])
+        ->name('environment.update_mail')
+        ->middleware(['permission:environment_update_mail'])
     ;
 });

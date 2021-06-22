@@ -132,16 +132,7 @@ export default defineComponent({
   data() {
     return {
       pagination: {},
-      bans: [],
-      account: {
-        name: '',
-        pre_name: '',
-        last_name: '',
-        email: '',
-        role: {
-          name: 'Not set'
-        }
-      }
+      bans: []
     }
   },
   mounted() {

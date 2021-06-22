@@ -117,10 +117,13 @@
                             <input
                               id="create-reason-ban"
                               type="text"
-                              class="form-control"
+                              :class="'form-control' + (this.validation_error?.reason != null ? ' border-theme-6' : '')"
                               placeholder="Enter ban reason"
                               v-model="ban.reason"
                             />
+                            <div v-if="this.validation_error?.reason != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.reason[0] }}
+                            </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-12 mb-4">
@@ -130,11 +133,13 @@
                             </label>
                             <textarea
                               id="create-description-ban"
-                              type="text"
-                              class="form-control"
+                              :class="'form-control' + (this.validation_error?.reason != null ? ' border-theme-6' : '')"
                               placeholder="Enter a ban description"
                               v-model="ban.description"
                             />
+                            <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.description[0] }}
+                            </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -145,9 +150,12 @@
                             <input
                               id="create-date-ban"
                               type="date"
-                              class="form-control"
+                              :class="'form-control' + (this.validation_error?.ban_until != null ? ' border-theme-6' : '')"
                               v-model="ban_time.date"
                             />
+                            <div v-if="this.validation_error?.ban_until != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.ban_until[0] }}
+                            </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -158,9 +166,12 @@
                             <input
                               id="create-time-ban"
                               type="time"
-                              class="form-control"
+                              :class="'form-control' + (this.validation_error?.ban_until != null ? ' border-theme-6' : '')"
                               v-model="ban_time.time"
                             />
+                            <div v-if="this.validation_error?.ban_until != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.ban_until[0] }}
+                            </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -171,14 +182,18 @@
                             <TailSelect
                               id="update-type-ban"
                               v-model="ban.type"
+                              :class="'form-control' + (this.validation_error?.type != null ? ' border-theme-6' : '')"
                               :options="{
-                            classNames: 'w-full'
-                          }"
+                                classNames: 'w-full'
+                              }"
                             >
                               <option value="0" :selected="ban.type === 0">Global Ban</option>
                               <option value="1" :selected="ban.type === 1">Comment Ban</option>
                               <option value="2" :selected="ban.type === 2">Posting Ban</option>
                             </TailSelect>
+                            <div v-if="this.validation_error?.type != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.type[0] }}
+                            </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-3 mb-4">
@@ -269,6 +284,17 @@
             aria-labelledby="history-tab"
           >
             <div class="grid grid-cols-12 gap-6 mt-5">
+              <div v-if="this.bans.length <= 0" class="intro-y col-span-12">
+                <div class="box">
+                  <div class="p-5 text-center">
+                    <ArchiveIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
+                    <div class="text-3xl mt-5">No recent Bans</div>
+                    <div class="text-gray-600 mt-2 mb-5">
+                      This user have no recent bans!
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div
                 v-for="ban in this.bans"
                 :key="ban.id"
@@ -280,22 +306,25 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        src=""
+                        :src="ban.staff.profile_picture"
                       />
                     </div>
                     <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-                      <a href="" class="font-medium">Ban Reason</a>
+                      <a href="" class="font-medium">{{ ban.reason }}</a>
                       <div class="text-gray-600 text-xs mt-0.5">
-                        NAME
+                        {{ ban.staff.name }}
                       </div>
                     </div>
                     <div class="lg:ml-2 text-center mt-3 lg:mt-0">
-                      <small><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></small>
+                      <small v-if="ban.active"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Active</span></small>
+                      <small v-else><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Closed</span></small>
                     </div>
                     <div class="flex mt-4 lg:mt-0">
-                      <button class="btn btn-outline-secondary py-1 px-2">
-                        View
-                      </button>
+                      <router-link :to="{ name: 'admin.ban', params: { 'id': ban.id } }">
+                        <button class="btn btn-outline-secondary py-1 px-2">
+                          View
+                        </button>
+                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -313,6 +342,8 @@
 import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -335,7 +366,8 @@ export default defineComponent({
       ban_time: {
         date: '',
         time: ''
-      }
+      },
+      validation_error: {}
     }
   },
   mounted() {
@@ -385,13 +417,11 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
           loader.hide()
         })
     },
     createBan(ban) {
-      console.log(ban)
-      console.log(this.ban_time)
+      const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/bans', {
         reason: ban.reason,
         description: ban.description,
@@ -399,10 +429,14 @@ export default defineComponent({
         type: ban.type
       })
         .then(response => {
-          console.log(response)
+          loader.hide()
+          toast.success('Ban successfully created')
+          this.fetchBans(this.$route.params.id)
         })
         .catch(error => {
-          console.error(error)
+          loader.hide()
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
         })
     }
   }

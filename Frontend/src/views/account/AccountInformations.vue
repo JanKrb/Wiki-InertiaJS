@@ -57,10 +57,13 @@
                         <input
                           id="update-profile-form-1"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.name != null ? ' border-theme-6' : '')"
                           placeholder="Enter Username"
                           v-model="user.name"
                         />
+                        <div v-if="this.validation_error?.name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.name[0] }}
+                        </div>
                       </div>
                       <div class="mt-3">
                         <label for="accounts-firstname-edit" class="form-label">
@@ -69,10 +72,13 @@
                         <input
                           id="accounts-firstname-edit"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.pre_name != null ? ' border-theme-6' : '')"
                           placeholder="Enter Firstname"
                           v-model="user.pre_name"
                         />
+                        <div v-if="this.validation_error?.pre_name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.pre_name[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6">
@@ -83,10 +89,13 @@
                         <input
                           id="accounts-email-edit"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.email != null ? ' border-theme-6' : '')"
                           placeholder="Enter Email"
                           v-model="user.email"
                         />
+                        <div v-if="this.validation_error?.email != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.email[0] }}
+                        </div>
                       </div>
                       <div class="mt-3">
                         <label for="accounts-lastname-edit" class="form-label">
@@ -95,10 +104,13 @@
                         <input
                           id="accounts-lastname-edit"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.last_name != null ? ' border-theme-6' : '')"
                           placeholder="Enter Lastname"
                           v-model="user.last_name"
                         />
+                        <div v-if="this.validation_error?.last_name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.last_name[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12">
@@ -189,6 +201,8 @@
 import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -199,7 +213,8 @@ export default defineComponent({
   },
   data() {
     return {
-      user: {}
+      user: {},
+      validation_error: {}
     }
   },
   methods: {
@@ -226,12 +241,14 @@ export default defineComponent({
         profile_picture: user.profile_picture
       })
         .then(response => {
+          toast.success('Account successfully updated')
           loader.hide()
           this.fetchUser(this.$route.params.id)
         })
         .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          console.error(error)
         })
     },
     deleteUser() {
@@ -239,11 +256,13 @@ export default defineComponent({
       axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/delete')
         .then(response => {
           loader.hide()
+          toast.success('Account successfully deleted')
           this.$router.push({ name: 'admin.accounts' })
         })
         .error(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          console.error(error)
         })
     }
   }

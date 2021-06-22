@@ -27,10 +27,13 @@
                         <input
                           id="accounts-new_password-edit"
                           type="password"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.password != null ? ' border-theme-6' : '')"
                           placeholder="Your new Password"
                           v-model="password"
                         />
+                      </div>
+                      <div v-if="this.validation_error?.password != null" class="text-theme-6 mt-2 mb-4">
+                        {{ this.validation_error?.password[0] }}
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6">
@@ -41,10 +44,13 @@
                         <input
                           id="accounts-password_confirmation-edit"
                           type="password"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.password_confirmation != null ? ' border-theme-6' : '')"
                           placeholder="Your new Password confirmation"
                           v-model="password_confirmation"
                         />
+                        <div v-if="this.validation_error?.password_confirmation != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.password_confirmation[0] }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -104,6 +110,8 @@
 import { defineComponent, ref } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -113,7 +121,8 @@ export default defineComponent({
     return {
       password: '',
       password_confirmation: '',
-      user: {}
+      user: {},
+      validation_error: {}
     }
   },
   setup() {
@@ -130,10 +139,12 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/users/' + id + '/verify_email')
         .then(response => {
+          toast.success('Verification mail sent')
           loader.hide()
         })
         .catch(error => {
-          console.log(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
@@ -141,10 +152,12 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/users/' + id + '/reset_password')
         .then(response => {
+          toast.success('Password-reset mail sent')
           loader.hide()
         })
         .catch(error => {
-          console.log(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
@@ -155,10 +168,12 @@ export default defineComponent({
         password_confirmation: this.password_confirmation
       })
         .then(response => {
+          toast.success('Password successfully changed')
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },

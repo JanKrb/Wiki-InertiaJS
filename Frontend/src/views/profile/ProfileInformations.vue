@@ -28,10 +28,13 @@
                         <input
                           id="update-profile-firstname"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.pre_name != null ? ' border-theme-6' : '')"
                           placeholder="Firstname"
                           v-model="user.pre_name"
                         />
+                        <div v-if="this.validation_error?.pre_name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.pre_name[0] }}
+                        </div>
                       </div>
                       <div class="mt-3">
                         <label for="update-profile-username" class="form-label">
@@ -40,10 +43,13 @@
                         <input
                           id="update-profile-username"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.name != null ? ' border-theme-6' : '')"
                           placeholder="Username"
                           v-model="user.name"
                         />
+                        <div v-if="this.validation_error?.name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.name[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-span-12 xxl:col-span-6">
@@ -54,10 +60,13 @@
                         <input
                           id="update-profile-lastname"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.type != null ? ' border-theme-6' : '')"
                           placeholder="Lastname"
                           v-model="user.last_name"
                         />
+                        <div v-if="this.validation_error?.last_name != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.last_name[0] }}
+                        </div>
                       </div>
                       <div class="mt-3">
                         <label for="update-profile-email" class="form-label">
@@ -66,10 +75,13 @@
                         <input
                           id="update-profile-email"
                           type="text"
-                          class="form-control"
+                          :class="'form-control' + (this.validation_error?.type != null ? ' border-theme-6' : '')"
                           placeholder="Email"
                           v-model="user.email"
                         />
+                        <div v-if="this.validation_error?.email != null" class="text-theme-6 mt-2 mb-4">
+                          {{ this.validation_error?.email[0] }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -122,6 +134,8 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -129,7 +143,8 @@ export default defineComponent({
   },
   data() {
     return {
-      user: {}
+      user: {},
+      validation_error: {}
     }
   },
   mounted() {
@@ -146,18 +161,20 @@ export default defineComponent({
         email: this.user.email
       })
         .then(response => {
+          toast.success('Profile successfully updated')
           loader.hide()
           this.fetchUser()
         })
         .catch(error => {
-          console.log(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
         })
     },
     fetchUser() {
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
-          console.log(response)
           this.user = response.data.data.user
           loader.hide()
         })

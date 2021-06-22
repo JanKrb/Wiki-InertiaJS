@@ -1,6 +1,7 @@
 <template>
   <div>
     <DarkModeSwitcher />
+
     <MobileMenu />
     <!-- BEGIN: Top Bar -->
     <div class="-mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2">
@@ -14,10 +15,10 @@
           <img
             alt=""
             class="w-6"
-            src="@/assets/images/logo.svg"
+            :src="wiki_logo"
           />
           <span class="text-white text-lg ml-3">
-            Ru<span class="font-medium">bick</span>
+            <span class="font-medium">{{ wiki_name }}</span>
           </span>
         </router-link>
         <!-- END: Logo -->
@@ -324,6 +325,7 @@ import TopBar from '@/components/top-bar/Main.vue'
 import MobileMenu from '@/components/mobile-menu/Main.vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import axios from 'axios'
+
 import {
   searchDropdown,
   showSearchDropdown,
@@ -340,7 +342,9 @@ export default defineComponent({
   data() {
     return {
       user: {},
-      loggedIn: false
+      loggedIn: false,
+      wiki_name: process.env.VUE_APP_NAME,
+      wiki_logo: process.env.VUE_APP_LOGO
     }
   },
   mounted() {

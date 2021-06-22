@@ -15,6 +15,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Observers\AnnouncementObserver;
 use App\Observers\BadgeObserver;
+use App\Observers\BanObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\PermissionObserver;
 use App\Observers\PostCommentObserver;
@@ -55,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Role::observe(RoleObserver::class);
         Permission::observe(PermissionObserver::class);
-        Ban::observe(Ban::class);
+        Ban::observe(BanObserver::class);
         Badge::observe(BadgeObserver::class);
 
         Category::observe(CategoryObserver::class);

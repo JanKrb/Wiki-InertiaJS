@@ -79,11 +79,11 @@
                 <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
-                      <label for="lastname" class="bg-white text-gray-600 px-1">Color</label>
+                      <label for="color" class="bg-white text-gray-600 px-1">Color</label>
                     </p>
                   </div>
                   <p>
-                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full" v-model="role.color_code">
+                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full" v-model="role.color">
                   </p>
                 </div>
               </div>
@@ -244,21 +244,25 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
     return {
       role: {},
       role_permissions: [],
+      page_role_permissions: [],
       all_permissions: [],
+      all_role_permissions: [],
       pagination: {},
       newPermission: 'NewPermission'
     }
   },
   mounted() {
     this.fetchRole(this.$route.params.id)
-    this.fetchRolePermissions(this.$route.params.id)
-    this.fetchPermissions()
+    this.fetchRolePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+    this.fetchPermissions('http://localhost:8000/api/permissions')
   },
   methods: {
     makePagination(meta, links) {
@@ -276,11 +280,13 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/roles/' + this.role.id)
         .then(response => {
+          toast.success('Role was successfully deleted')
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
         })
         .catch(error => {
           console.error(error)
+          toast.error('Delete failed')
           loader.hide()
         })
     },
@@ -289,15 +295,17 @@ export default defineComponent({
       axios.put('http://localhost:8000/api/roles/' + this.role.id, {
         name: this.role.name,
         description: this.role.description,
-        color_code: this.role.color_code
+        color: this.role.color
       })
         .then(response => {
           loader.hide()
+          toast.success('Role was successfully edited')
           this.fetchRole(this.role.id)
         })
         .catch(error => {
           console.error(error)
           loader.hide()
+          toast.error('Editing failed')
         })
     },
     fetchRole(id) {
@@ -313,9 +321,9 @@ export default defineComponent({
           this.$router.push({ name: 'admin.roles' })
         })
     },
-    fetchRolePermissions(id) {
+    fetchRolePermissions(page) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/roles/' + id + '/permissions')
+      axios.get(page)
         .then(response => {
           this.role_permissions = response.data.data
           loader.hide()
@@ -331,15 +339,17 @@ export default defineComponent({
       axios.delete('http://localhost:8000/api/roles/' + this.role.id + '/permissions/' + permission.id)
         .then(response => {
           loader.hide()
+          toast.success('Permission was successfully removed')
           this.fetchRolePermissions(this.role.id)
         })
         .catch(error => {
           console.error(error)
           loader.hide()
+          toast.error('Removed failed')
         })
     },
-    fetchPermissions() {
-      axios.get('http://localhost:8000/api/permissions')
+    fetchPermissions(page) {
+      axios.get(page)
         .then(response => {
           this.all_permissions = response.data.data
         })
@@ -348,7 +358,7 @@ export default defineComponent({
         })
     },
     fetchSelectablePermissions() {
-      return this.all_permissions.filter(all => !this.role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
+      return this.all_permissions.filter(all => !this.all_role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
     },
     addPermission() {
       const loader = this.$loading.show()
@@ -357,10 +367,12 @@ export default defineComponent({
       })
         .then(response => {
           loader.hide()
+          toast.success('Permission successfully added')
           this.fetchRolePermissions(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
+          toast.error('Failed to add Permission')
         })
     }
   }
