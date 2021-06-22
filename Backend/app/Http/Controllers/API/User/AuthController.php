@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
@@ -157,18 +158,25 @@ class AuthController extends BaseController
         }
 
         $input = $request->all();
-        $user = User::where('email', $input['email']);
+        $user = User::where('email', $input['email'])->first();
 
         if (!$user->exists()) {
             return $this->sendError('This email does not belong to any users', ['email' => $input['email']]);
         }
 
-        $response = Password::sendResetLink($input);
+        $token = Str::random(40);
+
+        DB::table('password_resets')->insert([
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => now()
+        ]);
+
+        $user->sendPasswordResetNotification($token);
+
         $user->sendActivity('Password-Reset-Email has been sent.', 'A mail to reset the password has been sent to ' . $user->email, $user);
 
-        $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : 'Whoops... Something went wrong...';
-
-        return $this->sendResponse([], $message);
+        return $this->sendResponse([], 'Mail has been sent');
     }
 
     /**
@@ -189,16 +197,22 @@ class AuthController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
         }
 
-        $response = Password::reset($request->all(), function ($user, $password) {
-            $user->sendActivity('Password-Reset has been performed', 'The password has been changed through a reset-email.');
+        $tokenData = DB::table('password_resets')->where('token', $request->token)->first();
+        if (!$tokenData) return $this->sendError('Invalid token.', [
+            'errors' => []
+        ]);
 
-            $user->password = Hash::make($password);
-            $user->save();
-        });
+        $user = User::where('email', $request->email)->first();
+        if (!$user) return $this->sendError('Invalid token.', [
+            'errors' => []
+        ]);
 
-        $message = $response == Password::PASSWORD_RESET ? 'Password reset successfully' : 'Whoops... Something went wrong...';
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-        return $this->sendResponse([], $message);
+        DB::table('password_resets')->where('email', $user->email)->delete();
+
+        return $this->sendResponse([], 'Successfully resetted password.');
     }
 
     /**

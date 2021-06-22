@@ -44,7 +44,7 @@ class MailResetPasswordToken extends Notification
         return (new MailMessage)
             ->subject("Reset your password")
             ->line("Hey, did you forget your password? Click the button to reset it.")
-            ->action('Reset Password', config('app.url_frontend') . '/password/reset/' . $this->token)
+            ->action('Reset Password', config('app.url_frontend') . '/password/reset?token=' . $this->token)
             ->line('Thank you for being a friend');
     }
 
