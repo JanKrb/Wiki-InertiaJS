@@ -20,6 +20,7 @@ import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
 import SettingsMail from '../views/settings/SettingsMail.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
+import ResetPassword from '../views/reset-password/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
@@ -276,6 +277,16 @@ const routes = [
       title: 'Register',
       auth: false,
       isAuth: true
+    }
+  },
+  {
+    path: '/password/reset',
+    name: 'password-reset',
+    component: ResetPassword,
+    meta: {
+      title: 'ResetPassword',
+      auth: false,
+      isAuth: false
     }
   },
   {
