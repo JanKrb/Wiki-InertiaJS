@@ -13,13 +13,13 @@
               <div class="box p-2">
                 <div class="chat__tabs nav nav-tabs justify-center" role="tablist">
                   <a
-                    id="profile-tab"
+                    id="latest-tab"
                     data-toggle="tab"
-                    data-target="#profile"
+                    data-target="#latest"
                     href="javascript:;"
                     class="flex-1 py-2 rounded-md text-center active"
                     role="tab"
-                    aria-controls="profile"
+                    aria-controls="latest"
                     aria-selected="true"
                   >
                     Latest Notifications
@@ -65,7 +65,8 @@
                       <input
                         type="text"
                         class="form-control py-3 px-4 border-transparent bg-gray-200 pr-10 placeholder-theme-13"
-                        placeholder="Search for messages or users..."
+                        placeholder="Search user..."
+                        v-model="this.search.user"
                       />
                       <SearchIcon
                         class="w-4 h-4 hidden sm:absolute my-auto inset-y-0 mr-3 right-0"
@@ -74,21 +75,22 @@
                     <div class="overflow-x-auto scrollbar-hidden">
                       <div class="flex mt-3">
                         <a
-                          v-for="user in this.users"
-                          v-bind:key="user.id"
-                          href=""
+                          v-for="notification in this.recent_notifications"
+                          v-bind:key="notification.id"
+                          href="javascript:;"
                           class="w-14 mr-4 cursor-pointer mb-3"
+                          @click="showUserHistory(notification.user)"
                         >
                           <div class="w-14 h-14 flex-none image-fit rounded-full">
                             <img
                               alt=""
                               class="rounded-full"
-                              :src="user.profile_picture"
+                              :src="notification.user.profile_picture"
                             />
                             <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                           </div>
                           <div class="text-xs text-gray-600 truncate text-center mt-2">
-                            {{ user.name }}
+                            {{ notification.user.name }}
                           </div>
                         </a>
                       </div>
@@ -97,10 +99,10 @@
                 </div>
                 <div class="chat__chat-list overflow-y-auto scrollbar-hidden pr-1 pt-1">
                   <div
-                    v-for="user in this.users"
+                    v-for="user in this.filteredUsers"
                     v-bind:key="user.id"
                     class="intro-x cursor-pointer box relative flex items-center p-5 mt-4"
-                    @click="showChatBox"
+                    @click="showUserHistory(user)"
                   >
                     <div class="w-12 h-12 flex-none image-fit mr-1">
                       <img
@@ -137,19 +139,17 @@
                       <input
                         type="text"
                         class="form-control py-3 px-4 border-transparent bg-gray-200 pr-10 placeholder-theme-13"
-                        placeholder="Search Username..."
+                        placeholder="Search user..."
+                        v-model="this.search.user"
                       />
                       <SearchIcon class="w-4 h-4 hidden sm:absolute my-auto inset-y-0 mr-3 right-0"/>
                     </div>
-                    <button type="button" class="btn btn-primary w-full mt-3">
-                      Search
-                    </button>
                   </div>
                 </div>
                 <div class="chat__user-list overflow-y-auto scrollbar-hidden pr-1 pt-1">
                   <div
                     class="cursor-pointer box relative flex items-center p-5 mt-5"
-                    v-for="user in this.users"
+                    v-for="user in this.filteredUsers"
                     v-bind:key="user.id"
                     @click="showCreateNotification(user)"
                   >
@@ -191,14 +191,14 @@
               <!-- END: Notification Creation Menu -->
               <!-- BEGIN: Lastest Notifications Menu -->
               <div
-                id="profile"
+                id="latest"
                 class="tab-pane active"
                 role="tabpanel"
-                aria-labelledby="profile-tab"
+                aria-labelledby="latest-tab"
               >
                 <div class="chat__chat-list overflow-y-auto scrollbar-hidden pr-1 pt-1 mt-4">
                   <div
-                    v-for="notification in this.notifications"
+                    v-for="notification in this.recent_notifications"
                     v-bind:key="notification.id"
                     class="intro-x cursor-pointer box relative flex items-center p-5 mb-4"
                     @click="showSingleNotification(notification)"
@@ -294,7 +294,6 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="p-5">
                     <div class="flex flex-col-reverse xl:flex-row flex-col">
                       <div class="flex-1 mt-6 xl:mt-0">
@@ -438,7 +437,45 @@
           <!-- BEGIN: Notification Creation Tab -->
           <div class="intro-y col-span-12 lg:col-span-8 xxl:col-span-9" v-if="this.active_tab === 2">
             <div class="chat__box box">
-              <div class="h-full">
+              <div class="h-full flex flex-col">
+                <div class="overflow-y-scroll scrollbar-hidden px-5 pt-5 flex-1">
+                  <div class="intro-y box px-5 pt-5">
+                    <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5 pb-5 -mx-5">
+                      <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
+                          <img
+                            alt=""
+                            class="rounded-full"
+                            :src="this.create_notification.user?.profile_picture"
+                          />
+                        </div>
+                        <div class="ml-5">
+                          <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
+                            {{ this.create_notification.user?.name }}
+                          </div>
+                          <div class="text-gray-600">{{ this?.create_notification?.user.role?.name }}</div>
+                        </div>
+                      </div>
+                      <div class="mt-6 lg:mt-0 flex-1 dark:text-gray-300 px-5 border-l border-r border-gray-200 dark:border-dark-5 border-t lg:border-t-0 pt-5 lg:pt-0">
+                        <div class="font-medium text-center lg:text-left lg:mt-3">
+                          Contact Details
+                        </div>
+                        <div class="flex flex-col justify-center items-center lg:items-start mt-4">
+                          <div class="truncate sm:whitespace-normal flex items-center">
+                            <MailIcon class="w-4 h-4 mr-2"/>{{ this?.create_notification?.user.email }}
+                          </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                            <UserIcon class="w-4 h-4 mr-2"/>{{ this?.create_notification?.user?.pre_name }} {{ this?.create_notification?.user?.last_name }}
+                          </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                            <HashIcon class="w-4 h-4 mr-2"/>User ID: {{ this?.create_notification?.user.id }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="p-5">
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
@@ -575,6 +612,61 @@
             </div>
           </div>
           <!-- END: Notification Creation Tab -->
+          <!-- BEGIN: Notification History Tab -->
+          <div class="intro-y col-span-12 lg:col-span-8 xxl:col-span-9" v-if="this.active_tab === 3">
+            <div class="chat__box box">
+              <div class="h-full flex flex-col">
+                <div class="overflow-y-scroll scrollbar-hidden px-5 pt-5 flex-1">
+                  <div class="intro-y box px-5 pt-5">
+                    <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5 pb-5 -mx-5">
+                      <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
+                          <img
+                            alt=""
+                            class="rounded-full"
+                            :src="this.history_notification_user?.profile_picture"
+                          />
+                        </div>
+                        <div class="ml-5">
+                          <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
+                            {{ this.history_notification_user?.name }}
+                          </div>
+                          <div class="text-gray-600">{{ this.history_notification_user.role?.name }}</div>
+                        </div>
+                      </div>
+                      <div class="mt-6 lg:mt-0 flex-1 dark:text-gray-300 px-5 border-l border-r border-gray-200 dark:border-dark-5 border-t lg:border-t-0 pt-5 lg:pt-0">
+                        <div class="font-medium text-center lg:text-left lg:mt-3">
+                          Contact Details
+                        </div>
+                        <div class="flex flex-col justify-center items-center lg:items-start mt-4">
+                          <div class="truncate sm:whitespace-normal flex items-center">
+                            <MailIcon class="w-4 h-4 mr-2"/>{{ this.history_notification_user?.email }}
+                          </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                            <UserIcon class="w-4 h-4 mr-2"/>{{ this.history_notification_user?.pre_name }} {{ this.history_notification_user?.last_name }}
+                          </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3">
+                            <HashIcon class="w-4 h-4 mr-2"/>User ID: {{ this.history_notification_user?.id }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-5">
+                  <div class="flex flex-col-reverse xl:flex-row flex-col">
+                    <div class="flex-1 mt-6 xl:mt-0">
+                      <div class="grid grid-cols-12 gap-x-5 mb-3">
+                        histories
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END: Notification History Tab -->
         </div>
       </div>
     </div>
@@ -594,6 +686,7 @@ export default defineComponent({
       user: {},
       users: [],
       notifications: [],
+      recent_notifications: [],
       validation_error: {},
       permissions: {},
       single_notification: {},
@@ -604,6 +697,10 @@ export default defineComponent({
         type: 1,
         icon: 'BellIcon',
         user_id: 0
+      },
+      history_notification_user: {},
+      search: {
+        user: ''
       }
     }
   },
@@ -611,7 +708,20 @@ export default defineComponent({
     this.fetchUser()
     this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
     this.fetchUsers('http://localhost:8000/api/users?per_page=100000')
+    this.fetchRecentNotifications()
     this.testPagePermissions()
+  },
+  computed: {
+    filteredUsers: function () {
+      return this.users.filter((user) => {
+        return user.name.match(this.search.user) || user.email.match(this.search.user) || user.pre_name.match(this.search.user) || user.last_name.match(this.search.user)
+      })
+    },
+    userHistory: function () {
+      return this.notifications.filter((notification) => {
+        return notification.user.id === this.history_notification_user.id
+      })
+    }
   },
   methods: {
     fetchNotifications(page) {
@@ -626,6 +736,16 @@ export default defineComponent({
           toast.error(error.response.data.message)
           console.error(error)
           loader.hide()
+        })
+    },
+    fetchRecentNotifications() {
+      axios.get('http://localhost:8000/api/notifications/recent')
+        .then(response => {
+          this.recent_notifications = response.data.data
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          console.error(error)
         })
     },
     fetchUsers(page) {
@@ -675,6 +795,10 @@ export default defineComponent({
       this.create_notification.user = user
       this.create_notification.user_id = user.id
       this.active_tab = 2
+    },
+    showUserHistory(user) {
+      this.history_notification_user = user
+      this.active_tab = 3
     },
     updateNotification(notification) {
       const loader = this.$loading.show()
