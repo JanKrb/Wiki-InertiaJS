@@ -20,6 +20,12 @@ class NotificationController extends BaseController
         ]);
     }
 
+    public function recent(Request $request) {
+        $max = $request->get('max', 5);
+        $notifications = Notification::all()->sortBy('updated_at', SORT_ASC)->take($max);
+        return $this->sendResponse(new NotificationCollection($notifications), 'Recent notifications has been retrieved successfully');
+    }
+
     public function get_users(Request $request, $user_id) {
         $user = User::find($user_id);
 
