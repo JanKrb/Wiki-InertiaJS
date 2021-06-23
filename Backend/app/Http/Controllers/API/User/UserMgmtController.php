@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Str;
 
 class UserMgmtController extends BaseController
 {
@@ -29,18 +30,20 @@ class UserMgmtController extends BaseController
             return $this->sendError('Invallid user', ['user_id' => $account_id]);
         }
 
-        return $this->sendResponse(new UserResource($account), 'Successfully fetched user details.');
+        return $this->sendResponse(new UserResource($account, true), 'Successfully fetched user details.');
     }
 
     public function update(Request $request, $account_id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:users,name,' . $account_id,
-            'pre_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $account_id,
+            'name' => 'max:255|unique:users,name,' . $account_id,
+            'pre_name' => 'max:255',
+            'last_name' => 'max:255',
+            'email' => 'email|unique:users,email,' . $account_id,
             'profile_picture' => '',
-            'role_id' => 'integer|exists:roles,id'
+            'role_id' => 'integer|exists:roles,id',
+            'verify_mail' => 'boolean',
+            'subscribed_newsletter' => 'boolean'
         ]);
 
         if ($validator->fails()) {
@@ -53,10 +56,24 @@ class UserMgmtController extends BaseController
             return $this->sendError('Invallid user', ['user_id' => $account_id]);
         }
 
+        if ($request->has('verify_mail')) {
+            if ($request->verify_mail) {
+                $account->email_verified_at = now();
+                $account->email_verification_code = '';
+            } else {
+                $account->email_verified_at = null;
+                $account->email_verification_code = Str::random(40);
+            }
+
+            $account->save();
+        }
+
+        $request->request->remove('verify_mail');
         $account->update($request->all());
+
         $account->sendActivity('Account details has been changed', 'The profile details has been changed through an admin');
 
-        return $this->sendResponse(new UserResource($account), 'Successfully updated user details.');
+        return $this->sendResponse(new UserResource($account, true), 'Successfully updated user details.');
     }
 
     public function sendPasswordResetNotification(Request $request, $account_id) {

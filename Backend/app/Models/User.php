@@ -32,7 +32,8 @@ class User extends Authenticatable
         'profile_picture',
         'email',
         'password',
-        'email_verification_code'
+        'email_verification_code',
+        'subscribed_newsletter'
     ];
 
     /**

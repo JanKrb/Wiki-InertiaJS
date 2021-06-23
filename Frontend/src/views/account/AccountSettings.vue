@@ -77,7 +77,10 @@
         <div class="intro-y box lg:mt-5">
           <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
             <h2 class="font-medium text-base mr-auto">Account Settings</h2>
-            <button class="btn btn-primary btn-sm ml-auto"><SaveIcon class="mr-2 w-5 h-5"></SaveIcon>Save</button>
+            <button class="btn btn-primary btn-sm ml-auto" v-on:click='saveSettings()'>
+              <SaveIcon class="mr-2 w-5 h-5"></SaveIcon>
+              Save
+            </button>
           </div>
           <div class="p-5">
             <div class="flex flex-col-reverse xl:flex-row flex-col">
@@ -87,13 +90,13 @@
                     <div class="flex items-center">
                       <div class="border-l-2 border-theme-1 pl-4">
                         <a href="" class="font-medium">
-                          Verified Emailaddress
+                          Verified E-Mail address
                         </a>
                         <div class="text-gray-600">
                           Is the account-email verified?
                         </div>
                       </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+                      <input class="form-check-switch ml-auto" type="checkbox" v-model="new_verified">
                     </div>
                   </div>
                   <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -106,33 +109,20 @@
                           Does the user get newsletter?
                         </div>
                       </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+                      <input class="form-check-switch ml-auto" type="checkbox" v-model='new_newsletter'>
                     </div>
                   </div>
-                  <div class="col-span-12 xxl:col-span-6">
+                  <div class="col-span-12 xxl:col-span-6 mb-4">
                     <div class="flex items-center">
                       <div class="border-l-2 border-theme-1 pl-4">
                         <a href="" class="font-medium">
-                          Security Alerts
+                          Darkmode
                         </a>
                         <div class="text-gray-600">
-                          Does the user get Security alerts
+                          Enable darkmode on all wiki pages
                         </div>
                       </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
-                    </div>
-                  </div>
-                  <div class="col-span-12 xxl:col-span-6">
-                    <div class="flex items-center">
-                      <div class="border-l-2 border-theme-1 pl-4">
-                        <a href="" class="font-medium">
-                          Posting Informations
-                        </a>
-                        <div class="text-gray-600">
-                          Does the user get Informations about recent Postings?
-                        </div>
-                      </div>
-                      <input class="form-check-switch ml-auto" type="checkbox">
+                      <input class="form-check-switch ml-auto" type="checkbox" v-model='darkmode'>
                     </div>
                   </div>
                 </div>
@@ -151,6 +141,7 @@ import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import { useStore } from '@/store'
 const toast = useToast()
 
 export default defineComponent({
@@ -168,6 +159,9 @@ export default defineComponent({
           id: 0
         }
       },
+      new_verified: false,
+      new_newsletter: false,
+      darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false,
       badges: [],
       roles: []
     }
@@ -272,6 +266,9 @@ export default defineComponent({
           this.user = response.data.data
           this.user_role = response.data.data.role.id
           loader.hide()
+
+          this.new_verified = (this.user.email_verified_at != null)
+          this.new_newsletter = this.user.subscribed_newsletter
         })
         .catch(error => {
           console.error(error)
@@ -303,6 +300,30 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/users/' + id + '/badges')
         .then(response => {
           this.user_badges = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    saveSettings() {
+      const store = useStore()
+      const loader = this.$loading.show()
+
+      localStorage.setItem('darkmode', this.darkmode)
+      this.darkmode
+        ? cash('html').addClass('dark')
+        : cash('html').removeClass('dark')
+      store.dispatch('main/setDarkMode', this.darkmode)
+
+      axios.put('http://localhost:8000/api/users/' + this.user.id, {
+        verify_mail: this.new_verified,
+        subscribed_newsletter: this.new_newsletter
+      })
+        .then(response => {
+          this.user = response.data.data
+          this.new_verified = (this.user.email_verified_at != null)
+          this.new_newsletter = this.user.subscribed_newsletter
+          loader.hide()
         })
         .catch(error => {
           console.error(error)

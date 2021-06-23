@@ -7,6 +7,13 @@ use App\Http\Resources\Role as RoleResource;
 
 class User extends JsonResource
 {
+    private $detailed;
+
+    function __construct($resource, $detailed=false) {
+        parent::__construct($resource);
+        $this->detailed = $detailed;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -15,7 +22,7 @@ class User extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
@@ -26,5 +33,12 @@ class User extends JsonResource
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
+
+        if ($this->detailed) {
+            $data['email_verified_at'] = $this->email_verified_at;
+            $data['subscribed_newsletter'] = $this->subscribed_newsletter;
+        }
+
+        return $data;
     }
 }
