@@ -22,7 +22,8 @@ class Notification extends Model
         'user_id',
         'type',
         'icon',
-        'target_user'
+        'target_user',
+        'seen'
     ];
 
     /**

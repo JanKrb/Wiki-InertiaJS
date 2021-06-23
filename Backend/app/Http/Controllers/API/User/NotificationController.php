@@ -89,7 +89,8 @@ class NotificationController extends BaseController
             'content' => 'required',
             'type' => 'required|integer',
             'icon' => 'required_if:type,1',
-            'target_user' => 'required_if:type,2'
+            'target_user' => 'required_if:type,2',
+            'seen' => 'boolean'
         ]);
 
         if ($validator->fails()) {
