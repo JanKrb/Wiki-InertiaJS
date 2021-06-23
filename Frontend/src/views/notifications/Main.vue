@@ -52,7 +52,7 @@
               </div>
             </div>
             <div class="tab-content">
-              <!-- BEGIN: Notification Histories Menu -->
+              <!-- BEGIN: User Histories Menu -->
               <div
                 id="histories"
                 class="tab-pane"
@@ -123,7 +123,7 @@
                   </div>
                 </div>
               </div>
-              <!-- ENG: Notification Histories Menu -->
+              <!-- ENG: User Histories Menu -->
               <!-- BEGIN: Notification Creation Menu -->
               <div
                 id="create-notification"
@@ -151,6 +151,7 @@
                     class="cursor-pointer box relative flex items-center p-5 mt-5"
                     v-for="user in this.users"
                     v-bind:key="user.id"
+                    @click="showCreateNotification(user)"
                   >
                     <div class="w-12 h-12 flex-none image-fit mr-1">
                       <img
@@ -188,7 +189,7 @@
                 </div>
               </div>
               <!-- END: Notification Creation Menu -->
-              <!-- BEGIN: Notification Userhistory Menu -->
+              <!-- BEGIN: Lastest Notifications Menu -->
               <div
                 id="profile"
                 class="tab-pane active"
@@ -199,7 +200,7 @@
                   <div
                     v-for="notification in this.notifications"
                     v-bind:key="notification.id"
-                    class="intro-x cursor-pointer box relative flex items-center p-5"
+                    class="intro-x cursor-pointer box relative flex items-center p-5 mb-4"
                     @click="showSingleNotification(notification)"
                   >
                     <div class="w-12 h-12 flex-none mr-1" v-if="notification.type === 1">
@@ -219,9 +220,6 @@
                         <a href="javascript:;" class="font-medium">
                           {{ notification.title }}
                         </a>
-                        <div class="text-xs text-gray-500 ml-auto">
-                          {{ notification.created_at }}
-                        </div>
                       </div>
                       <div class="w-full truncate text-gray-600 mt-0.5">
                         {{ notification.content }}
@@ -230,7 +228,7 @@
                   </div>
                 </div>
               </div>
-              <!-- END: Notification Userhistory Menu -->
+              <!-- END: Lastest Notifications Menu -->
             </div>
           </div>
           <!-- END: Notification Side Menu -->
@@ -422,9 +420,12 @@
                               </div>
                             </div>
                           </div>
-                          <button class="btn btn-primary w-20" @click="updateNotification(this.single_notification)">
-                            Save
-                          </button>
+                          <div class="col-span-12 mb-4">
+                            <div class="flow-root">
+                              <p class="float-left"><button class="btn btn-primary btn-md" @click="updateNotification(this.single_notification)"><SaveIcon class="w-4 h-4 mr-2"></SaveIcon>Save</button></p>
+                              <p class="float-right"><button class="btn btn-danger btn-md" @click="deleteNotification(this.single_notification.id)"><Trash2Icon class="w-4 h-4 mr-2"></Trash2Icon>Delete</button></p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -441,122 +442,131 @@
                 <div class="p-5">
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
-                      <div class="grid grid-cols-12 gap-x-5 mb-4">
+                      <div class="grid grid-cols-12 gap-x-5 mb-3">
                         <div class="col-span-12 xxl:col-span-12 mb-4">
                           <div>
-                            <label for="update-reason-notification" class="form-label">
-                              Reason
+                            <label for="create-title-notification" class="form-label">
+                              Title
                             </label>
                             <input
-                              id="update-reason-notification"
+                              id="create-title-notification"
                               type="text"
-                              :class="'form-control' + (this.validation_error?.reason != null ? ' border-theme-6' : '')"
-                              placeholder="Enter notification reason"
-                              v-model="test"
+                              :class="'form-control' + (this.validation_error?.title != null ? ' border-theme-6' : '')"
+                              placeholder="Enter Title"
+                              v-model="this.create_notification.title"
                             />
-                            <div v-if="this.validation_error?.reason != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.reason[0] }}
+                            <div v-if="this.validation_error?.title != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.title[0] }}
                             </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-12 mb-4">
                           <div>
-                            <label for="update-description-notification" class="form-label">
-                              Description
+                            <label for="create-title-notification" class="form-label">
+                              Content
                             </label>
                             <textarea
-                              id="update-description-notification"
-                              :class="'form-control' + (this.validation_error?.description != null ? ' border-theme-6' : '')"
-                              placeholder="Enter a notification description"
-                              v-model="test"
+                              id="create-content-notification"
+                              :class="'form-control' + (this.validation_error?.content != null ? ' border-theme-6' : '')"
+                              placeholder="Enter Content"
+                              rows="5"
+                              v-model="this.create_notification.content"
                             />
-                            <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.description[0] }}
+                            <div v-if="this.validation_error?.content != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.content[0] }}
                             </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
                           <div>
-                            <label for="update-date-notification" class="form-label">
-                              Unnotification Date
+                            <label for="create-color-notification" class="form-label">
+                              Color
                             </label>
                             <input
-                              id="update-date-notification"
-                              type="date"
-                              :class="'form-control' + (this.validation_error?.notification_until != null ? ' border-theme-6' : '')"
-                              v-model="test"
+                              id="create-color-notification"
+                              type="color"
+                              :class="'form-control' + (this.validation_error?.color != null ? ' border-theme-6' : '')"
+                              placeholder="Enter notification reason"
+                              v-model="this.create_notification.color"
                             />
-                            <div v-if="this.validation_error?.notification_until != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.notification_until[0] }}
+                            <div v-if="this.validation_error?.color != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.color[0] }}
                             </div>
                           </div>
                         </div>
                         <div class="col-span-12 xxl:col-span-6 mb-4">
                           <div>
-                            <label for="update-time-notification" class="form-label">
-                              Notification Time
-                            </label>
-                            <input
-                              id="update-time-notification"
-                              type="time"
-                              :class="'form-control' + (this.validation_error?.notification_until != null ? ' border-theme-6' : '')"
-                              v-model="test"
-                            />
-                            <div v-if="this.validation_error?.notification_until != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.notification_until[0] }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-span-12 xxl:col-span-6 mb-4">
-                          <div>
-                            <label for="update-type-notification" class="form-label">
-                              Notification type
+                            <label class="form-label">
+                              Type
                             </label>
                             <TailSelect
-                              id="update-type-notification"
-                              v-model="test"
+                              v-model="this.create_notification.type"
                               :class="'form-control' + (this.validation_error?.type != null ? ' border-theme-6' : '')"
                               :options="{
-                            classNames: 'w-full'
-                            }"
+                                search: true,
+                                classNames: 'w-full'
+                              }"
                             >
-                              <option value="0">Global Notification</option>
-                              <option value="1">Comment Notification</option>
-                              <option value="2">Posting Notification</option>
+                              <option value=1>Icon</option>
+                              <option value=2>User</option>
                             </TailSelect>
                             <div v-if="this.validation_error?.type != null" class="text-theme-6 mt-2 mb-4">
                               {{ this.validation_error?.type[0] }}
                             </div>
+                            {{ this.create_notification.type }}
                           </div>
                         </div>
-                        <div class="col-span-12 xxl:col-span-3 mb-4">
+                        <div class="col-span-12 xxl:col-span-12">
+                          <hr class="my-5">
+                        </div>
+                        <div class="col-span-12 xxl:col-span-6 mb-4">
                           <div>
-                            <label for="update-target-notification" class="form-label">
-                              Target
+                            <label for="create-icon-notification" class="form-label">
+                              Icon
                             </label>
                             <input
-                              id="update-target-notification"
+                              id="create-icon-notification"
                               type="text"
-                              class="form-control"
-                              value="value"
-                              disabled
+                              :class="'form-control' + (this.validation_error?.icon != null ? ' border-theme-6' : '')"
+                              placeholder="Enter Icon"
+                              v-model="this.create_notification.icon"
+                              :disabled="parseInt(this.create_notification.type) !== 1"
                             />
+                            <div v-if="parseInt(this.create_notification.type) !== 1" class="text-theme-6 mt-2 mb-4">
+                              User Badge is selected!
+                            </div>
+                            <div v-if="this.validation_error?.icon != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.type[0] }}
+                            </div>
                           </div>
                         </div>
-                        <div class="col-span-12 xxl:col-span-3 mb-4">
+                        <div class="col-span-12 xxl:col-span-6 mb-4">
                           <div>
-                            <label for="update-staff-notification" class="form-label">
-                              Staff
+                            <label class="form-label">
+                              User
                             </label>
-                            <input
-                              id="update-staff-notification"
-                              type="text"
-                              class="form-control"
-                              value="value"
-                              disabled
-                            />
+                            <TailSelect
+                              :class="'form-control' + (this.validation_error?.target_id != null ? ' border-theme-6' : '')"
+                              :options="{
+                                  search: true,
+                                  classNames: 'w-full'
+                                }"
+                            >
+                              <option :value="user.id" v-for="user in this.users" v-bind:key="user.id" :selected="this.create_notification.target_id === user.id">
+                                {{ user.name }}
+                              </option>
+                            </TailSelect>
+                            <div v-if="parseInt(this.create_notification.type) !== 2" class="text-theme-6 mt-2 mb-4">
+                              Icon Badge is selected!
+                            </div>
+                            <div v-if="this.validation_error?.target_id != null" class="text-theme-6 mt-2 mb-4">
+                              {{ this.validation_error?.type[0] }}
+                            </div>
                           </div>
                         </div>
+                        <button class="btn btn-primary w-20" @click="createNotification(this.create_notification)">
+                          Create
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -585,7 +595,16 @@ export default defineComponent({
       users: [],
       notifications: [],
       validation_error: {},
-      permissions: {}
+      permissions: {},
+      single_notification: {},
+      create_notification: {
+        title: 'New Notification',
+        content: 'New Content',
+        color: '#000000',
+        type: 1,
+        icon: 'BellIcon',
+        user_id: 0
+      }
     }
   },
   mounted() {
@@ -652,6 +671,11 @@ export default defineComponent({
       this.single_notification = notification
       this.active_tab = 1
     },
+    showCreateNotification(user) {
+      this.create_notification.user = user
+      this.create_notification.user_id = user.id
+      this.active_tab = 2
+    },
     updateNotification(notification) {
       const loader = this.$loading.show()
       axios.put('http://localhost:8000/api/notifications/' + notification.id, {
@@ -664,7 +688,47 @@ export default defineComponent({
       })
         .then(response => {
           console.log(response)
+          toast.success('Notification updated successfully')
           loader.hide()
+          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.validation_error = error.response.data?.data?.errors
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
+    },
+    deleteNotification(id) {
+      const loader = this.$loading.show()
+      axios.delete('http://localhost:8000/api/notifications/' + id)
+        .then(response => {
+          toast.success('Notification deleted successfully')
+          loader.hide()
+          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.active_tab = 0
+        })
+        .catch(error => {
+          console.error(error)
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
+    },
+    createNotification(notification) {
+      const loader = this.$loading.show()
+      axios.post('http://localhost:8000/api/notifications', {
+        title: notification.title,
+        content: notification.content,
+        type: notification.type,
+        icon: notification.icon,
+        target_id: notification.target_id,
+        color: notification.color
+      })
+        .then(response => {
+          console.log(response)
+          toast.success('Notification created successfully')
+          loader.hide()
+          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
         })
         .catch(error => {
           console.log(error.response)
