@@ -324,7 +324,7 @@
                                 id="update-content-notification"
                                 :class="'form-control' + (this.validation_error?.content != null ? ' border-theme-6' : '')"
                                 placeholder="Enter Content"
-                                rows="5"
+                                rows="2"
                                 v-model="this.single_notification.content"
                               />
                               <div v-if="this.validation_error?.content != null" class="text-theme-6 mt-2 mb-4">
@@ -372,6 +372,19 @@
                             </div>
                           </div>
                           <div class="col-span-12 xxl:col-span-12">
+                            <div class="flex items-center">
+                              <div class="border-l-2 border-theme-1 pl-4">
+                                <a href="" class="font-medium">
+                                  Has the notification already been seen?
+                                </a>
+                                <div class="text-gray-600">
+                                  Select this option to mark the notification as read.
+                                </div>
+                              </div>
+                              <input class="form-check-switch ml-auto" type="checkbox" v-model="this.single_notification.seen">
+                            </div>
+                          </div>
+                          <div class="col-span-12 xxl:col-span-12">
                             <hr class="my-5">
                           </div>
                           <div class="col-span-12 xxl:col-span-6 mb-4">
@@ -388,7 +401,7 @@
                                 :disabled="parseInt(this.single_notification.type) !== 1"
                               />
                               <div v-if="parseInt(this.single_notification.type) !== 1" class="text-theme-6 mt-2 mb-4">
-                                User Badge is selected!
+                                User Type is selected!
                               </div>
                               <div v-if="this.validation_error?.icon != null" class="text-theme-6 mt-2 mb-4">
                                 {{ this.validation_error?.type[0] }}
@@ -412,7 +425,7 @@
                                 </option>
                               </TailSelect>
                               <div v-if="parseInt(this.single_notification.type) !== 2" class="text-theme-6 mt-2 mb-4">
-                                Icon Badge is selected!
+                                Icon Type is selected!
                               </div>
                               <div v-if="this.validation_error?.target_id != null" class="text-theme-6 mt-2 mb-4">
                                 {{ this.validation_error?.type[0] }}
@@ -569,7 +582,7 @@
                               :disabled="parseInt(this.create_notification.type) !== 1"
                             />
                             <div v-if="parseInt(this.create_notification.type) !== 1" class="text-theme-6 mt-2 mb-4">
-                              User Badge is selected!
+                              User Type is selected!
                             </div>
                             <div v-if="this.validation_error?.icon != null" class="text-theme-6 mt-2 mb-4">
                               {{ this.validation_error?.type[0] }}
@@ -593,7 +606,7 @@
                               </option>
                             </TailSelect>
                             <div v-if="parseInt(this.create_notification.type) !== 2" class="text-theme-6 mt-2 mb-4">
-                              Icon Badge is selected!
+                              Icon Type is selected!
                             </div>
                             <div v-if="this.validation_error?.target_id != null" class="text-theme-6 mt-2 mb-4">
                               {{ this.validation_error?.type[0] }}
@@ -864,7 +877,8 @@ export default defineComponent({
         type: notification.type,
         icon: notification.icon,
         target_id: notification.target_id,
-        color: notification.color
+        color: notification.color,
+        seen: notification.seen
       })
         .then(response => {
           console.log(response)
