@@ -88,6 +88,7 @@ class PostReportController extends BaseController
         }
 
         $report->content = $input['content'];
+        $report->active = $input['active'];
         $report->save();
 
         return $this->sendResponse(new PostReportResource($report), 'Post Report updated successfully.');
