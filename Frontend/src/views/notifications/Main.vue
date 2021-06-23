@@ -422,6 +422,9 @@
                               </div>
                             </div>
                           </div>
+                          <button class="btn btn-primary w-20" @click="updateNotification(this.single_notification)">
+                            Save
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -648,6 +651,27 @@ export default defineComponent({
     showSingleNotification(notification) {
       this.single_notification = notification
       this.active_tab = 1
+    },
+    updateNotification(notification) {
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+        title: notification.title,
+        content: notification.content,
+        type: notification.type,
+        icon: notification.icon,
+        target_id: notification.target_id,
+        color: notification.color
+      })
+        .then(response => {
+          console.log(response)
+          loader.hide()
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.validation_error = error.response.data?.data?.errors
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
     }
   }
 })
