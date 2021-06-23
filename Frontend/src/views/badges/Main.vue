@@ -333,9 +333,9 @@ export default defineComponent({
         })
     },
     editBadge() {
-      let RoleId = null
+      let roleId = null
       if (this.edit_badge.role.id > 0) {
-        RoleId = this.edit_badge.role.id
+        roleId = this.edit_badge.role.id
       }
       const loader = this.$loading.show()
       axios.put('http://localhost:8000/api/badges/' + this.edit_badge.id, {
@@ -344,7 +344,7 @@ export default defineComponent({
         color: this.edit_badge.color,
         icon: this.edit_badge.icon,
         is_role_badge: this.edit_badge.is_role_badge,
-        role_id: RoleId
+        role_id: roleId
       })
         .then(response => {
           toast.success('Badge successfully updated')
