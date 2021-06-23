@@ -50,10 +50,12 @@
             </a>
             <div class="dropdown-menu w-40">
               <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                  <EyeIcon class="w-4 h-4 mr-2"/> View Report
-                </a>
-                <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': report.id } }">
+                  <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                    <EyeIcon class="w-4 h-4 mr-2"/> View Post
+                  </a>
+                </router-link>
+                <a href="javascript:;" @click="this.changeStatus(report)" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                   <Edit2Icon class="w-4 h-4 mr-2"/> Change Status
                 </a>
               </div>
@@ -72,13 +74,14 @@
           <div class="w-full flex text-gray-600 text-xs sm:text-sm">
             <div class="mr-2">
               Reported Post:
-              <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': report.user.id }}">
+              <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': report.post_id }}">
                 <span class="font-medium">#{{ report.post_id }}</span>
               </router-link>
             </div>
+            {{ report.active }}
             <div class="ml-auto">
               <span v-if="report.active"><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Open</span></span>
-              <span v-if="!report.active"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></span>
+              <span v-else><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></span>
             </div>
           </div>
         </div>
@@ -123,6 +126,8 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -145,6 +150,24 @@ export default defineComponent({
         })
         .catch(error => {
           console.log(error)
+          loader.hide()
+        })
+    },
+    changeStatus(report) {
+      const active = !report.active
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/posts/reports/' + report.id, {
+        content: report.content,
+        active: active
+      })
+        .then(response => {
+          toast.success('Status changed successfully')
+          loader.hide()
+          this.fetchReports('http://localhost:8000/api/posts/reports?page=' + this.pagination.current_page)
+        })
+        .catch(error => {
+          console.log(error)
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
