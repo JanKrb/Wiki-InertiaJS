@@ -350,6 +350,10 @@ export default defineComponent({
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
+
+    localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
+      ? cash('html').addClass('dark')
+      : cash('html').removeClass('dark')
   },
   methods: {
     logout() {
