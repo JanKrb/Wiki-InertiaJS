@@ -44,9 +44,9 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="" class="block font-medium text-xl mt-3">{{
-                  category.title
-                }}</a>
+              <a href="" class="block font-medium text-xl mt-3">
+                {{ category.title }}
+              </a>
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
@@ -124,7 +124,7 @@
                     class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
                   >
                     <img
-                      alt="Icewall Tailwind HTML Admin Template"
+                      alt=""
                       :src="activity?.user?.profile_picture"
                     />
                   </div>

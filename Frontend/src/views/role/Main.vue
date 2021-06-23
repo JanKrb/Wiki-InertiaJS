@@ -149,12 +149,12 @@
                 <div class="flex flex-col items-center mt-5">
                   <ul class="flex">
                     <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                      <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchRolePermissions(pagination.first_page_url)">
+                      <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchPagePermissions(pagination.first_page_url)">
                         <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
                       </button>
                     </li>
                     <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                      <button class="flex items-center font-bold" @click="fetchRolePermissions(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+                      <button class="flex items-center font-bold" @click="fetchPagePermissions(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
                         <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
                       </button>
                     </li>
@@ -162,12 +162,12 @@
                       <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
                     </li>
                     <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                      <button class="flex items-center font-bold" @click="fetchRolePermissions(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+                      <button class="flex items-center font-bold" @click="fetchPagePermissions(pagination.next_page_url)" :disabled="!pagination.next_page_url">
                         <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
                       </button>
                     </li>
                     <li class="mx-1 px-3 py-2 bg-gray-200 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                      <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchRolePermissions(pagination.last_page_url)">
+                      <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchPagePermissions(pagination.last_page_url)">
                         <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
                       </button>
                     </li>
@@ -226,7 +226,7 @@
                   classNames: 'w-full'
                 }"
               >
-                <option v-for="permission in fetchSelectablePermissions()" v-bind:key="permission.id">{{ permission.name }}</option>
+                <option v-for="permission in this.selectable_permissions" v-bind:key="permission.id">{{ permission.name }}</option>
               </TailSelect>
             </div>
             <button type="submit" class="btn btn-primary btn-sm w-20 mt-3">
@@ -255,14 +255,16 @@ export default defineComponent({
       page_role_permissions: [],
       all_permissions: [],
       all_role_permissions: [],
+      selectable_permissions: [],
       pagination: {},
+      validation_error: {},
       newPermission: 'NewPermission'
     }
   },
   mounted() {
     this.fetchRole(this.$route.params.id)
-    this.fetchRolePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
-    this.fetchPermissions('http://localhost:8000/api/permissions')
+    this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+    this.fetchPermissions('http://localhost:8000/api/permissions?per_page=9999')
   },
   methods: {
     makePagination(meta, links) {
@@ -280,13 +282,13 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('http://localhost:8000/api/roles/' + this.role.id)
         .then(response => {
-          toast.success('Role was successfully deleted')
+          toast.success('Role deleted successfully')
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
         })
         .catch(error => {
-          console.error(error)
-          toast.error('Delete failed')
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     },
@@ -298,14 +300,14 @@ export default defineComponent({
         color: this.role.color
       })
         .then(response => {
+          toast.success('Role edited successfully')
           loader.hide()
-          toast.success('Role was successfully edited')
           this.fetchRole(this.role.id)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          toast.error('Editing failed')
         })
     },
     fetchRole(id) {
@@ -316,12 +318,13 @@ export default defineComponent({
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
         })
     },
-    fetchRolePermissions(page) {
+    fetchPagePermissions(page) {
       const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
@@ -339,26 +342,38 @@ export default defineComponent({
       axios.delete('http://localhost:8000/api/roles/' + this.role.id + '/permissions/' + permission.id)
         .then(response => {
           loader.hide()
-          toast.success('Permission was successfully removed')
-          this.fetchRolePermissions(this.role.id)
+          toast.success('Permission removed successfully')
+          this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+          this.fetchRolePermissions(this.all_permissions.length)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
-          toast.error('Removed failed')
         })
     },
     fetchPermissions(page) {
       axios.get(page)
         .then(response => {
           this.all_permissions = response.data.data
+          this.fetchRolePermissions(response.data.data.length)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchRolePermissions(perms) {
+      axios.get('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions?per_page=' + perms)
+        .then(response => {
+          this.all_role_permissions = response.data.data
+          this.fetchSelectablePermissions()
         })
         .catch(error => {
           console.error(error)
         })
     },
     fetchSelectablePermissions() {
-      return this.all_permissions.filter(all => !this.all_role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
+      this.selectable_permissions = this.all_permissions.filter(all => !this.all_role_permissions.map(rolePerm => rolePerm.id).includes(all.id))
     },
     addPermission() {
       const loader = this.$loading.show()
@@ -368,11 +383,12 @@ export default defineComponent({
         .then(response => {
           loader.hide()
           toast.success('Permission successfully added')
-          this.fetchRolePermissions(this.$route.params.id)
+          this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+          this.fetchRolePermissions(this.all_permissions.length)
         })
         .catch(error => {
-          console.error(error)
-          toast.error('Failed to add Permission')
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
         })
     }
   }

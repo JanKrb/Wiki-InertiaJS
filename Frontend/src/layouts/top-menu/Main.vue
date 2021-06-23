@@ -102,7 +102,7 @@
               >
                 <div class="w-8 h-8 image-fit">
                   <img
-                    alt="Icewall Tailwind HTML Admin Template"
+                    alt=""
                     class="rounded-full"
                     :src="require(`@/assets/images/${faker.images[0]}`)"
                   />
@@ -175,7 +175,7 @@
           >
             <img
               alt=""
-              :src="user.profile_picture"
+              :src="user?.profile_picture"
             />
           </div>
           <div class="dropdown-menu w-56">

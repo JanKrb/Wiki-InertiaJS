@@ -110,12 +110,12 @@
               <div class="col-span-12">
                 <div class="flex items-center mt-3">
                   <div>
-                    <a href="" class="font-medium">Is Rolebadge?</a>
-                    <div class="text-gray-600">A Rolebadge is binded to a single Role</div>
+                    <a href="" class="font-medium">Is role badge?</a>
+                    <div class="text-gray-600">A role badge is connected to a role</div>
                   </div>
                   <input class="form-check-switch ml-auto" type="checkbox" :checked="edit_badge.is_role_badge" v-model="edit_badge.is_role_badge">
                 </div>
-                <div class="col-span-12" v-show="edit_badge.is_role_badge">
+                <div class="col-span-12" v-if="edit_badge.is_role_badge">
                   <hr class="my-5">
                   <label class="form-label">Role</label>
                   <TailSelect
@@ -126,7 +126,7 @@
                       classNames: 'w-full'
                     }"
                   >
-                    <option :value="role.id" v-for="role in this.roles" v-bind:key="role.id" :selected="role.id === this.edit_badge.role_id">{{ role.name }}</option>
+                    <option :value="role.id" v-for="role in this.roles" v-bind:key="role.id" :selected="role.id === this.edit_badge.role?.id">{{ role.name }}</option>
                   </TailSelect>
                 </div>
               </div>
@@ -151,31 +151,27 @@
     <table class="table mt-5">
       <thead>
         <tr class="bg-primary-2 dark:bg-blue-800 text-white">
-          <th class="whitespace-nowrap">#</th>
           <th class="whitespace-nowrap">Name</th>
           <th class="whitespace-nowrap">Color</th>
           <th class="whitespace-nowrap">Icon</th>
           <th class="whitespace-nowrap">Type</th>
           <th class="whitespace-nowrap">Creator</th>
-          <th class="whitespace-nowrap">Updated at</th>
           <th class="whitespace-nowrap">Created at</th>
           <th class="whitespace-nowrap"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="badge in this.badges" v-bind:key="badge.id">
-          <td class="border-b dark:border-dark-5">{{ badge.id }}</td>
           <td class="border-b dark:border-dark-5">{{ badge.title }}</td>
           <td class="border-b dark:border-dark-5"><span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ badge.color">{{ badge.color }}</span></td>
-          <td class="border-b dark:border-dark-5">{{ badge.icon }}</td>
+          <td class="border-b dark:border-dark-5"><component :is="badge.icon"/></td>
           <td class="border-b dark:border-dark-5" v-if="badge.is_role_badge">
-            <ShieldIcon class="mr-2"></ShieldIcon>{{ badge.role.id }}
+            <ShieldIcon class="mr-2"></ShieldIcon>Role Badge
           </td>
           <td class="border-b dark:border-dark-5" v-else>
-            <ShieldOffIcon class="mr-2"></ShieldOffIcon>No Role badge
+            <UserIcon class="mr-2"></UserIcon>User Badge
           </td>
           <td class="border-b dark:border-dark-5">{{ badge.user.name }}</td>
-          <td class="border-b dark:border-dark-5">{{ badge.updated_at }}</td>
           <td class="border-b dark:border-dark-5">{{ badge.created_at }}</td>
           <td class="border-b dark:border-dark-5">
             <a href="javascript:;" @click="this.edit_badge = badge" data-toggle="modal" data-target="#edit-badge-modal" class="text-small">
@@ -234,9 +230,7 @@ export default defineComponent({
       roles: [],
       edit_badge: {
         is_role_badge: 0,
-        role: {
-          id: 0
-        }
+        role_id: 0
       },
       badge: {
         name: 'New Badge',
@@ -244,9 +238,8 @@ export default defineComponent({
         color: '#000000',
         icon: 'BadgeIcon',
         is_role_badge: 0,
-        role: {
-          id: 0
-        }
+        role_id: 0,
+        role: {}
       },
       pagination: {},
       validation_error: {}
