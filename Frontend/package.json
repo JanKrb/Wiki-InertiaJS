@@ -46,6 +46,7 @@
     "dayjs": "^1.10.4",
     "dropzone": "^5.7.6",
     "feather-icons": "^4.28.0",
+    "fs": "0.0.1-security",
     "highlight.js": "^10.6.0",
     "js-beautify": "^1.13.5",
     "litepicker": "^2.0.11",

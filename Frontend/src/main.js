@@ -8,8 +8,9 @@ import globalComponents from './global-components'
 import utils from './utils'
 import './libs'
 import moment from 'moment'
-import Toast, { TYPE, POSITION } from 'vue-toastification'
+import Toast, { POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import axios from 'axios'
 
 // SASS Theme
 import './assets/sass/app.scss'
@@ -85,7 +86,6 @@ var formatter = {
     }
   }
 }
-
 app.component('format', {
   template: '<span>{{ formatter[fn](value, format) }}</span>',
   props: ['value', 'fn', 'format'],
@@ -109,5 +109,31 @@ const toastOptions = {
   },
   position: POSITION.TOP_RIGHT
 }
-
 app.use(Toast, toastOptions)
+
+axios
+  .get(process.env.BASE_URL + 'static/config.json')
+  .then((response) => {
+    app.config.globalProperties.$config = response.data
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+
+app.config.globalProperties.$writeConfig = () => {
+  const fs = require('fs')
+
+  try {
+    fs.writeFileSync(
+      process.env.BASE_URL + 'static/config.json',
+      JSON.stringify(app.config.globalProperties.$config),
+      'utf-8'
+    )
+
+    return true
+  } catch (e) {
+    console.error('Unable to save configuration')
+
+    return false
+  }
+}
