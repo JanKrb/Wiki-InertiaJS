@@ -79,7 +79,8 @@ class PostReportController extends BaseController
         $input = $request->all();
 
         $validator = Validator::make($input, [
-            'content' => 'required'
+            'content' => 'required',
+            'active' => 'boolean'
         ]);
 
         if ($validator->fails()) {

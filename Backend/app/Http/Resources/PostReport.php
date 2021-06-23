@@ -19,6 +19,7 @@ class PostReport extends JsonResource
             'post_id' => $this->post_id,
             'user' => $this->user,
             'content' => $this->content,
+            'active' => $this->active,
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
