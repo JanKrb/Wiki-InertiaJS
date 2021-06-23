@@ -83,6 +83,19 @@
                           {{ this.validation_error?.email[0] }}
                         </div>
                       </div>
+                      <div class="mt-3">
+                        <div class="flex items-center">
+                          <div class="pl-4">
+                            <a href="" class="font-medium">
+                              Darkmode
+                            </a>
+                            <div class="text-gray-600">
+                              Enable darkmode on all wiki pages
+                            </div>
+                          </div>
+                          <input class="form-check-switch ml-auto" type="checkbox" v-model='darkmode'>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <button type="submit" class="btn btn-primary w-20 mt-3">
@@ -135,6 +148,8 @@ import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
 import { useToast } from 'vue-toastification'
+import { useStore } from '@/store'
+
 const toast = useToast()
 
 export default defineComponent({
@@ -144,7 +159,8 @@ export default defineComponent({
   data() {
     return {
       user: {},
-      validation_error: {}
+      validation_error: {},
+      darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
     }
   },
   mounted() {
@@ -153,7 +169,16 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
+
+      const store = useStore()
       const loader = this.$loading.show()
+
+      localStorage.setItem('darkmode', this.darkmode)
+      this.darkmode
+        ? cash('html').addClass('dark')
+        : cash('html').removeClass('dark')
+      store.dispatch('main/setDarkMode', this.darkmode)
+
       axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
         name: this.user.name,
         pre_name: this.user.pre_name,
