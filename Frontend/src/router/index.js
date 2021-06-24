@@ -238,7 +238,7 @@ const routes = [
         name: 'admin.settings.security',
         component: SettingsSecurity,
         meta: {
-          title: 'Wiki Security',
+          title: 'Wiki Settings',
           auth: true,
           isAuth: false
         }
@@ -269,7 +269,7 @@ const routes = [
         name: 'moderation.tags',
         component: Tags,
         meta: {
-          title: 'Wiki Roles',
+          title: 'Wiki Tags',
           auth: true,
           isAuth: false
         }
@@ -331,7 +331,7 @@ const routes = [
     name: 'email-verify',
     component: EmailVerify,
     meta: {
-      title: 'EmailVerify',
+      title: 'Email Verify',
       auth: false,
       isAuth: false
     }
@@ -341,7 +341,7 @@ const routes = [
     name: 'password-forgot',
     component: ForgotPassword,
     meta: {
-      title: 'ForgotPassword',
+      title: 'Forgot Password',
       auth: false,
       isAuth: false
     }
@@ -351,7 +351,7 @@ const routes = [
     name: 'password-reset',
     component: ResetPassword,
     meta: {
-      title: 'ResetPassword',
+      title: 'Reset Password',
       auth: false,
       isAuth: false
     }

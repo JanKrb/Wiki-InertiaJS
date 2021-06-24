@@ -55,9 +55,10 @@
 
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
-          <a href="" class="">Application</a>
-          <ChevronRightIcon class="breadcrumb__icon" />
-          <a href="" class="breadcrumb--active">Dashboard</a>
+          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
+            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
+            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.name === this.$router.name"/>
+          </div>
         </div>
         <!-- END: Breadcrumb -->
         <!-- BEGIN: Search -->
@@ -376,7 +377,8 @@ export default defineComponent({
       notifications: [],
       loggedIn: false,
       wiki_name: process.env.VUE_APP_NAME,
-      wiki_logo: process.env.VUE_APP_LOGO
+      wiki_logo: process.env.VUE_APP_LOGO,
+      breadcrums: []
     }
   },
   computed: {
@@ -386,10 +388,18 @@ export default defineComponent({
       })
     }
   },
+  watch: {
+    $route(to, from) {
+      this.breadcrums = this.$route.matched
+    }
+  },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
     this.fetchNotifications()
+
+    this.breadcrums = this.$route.matched
+    console.log(this.$route.matched)
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
