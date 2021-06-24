@@ -13,6 +13,7 @@
               type="text"
               class="form-control w-56 box pr-10 placeholder-theme-13"
               placeholder="Search..."
+              v-model="this.search.ban"
             />
             <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
           </div>
@@ -20,7 +21,7 @@
       </div>
       <!-- BEGIN: Ban Layout -->
       <div
-        v-for="ban in this.bans"
+        v-for="ban in this.filteredBans"
         v-bind:key="ban.id"
         class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box"
       >
@@ -132,7 +133,17 @@ export default defineComponent({
   data() {
     return {
       pagination: {},
+      search: {
+        ban: ''
+      },
       bans: []
+    }
+  },
+  computed: {
+    filteredBans: function () {
+      return this.bans.filter((ban) => {
+        return ban?.reason.toLowerCase().match(this.search.ban.toLowerCase()) || ban?.description.toLowerCase().match(this.search.ban.toLowerCase()) || ban?.ban_until.toLowerCase().match(this.search.ban.toLowerCase()) || ban?.staff?.name.toLowerCase().match(this.search.ban.toLowerCase()) || ban?.target?.name.toLowerCase().match(this.search.ban.toLowerCase())
+      })
     }
   },
   mounted() {

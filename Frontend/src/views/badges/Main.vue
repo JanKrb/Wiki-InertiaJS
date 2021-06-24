@@ -3,6 +3,15 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Wiki Badges</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <div class="w-56 relative text-gray-700 dark:text-gray-300 mr">
+          <input
+            type="text"
+            class="form-control w-56 box pr-10 placeholder-theme-13"
+            placeholder="Search..."
+            v-model="this.search.badge"
+          />
+          <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
+        </div>
         <a href="javascript:;" data-toggle="modal" data-target="#create-badge-modal" class="btn btn-primary">Add New Badge</a>
       </div>
     </div>
@@ -161,7 +170,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="badge in this.badges" v-bind:key="badge.id">
+        <tr v-for="badge in this.filteredBadges" v-bind:key="badge.id">
           <td class="border-b dark:border-dark-5">{{ badge.title }}</td>
           <td class="border-b dark:border-dark-5"><span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ badge.color">{{ badge.color }}</span></td>
           <td class="border-b dark:border-dark-5"><component :is="badge.icon"/></td>
@@ -232,6 +241,9 @@ export default defineComponent({
         is_role_badge: 0,
         role_id: 0
       },
+      search: {
+        badge: ''
+      },
       badge: {
         name: 'New Badge',
         description: 'New Description',
@@ -248,6 +260,13 @@ export default defineComponent({
   mounted() {
     this.fetchBadges('http://localhost:8000/api/badges')
     this.fetchRoles('http://localhost:8000/api/roles')
+  },
+  computed: {
+    filteredBadges: function () {
+      return this.badges.filter((badge) => {
+        return badge?.title.toLowerCase().match(this.search.badge.toLowerCase()) || badge?.color.toLowerCase().match(this.search.badge.toLowerCase()) || badge?.icon.toLowerCase().match(this.search.badge.toLowerCase()) || badge?.user?.name.toLowerCase().match(this.search.badge.toLowerCase())
+      })
+    }
   },
   methods: {
     fetchBadges(page) {
