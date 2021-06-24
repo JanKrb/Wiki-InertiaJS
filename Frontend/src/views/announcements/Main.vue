@@ -97,6 +97,7 @@
               type="text"
               class="form-control w-56 box pr-10 placeholder-theme-13"
               placeholder="Search..."
+              v-model="this.search.announcement"
             />
             <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
           </div>
@@ -104,7 +105,7 @@
       </div>
       <!-- BEGIN: Ban Layout -->
       <div
-        v-for="announce in this.announcements"
+        v-for="announce in this.filteredAnnouncements"
         v-bind:key="announce.id"
         class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box"
       >
@@ -220,6 +221,9 @@ export default defineComponent({
         title: 'New Title',
         description: 'New Description'
       },
+      search: {
+        announcement: ''
+      },
       edit_announcement: {
         title: 'New Title',
         description: 'New Description'
@@ -229,6 +233,13 @@ export default defineComponent({
   },
   mounted() {
     this.fetchAnnouncements('http://localhost:8000/api/announcements')
+  },
+  computed: {
+    filteredAnnouncements: function () {
+      return this.announcements.filter((announcement) => {
+        return announcement?.title.toLowerCase().match(this.search.announcement.toLowerCase()) || announcement?.description.toLowerCase().match(this.search.announcement.toLowerCase()) || announcement?.user?.name.toLowerCase().match(this.search.announcement.toLowerCase()) || announcement?.created_at.toLowerCase().match(this.search.announcement.toLowerCase()) || announcement?.updated_at.toLowerCase().match(this.search.announcement.toLowerCase())
+      })
+    }
   },
   methods: {
     fetchAnnouncements(url) {
