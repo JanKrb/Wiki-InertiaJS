@@ -18,8 +18,7 @@
           <!-- BEGIN: Modal Body -->
           <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
             <div class="col-span-12">
-              <label for="create-tag-modal-description" class="form-label">Content:</label>
-              <textarea id="create-tag-modal-description" class="form-control" rows="10" :value="this.view_notification.content" disabled/>
+              <p>{{ this.view_notification.content }}</p>
             </div>
           </div>
           <!-- END: Modal Body -->
@@ -179,7 +178,7 @@
                 </div>
                 <div class="ml-2 overflow-hidden">
                   <div class="flex items-center">
-                    <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.view_notification = notification" class="font-medium truncate mr-5">
+                    <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
                     <div
@@ -416,6 +415,25 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+        })
+    },
+    viewNotification(notification) {
+      this.view_notification = notification
+      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+        title: notification.title,
+        color: notification.color,
+        content: notification.content,
+        type: notification.type,
+        icon: notification.icon,
+        seen: 1
+      })
+        .then(response => {
+          console.log(response)
+          this.fetchNotifications()
+        })
+        .catch(error => {
+          console.error(error)
+          console.log(error.response)
         })
     }
   },
