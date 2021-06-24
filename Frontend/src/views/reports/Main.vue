@@ -13,6 +13,7 @@
               type="text"
               class="form-control w-56 box pr-10 placeholder-theme-13"
               placeholder="Search..."
+              v-model="this.search.report"
             />
             <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
           </div>
@@ -20,7 +21,7 @@
       </div>
       <!-- BEGIN: Report Layout -->
       <div
-        v-for="report in this.reports"
+        v-for="report in this.filteredReports"
         v-bind:key="report.id"
         class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box"
       >
@@ -133,11 +134,21 @@ export default defineComponent({
   data() {
     return {
       pagination: {},
-      reports: []
+      reports: [],
+      search: {
+        report: ''
+      }
     }
   },
   mounted() {
     this.fetchReports('http://localhost:8000/api/posts/reports')
+  },
+  computed: {
+    filteredReports: function () {
+      return this.reports.filter((report) => {
+        return report?.content.toLowerCase().match(this.search.report.toLowerCase()) || report?.user?.name.toLowerCase().match(this.search.report.toLowerCase()) || report?.updated_at.toLowerCase().match(this.search.report.toLowerCase()) || report?.created_at.toLowerCase().match(this.search.report.toLowerCase())
+      })
+    }
   },
   methods: {
     fetchReports(url) {
