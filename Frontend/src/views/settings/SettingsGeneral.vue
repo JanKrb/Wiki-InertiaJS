@@ -6,13 +6,17 @@
     </div>
     <div class="col-span-12 lg:col-span-9 xxl:col-span-10">
       <div class="intro-y text-right items-center">
-        <button class="btn px-2 box text-gray-700 dark:text-gray-300">
+        <Tippy
+          tag="a"
+          href="javascript:;"
+          class="tooltip btn px-2 box text-gray-700 dark:text-gray-300"
+          content="These are the general wiki settings, here you can set your wiki data!"
+        >
           <span class="flex items-center justify-center">
             <InfoIcon class="w-5 h-5 mr-2"/>Informations
           </span>
-        </button>
+        </Tippy>
       </div>
-      <!-- END: Inbox Filter -->
       <!-- BEGIN: Inbox Content -->
       <div class="intro-y inbox box mt-5">
         <div class="p-5 flex flex-col-reverse sm:flex-row text-gray-600 border-b border-gray-200 dark:border-dark-1">
