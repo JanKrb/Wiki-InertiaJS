@@ -218,7 +218,7 @@ export default defineComponent({
   computed: {
     filteredAccounts: function () {
       return this.accounts.filter((account) => {
-        return account.name.match(this.search.account) || account.email.match(this.search.account) || account.pre_name.match(this.search.account) || account.last_name.match(this.search.account)
+        return account.name.toLowerCase().match(this.search.account.toLowerCase()) || account.email.toLowerCase().match(this.search.account.toLowerCase()) || account.pre_name.toLowerCase().match(this.search.account.toLowerCase()) || account.last_name.toLowerCase().match(this.search.account.toLowerCase())
       })
     }
   },
