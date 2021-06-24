@@ -11,7 +11,7 @@
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <div class="grid grid-cols-12 gap-6 mt-5">
           <div
-            v-for="post in this.posts"
+            v-for="post in this.postings"
             :key="post.id"
             class="intro-y col-span-12 md:col-span-6"
           >
@@ -28,9 +28,8 @@
                   <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
                   <div class="flex text-gray-600 truncate text-xs mt-0.5">
                     <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
-                      Categorie
+                      {{ post.created_at }}
                     </a>
-                    <span class="mx-1">•</span> {{ post.created_at }}
                   </div>
                 </div>
                 <div class="dropdown ml-3">
@@ -39,16 +38,9 @@
                   </a>
                   <div class="dropdown-menu w-40">
                     <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                      <router-link :to="{ name: 'admin.ban', params: { 'id': post.id }}">
-                        <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                          <FileIcon class="w-4 h-4 mr-2"/> View Post
-                        </a>
-                      </router-link>
-                      <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': post.id }}">
-                        <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                          <Edit2Icon class="w-4 h-4 mr-2"/> Edit Post
-                        </a>
-                      </router-link>
+                      <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                        <FileIcon class="w-4 h-4 mr-2"/> View Post
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -70,19 +62,20 @@
                     <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments > 0 ? post.comments : 0 }}
                   </div>
                   <div class="ml-auto">
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Not Verified</span></span>
+                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
+                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="this.posts.length <= 0" class="intro-y col-span-12">
+          <div v-if="this.postings.length <= 0" class="intro-y col-span-12">
             <div class="box">
               <div class="p-5 text-center">
                 <FolderIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
                 <div class="text-3xl mt-5">No recent Posts</div>
                 <div class="text-gray-600 mt-2 mb-5">
-                  This user have no Posts!
+                  You have no Posts, but you can create a new one!
                 </div>
               </div>
             </div>
@@ -110,6 +103,7 @@ export default defineComponent({
   data() {
     return {
       user: {},
+      postings: [],
       validation_error: {},
       darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
     }
@@ -152,12 +146,22 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
           this.user = response.data.data.user
-          localStorage.setItem('user', JSON.stringify(response.data.data.user))
           loader.hide()
+          this.fetchPostings(response.data.data.user.id)
         })
         .catch(error => {
           console.log(error)
           loader.hide()
+        })
+    },
+    fetchPostings(id) {
+      axios.get('http://localhost:8000/api/posts?user=' + id)
+        .then(response => {
+          console.log(response)
+          this.postings = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   }

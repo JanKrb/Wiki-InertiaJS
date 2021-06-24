@@ -28,7 +28,7 @@
                   </router-link>
                   <div class="flex text-gray-600 truncate text-xs mt-0.5">
                     <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
-                      Categorie
+                      Category
                     </a>
                     <span class="mx-1">•</span> {{ post.created_at }}
                   </div>
@@ -77,7 +77,17 @@
             </div>
           </div>
         </div>
-        <!-- END: Security / Passwords -->
+        <div v-if="this.posts.length <= 0" class="intro-y col-span-12">
+          <div class="box">
+            <div class="p-5 text-center">
+              <FolderIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
+              <div class="text-3xl mt-5">No recent Posts</div>
+              <div class="text-gray-600 mt-2 mb-5">
+                This user have no Posts!
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- END: Postings-->
     </div>
@@ -107,7 +117,6 @@ export default defineComponent({
   },
   mounted() {
     this.fetchUser(this.$route.params.id)
-    this.fetchPosts(1)
   },
   methods: {
     fetchUser(id) {
@@ -116,6 +125,7 @@ export default defineComponent({
         .then(response => {
           this.user = response.data.data
           loader.hide()
+          this.fetchPosts(id)
         })
         .catch(error => {
           console.error(error)
@@ -124,7 +134,7 @@ export default defineComponent({
         })
     },
     fetchPosts(id) {
-      axios.get('http://localhost:8000/api/posts')
+      axios.get('http://localhost:8000/api/posts?user=' + id)
         .then(response => {
           console.log(response)
           this.posts = response.data.data
