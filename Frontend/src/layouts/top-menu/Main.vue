@@ -3,6 +3,37 @@
     <DarkModeSwitcher />
 
     <MobileMenu />
+
+    <!-- BEGIN: View Notification Modal -->
+    <div id="view-notification-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- BEGIN: Modal Header -->
+          <div class="modal-header">
+            <h2 class="font-medium text-base mr-auto">
+              <component :is="this.view_notification.icon"></component> {{ this.view_notification.title }}
+            </h2>
+          </div>
+          <!-- END: Modal Header -->
+          <!-- BEGIN: Modal Body -->
+          <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+            <div class="col-span-12">
+              <label for="create-tag-modal-description" class="form-label">Content:</label>
+              <textarea id="create-tag-modal-description" class="form-control" rows="10" :value="this.view_notification.content" disabled/>
+            </div>
+          </div>
+          <!-- END: Modal Body -->
+          <!-- BEGIN: Modal Footer -->
+          <div class="modal-footer text-right">
+            <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
+              Close
+            </button>
+          </div>
+          <!-- END: Modal Footer -->
+        </div>
+      </div>
+    </div>
+    <!-- END: View Notification Modal -->
     <!-- BEGIN: Top Bar -->
     <div class="-mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-2">
       <div class="top-bar-boxed flex items-center">
@@ -119,11 +150,12 @@
         <!-- BEGIN: Notifications -->
         <div class="intro-x dropdown mr-4 sm:mr-6" v-show='this.loggedIn'>
           <div
-            class="dropdown-toggle notification notification--light notification--bullet cursor-pointer"
+            class="dropdown-toggle notification notification--light cursor-pointer"
+            :class="this.unseenNotifications.length > 0 ? 'notification--bullet' : ''"
             role="button"
             aria-expanded="false"
           >
-            <BellIcon class="notification__icon dark:text-gray-300" />
+            <BellIcon class="notification__icon dark:text-gray-300"/>
           </div>
           <div class="notification-content pt-2 dropdown-menu">
             <div
@@ -131,16 +163,15 @@
             >
               <div class="notification-content__title">Notifications</div>
               <div
-                v-for="(faker, fakerKey) in $_.take($f(), 5)"
-                :key="fakerKey"
-                class="cursor-pointer relative flex items-center"
-                :class="{ 'mt-5': fakerKey }"
+                v-for="notification in this.unseenNotifications"
+                v-bind:key="notification.id"
+                class="cursor-pointer relative flex items-center mb-3"
               >
                 <div class="w-12 h-12 flex-none image-fit mr-1">
                   <img
-                    alt="Icewall Tailwind HTML Admin Template"
+                    alt=""
                     class="rounded-full"
-                    :src="require(`@/assets/images/${faker.photos[0]}`)"
+                    :src="notification.user.profile_picture"
                   />
                   <div
                     class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"
@@ -148,17 +179,17 @@
                 </div>
                 <div class="ml-2 overflow-hidden">
                   <div class="flex items-center">
-                    <a href="javascript:;" class="font-medium truncate mr-5">
-                      {{ faker.users[0].name }}
+                    <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.view_notification = notification" class="font-medium truncate mr-5">
+                      {{ notification.title }}
                     </a>
                     <div
                       class="text-xs text-gray-500 ml-auto whitespace-nowrap"
                     >
-                      {{ faker.times[0] }}
+                      {{ notification.created_at }}
                     </div>
                   </div>
                   <div class="w-full truncate text-gray-600 mt-0.5">
-                    {{ faker.news[0].shortContent }}
+                    {{ notification.content }}
                   </div>
                 </div>
               </div>
@@ -310,7 +341,7 @@
     <!-- END: Top Menu -->
     <!-- BEGIN: Content -->
     <div class="content">
-      <router-view />
+      <router-view/>
     </div>
     <!-- END: Content -->
   </div>
@@ -342,14 +373,24 @@ export default defineComponent({
   data() {
     return {
       user: {},
+      view_notification: {},
+      notifications: [],
       loggedIn: false,
       wiki_name: process.env.VUE_APP_NAME,
       wiki_logo: process.env.VUE_APP_LOGO
     }
   },
+  computed: {
+    unseenNotifications: function () {
+      return this.notifications.filter((notification) => {
+        return notification.seen === 0
+      })
+    }
+  },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
+    this.fetchNotifications()
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
@@ -365,6 +406,16 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error.message)
+        })
+    },
+    fetchNotifications() {
+      axios.get('http://localhost:8000/api/users/' + this.user.id + '/notifications')
+        .then(response => {
+          this.notifications = response.data.data
+          console.log(response.data.data)
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   },
