@@ -29,6 +29,7 @@ import EmailVerify from '../views/email-verify/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
+import ProfilePostings from '../views/profile/ProfilePostings.vue'
 
 const routes = [
   {
@@ -66,6 +67,16 @@ const routes = [
         component: ProfileSecurity,
         meta: {
           title: 'Change Password',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'profile/postings',
+        name: 'profile.postings',
+        component: ProfilePostings,
+        meta: {
+          title: 'My Postings',
           auth: true,
           isAuth: false
         }
