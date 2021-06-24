@@ -100,6 +100,7 @@
               type="text"
               class="form-control w-56 box pr-10 placeholder-theme-13"
               placeholder="Search..."
+              v-model="this.search.account"
             />
             <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
           </div>
@@ -107,7 +108,7 @@
       </div>
       <!-- BEGIN: Users Layout -->
       <div
-        v-for="account in this.accounts"
+        v-for="account in this.filteredAccounts"
         v-bind:key="account.id"
         class="intro-y col-span-12 md:col-span-6"
       >
@@ -198,8 +199,11 @@ export default defineComponent({
   data() {
     return {
       pagination: {},
-      accounts: {},
+      accounts: [],
       validation_error: {},
+      search: {
+        account: ''
+      },
       account: {
         name: '',
         pre_name: '',
@@ -211,6 +215,13 @@ export default defineComponent({
       }
     }
   },
+  computed: {
+    filteredAccounts: function () {
+      return this.accounts.filter((account) => {
+        return account.name.match(this.search.account) || account.email.match(this.search.account) || account.pre_name.match(this.search.account) || account.last_name.match(this.search.account)
+      })
+    }
+  },
   mounted() {
     this.fetchAccounts('http://localhost:8000/api/users')
   },
@@ -219,7 +230,6 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get(url)
         .then(response => {
-          console.log(response)
           this.accounts = response.data.data
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
@@ -263,7 +273,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.validation_error = error.response.data.data.errors
-            toast.error('Action failed')
+            toast.error(error.response.data.message)
             loader.hide()
           })
       } else {
