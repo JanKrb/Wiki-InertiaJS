@@ -13,7 +13,7 @@
         </button>
       </div>
       <!-- END: Inbox Filter -->
-      <!-- BEGIN: Submit Database Modal -->
+      <!-- BEGIN: Submit Mail Modal -->
       <div
         id="submit-mail-modal"
         class="modal"
@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <!-- BEGIN: Submit Database Modal -->
+      <!-- END: Submit Mail Modal -->
       <!-- BEGIN: Database Settings -->
       <div class="intro-y inbox box mt-5">
         <div class="p-5 flex flex-col-reverse sm:flex-row text-gray-600 border-b border-gray-200 dark:border-dark-1">

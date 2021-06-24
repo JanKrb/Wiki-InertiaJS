@@ -21,6 +21,7 @@ import AccountBans from '../views/account/AccountBans.vue'
 import SettingsGeneral from '../views/settings/SettingsGeneral.vue'
 import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
 import SettingsMail from '../views/settings/SettingsMail.vue'
+import SettingsSecurity from '../views/settings/SettingsSecurity.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ForgotPassword from '../views/forgot-password/Main.vue'
@@ -228,6 +229,16 @@ const routes = [
         component: SettingsMail,
         meta: {
           title: 'Wiki Settings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'settings/security',
+        name: 'admin.settings.security',
+        component: SettingsSecurity,
+        meta: {
+          title: 'Wiki Security',
           auth: true,
           isAuth: false
         }

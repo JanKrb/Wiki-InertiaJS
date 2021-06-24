@@ -10,9 +10,11 @@
             <GlobeIcon class="w-4 h-4 mr-2"/> General
           </a>
         </router-link>
-        <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
-            <LockIcon class="w-4 h-4 mr-2"/> Security
-        </a>
+        <router-link :to="{ name: 'admin.settings.security' }">
+          <a :class="'flex items-center px-3 py-2 mt-2 rounded-md ' + (this.$route.name === 'admin.settings.security' ? 'bg-theme-20 dark:bg-dark-1 font-medium' : '')" href="">
+              <LockIcon class="w-4 h-4 mr-2"/> Security
+          </a>
+        </router-link>
         <router-link :to="{ name: 'admin.settings.database' }">
           <a :class="'flex items-center px-3 py-2 mt-2 rounded-md ' + (this.$route.name === 'admin.settings.database' ? 'bg-theme-20 dark:bg-dark-1 font-medium' : '')" href="">
               <DatabaseIcon class="w-4 h-4 mr-2"/> Database
