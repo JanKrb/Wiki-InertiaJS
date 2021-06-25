@@ -516,14 +516,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Notification System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('notifications', [NotificationController::class, 'index'])
+    Route::get('notifications', [NotificationController::class, 'get_all'])
         ->name('notifications.index')
         ->middleware(['permission:notifications_get_all'])
-    ;
-
-    Route::get('notifications/recent', [NotificationController::class, 'recent'])
-        ->name('notifications.recent')
-        ->middleware(['permission:notifications_get_recent'])
     ;
 
     Route::get('users/{user}/notifications', [NotificationController::class, 'get_users'])
@@ -531,12 +526,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_get_user'])
     ;
 
-    Route::get('notifications/{notification}', [NotificationController::class, 'show'])
+    Route::get('notifications/{notification}', [NotificationController::class, 'get_single'])
         ->name('notifications.get_single')
         ->middleware(['permission:notifications_get_single'])
     ;
 
-    Route::post('notifications', [NotificationController::class, 'create'])
+    Route::post('notifications', [NotificationController::class, 'store'])
         ->name('notifications.create')
         ->middleware(['permission:notifications_create'])
     ;
@@ -546,11 +541,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_update'])
     ;
 
-    Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])
+    Route::delete('notifications/{notification}', [NotificationController::class, 'delete'])
         ->name('notifications.destroy')
         ->middleware(['permission:notifications_destroy'])
     ;
+
+    Route::delete('notifications/{notification}/force', [NotificationController::class, 'force_delete'])
+        ->name('notifications.force_destroy')
+        ->middleware(['permission:notifications_force_destroy'])
+    ;
+
+    Route::post('notifications/{notification}/recover', [NotificationController::class, 'recover'])
+        ->name('notifications.recover')
+        ->middleware(['permission:notifications_recover'])
+    ;
 });
 
-Route::get('test', [TestController::class, 'get_all'])
-    ->name('testroute');
