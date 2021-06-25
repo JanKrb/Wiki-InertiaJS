@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\EnvironmentController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
+use App\Http\Controllers\API\Post\PostHistoryController;
 use App\Http\Controllers\API\Post\PostReportController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
@@ -430,6 +431,37 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('posts/reports/{report}', [PostReportController::class, 'destroy'])
         ->name('posts.report.destroy')
         ->middleware(['permission:posts_report_destroy'])
+    ;
+
+    // Post History
+    Route::get('posts/histories', [PostHistoryController::class, 'get_all'])
+        ->name('posts.histories.get_all')
+        ->middleware(['permission:posts_history_get_all'])
+    ;
+
+    Route::get('posts/{post}/histories', [PostHistoryController::class, 'get_posts'])
+        ->name('posts.histories.posts')
+        ->middleware(['permission:posts_history_get_posts'])
+    ;
+
+    Route::get('posts/histories/{history}', [PostHistoryController::class, 'get_single'])
+        ->name('posts.histories.show')
+        ->middleware(['permission:posts_history_get_single'])
+    ;
+
+    Route::delete('posts/histories/{history}', [PostHistoryController::class, 'delete'])
+        ->name('posts.histories.destroy')
+        ->middleware(['permission:posts_history_destroy'])
+    ;
+
+    Route::delete('posts/histories/{history}/force', [PostHistoryController::class, 'force_delete'])
+        ->name('posts.histories.force_destroy')
+        ->middleware(['permission:posts_history_force_destroy'])
+    ;
+
+    Route::post('posts/histories/{history}/recover', [PostHistoryController::class, 'recover'])
+        ->name('posts.histories.recover')
+        ->middleware(['permission:posts_history_recover'])
     ;
 
     // Posts
