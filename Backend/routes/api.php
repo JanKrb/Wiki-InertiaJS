@@ -17,6 +17,7 @@ use App\Http\Controllers\API\Permission\PermissionController;
 use App\Http\Controllers\API\Permission\RoleController;
 use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -464,9 +465,14 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Announcement System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('announcements', [AnnouncementController::class, 'index'])
+    Route::get('announcements', [AnnouncementController::class, 'get_all'])
         ->name('announcements.index')
         ->middleware(['permission:announcements_get_all'])
+    ;
+
+    Route::get('announcements/{announcement}', [announcementController::class, 'get_single'])
+        ->name('announcements.show')
+        ->middleware(['permission:announcements_get_single'])
     ;
 
     Route::post('announcements', [AnnouncementController::class, 'store'])
@@ -479,14 +485,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:announcements_update'])
     ;
 
-    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'delete'])
         ->name('announcements.destroy')
         ->middleware(['permission:announcements_destroy'])
     ;
 
-    Route::get('announcements/{announcement}', [announcementController::class, 'show'])
-        ->name('announcements.show')
-        ->middleware(['permission:announcements_get_single'])
+    Route::delete('announcements/{announcement}/force', [AnnouncementController::class, 'force_delete'])
+        ->name('announcements.force_destroy')
+        ->middleware(['permission:announcements_force_destroy'])
+    ;
+
+    Route::post('announcements/{announcement}/recover', [AnnouncementController::class, 'recover'])
+        ->name('announcements.recover')
+        ->middleware(['permission:announcements_recover'])
     ;
 });
 
@@ -540,3 +551,6 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_destroy'])
     ;
 });
+
+Route::get('test', [TestController::class, 'get_all'])
+    ->name('testroute');
