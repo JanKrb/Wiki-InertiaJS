@@ -3,7 +3,16 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Wiki Permissions</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <a href="javascript:;" data-toggle="modal" data-target="#create-permission-modal" class="btn btn-primary">Add New Permission</a>
+        <div class="w-56 relative text-gray-700 dark:text-gray-300 mr-3">
+          <input
+            type="text"
+            class="form-control w-56 box pr-10 placeholder-theme-13"
+            placeholder="Search..."
+            v-model="this.search.permission"
+          />
+          <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
+        </div>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-permission-modal" class="btn btn-primary">Create new Permission</a>
       </div>
     </div>
     <!-- BEGIN: Create Permission Modal -->
@@ -88,7 +97,7 @@
       </tr>
       </thead>
       <tbody>
-        <tr v-for="permission in this.permissions" v-bind:key="permission.id">
+        <tr v-for="permission in this.filteredPermissions" v-bind:key="permission.id">
           <td class="border-b dark:border-dark-5">{{ permission.id }}</td>
           <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
           <td class="border-b dark:border-dark-5">{{ permission.updated_at }}</td>
@@ -149,6 +158,9 @@ export default defineComponent({
       permission: {
         name: 'New Permission'
       },
+      search: {
+        permission: ''
+      },
       pagination: {},
       validation_error: {}
     }
@@ -156,13 +168,19 @@ export default defineComponent({
   mounted() {
     this.fetchPermissions('http://localhost:8000/api/permissions')
   },
+  computed: {
+    filteredPermissions: function () {
+      return this.permissions.filter((permission) => {
+        return permission?.name.toLowerCase().match(this.search.permission.toLowerCase())
+      })
+    }
+  },
   methods: {
     fetchPermissions(page) {
       const loader = this.$loading.show()
       axios.get(page)
         .then(response => {
           this.permissions = response.data.data
-          console.log(response)
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })

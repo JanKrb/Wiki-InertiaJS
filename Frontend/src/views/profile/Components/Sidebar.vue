@@ -27,6 +27,11 @@
             <LockIcon class="w-4 h-4 mr-2"/> Change Password
           </a>
         </router-link>
+        <router-link :to="{ name: 'profile.postings' }">
+          <a :class="'flex items-center ' + (this.$route.name === 'profile.postings' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
+            <FolderIcon class="w-4 h-4 mr-2"/> My Postings
+          </a>
+        </router-link>
       </div>
       <div class="p-5 border-t border-gray-200 dark:border-dark-5">
         <a class="flex items-center" href="">

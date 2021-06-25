@@ -6,14 +6,18 @@
     </div>
     <div class="col-span-12 lg:col-span-9 xxl:col-span-10">
       <div class="intro-y text-right items-center">
-        <button class="btn px-2 box text-gray-700 dark:text-gray-300">
+        <Tippy
+          tag="a"
+          href="javascript:;"
+          class="tooltip btn px-2 box text-gray-700 dark:text-gray-300"
+          content="This is the mail wiki settings, here you can change connection settings to the mail server. Please be careful what you do, because these settings can damage your system!"
+        >
           <span class="flex items-center justify-center">
             <InfoIcon class="w-5 h-5 mr-2"/>Informations
           </span>
-        </button>
+        </Tippy>
       </div>
-      <!-- END: Inbox Filter -->
-      <!-- BEGIN: Submit Database Modal -->
+      <!-- BEGIN: Submit Mail Modal -->
       <div
         id="submit-mail-modal"
         class="modal"
@@ -42,7 +46,7 @@
           </div>
         </div>
       </div>
-      <!-- BEGIN: Submit Database Modal -->
+      <!-- END: Submit Mail Modal -->
       <!-- BEGIN: Database Settings -->
       <div class="intro-y inbox box mt-5">
         <div class="p-5 flex flex-col-reverse sm:flex-row text-gray-600 border-b border-gray-200 dark:border-dark-1">

@@ -3,6 +3,15 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Wiki Roles</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <div class="w-56 relative text-gray-700 dark:text-gray-300 mr-3">
+          <input
+            type="text"
+            class="form-control w-56 box pr-10 placeholder-theme-13"
+            placeholder="Search..."
+            v-model="this.search.role"
+          />
+          <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
+        </div>
         <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Role</a>
       </div>
     </div>
@@ -107,7 +116,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="role in this.roles" v-bind:key="role.id">
+        <tr v-for="role in this.filteredRoles" v-bind:key="role.id">
           <td class="border-b dark:border-dark-5">{{ role.id }}</td>
           <td class="border-b dark:border-dark-5">{{ role.name }}</td>
           <td class="border-b dark:border-dark-5">{{ role.description }}</td>
@@ -179,12 +188,22 @@ export default defineComponent({
         description: null,
         color: '#000000'
       },
+      search: {
+        role: ''
+      },
       pagination: {},
       validation_error: {}
     }
   },
   mounted() {
     this.fetchRoles('http://localhost:8000/api/roles')
+  },
+  computed: {
+    filteredRoles: function () {
+      return this.roles.filter((role) => {
+        return role?.name?.toLowerCase().match(this.search.role.toLowerCase()) || role?.color?.toLowerCase().match(this.search.role.toLowerCase()) || role?.description?.toLowerCase().match(this.search.role.toLowerCase())
+      })
+    }
   },
   methods: {
     fetchRoles(page) {

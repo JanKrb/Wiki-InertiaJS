@@ -21,6 +21,7 @@ import AccountBans from '../views/account/AccountBans.vue'
 import SettingsGeneral from '../views/settings/SettingsGeneral.vue'
 import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
 import SettingsMail from '../views/settings/SettingsMail.vue'
+import SettingsSecurity from '../views/settings/SettingsSecurity.vue'
 import Login from '../views/login/Main.vue'
 import Register from '../views/register/Main.vue'
 import ForgotPassword from '../views/forgot-password/Main.vue'
@@ -29,6 +30,7 @@ import EmailVerify from '../views/email-verify/Main.vue'
 import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
+import ProfilePostings from '../views/profile/ProfilePostings.vue'
 
 const routes = [
   {
@@ -66,6 +68,16 @@ const routes = [
         component: ProfileSecurity,
         meta: {
           title: 'Change Password',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'profile/postings',
+        name: 'profile.postings',
+        component: ProfilePostings,
+        meta: {
+          title: 'My Postings',
           auth: true,
           isAuth: false
         }
@@ -222,6 +234,16 @@ const routes = [
         }
       },
       {
+        path: 'settings/security',
+        name: 'admin.settings.security',
+        component: SettingsSecurity,
+        meta: {
+          title: 'Wiki Settings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
         path: 'badges',
         name: 'admin.badges',
         component: Badges,
@@ -247,7 +269,7 @@ const routes = [
         name: 'moderation.tags',
         component: Tags,
         meta: {
-          title: 'Wiki Roles',
+          title: 'Wiki Tags',
           auth: true,
           isAuth: false
         }
@@ -309,7 +331,7 @@ const routes = [
     name: 'email-verify',
     component: EmailVerify,
     meta: {
-      title: 'EmailVerify',
+      title: 'Email Verify',
       auth: false,
       isAuth: false
     }
@@ -319,7 +341,7 @@ const routes = [
     name: 'password-forgot',
     component: ForgotPassword,
     meta: {
-      title: 'ForgotPassword',
+      title: 'Forgot Password',
       auth: false,
       isAuth: false
     }
@@ -329,7 +351,7 @@ const routes = [
     name: 'password-reset',
     component: ResetPassword,
     meta: {
-      title: 'ResetPassword',
+      title: 'Reset Password',
       auth: false,
       isAuth: false
     }
