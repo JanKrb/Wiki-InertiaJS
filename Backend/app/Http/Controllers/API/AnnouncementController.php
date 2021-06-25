@@ -6,7 +6,6 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\AnnouncementCollection;
 use App\Models\Announcement;
 use App\Http\Resources\Announcement as AnnouncementResource;
-use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends BaseController
 {
