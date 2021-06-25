@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\EnvironmentController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
+use App\Http\Controllers\API\Post\PostHistoryController;
 use App\Http\Controllers\API\Post\PostReportController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\API\Permission\PermissionController;
 use App\Http\Controllers\API\Permission\RoleController;
 use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -431,18 +433,44 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_report_destroy'])
     ;
 
+    // Post History
+    Route::get('posts/histories', [PostHistoryController::class, 'get_all'])
+        ->name('posts.histories.get_all')
+        ->middleware(['permission:posts_history_get_all'])
+    ;
+
+    Route::get('posts/{post}/histories', [PostHistoryController::class, 'get_posts'])
+        ->name('posts.histories.posts')
+        ->middleware(['permission:posts_history_get_posts'])
+    ;
+
+    Route::get('posts/histories/{history}', [PostHistoryController::class, 'get_single'])
+        ->name('posts.histories.show')
+        ->middleware(['permission:posts_history_get_single'])
+    ;
+
+    Route::delete('posts/histories/{history}', [PostHistoryController::class, 'delete'])
+        ->name('posts.histories.destroy')
+        ->middleware(['permission:posts_history_destroy'])
+    ;
+
+    Route::delete('posts/histories/{history}/force', [PostHistoryController::class, 'force_delete'])
+        ->name('posts.histories.force_destroy')
+        ->middleware(['permission:posts_history_force_destroy'])
+    ;
+
+    Route::post('posts/histories/{history}/recover', [PostHistoryController::class, 'recover'])
+        ->name('posts.histories.recover')
+        ->middleware(['permission:posts_history_recover'])
+    ;
+
     // Posts
-    Route::get('posts', [PostController::class, 'index'])
+    Route::get('posts', [PostController::class, 'get_all'])
         ->name('posts.index')
         ->middleware(['permission:posts_get_all'])
     ;
 
-    Route::get('posts/recent', [PostController::class, 'recent_posts'])
-        ->name('posts.recent')
-        ->middleware(['permission:posts_recent'])
-    ;
-
-    Route::get('posts/{post}', [PostController::class, 'show'])
+    Route::get('posts/{post}', [PostController::class, 'get_single'])
         ->name('posts.show')
         ->middleware(['permission:posts_get_single'])
     ;
@@ -456,17 +484,32 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('posts.update')
     ;
 
-    Route::delete('posts/{post}', [PostController::class, 'destroy'])
+    Route::delete('posts/{post}', [PostController::class, 'delete'])
         ->name('posts.destroy')
         ->middleware(['permission:posts_destroy'])
+    ;
+
+    Route::delete('posts/{post}/force', [PostController::class, 'force_delete'])
+        ->name('posts.force_destroy')
+        ->middleware(['permission:posts_force_destroy'])
+    ;
+
+    Route::post('posts/{post}/recover', [PostController::class, 'recover'])
+        ->name('posts.recover')
+        ->middleware(['permission:posts_recover'])
     ;
 });
 
 // Announcement System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('announcements', [AnnouncementController::class, 'index'])
+    Route::get('announcements', [AnnouncementController::class, 'get_all'])
         ->name('announcements.index')
         ->middleware(['permission:announcements_get_all'])
+    ;
+
+    Route::get('announcements/{announcement}', [announcementController::class, 'get_single'])
+        ->name('announcements.show')
+        ->middleware(['permission:announcements_get_single'])
     ;
 
     Route::post('announcements', [AnnouncementController::class, 'store'])
@@ -479,14 +522,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:announcements_update'])
     ;
 
-    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'delete'])
         ->name('announcements.destroy')
         ->middleware(['permission:announcements_destroy'])
     ;
 
-    Route::get('announcements/{announcement}', [announcementController::class, 'show'])
-        ->name('announcements.show')
-        ->middleware(['permission:announcements_get_single'])
+    Route::delete('announcements/{announcement}/force', [AnnouncementController::class, 'force_delete'])
+        ->name('announcements.force_destroy')
+        ->middleware(['permission:announcements_force_destroy'])
+    ;
+
+    Route::post('announcements/{announcement}/recover', [AnnouncementController::class, 'recover'])
+        ->name('announcements.recover')
+        ->middleware(['permission:announcements_recover'])
     ;
 });
 
@@ -505,14 +553,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Notification System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('notifications', [NotificationController::class, 'index'])
+    Route::get('notifications', [NotificationController::class, 'get_all'])
         ->name('notifications.index')
         ->middleware(['permission:notifications_get_all'])
-    ;
-
-    Route::get('notifications/recent', [NotificationController::class, 'recent'])
-        ->name('notifications.recent')
-        ->middleware(['permission:notifications_get_recent'])
     ;
 
     Route::get('users/{user}/notifications', [NotificationController::class, 'get_users'])
@@ -520,12 +563,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_get_user'])
     ;
 
-    Route::get('notifications/{notification}', [NotificationController::class, 'show'])
+    Route::get('notifications/{notification}', [NotificationController::class, 'get_single'])
         ->name('notifications.get_single')
         ->middleware(['permission:notifications_get_single'])
     ;
 
-    Route::post('notifications', [NotificationController::class, 'create'])
+    Route::post('notifications', [NotificationController::class, 'store'])
         ->name('notifications.create')
         ->middleware(['permission:notifications_create'])
     ;
@@ -535,8 +578,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_update'])
     ;
 
-    Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])
+    Route::delete('notifications/{notification}', [NotificationController::class, 'delete'])
         ->name('notifications.destroy')
         ->middleware(['permission:notifications_destroy'])
     ;
+
+    Route::delete('notifications/{notification}/force', [NotificationController::class, 'force_delete'])
+        ->name('notifications.force_destroy')
+        ->middleware(['permission:notifications_force_destroy'])
+    ;
+
+    Route::post('notifications/{notification}/recover', [NotificationController::class, 'recover'])
+        ->name('notifications.recover')
+        ->middleware(['permission:notifications_recover'])
+    ;
 });
+

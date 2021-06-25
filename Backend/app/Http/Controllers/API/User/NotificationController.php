@@ -8,23 +8,27 @@ use App\Http\Resources\Notification as NotificationResource;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends BaseController
 {
-    public function index(Request $request) {
-        $per_page = $request->get('per_page', 15);
-        return (new NotificationCollection(Notification::paginate($per_page)))->additional([
-            'success' => true,
-            'message' => 'Successfully retrieved notifications'
-        ]);
-    }
+    protected $model = Notification::class;
+    protected $resource = NotificationResource::class;
+    protected $collection = NotificationCollection::class;
 
-    public function recent(Request $request) {
-        $max = $request->get('max', 5);
-        $notifications = Notification::all()->sortBy('updated_at', SORT_ASC)->take($max);
-        return $this->sendResponse(new NotificationCollection($notifications), 'Recent notifications has been retrieved successfully');
-    }
+    protected $validations_create = [
+        'title' => 'required|max:255',
+        'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
+        'content' => 'required',
+        'type' => 'required|integer',
+        'icon' => 'required_if:type,1',
+        'target_user' => 'required_if:type,2',
+        'seen' => 'boolean'
+    ];
+
+    protected $validations_update = [
+        'title' => 'string|max:255',
+        'description' => 'string'
+    ];
 
     public function get_users(Request $request, $user_id) {
         $user = User::find($user_id);
@@ -39,100 +43,5 @@ class NotificationController extends BaseController
             'success' => true,
             'message' => 'Successfully retrieved user notifications'
         ]);
-    }
-
-    public function show(Request $request, $notification_id) {
-        $notify = Notification::find($notification_id);
-
-        if (is_null($notify)) {
-            return $this->sendError('Notification does not exists.');
-        }
-
-        return $this->sendResponse(new NotificationResource($notify), 'Notification retrieved successfully.');
-    }
-
-    public function create(Request $request) {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'title' => 'required|max:255',
-            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
-            'content' => 'required',
-            'type' => 'required|integer',
-            'icon' => 'required_if:type,1|max:255',
-            'target_user' => 'required_if:type,2|integer|exists:users,id'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
-        }
-
-        $input['user_id'] = auth()->user()->id;
-
-        $notify = Notification::create($input);
-
-        return $this->sendResponse(new NotificationResource($notify), 'Notification successfully created.');
-    }
-
-    public function update(Request $request, $notification_id) {
-        $notify = Notification::find($notification_id);
-
-        if (is_null($notify)) {
-            return $this->sendError('Notification does not exists.');
-        }
-
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'title' => 'required|max:255',
-            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
-            'content' => 'required',
-            'type' => 'required|integer',
-            'icon' => 'required_if:type,1',
-            'target_user' => 'required_if:type,2',
-            'seen' => 'boolean'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
-        }
-
-        $notify->title = $input['title'];
-        $notify->color = $input['color'];
-        $notify->content = $input['content'];
-        $notify->type = $input['type'];
-
-        if ($input['type']  == 1) {
-            $notify->icon = $input['icon'];
-        } else {
-            $notify->target_user = $input['target_user'];
-        }
-
-        $notify->seen = $input['seen'];
-
-        if ($request->has('icon')) {
-            $notify->icon = $input['icon'];
-        }
-
-
-        if ($request->has('target_user')) {
-            $notify->target_user = $input['target_user'];
-        }
-
-        $notify->save();
-
-        return $this->sendResponse(new NotificationResource($notify), 'Notification successfully updated.');
-    }
-
-    public function destroy($notification_id) {
-        $notify = Notification::find($notification_id);
-
-        if (is_null($notify)) {
-            return $this->sendError('Notification does not exists.');
-        }
-
-        $notify->delete();
-
-        return $this->sendResponse([], 'Notification soft-deleted successfully.');
     }
 }
