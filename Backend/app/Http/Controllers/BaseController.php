@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Validator;
 
 class BaseController extends Controller
 {
-    protected string $model;
-    protected string $resource;
-    protected string $collection;
+    protected $model;
+    protected $resource;
+    protected $collection;
 
     protected $validations_create = [];
     protected $validations_update = [];
     protected $additionalCreateData = [];
+
+    public function __construct() {}
 
     /**
      * Success response method.
@@ -79,8 +81,8 @@ class BaseController extends Controller
             'per_page' => 'integer',
             'paginate' => 'boolean',
             'sort' => 'array',
-            'sort.column' => 'integer|required_with:sort',
-            'sort.method' => 'string|regex:(asc|desc)|required_with:sort',
+            'sort.column' => 'string|required_with:sort',
+            'sort.method' => 'integer|required_with:sort',
             'additional' => 'array',
             'recent' => 'integer'
         ]);
@@ -100,7 +102,10 @@ class BaseController extends Controller
         }
 
         if ($request->has('sort')) {
-            $data = $data->sortBy($request->get('sort.column', 'id'), $request->get('sort.method', 3));
+            $data = $data->sortBy(
+                $request->get('sort.column', 'id'),
+                $request->get('sort.method', SORT_ASC)
+            );
         }
 
         if ($paginate_data) {
@@ -131,13 +136,12 @@ class BaseController extends Controller
     public function get_single(Request $request, int $id)
     {
         $item = $this->model::find($id);
-
         if (is_null($item)) {
             return $this->sendError('Item does not exists.');
         }
 
         $response = new $this->resource($item);
-        $this->sendResponse($response, 'Successfully fetched item');
+        return $this->sendResponse($response, 'Successfully fetched item');
     }
 
     /**
@@ -161,7 +165,7 @@ class BaseController extends Controller
         }
 
         $response = new $this->resource($created_object);
-        $this->sendResponse($response, 'Successfully stored item');
+        return $this->sendResponse($response, 'Successfully stored item');
     }
 
     /**
@@ -226,7 +230,7 @@ class BaseController extends Controller
      */
     public function force_delete(Request $request, int $id)
     {
-        $item = $this->model::find($id);
+        $item = $this->model::withTrashed()->find($id);
 
         if (is_null($item)) {
             return $this->sendError('Item does not exists.');
@@ -246,13 +250,13 @@ class BaseController extends Controller
      * @param int $id
      */
     public function recover(Request $request, int $id) {
-        $item = $this->model::find($id);
+        $item = $this->model::withTrashed()->find($id);
 
         if (is_null($item)) {
             return $this->sendError('Item does not exists.');
         }
 
-        $item->recover();
+        $item->restore();
         $response = (new $this->resource($item));
 
         return $this->sendResponse($response, 'Item recovered successfully.');
