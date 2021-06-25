@@ -376,8 +376,8 @@ export default defineComponent({
       view_notification: {},
       notifications: [],
       loggedIn: false,
-      wiki_name: process.env.VUE_APP_NAME,
-      wiki_logo: process.env.VUE_APP_LOGO,
+      wiki_name: this.$config.name,
+      wiki_logo: this.$config.logo,
       breadcrums: []
     }
   },
