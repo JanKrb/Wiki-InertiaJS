@@ -23,14 +23,4 @@ class AnnouncementController extends BaseController
         'title' => 'string|max:255',
         'description' => 'string'
     ];
-
-    public function __construct() {
-        $this->middleware(function ($request, $next) {
-            $this->additionalCreateData = [
-                'user_id' => Auth::user()->id
-            ];
-
-            return $next($request);
-        });
-    }
 }

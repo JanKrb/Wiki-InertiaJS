@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BaseController extends Controller
@@ -16,7 +17,15 @@ class BaseController extends Controller
     protected $validations_update = [];
     protected $additionalCreateData = [];
 
-    public function __construct() {}
+    public function __construct() {
+        $this->middleware(function ($request, $next) {
+            $this->additionalCreateData = [
+                'user_id' => Auth::user()->id
+            ];
+
+            return $next($request);
+        });
+    }
 
     /**
      * Success response method.
@@ -35,7 +44,6 @@ class BaseController extends Controller
 
         return response()->json($response, 200);
     }
-
 
     /**
      * Return error response.
