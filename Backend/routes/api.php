@@ -433,17 +433,12 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 
     // Posts
-    Route::get('posts', [PostController::class, 'index'])
+    Route::get('posts', [PostController::class, 'get_all'])
         ->name('posts.index')
         ->middleware(['permission:posts_get_all'])
     ;
 
-    Route::get('posts/recent', [PostController::class, 'recent_posts'])
-        ->name('posts.recent')
-        ->middleware(['permission:posts_recent'])
-    ;
-
-    Route::get('posts/{post}', [PostController::class, 'show'])
+    Route::get('posts/{post}', [PostController::class, 'get_single'])
         ->name('posts.show')
         ->middleware(['permission:posts_get_single'])
     ;
@@ -457,9 +452,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('posts.update')
     ;
 
-    Route::delete('posts/{post}', [PostController::class, 'destroy'])
+    Route::delete('posts/{post}', [PostController::class, 'delete'])
         ->name('posts.destroy')
         ->middleware(['permission:posts_destroy'])
+    ;
+
+    Route::delete('posts/{post}/force', [PostController::class, 'force_delete'])
+        ->name('posts.force_destroy')
+        ->middleware(['permission:posts_force_destroy'])
+    ;
+
+    Route::post('posts/{post}/recover', [PostController::class, 'recover'])
+        ->name('posts.recover')
+        ->middleware(['permission:posts_recover'])
     ;
 });
 
