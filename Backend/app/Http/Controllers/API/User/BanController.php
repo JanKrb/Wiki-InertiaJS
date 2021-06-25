@@ -34,7 +34,7 @@ class BanController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $input['staff_id'] = auth()->user()->id;
@@ -71,7 +71,7 @@ class BanController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $ban->target_id = $input['target_id'];

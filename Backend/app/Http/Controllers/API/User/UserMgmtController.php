@@ -27,7 +27,7 @@ class UserMgmtController extends BaseController
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         return $this->sendResponse(new UserResource($account, true), 'Successfully fetched user details.');
@@ -47,13 +47,13 @@ class UserMgmtController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         if ($request->has('verify_mail')) {
@@ -80,7 +80,7 @@ class UserMgmtController extends BaseController
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         $response = Password::sendResetLink([
@@ -97,7 +97,7 @@ class UserMgmtController extends BaseController
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         $account->sendEmailVerificationNotification();
@@ -110,7 +110,7 @@ class UserMgmtController extends BaseController
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         $validator = Validator::make($request->all(), [
@@ -118,7 +118,7 @@ class UserMgmtController extends BaseController
         ]);
 
         if ($validator->fails()){
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $account->password = Hash::make($request->input('password'));
@@ -132,7 +132,7 @@ class UserMgmtController extends BaseController
         $account = User::find($account_id);
 
         if (is_null($account)) {
-            return $this->sendError('Invallid user', ['user_id' => $account_id]);
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
         $account->delete();

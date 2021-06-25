@@ -30,7 +30,7 @@ class PermissionController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $input['user_id'] = auth()->user()->id;
@@ -57,7 +57,7 @@ class PermissionController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $permission->name = $input['name'];
@@ -81,7 +81,7 @@ class PermissionController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $response = [];

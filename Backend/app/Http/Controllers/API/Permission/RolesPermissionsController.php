@@ -42,7 +42,7 @@ class RolesPermissionsController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $permission = Permission::where('name', $input['name'])->first();

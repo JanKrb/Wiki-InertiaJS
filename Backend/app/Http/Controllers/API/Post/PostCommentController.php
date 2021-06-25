@@ -63,7 +63,7 @@ class PostCommentController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $input['post_id'] = $post_id;
@@ -87,7 +87,7 @@ class PostCommentController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()]);
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
         $comment->content = $input['content'];
