@@ -102,6 +102,14 @@ class NotificationController extends BaseController
         $notify->content = $input['content'];
         $notify->type = $input['type'];
 
+        if ($input['type']  == 1) {
+            $notify->icon = $input['icon'];
+        } else {
+            $notify->target_user = $input['target_user'];
+        }
+
+        $notify->seen = $input['seen'];
+
         if ($request->has('icon')) {
             $notify->icon = $input['icon'];
         }
