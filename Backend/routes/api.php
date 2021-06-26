@@ -274,12 +274,12 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // User Management System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('users', [UserMgmtController::class, 'index'])
+    Route::get('users', [UserMgmtController::class, 'get_all'])
         ->name('users.index')
         ->middleware(['permission:users_get_all'])
     ;
 
-    Route::get('users/{user}', [UserMgmtController::class, 'show'])
+    Route::get('users/{user}', [UserMgmtController::class, 'get_single'])
         ->name('users.show')
         ->middleware(['permission:users_get_single'])
     ;
@@ -304,9 +304,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:users_change_password'])
     ;
 
-    Route::post('users/{user}/delete', [UserMgmtController::class, 'delete'])
+    Route::delete('users/{user}', [UserMgmtController::class, 'delete'])
         ->name('users.delete')
         ->middleware(['permission:users_delete'])
+    ;
+
+    Route::delete('users/{user}/force', [UserMgmtController::class, 'force_delete'])
+        ->name('users.force_delete')
+        ->middleware(['permission:users_force_delete'])
+    ;
+
+    Route::post('users/{user}/recover', [UserMgmtController::class, 'recover'])
+        ->name('users.recover')
+        ->middleware(['permission:users_recover'])
     ;
 });
 

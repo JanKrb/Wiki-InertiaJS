@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -13,26 +13,11 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Str;
 
-class UserMgmtController extends Controller
+class UserMgmtController extends BaseController
 {
-    public function index(Request $request)
-    {
-        $per_page = $request->get('per_page', 15);
-        return (new UserCollection(User::paginate($per_page)))->additional([
-            'success' => true,
-            'message' => 'Successfully retrieved users'
-        ]);
-    }
-
-    public function show(Request $request, $account_id) {
-        $account = User::find($account_id);
-
-        if (is_null($account)) {
-            return $this->sendError('Invalid user', ['user_id' => $account_id]);
-        }
-
-        return $this->sendResponse(new UserResource($account, true), 'Successfully fetched user details.');
-    }
+    protected $model = User::class;
+    protected $resource = UserResource::class;
+    protected $collection = UserCollection::class;
 
     public function update(Request $request, $account_id)
     {
@@ -77,7 +62,8 @@ class UserMgmtController extends Controller
         return $this->sendResponse(new UserResource($account, true), 'Successfully updated user details.');
     }
 
-    public function sendPasswordResetNotification(Request $request, $account_id) {
+    public function sendPasswordResetNotification(Request $request, $account_id): JsonResponse
+    {
         $account = User::find($account_id);
 
         if (is_null($account)) {
@@ -94,7 +80,8 @@ class UserMgmtController extends Controller
         return $this->sendResponse([], $message);
     }
 
-    public function sendEmailVerificationNotification(Request $request, $account_id) {
+    public function sendEmailVerificationNotification(Request $request, $account_id): JsonResponse
+    {
         $account = User::find($account_id);
 
         if (is_null($account)) {
@@ -127,17 +114,5 @@ class UserMgmtController extends Controller
         $account->sendActivity('Password has been changed', 'The account\'s password has been changed trough an admin', $account);
 
         return $this->sendResponse([], 'Password changed successfully');
-    }
-
-    public function delete(Request $request, $account_id) {
-        $account = User::find($account_id);
-
-        if (is_null($account)) {
-            return $this->sendError('Invalid user', ['user_id' => $account_id]);
-        }
-
-        $account->delete();
-
-        return $this->sendResponse([], 'Account soft-deleted successfully.');
     }
 }
