@@ -155,8 +155,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Badges System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('badges', [BadgeController::class, 'index'])
-        ->name('badges.index')
+    Route::get('badges', [BadgeController::class, 'get_all'])
+        ->name('badges.get_all')
         ->middleware(['permission:badges_get_all'])
     ;
 
@@ -175,8 +175,18 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:badges_delete'])
     ;
 
-    Route::get('badges/{badge}', [BadgeController::class, 'show'])
-        ->name('badges.show')
+    Route::delete('badges/{badge}/force', [BadgeController::class, 'force_delete'])
+        ->name('badges.force_delete')
+        ->middleware(['permission:badges_force_delete'])
+    ;
+
+    Route::post('badges/{badge}/recover', [BadgeController::class, 'recover'])
+        ->name('badges.recover')
+        ->middleware(['permission:badges_recover'])
+    ;
+
+    Route::get('badges/{badge}', [BadgeController::class, 'get_single'])
+        ->name('badges.get_single')
         ->middleware(['permission:badges_get_single'])
     ;
 
