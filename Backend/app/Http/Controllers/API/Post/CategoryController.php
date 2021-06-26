@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\Category as CategoryResource;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
 use App\Http\Resources\StructuredCategoryCollection;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 class CategoryController extends BaseController
 {
     protected $model = Category::class;
-    protected $resource = StructuredCategoryResource::class;
+    protected $resource = CategoryResource::class;
     protected $collection = CategoryCollection::class;
 
     protected $validations_create = [
