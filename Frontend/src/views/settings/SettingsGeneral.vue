@@ -24,7 +24,7 @@
         </div>
         <div class="overflow-x-auto sm:overflow-x-visible">
           <div class="intro-y p-5">
-            <form @submit.prevent="">
+            <form @submit.prevent="saveSettings">
               <div class="flex flex-col-reverse xl:flex-row flex-col">
                 <div class="flex-1 mt-6 xl:mt-0">
                   <div class="grid grid-cols-12 gap-x-5">
@@ -38,6 +38,7 @@
                           type="text"
                           class="form-control"
                           placeholder="Enter Wiki-Name"
+                          v-model='settings.name'
                         />
                       </div>
                       <div class="mt-3 xxl:mt-5">
@@ -49,6 +50,7 @@
                           type="text"
                           class="form-control"
                           placeholder="Enter Wiki-Description"
+                          v-model='settings.description'
                         />
                       </div>
                     </div>
@@ -179,9 +181,13 @@ export default defineComponent({
   data() {
     return {
       details: {
-        name: process.env.VUE_APP_NAME,
-        logo: process.env.VUE_APP_LOGO,
-        description: process.env.VUE_APP_DESCRIPTION
+        name: this.$config.name,
+        logo: this.$config.logo,
+        description: this.$config.description
+      },
+      settings: {
+        name: this.$config.name,
+        description: this.$config.description
       }
     }
   },
@@ -189,8 +195,10 @@ export default defineComponent({
     console.log('Wikisettings')
   },
   methods: {
-    changeDetails() {
-      console.log('ChangeDetails')
+    saveSettings() {
+      this.$config.name = this.settings.name
+      this.$config.description = this.settings.description
+      this.$writeConfig()
     }
   }
 })
