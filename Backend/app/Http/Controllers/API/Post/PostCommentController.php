@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\PostComment;
 use App\Http\Resources\PostCommentCollection;
 use App\Http\Resources\PostComment as PostCommentResource;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Validator;
 
-class PostCommentController extends BaseController
+class PostCommentController extends Controller
 {
     public function index(Request $request)
     {

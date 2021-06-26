@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Str;
 
-class UserMgmtController extends BaseController
+class UserMgmtController extends Controller
 {
     public function index(Request $request)
     {

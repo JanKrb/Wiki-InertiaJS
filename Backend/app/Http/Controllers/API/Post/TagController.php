@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\TagCollection;
 use App\Models\Tag;
 use App\Http\Resources\Tag as TagResource;
@@ -10,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class TagController extends BaseController
+class TagController extends Controller
 {
     public function index(Request $request)
     {

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\API\Permission;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionCollection;
 use App\Models\Permission;
 use App\Http\Resources\Permission as PermissionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PermissionController extends BaseController
+class PermissionController extends Controller
 {
     protected $model = Permission::class;
     protected $resource = PermissionResource::class;

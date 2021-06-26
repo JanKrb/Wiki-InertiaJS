@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Ban;
 use App\Http\Resources\UserBanCollection;
 use App\Http\Resources\Ban as BanResource;
@@ -10,7 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class UserBansController extends BaseController
+class UserBansController extends Controller
 {
     public function index(Request $request, $user_id) {
         $per_page = $request->get('per_page', 15);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BadgeCollection;
 use App\Models\Badge;
 use App\Http\Resources\Badge as BadgeResource;
@@ -10,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class BadgeController extends BaseController
+class BadgeController extends Controller
 {
     public function index(Request $request)
     {

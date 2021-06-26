@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PostHistoryCollection;
 use App\Models\PostHistory;
 use App\Http\Resources\PostHistory as PostHistoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PostHistoryController extends BaseController
+class PostHistoryController extends Controller
 {
     protected $model = PostHistory::class;
     protected $resource = PostHistoryResource::class;

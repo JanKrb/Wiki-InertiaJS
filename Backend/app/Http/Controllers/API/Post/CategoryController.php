@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends BaseController
+class CategoryController extends Controller
 {
     public function index(Request $request)
     {

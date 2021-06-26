@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BadgeCollection;
 use App\Http\Resources\UserBadgeCollection;
 use \App\Http\Resources\Badge as BadgeResource;
@@ -14,7 +15,7 @@ use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class UserBadgesController extends BaseController
+class UserBadgesController extends Controller
 {
     public function index(Request $request, $user_id) {
         $per_page = $request->get('per_page', 15);

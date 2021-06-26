@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PostReportCollection;
 use App\Http\Resources\PostReport as PostReportResource;
 use App\Models\Post;
@@ -10,7 +11,7 @@ use App\Models\PostReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PostReportController extends BaseController
+class PostReportController extends Controller
 {
     public function index(Request $request) {
         $per_page = $request->get('per_page', 15);
