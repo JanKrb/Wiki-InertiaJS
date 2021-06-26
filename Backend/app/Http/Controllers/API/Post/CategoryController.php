@@ -30,7 +30,7 @@ class CategoryController extends BaseController
 
     public function structured(Request $request) {
         $per_page = $request->get('per_page', 15);
-        return (new StructuredCategoryCollection(Category::paginate($per_page)))->additional([
+        return (new StructuredCategoryCollection(Category::where('parent_id', null)->paginate($per_page)))->additional([
             'success' => true,
             'message' => 'Successfully retrieved categories'
         ]);
