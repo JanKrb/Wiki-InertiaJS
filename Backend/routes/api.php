@@ -332,15 +332,27 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:bans_update'])
     ;
 
-    Route::delete('bans/{ban}', [BanController::class, 'destroy'])
-        ->name('bans.destroy')
-        ->middleware(['permission:bans_destroy'])
+    Route::delete('bans/{ban}', [BanController::class, 'delete'])
+        ->name('bans.delete')
+        ->middleware(['permission:bans_delete'])
     ;
 
-    Route::get('bans/{ban}', [BanController::class, 'show'])
+    Route::get('bans/{ban}', [BanController::class, 'get_single'])
         ->name('bans.show')
         ->middleware(['permission:bans_get_single'])
     ;
+
+    Route::delete('bans/{ban}/force', [BanController::class, 'force_delete'])
+        ->name('bans.force_delete')
+        ->middleware(['permission:bans_force_delete'])
+    ;
+
+    Route::post('bans/{ban}/recover', [BanController::class, 'recover'])
+        ->name('bans.recover')
+        ->middleware(['permission:bans_recover'])
+    ;
+
+    // User Bans
 
     Route::get('users/{user}/bans', [UserBansController::class, 'index'])
         ->name('users.bans.index')
@@ -362,9 +374,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:user_bans_get_single'])
     ;
 
-    Route::delete('users/{user}/bans/{ban}', [UserBansController::class, 'destroy'])
-        ->name('users.bans.destroy')
-        ->middleware(['permission:user_bans_destroy'])
+    Route::delete('users/{user}/bans/{ban}', [UserBansController::class, 'delete'])
+        ->name('users.bans.delete')
+        ->middleware(['permission:user_bans_delete'])
     ;
 });
 
