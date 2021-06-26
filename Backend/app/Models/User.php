@@ -95,7 +95,7 @@ class User extends Authenticatable
     /**
      * Badges Relation
      */
-    public function badges(): BelongsToMany
+    public function relations(): BelongsToMany
     {
         return $this->belongsToMany(Badge::class, 'user_badges');
     }

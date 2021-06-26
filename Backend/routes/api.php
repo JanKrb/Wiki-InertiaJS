@@ -190,34 +190,24 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:badges_get_single'])
     ;
 
-    Route::get('users/{user}/badges', [UserBadgesController::class, 'index'])
-        ->name('users.badges.index')
-        ->middleware(['permission:user_badges_get_all'])
+    Route::get('users/{user}/badges', [UserBadgesController::class, 'get_all'])
+        ->name('users.badges.get_all')
+        ->middleware(['permission:users_badges_get_all'])
     ;
 
-    Route::post('users/{user}/badges/multiple', [UserBadgesController::class, 'storeArray'])
-        ->name('users.badges.store_array')
-        ->middleware(['permission:user_badges_store_array'])
+    Route::get('users/{user}/badges/{badge}/check', [UserBadgesController::class, 'check'])
+        ->name('users.badges.check')
+        ->middleware(['permission:users_badges_check'])
     ;
 
-    Route::post('users/{user}/badges', [UserBadgesController::class, 'store'])
-        ->name('users.badges.store')
-        ->middleware(['permission:user_badges_store'])
+    Route::post('users/{user}/badges/{badge}/attach', [UserBadgesController::class, 'attach'])
+        ->name('users.badges.attach')
+        ->middleware(['permission:users_badges_attach'])
     ;
 
-    Route::get('users/{user}/badges/{badge}', [UserBadgesController::class, 'show'])
-        ->name('users.badges.show')
-        ->middleware(['permission:user_badges_get_single'])
-    ;
-
-    Route::delete('users/{user}/badges/multiple', [UserBadgesController::class, 'deleteArray'])
-        ->name('users.badges.delete_array')
-        ->middleware(['permission:user_badges_delete_array'])
-    ;
-
-    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'delete'])
-        ->name('users.badges.delete')
-        ->middleware(['permission:user_badges_delete'])
+    Route::post('users/{user}/badges/{badge}/detach', [UserBadgesController::class, 'detach'])
+        ->name('users.badges.detach')
+        ->middleware(['permission:users_badges_detach'])
     ;
 });
 
