@@ -3,82 +3,27 @@
 namespace App\Http\Controllers\API\Post;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\TagCollection;
 use App\Models\Tag;
 use App\Http\Resources\Tag as TagResource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class TagController extends Controller
+class TagController extends BaseController
 {
-    public function index(Request $request)
-    {
-        $per_page = $request->get('per_page', 15);
-        return (new TagCollection(Tag::paginate($per_page)))->additional([
-            'success' => true,
-            'message' => 'Successfully retrieved tags'
-        ]);
-    }
+    protected $model = Tag::class;
+    protected $resource = TagResource::class;
+    protected $collection = TagCollection::class;
 
-    public function store(Request $request): JsonResponse
-    {
-        $input = $request->all();
+    protected $validations_create = [
+        'name' => 'required|max:255',
+        'description' => '',
+        'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
+        'icon' => 'required'
+    ];
 
-        $validator = Validator::make($input, [
-            'name' => 'required|max:255',
-            'description' => '',
-            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
-            'icon' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
-        }
-
-        $input['user_id'] = auth()->user()->id;
-
-        $tag = Tag::create($input);
-        return $this->sendResponse(new TagResource($tag), 'Tag created successfully');
-    }
-
-    public function show($id) {
-        $tag = Tag::find($id);
-
-        if (is_null($tag)) {
-            return $this->sendError('Tag does not exists.');
-        }
-
-        return $this->sendResponse(new TagResource($tag), 'Tag retrieved successfully.');
-    }
-
-    public function update(Request $request, Tag $tag) {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'name' => 'required|max:255',
-            'description' => '',
-            'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
-            'icon' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
-        }
-
-        $tag->name = $input['name'];
-        $tag->description = $input['description'];
-        $tag->color = $input['color'];
-        $tag->icon = $input['icon'];
-
-        $tag->save();
-
-        return $this->sendResponse(new TagResource($tag), 'Tag updated successfully.');
-    }
-
-    public function destroy(Tag $tag) {
-        $tag->delete();
-        return $this->sendResponse([], 'Tag soft-deleted successfully.');
-    }
+    protected $validations_update = [
+        'name' => 'string|max:255',
+        'description' => 'string',
+        'color' => 'string|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
+        'icon' => 'string'
+    ];
 }

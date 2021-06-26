@@ -256,8 +256,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Tags System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('tags', [TagController::class, 'index'])
-        ->name('tags.index')
+    Route::get('tags', [TagController::class, 'get_all'])
+        ->name('tags.get_all')
         ->middleware(['permission:tags_get_all'])
     ;
 
@@ -276,7 +276,17 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:tags_delete'])
     ;
 
-    Route::get('tags/{tag}', [TagController::class, 'show'])
+    Route::delete('tags/{tag}/force', [TagController::class, 'force_delete'])
+        ->name('tags.force_delete')
+        ->middleware(['permission:tags_force_delete'])
+    ;
+
+    Route::post('tags/{tag}/recover', [TagController::class, 'recover'])
+        ->name('tags.recover')
+        ->middleware(['permission:tags_recover'])
+    ;
+
+    Route::get('tags/{tag}', [TagController::class, 'get_single'])
         ->name('tags.show')
         ->middleware(['permission:tags_get_single'])
     ;
