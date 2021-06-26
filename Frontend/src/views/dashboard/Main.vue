@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="" class="block font-medium text-xl mt-3">
+              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="loadSubcategories(category.id)">
                 {{ category.title }}
               </a>
             </div>
@@ -174,7 +174,7 @@ export default defineComponent({
   },
   methods: {
     loadRecent() {
-      axios.get('http://localhost:8000/api/posts/recent')
+      axios.get('http://localhost:8000/api/posts?recent=5')
         .then((res) => {
           this.recent = res.data.data
         })
@@ -193,9 +193,18 @@ export default defineComponent({
         })
     },
     loadCategories() {
-      axios.get('http://localhost:8000/api/categories')
+      axios.get('http://localhost:8000/api/categories/structured')
         .then((res) => {
           this.categories = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    loadSubcategories(id) {
+      axios.get('http://localhost:8000/api/categories/' + id)
+        .then((res) => {
+          this.categories = res.data.data.children
         })
         .catch((err) => {
           console.log(err)
