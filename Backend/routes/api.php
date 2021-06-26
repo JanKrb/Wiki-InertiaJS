@@ -213,8 +213,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Categories System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('categories', [CategoryController::class, 'index'])
-        ->name('categories.index')
+    Route::get('categories', [CategoryController::class, 'get_all'])
+        ->name('categories.get_all')
         ->middleware(['permission:categories_get_all'])
     ;
 
@@ -238,7 +238,17 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:categories_delete'])
     ;
 
-    Route::get('categories/{category}', [CategoryController::class, 'show'])
+    Route::delete('categories/{category}/force', [CategoryController::class, 'force_delete'])
+        ->name('categories.force_delete')
+        ->middleware(['permission:categories_force_delete'])
+    ;
+
+    Route::post('categories/{category}/recover', [CategoryController::class, 'recover'])
+        ->name('categories.recover')
+        ->middleware(['permission:categories_recover'])
+    ;
+
+    Route::get('categories/{category}', [CategoryController::class, 'get_single'])
         ->name('categories.show')
         ->middleware(['permission:categories_get_single'])
     ;
