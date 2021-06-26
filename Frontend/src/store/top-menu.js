@@ -3,7 +3,7 @@ const state = () => {
     menu: [
       {
         icon: 'HomeIcon',
-        pageName: 'dashboard',
+        pageName: 'categories',
         title: 'Categories'
       },
       {
