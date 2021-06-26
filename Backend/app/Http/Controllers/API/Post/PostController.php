@@ -15,7 +15,7 @@ use App\Http\Resources\PostHistory as PostHistoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PostController extends Controller
+class PostController extends BaseController
 {
     protected $model = Post::class;
     protected $resource = PostResource::class;
