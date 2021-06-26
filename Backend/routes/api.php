@@ -132,29 +132,24 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:permissions_get_single'])
     ;
 
-    Route::get('roles/{role}/permissions', [RolesPermissionsController::class, 'index'])
+    Route::get('roles/{role}/permissions', [RolesPermissionsController::class, 'get_all'])
         ->name('roles.permissions.index')
         ->middleware(['permission:roles_permissions_get_all'])
     ;
 
-    Route::post('roles/{role}/permissions', [RolesPermissionsController::class, 'store'])
-        ->name('roles.permissions.store')
-        ->middleware(['permission:roles_permissions_store'])
+    Route::get('roles/{role}/permissions/{permission}/check', [RolesPermissionsController::class, 'check'])
+        ->name('roles.permissions.check')
+        ->middleware(['permission:roles_permissions_check'])
     ;
 
-    Route::get('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'show'])
-        ->name('roles.permissions.show')
-        ->middleware(['permission:roles_permissions_get_single'])
+    Route::post('roles/{role}/permissions/{permission}/attach', [RolesPermissionsController::class, 'attach'])
+        ->name('roles.permissions.attach')
+        ->middleware(['permission:roles_permissions_attach'])
     ;
 
-    Route::get('roles/{role}/permissions/{permission_name}/name', [RolesPermissionsController::class, 'show_name'])
-        ->name('roles.permissions.showName')
-        ->middleware(['permission:roles_permissions_get_single_name'])
-    ;
-
-    Route::delete('roles/{role}/permissions/{permission}', [RolesPermissionsController::class, 'destroy'])
-        ->name('roles.permissions.destroy')
-        ->middleware(['permission:roles_permissions_destroy'])
+    Route::post('roles/{role}/permissions/{permission}/detach', [RolesPermissionsController::class, 'detach'])
+        ->name('roles.permissions.detach')
+        ->middleware(['permission:roles_permissions_detach'])
     ;
 });
 
