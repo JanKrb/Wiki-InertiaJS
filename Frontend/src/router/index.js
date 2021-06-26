@@ -54,7 +54,7 @@ const routes = [
         }
       },
       {
-        path: 'categories/:id',
+        path: 'categories/:id/view',
         name: 'categories.subcategory',
         component: Categories,
         meta: {
