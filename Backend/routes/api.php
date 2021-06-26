@@ -102,12 +102,22 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:permissions_update'])
     ;
 
-    Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])
-        ->name('permissions.destroy')
-        ->middleware(['permission:permissions_destroy'])
+    Route::delete('permissions/{permission}', [PermissionController::class, 'delete'])
+        ->name('permissions.delete')
+        ->middleware(['permission:permissions_delete'])
     ;
 
-    Route::get('permissions/{permission}', [PermissionController::class, 'show'])
+    Route::delete('permissions/{permission}/force', [PermissionController::class, 'force_delete'])
+        ->name('permissions.force_delete')
+        ->middleware(['permission:permissions_force_delete'])
+    ;
+
+    Route::post('permissions/{permission}/recover', [PermissionController::class, 'recover'])
+        ->name('permissions.recover')
+        ->middleware(['permission:permissions_recover'])
+    ;
+
+    Route::get('permissions/{permission}', [PermissionController::class, 'get_single'])
         ->name('permissions.show')
         ->middleware(['permission:permissions_get_single'])
     ;

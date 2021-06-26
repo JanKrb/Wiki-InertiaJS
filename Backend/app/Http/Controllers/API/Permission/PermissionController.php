@@ -6,70 +6,49 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\PermissionCollection;
 use App\Models\Permission;
 use App\Http\Resources\Permission as PermissionResource;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends BaseController
 {
-    public function index(Request $request)
-    {
-        $per_page = $request->get('per_page', 15);
-        return (new PermissionCollection(Permission::paginate($per_page)))->additional([
-            'success' => true,
-            'message' => 'Successfully retrieved permissions'
-        ]);
-    }
+    protected $model = Permission::class;
+    protected $resource = PermissionResource::class;
+    protected $collection = PermissionCollection::class;
 
-    public function store(Request $request): JsonResponse
-    {
-        $input = $request->all();
+    protected $validations_create = [
+        'name' => 'required|max:255|unique:permissions'
+    ];
 
-        $validator = Validator::make($input, [
-            'name' => 'required|max:255|unique:permissions'
+    protected $validations_update = [];
+
+
+    public function update(Request $request, int $id)
+    {
+        $item = $this->model::find($id);
+
+        if (is_null($item)) {
+            return $this->sendError('Item does not exists.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255|unique:permissions,name,' . $item->name
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $input['user_id'] = auth()->user()->id;
+        $item->update($request->all());
 
-        $permission = Permission::create($input);
-        return $this->sendResponse(new PermissionResource($permission), 'Permission created successfully');
-    }
+        $saved = $item->save();
+        $response = new $this->resource($item);
+        $message = 'Item updated successfully.';
 
-    public function show($id) {
-        $permission = Permission::find($id);
-
-        if (is_null($permission)) {
-            return $this->sendError('Permission does not exists.');
+        if (!$saved) {
+            $message = 'Item has been skipped, because no columns has been updated.';
         }
 
-        return $this->sendResponse(new PermissionResource($permission), 'Permission retrieved successfully.');
-    }
-
-    public function update(Request $request, Permission $permission) {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'name' => 'required|max:255|unique:permissions,name,' . $permission->name
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
-        }
-
-        $permission->name = $input['name'];
-
-        $permission->save();
-
-        return $this->sendResponse(new PermissionResource($permission), 'Permission updated successfully.');
-    }
-
-    public function destroy(Permission $permission) {
-        $permission->delete();
-        return $this->sendResponse([], 'Permission soft-deleted successfully.');
+        return $this->sendResponse($response, $message);
     }
 
     public function test_permission(Request $request) {
