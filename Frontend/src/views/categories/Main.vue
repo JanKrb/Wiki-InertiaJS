@@ -73,7 +73,9 @@
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3" v-if="this.selectedSubcategory !== 0">
             <div class="mt-5 intro-x">
-              <button class="btn btn-primary shadow-md mr-2" @click="this.categories = this.all_categories; this.selectedSubcategory = 0">Back to Dashboard</button>
+              <router-link :to="{ name: 'categories' }">
+                <button class="btn btn-primary shadow-md mr-2">Back to Dashboard</button>
+              </router-link>
             </div>
           </div>
           <!-- BEGIN: Announcements -->
@@ -88,7 +90,7 @@
                 class="tiny-slider-navigator btn px-2 border-gray-400 text-gray-700 dark:text-gray-300 mr-2"
                 @click="prevImportantNotes"
               >
-                <ChevronLeftIcon class="w-4 h-4" />
+                <ChevronLeftIcon class="w-4 h-4"/>
               </button>
               <button
                 data-carousel="important-notes"
@@ -96,7 +98,7 @@
                 class="tiny-slider-navigator btn px-2 border-gray-400 text-gray-700 dark:text-gray-300 mr-2"
                 @click="nextImportantNotes"
               >
-                <ChevronRightIcon class="w-4 h-4" />
+                <ChevronRightIcon class="w-4 h-4"/>
               </button>
             </div>
             <div class="mt-5 intro-x">
@@ -153,11 +155,9 @@
                   </div>
                 </div>
               </div>
-              <a
-                href=""
-                class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600"
-              >View More</a
-              >
+              <a href="" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">
+                View More
+              </a>
             </div>
           </div>
           <!-- END: Transactions -->
@@ -177,7 +177,6 @@ export default defineComponent({
       recent: [],
       announcements: [],
       categories: [],
-      all_categories: [],
       announcementsLoading: true,
       permissions: {},
       selectedSubcategory: 0
@@ -213,7 +212,6 @@ export default defineComponent({
       this.selectedSubcategory = 0
       axios.get('http://localhost:8000/api/categories/structured')
         .then((res) => {
-          this.all_categories = res.data.data
           this.categories = res.data.data
         })
         .catch((err) => {
