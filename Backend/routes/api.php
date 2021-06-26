@@ -170,9 +170,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:badges_update'])
     ;
 
-    Route::delete('badges/{badge}', [BadgeController::class, 'destroy'])
-        ->name('badges.destroy')
-        ->middleware(['permission:badges_destroy'])
+    Route::delete('badges/{badge}', [BadgeController::class, 'delete'])
+        ->name('badges.delete')
+        ->middleware(['permission:badges_delete'])
     ;
 
     Route::get('badges/{badge}', [BadgeController::class, 'show'])
@@ -200,14 +200,14 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:user_badges_get_single'])
     ;
 
-    Route::delete('users/{user}/badges/multiple', [UserBadgesController::class, 'destroyArray'])
-        ->name('users.badges.destroy_array')
-        ->middleware(['permission:user_badges_destroy_array'])
+    Route::delete('users/{user}/badges/multiple', [UserBadgesController::class, 'deleteArray'])
+        ->name('users.badges.delete_array')
+        ->middleware(['permission:user_badges_delete_array'])
     ;
 
-    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'destroy'])
-        ->name('users.badges.destroy')
-        ->middleware(['permission:user_badges_destroy'])
+    Route::delete('users/{user}/badges/{badge}', [UserBadgesController::class, 'delete'])
+        ->name('users.badges.delete')
+        ->middleware(['permission:user_badges_delete'])
     ;
 });
 
@@ -233,9 +233,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:categories_update'])
     ;
 
-    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])
-        ->name('categories.destroy')
-        ->middleware(['permission:categories_destroy'])
+    Route::delete('categories/{category}', [CategoryController::class, 'delete'])
+        ->name('categories.delete')
+        ->middleware(['permission:categories_delete'])
     ;
 
     Route::get('categories/{category}', [CategoryController::class, 'show'])
@@ -261,9 +261,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:tags_update'])
     ;
 
-    Route::delete('tags/{tag}', [TagController::class, 'destroy'])
-        ->name('tags.destroy')
-        ->middleware(['permission:tags_destroy'])
+    Route::delete('tags/{tag}', [TagController::class, 'delete'])
+        ->name('tags.delete')
+        ->middleware(['permission:tags_delete'])
     ;
 
     Route::get('tags/{tag}', [TagController::class, 'show'])
@@ -312,7 +312,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Ban System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('bans', [BanController::class, 'index'])
+    Route::get('bans', [BanController::class, 'get_all'])
         ->name('bans.index')
         ->middleware(['permission:bans_get_all'])
     ;
@@ -424,9 +424,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_comments_update'])
     ;
 
-    Route::delete('posts/comments/{comment}', [PostCommentController::class, 'destroy'])
-        ->name('posts.comment.destroy')
-        ->middleware(['permission:posts_comments_destroy'])
+    Route::delete('posts/comments/{comment}', [PostCommentController::class, 'delete'])
+        ->name('posts.comment.delete')
+        ->middleware(['permission:posts_comments_delete'])
     ;
 
     // Report
@@ -455,9 +455,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_report_update'])
     ;
 
-    Route::delete('posts/reports/{report}', [PostReportController::class, 'destroy'])
-        ->name('posts.report.destroy')
-        ->middleware(['permission:posts_report_destroy'])
+    Route::delete('posts/reports/{report}', [PostReportController::class, 'delete'])
+        ->name('posts.report.delete')
+        ->middleware(['permission:posts_report_delete'])
     ;
 
     // Post History
@@ -477,13 +477,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 
     Route::delete('posts/histories/{history}', [PostHistoryController::class, 'delete'])
-        ->name('posts.histories.destroy')
-        ->middleware(['permission:posts_history_destroy'])
+        ->name('posts.histories.delete')
+        ->middleware(['permission:posts_history_delete'])
     ;
 
     Route::delete('posts/histories/{history}/force', [PostHistoryController::class, 'force_delete'])
-        ->name('posts.histories.force_destroy')
-        ->middleware(['permission:posts_history_force_destroy'])
+        ->name('posts.histories.force_delete')
+        ->middleware(['permission:posts_history_force_delete'])
     ;
 
     Route::post('posts/histories/{history}/recover', [PostHistoryController::class, 'recover'])
@@ -512,13 +512,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 
     Route::delete('posts/{post}', [PostController::class, 'delete'])
-        ->name('posts.destroy')
-        ->middleware(['permission:posts_destroy'])
+        ->name('posts.delete')
+        ->middleware(['permission:posts_delete'])
     ;
 
     Route::delete('posts/{post}/force', [PostController::class, 'force_delete'])
-        ->name('posts.force_destroy')
-        ->middleware(['permission:posts_force_destroy'])
+        ->name('posts.force_delete')
+        ->middleware(['permission:posts_force_delete'])
     ;
 
     Route::post('posts/{post}/recover', [PostController::class, 'recover'])
@@ -550,13 +550,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 
     Route::delete('announcements/{announcement}', [AnnouncementController::class, 'delete'])
-        ->name('announcements.destroy')
-        ->middleware(['permission:announcements_destroy'])
+        ->name('announcements.delete')
+        ->middleware(['permission:announcements_delete'])
     ;
 
     Route::delete('announcements/{announcement}/force', [AnnouncementController::class, 'force_delete'])
-        ->name('announcements.force_destroy')
-        ->middleware(['permission:announcements_force_destroy'])
+        ->name('announcements.force_delete')
+        ->middleware(['permission:announcements_force_delete'])
     ;
 
     Route::post('announcements/{announcement}/recover', [AnnouncementController::class, 'recover'])
@@ -606,13 +606,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 
     Route::delete('notifications/{notification}', [NotificationController::class, 'delete'])
-        ->name('notifications.destroy')
-        ->middleware(['permission:notifications_destroy'])
+        ->name('notifications.delete')
+        ->middleware(['permission:notifications_delete'])
     ;
 
     Route::delete('notifications/{notification}/force', [NotificationController::class, 'force_delete'])
-        ->name('notifications.force_destroy')
-        ->middleware(['permission:notifications_force_destroy'])
+        ->name('notifications.force_delete')
+        ->middleware(['permission:notifications_force_delete'])
     ;
 
     Route::post('notifications/{notification}/recover', [NotificationController::class, 'recover'])
