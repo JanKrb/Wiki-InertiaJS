@@ -177,7 +177,7 @@ export default defineComponent({
           localStorage.setItem('token', response.data.data.token)
           if (localStorage.getItem('token') != null) {
             loader.hide()
-            this.$router.push({ name: 'dashboard' })
+            this.$router.push({ name: 'categories' })
           }
         })
         .catch(error => {

@@ -174,7 +174,7 @@ export default defineComponent({
             axios.defaults.headers.common['Content-Type'] = 'application/json'
             axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.data.token
             loader.hide()
-            this.$router.push({ name: 'dashboard' })
+            this.$router.push({ name: 'categories' })
           }
         })
         .catch(error => {
