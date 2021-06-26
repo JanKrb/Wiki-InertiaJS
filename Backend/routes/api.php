@@ -57,7 +57,7 @@ Route::group(['prefix' => 'auth'], function() {
 
 // Roles & Permissions System
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('roles', [RoleController::class, 'index'])
+    Route::get('roles', [RoleController::class, 'get_all'])
         ->name('roles.index')
         ->middleware(['permission:roles_get_all'])
     ;
@@ -72,17 +72,27 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:roles_update'])
     ;
 
-    Route::delete('roles/{role}', [RoleController::class, 'destroy'])
-        ->name('roles.destroy')
-        ->middleware(['permission:roles_destroy'])
+    Route::delete('roles/{role}', [RoleController::class, 'delete'])
+        ->name('roles.delete')
+        ->middleware(['permission:roles_delete'])
     ;
 
-    Route::get('roles/{role}', [RoleController::class, 'show'])
+    Route::delete('roles/{role}/force', [RoleController::class, 'force_delete'])
+        ->name('roles.force_delete')
+        ->middleware(['permission:roles_force_delete'])
+    ;
+
+    Route::post('roles/{role}/recover', [RoleController::class, 'recover'])
+        ->name('roles.recover')
+        ->middleware(['permission:roles_recover'])
+    ;
+
+    Route::get('roles/{role}', [RoleController::class, 'get_single'])
         ->name('roles.show')
         ->middleware(['permission:roles_get_single'])
     ;
 
-    Route::get('permissions', [PermissionController::class, 'index'])
+    Route::get('permissions', [PermissionController::class, 'get_all'])
         ->name('permissions.index')
         ->middleware(['permission:permissions_get_all'])
     ;
