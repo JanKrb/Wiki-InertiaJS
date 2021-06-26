@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import axios from 'axios'
 import TopMenu from '../layouts/top-menu/Main.vue'
-import Dashboard from '../views/dashboard/Main.vue'
+import Categories from '../views/categories/Main.vue'
 import Roles from '../views/roles/Main.vue'
 import Role from '../views/role/Main.vue'
 import Permissions from '../views/permissions/Main.vue'
@@ -36,6 +36,7 @@ const routes = [
   {
     path: '/',
     component: TopMenu,
+    name: 'TopMenu',
     meta: {
       title: 'Wiki',
       auth: false,
@@ -43,11 +44,21 @@ const routes = [
     },
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: Dashboard,
+        path: 'categories',
+        name: 'categories',
+        component: Categories,
         meta: {
-          title: 'Dashboard',
+          title: 'Categories',
+          auth: false,
+          isAuth: false
+        }
+      },
+      {
+        path: 'categories/:id',
+        name: 'categories.subcategory',
+        component: Categories,
+        meta: {
+          title: 'Categories',
           auth: false,
           isAuth: false
         }

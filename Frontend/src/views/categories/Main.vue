@@ -222,9 +222,13 @@ export default defineComponent({
     },
     showSubcategories(category) {
       if (category.children.length > 0) {
+        this.loadPosts(category.id)
         this.categories = category.children
         this.selectedSubcategory = category.id
       }
+    },
+    loadPosts(id) {
+      axios.get()
     },
     testPagePermissions() {
       axios.post('http://localhost:8000/api/permissions/test', {
