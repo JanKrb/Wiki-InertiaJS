@@ -38,7 +38,7 @@
       <div class="top-bar-boxed flex items-center">
         <!-- BEGIN: Logo -->
         <router-link
-          :to="{ name: 'dashboard' }"
+          :to="{ name: 'categories' }"
           tag="a"
           class="-intro-x hidden md:flex"
         >
@@ -56,7 +56,7 @@
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
           <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
-            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
+            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'" v-if="breadcrum.name !== 'categories' && breadcrum.name !== 'categories.subcategory'">{{ breadcrum.meta.title }}</a>
             <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.name === this.$router.name"/>
           </div>
         </div>
@@ -391,15 +391,21 @@ export default defineComponent({
   watch: {
     $route(to, from) {
       this.breadcrums = this.$route.matched
+      console.log(this.breadcrums)
+      if (this.$route.name === 'TopMenu') {
+        this.$router.push({ name: 'categories' })
+      }
     }
   },
   mounted() {
+    if (this.$route.name === 'TopMenu') {
+      this.$router.push({ name: 'categories' })
+    }
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
     this.fetchNotifications()
 
     this.breadcrums = this.$route.matched
-    console.log(this.$route.matched)
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')

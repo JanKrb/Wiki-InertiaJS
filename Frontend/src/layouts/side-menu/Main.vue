@@ -7,7 +7,7 @@
       <nav class="side-nav">
         <!-- BEGIN: Logo -->
         <router-link
-          :to="{ name: 'dashboard' }"
+          :to="{ name: 'categories' }"
           tag="a"
           class="intro-x flex items-center pl-5 pt-4"
         >
