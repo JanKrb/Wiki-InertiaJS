@@ -23,6 +23,7 @@ class Category extends JsonResource
             'thumbnail' => $this->thumbnail,
             'user' => new UserResource($this->user),
             'children' => new CategoryCollection($this->subcategory),
+            'posts' => new PostCollection($this->posts),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
