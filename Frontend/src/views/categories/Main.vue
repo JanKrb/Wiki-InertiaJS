@@ -244,6 +244,8 @@ export default defineComponent({
     this.loadAnnouncements()
     this.loadRecent()
     this.testPagePermissions()
+    this.posts = []
+    this.categories = []
 
     if (this.$route.name === 'categories.subcategory') {
       this.loadSubcategory(this.$route.params.id)
@@ -253,6 +255,8 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
+      this.posts = []
+      this.categories = []
       if (this.$route.name === 'categories.subcategory') {
         this.loadSubcategory(this.$route.params.id)
       } else {
@@ -281,12 +285,15 @@ export default defineComponent({
         })
     },
     loadCategories() {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/categories/structured')
         .then((res) => {
           this.categories = res.data.data
+          loader.hide()
         })
         .catch((err) => {
           console.log(err)
+          loader.hide()
         })
     },
     showSubcategories(category) {
@@ -295,14 +302,24 @@ export default defineComponent({
       }
     },
     loadSubcategory(id) {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/posts')
         .then(response => {
           this.posts = response.data.data
+        })
+        .catch((err) => {
+          console.error(err)
+          loader.hide()
         })
 
       axios.get('http://localhost:8000/api/categories/' + id)
         .then(response => {
           this.categories = response.data.data.children
+          loader.hide()
+        })
+        .catch((err) => {
+          console.error(err)
+          loader.hide()
         })
     },
     testPagePermissions() {
