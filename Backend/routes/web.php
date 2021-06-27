@@ -20,4 +20,4 @@ Route::get('/', function () {
     ], 404)->header('Content-Type', 'application/json');
 });
 
-Auth::routes();
+

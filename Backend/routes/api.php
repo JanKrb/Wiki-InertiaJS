@@ -18,6 +18,7 @@ use App\Http\Controllers\API\Permission\PermissionController;
 use App\Http\Controllers\API\Permission\RoleController;
 use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
+use App\Http\Controllers\StorageController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -651,3 +652,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     ;
 });
 
+// Storage System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::post('storage/uploadImage', [StorageController::class, 'upload'])
+        ->name('storage.uploadImage')
+    ;
+});

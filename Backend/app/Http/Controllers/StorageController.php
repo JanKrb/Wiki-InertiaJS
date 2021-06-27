@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+class StorageController extends Controller
+{
+    private $imageValidator = 'required|image|mimes:jpeg,png,jpg,gif,svg,ico|max:2048';
+
+    public function upload(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'image' => $this->imageValidator
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
+        }
+
+        $result = $request->file('image')->store('public');
+        $storage_url = Storage::url($result);
+
+        return $this->sendResponse(
+            [
+                'url' => config('app.url') . $storage_url
+            ],
+            'Image has been successfully uploaded');
+    }
+
+    public function getFileName(Request $request) {
+        $found_name = false;
+
+        $time_formatted = date_format(now(), 'c'); # c => ISO 8601
+        $f_name = $request->file('image')->getClientOriginalName();
+        $base_name = "_${time_formatted}_${f_name}";
+
+        while (!$found_name) {
+            $code = Str::random(8);
+            $full = $code . $base_name;
+
+            if (Storage::disk('local')->exists($full)) {
+                continue;
+            }
+
+            $found_name = false;
+            return $full;
+        }
+    }
+}
