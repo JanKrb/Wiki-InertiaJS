@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +21,7 @@ class Post extends Model
         'title',
         'content',
         'user_id',
+        'category_id',
         'approved_by',
         'approved_at'
     ];
@@ -27,12 +29,22 @@ class Post extends Model
     /**
      * User relation
      */
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function approved_user() {
+    public function approved_user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Parent category relation
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
