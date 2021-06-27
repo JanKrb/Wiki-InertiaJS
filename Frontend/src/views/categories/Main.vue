@@ -4,7 +4,7 @@
       <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
-          v-for="category in this.categories"
+          v-for="category in this.view_structure"
           v-bind:key="category.id"
           class="intro-y blog col-span-12 md:col-span-4 box"
         >
@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.showSubcategories(category)">
+              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.showSubcategory(category.id)">
                 {{ category.title }}
               </a>
             </div>
@@ -234,33 +234,22 @@ export default defineComponent({
     return {
       recent: [],
       announcements: [],
-      categories: [],
+      structure: [],
+      view_structure: [],
       announcementsLoading: true,
-      permissions: {},
-      posts: []
+      permissions: {}
     }
   },
   mounted() {
     this.loadAnnouncements()
     this.loadRecent()
     this.testPagePermissions()
-    this.posts = []
-    this.categories = []
-
-    if (this.$route.name === 'categories.subcategory') {
-      this.loadSubcategory(this.$route.params.id)
-    } else {
-      this.loadCategories()
-    }
+    this.loadStructure()
   },
   watch: {
     $route(to, from) {
-      this.posts = []
-      this.categories = []
       if (this.$route.name === 'categories.subcategory') {
-        this.loadSubcategory(this.$route.params.id)
-      } else {
-        this.loadCategories()
+        this.showSubcategory(this.$route.params.id)
       }
     }
   },
@@ -284,11 +273,12 @@ export default defineComponent({
           console.log(err)
         })
     },
-    loadCategories() {
+    loadStructure() {
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/categories/structured')
         .then((res) => {
-          this.categories = res.data.data
+          this.structure = res.data.data
+          this.view_structure = res.data.data
           loader.hide()
         })
         .catch((err) => {
@@ -296,31 +286,8 @@ export default defineComponent({
           loader.hide()
         })
     },
-    showSubcategories(category) {
-      if (category.children.length > 0) {
-        this.$router.push({ name: 'categories.subcategory', params: { id: category.id } })
-      }
-    },
-    loadSubcategory(id) {
-      const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/posts')
-        .then(response => {
-          this.posts = response.data.data
-        })
-        .catch((err) => {
-          console.error(err)
-          loader.hide()
-        })
-
-      axios.get('http://localhost:8000/api/categories/' + id)
-        .then(response => {
-          this.categories = response.data.data.children
-          loader.hide()
-        })
-        .catch((err) => {
-          console.error(err)
-          loader.hide()
-        })
+    showSubcategory(id) {
+      this.$router.push({ name: 'categories.subcategory', params: { id: id } })
     },
     testPagePermissions() {
       axios.post('http://localhost:8000/api/permissions/test', {
