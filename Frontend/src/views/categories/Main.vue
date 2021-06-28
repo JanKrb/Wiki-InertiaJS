@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3">
+              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="showSubcategory(category.id)">
                 {{ category.title }}
               </a>
             </div>
@@ -241,14 +241,25 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.loadAnnouncements()
-    this.loadRecent()
     this.testPagePermissions()
     this.loadStructure()
+    this.loadAnnouncements()
+    this.loadRecent()
   },
   watch: {
     $route(to, from) {
-      console.log('Kategorien werden gesucht!')
+      if (this.$route.name === 'categories.subcategory') {
+        if (this.structure.length > 0) {
+          const category = this.filterCategory(this.structure, parseInt(this.$route.params.id))
+          this.view_structure.categories = category.children
+          this.view_structure.posts = category.posts
+        }
+      } else {
+        if (this.structure.length > 0) {
+          this.view_structure.posts = []
+          this.view_structure.categories = this.structure
+        }
+      }
     }
   },
   methods: {
