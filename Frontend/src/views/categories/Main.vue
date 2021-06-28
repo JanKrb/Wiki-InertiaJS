@@ -77,7 +77,7 @@
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
-                  :alt="'Thumbnail of ' + post.title"
+                  :alt="'Profile Picture of ' + post.user?.name"
                   class="rounded-full"
                   :src="post.user?.profile_picture"
                 />
@@ -88,7 +88,7 @@
               </div>
               <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
                 <a
-                  href="javascript:;"
+                  href='javascript:'
                   class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
                   aria-expanded="false"
                 >
