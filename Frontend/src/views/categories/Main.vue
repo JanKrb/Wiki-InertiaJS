@@ -146,10 +146,11 @@
       <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3" v-if="this.$route.name === 'categories.subcategory'">
-            <div class="mt-5 intro-x">
-              <router-link :to="{ name: 'categories' }">
-                <button class="btn btn-primary shadow-md mr-2">Back to Dashboard</button>
-              </router-link>
+            <div class="mt-5 intro-x float-left">
+              <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(0)"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
+            </div>
+            <div class="mt-5 intro-x float-right">
+              <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(this.lastPage)" v-if="this.lastPage !== 0"><CornerLeftUpIcon class="mr-2 h-5 w-5"/>Previous</button>
             </div>
           </div>
           <!-- BEGIN: Announcements -->
@@ -253,6 +254,7 @@ export default defineComponent({
         posts: [],
         categories: []
       },
+      lastPage: 0,
       announcementsLoading: true,
       permissions: {}
     }
@@ -330,7 +332,14 @@ export default defineComponent({
         })
     },
     showSubcategory(id) {
-      this.$router.push({ name: 'categories.subcategory', params: { id: id } })
+      if (parseInt(this.$route.params.id) > 0) {
+        this.lastPage = this.$route.params.id
+      }
+      if (id === 0) {
+        this.$router.push({ name: 'categories' })
+      } else {
+        this.$router.push({ name: 'categories.subcategory', params: { id: id } })
+      }
     },
     testPagePermissions() {
       axios.post('http://localhost:8000/api/permissions/test', {
