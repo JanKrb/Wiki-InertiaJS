@@ -72,9 +72,15 @@
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
                       <p class="mt-3">Category Title</p>
-                      <input type="text" class="form-control mt-2" placeholder="Title" v-model="this.category.title"/>
+                      <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.category.title"/>
+                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                        {{ this.validation_error?.title[0] }}
+                      </div>
                       <p class="mt-3">Category Title</p>
-                      <textarea rows="5" class="form-control mt-2" placeholder="Description" v-model="this.category.description"></textarea>
+                      <textarea rows="5" :class="'form-control mt-2' + (this.validation_error?.description != null ? ' border-theme-6' : '')" placeholder="Description" v-model="this.category.description"></textarea>
+                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                        {{ this.validation_error?.description[0] }}
+                      </div>
                     </div>
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                       <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
@@ -95,6 +101,9 @@
                             @change="changePicture"
                           />
                         </div>
+                      </div>
+                      <div v-if="this.validation_error?.thumbnail != null" class="text-theme-6 mt-2 mb-4">
+                        The thumbnail is required.
                       </div>
                     </div>
                   </div>
