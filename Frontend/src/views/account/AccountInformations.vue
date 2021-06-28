@@ -177,12 +177,16 @@
                       </Tippy>
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
-                      <button type="button" class="btn btn-primary w-full">
+                      <button
+                        type="button"
+                        class="btn btn-primary w-full"
+                      >
                         Change Photo
                       </button>
                       <input
                         type="file"
                         class="w-full h-full top-0 left-0 absolute opacity-0"
+                        @change="changePicture"
                       />
                     </div>
                   </div>
@@ -262,6 +266,49 @@ export default defineComponent({
         .error(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
+          loader.hide()
+        })
+    },
+    changePicture(event) {
+      if (event.target.files.length <= 0) return
+      const files = event.target.files
+      const data = new FormData()
+
+      data.append('image', files[0])
+
+      const loader = this.$loading.show()
+
+      axios.post('http://localhost:8000/api/storage/uploadImage',
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          this.user.profile_picture = res.data.data.url
+
+          axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.$route.params.id, {
+            name: this.user.name,
+            pre_name: this.user.pre_name,
+            last_name: this.user.last_name,
+            email: this.user.email,
+            profile_picture: this.user.profile_picture
+          })
+            .then(response => {
+              toast.success('Profile picture successfully updated')
+              loader.hide()
+            })
+            .catch(error => {
+              console.log(error.response)
+              this.validation_error = error.response.data.data.errors
+              toast.error(error.response.data.message)
+              loader.hide()
+            })
+        })
+        .catch((err) => {
+          console.error(err)
+          toast.error(err.response.data.message)
           loader.hide()
         })
     }
