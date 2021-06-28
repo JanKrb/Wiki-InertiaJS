@@ -4,7 +4,7 @@
       <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
-          v-for="category in this.view_structure"
+          v-for="category in this.view_structure.categories"
           v-bind:key="category.id"
           class="intro-y blog col-span-12 md:col-span-4 box"
         >
@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.showSubcategory(category.id)">
+              <a href="javascript:;" class="block font-medium text-xl mt-3">
                 {{ category.title }}
               </a>
             </div>
@@ -64,7 +64,7 @@
 
         <!-- BEGIN: Posts Layout -->
         <div
-          v-for="post in this.posts"
+          v-for="post in this.view_structure.posts"
           v-bind:key="post.id"
           class="intro-y blog col-span-12 md:col-span-4 box"
         >
@@ -104,7 +104,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.showSubcategories(post)">
+              <a href="javascript:;" class="block font-medium text-xl mt-3">
                 {{ post.title }}
               </a>
             </div>
@@ -248,12 +248,22 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
-      if (this.$route.name === 'categories.subcategory') {
-        this.showSubcategory(this.$route.params.id)
-      }
+      console.log('Kategorien werden gesucht!')
     }
   },
   methods: {
+    filterCategory(data, id) {
+      for (const category in data) {
+        if (data[category].id === id) {
+          return data[category]
+        }
+        if (data[category].children.length > 0) {
+          const v = this.filterCategory(data[category].children, id)
+          if (v !== null) { return v }
+        }
+      }
+      return null
+    },
     loadRecent() {
       axios.get('http://localhost:8000/api/posts?recent=5')
         .then((res) => {
@@ -278,7 +288,12 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/categories/structured')
         .then((res) => {
           this.structure = res.data.data
-          this.view_structure = res.data.data
+          this.view_structure.categories = res.data.data
+          if (this.$route.name === 'categories.subcategory') {
+            const category = this.filterCategory(res.data.data, parseInt(this.$route.params.id))
+            this.view_structure.categories = category.children
+            this.view_structure.posts = category.posts
+          }
           loader.hide()
         })
         .catch((err) => {
