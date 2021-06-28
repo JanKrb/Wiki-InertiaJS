@@ -18,7 +18,6 @@ class StructuredCategory extends JsonResource
     {
         return [
             'id' => $this->id,
-            'cid' => $this->cid,  # Used for better handling in frontend
             'title' => $this->title,
             'description' => $this->description,
             'thumbnail' => $this->thumbnail,
