@@ -173,7 +173,7 @@ export default defineComponent({
         thumbnail: this.category.thumbnail
       })
         .then(response => {
-          toast.success('Profile successfully updated')
+          toast.success('Category was created successfully!')
           loader.hide()
         })
         .catch(error => {
