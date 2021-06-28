@@ -236,7 +236,11 @@ export default defineComponent({
             .then(response => {
               toast.success('Profile picture successfully updated')
               loader.hide()
-              this.fetchUser()
+
+              const user = JSON.parse(localStorage.getItem('user'))
+              user.profile_picture = res.data.data.url
+              const userJson = JSON.stringify(user)
+              localStorage.setItem('user', userJson)
             })
             .catch(error => {
               console.log(error.response)
