@@ -116,6 +116,7 @@
                                 <input
                                   type="file"
                                   class="w-full h-full top-0 left-0 absolute opacity-0"
+                                  @change="changePicture"
                                 />
                               </div>
                             </div>
@@ -183,6 +184,7 @@
                       class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                       data-toggle="modal"
                       data-target="#edit-category-modal"
+                      data-dismiss="dropdown"
                       @click="this.edit_category = category"
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
