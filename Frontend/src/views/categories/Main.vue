@@ -284,9 +284,7 @@ export default defineComponent({
   methods: {
     filterCategory(data, id) {
       for (const category in data) {
-        if (data[category].id === id) {
-          return data[category]
-        }
+        if (data[category].id === id) { return data[category] }
         if (data[category].children.length > 0) {
           const v = this.filterCategory(data[category].children, id)
           if (v !== null) { return v }

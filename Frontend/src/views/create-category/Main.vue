@@ -132,7 +132,7 @@
               <label class="form-label">Title</label>
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="truncate">{{ this.category?.title?.substring(0,75)+"..." }}</div>
+                  <div class="truncate">{{ this.category?.title?.substring(0,75) }}</div>
                   <TagIcon class="w-4 h-4 ml-auto"/>
                 </div>
               </div>
@@ -141,8 +141,30 @@
               <label class="form-label">Description</label>
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="truncate">{{ this.category?.description?.substring(0,75)+"..." }}</div>
+                  <div class="truncate">{{ this.category?.description?.substring(0,75) }}</div>
                   <FileTextIcon class="w-4 h-4 ml-auto"/>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="form-label">Category sorting</label>
+              <div class="dropdown">
+                <div class="w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start mb-3" role="button" aria-expanded="false">
+                  <div class="form-check">
+                    <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
+                    <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
+                  </div>
+                </div>
+                <div v-show="has_parent">
+                  <TailSelect
+                    v-model="this.category.parent_id"
+                    :options="{
+                    search: true,
+                    classNames: 'w-full'
+                  }"
+                  >
+                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
+                  </TailSelect>
                 </div>
               </div>
             </div>
@@ -164,22 +186,33 @@ const toast = useToast()
 export default defineComponent({
   data() {
     return {
-      category: {},
-      user: {}
+      category: {
+        title: '',
+        description: ''
+      },
+      has_parent: false,
+      user: {},
+      categories: []
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchCategories()
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-
+      let parentId = null
+      if (this.has_parent) {
+        parentId = this.category.parent_id
+      }
+      console.log(parentId)
       const loader = this.$loading.show()
       axios.post('http://localhost:8000/api/categories', {
         title: this.category.title,
         description: this.category.description,
-        thumbnail: this.category.thumbnail
+        thumbnail: this.category.thumbnail,
+        parent_id: parentId
       })
         .then(response => {
           toast.success('Category was created successfully!')
@@ -188,6 +221,7 @@ export default defineComponent({
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
+          console.log(error.response)
           loader.hide()
         })
     },
@@ -216,6 +250,16 @@ export default defineComponent({
           console.error(err)
           toast.error(err.response.data.message)
           loader.hide()
+        })
+    },
+    fetchCategories() {
+      axios.get('http://localhost:8000/api/categories?paginate=0')
+        .then(response => {
+          this.categories = response.data
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   }
