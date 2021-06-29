@@ -94,7 +94,7 @@
                                       classNames: 'w-full'
                                     }"
                                   >
-                                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
+                                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === parseInt(this.$route.params.id)">{{ category.title }}</option>
                                   </TailSelect>
                                 </div>
                               </div>
@@ -185,7 +185,7 @@
                       data-toggle="modal"
                       data-target="#edit-category-modal"
                       data-dismiss="dropdown"
-                      @click="this.edit_category = category"
+                      @click="this.edit_category = category; this.edit_category.has_parent = category.parent_id !== null"
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
@@ -358,9 +358,7 @@
           <!-- END: Announcements -->
 
           <!-- BEGIN: Transactions -->
-          <div
-            class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8"
-          >
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
@@ -483,7 +481,7 @@ export default defineComponent({
     },
     loadStructure() {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/categories/structured')
+      axios.get('http://localhost:8000/api/categories/structured?paginate=0')
         .then((res) => {
           this.structure = res.data.data
           this.view_structure.categories = res.data.data
