@@ -22,7 +22,8 @@ class Category extends Model
         'title',
         'description',
         'thumbnail',
-        'user_id'
+        'user_id',
+        'parent_id'
     ];
 
     /**
