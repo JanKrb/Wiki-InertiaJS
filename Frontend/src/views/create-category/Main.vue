@@ -217,6 +217,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Category was created successfully!')
           loader.hide()
+          this.$router.push({ name: 'categories' })
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
