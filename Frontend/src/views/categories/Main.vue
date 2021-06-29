@@ -4,7 +4,7 @@
       <!-- BEGIN: Edit Category Modal -->
       <div id="edit-category-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-category-modal">
         <div class="modal-dialog modal-xl">
-          <form>
+          <form @submit.prevent="handleSubmit">
             <div class="modal-content">
               <!-- BEGIN: Edit Category -->
               <div class="intro-y col-span-12">
@@ -551,6 +551,26 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+        })
+    },
+    handleSubmit(e) {
+      e.preventDefault()
+      const loader = this.$loading.show()
+      axios.put('http://localhost:8000/api/categories/' + this.edit_category.id, {
+        title: this.edit_category.title,
+        description: this.edit_category.description,
+        thumbnail: this.edit_category.thumbnail,
+        parent_id: this.edit_category.parent_id
+      })
+        .then(response => {
+          toast.success('Category was updated successfully!')
+          loader.hide()
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          console.log(error.response)
+          loader.hide()
         })
     }
   },
