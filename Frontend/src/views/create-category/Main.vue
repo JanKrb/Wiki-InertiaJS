@@ -212,7 +212,7 @@ export default defineComponent({
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
-        parent_id: parentId
+        ...(parentId ? { parent_id: parentId } : {})
       })
         .then(response => {
           toast.success('Category was created successfully!')
