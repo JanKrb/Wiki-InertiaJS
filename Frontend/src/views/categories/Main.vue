@@ -187,7 +187,9 @@
                     <div class="text-base font-medium truncate">
                       {{ announce.title }}
                     </div>
-                    <div class="text-gray-500 mt-1">20 Hours ago</div>
+                    <div class="text-gray-500 mt-1">
+                      {{ announce.updated_at }}
+                    </div>
                     <div class="text-gray-600 text-justify mt-1">
                       {{ announce.description }}
                     </div>
