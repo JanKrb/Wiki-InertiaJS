@@ -182,9 +182,7 @@
                     <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
-                    <div
-                      class="text-xs text-gray-500 ml-auto whitespace-nowrap"
-                    >
+                    <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                       {{ notification.created_at }}
                     </div>
                   </div>
@@ -192,6 +190,9 @@
                     {{ notification.content }}
                   </div>
                 </div>
+              </div>
+              <div v-if="this.unseenNotifications.length === 0" class="text-xs text-gray-500 ml-auto whitespace-nowrap">
+                No recent Notifications!
               </div>
             </div>
           </div>
@@ -391,7 +392,6 @@ export default defineComponent({
   watch: {
     $route(to, from) {
       this.breadcrums = this.$route.matched
-      console.log(this.breadcrums)
       if (this.$route.name === 'TopMenu') {
         this.$router.push({ name: 'categories' })
       }
@@ -427,7 +427,6 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/users/' + this.user.id + '/notifications')
         .then(response => {
           this.notifications = response.data.data
-          console.log(response.data.data)
         })
         .catch(error => {
           console.error(error)

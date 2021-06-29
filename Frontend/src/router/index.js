@@ -31,6 +31,7 @@ import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 import ProfilePostings from '../views/profile/ProfilePostings.vue'
+import CreateCategories from '../views/create-category/Main.vue'
 
 const routes = [
   {
@@ -311,6 +312,16 @@ const routes = [
         component: Notifications,
         meta: {
           title: 'Wiki Notifications',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'categories/create',
+        name: 'moderation.categories.create',
+        component: CreateCategories,
+        meta: {
+          title: 'Wiki Categories',
           auth: true,
           isAuth: false
         }

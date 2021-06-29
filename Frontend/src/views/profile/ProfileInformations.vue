@@ -103,12 +103,8 @@
                   </button>
                 </div>
                 <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
-                  <div
-                    class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5"
-                  >
-                    <div
-                      class="h-40 relative image-fit cursor-pointer zoom-in mx-auto"
-                    >
+                  <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
+                    <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
                       <img
                         class="rounded-md"
                         alt=""
@@ -116,10 +112,7 @@
                       />
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
-                      <button
-                        type="button"
-                        class="btn btn-primary w-full"
-                      >
+                      <button type="button" class="btn btn-primary w-full">
                         Change Photo
                       </button>
                       <input
