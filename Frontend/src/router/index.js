@@ -55,7 +55,7 @@ const routes = [
         }
       },
       {
-        path: 'categories/:id/view',
+        path: 'categories/:id',
         name: 'categories.subcategory',
         component: Categories,
         meta: {
@@ -116,7 +116,7 @@ const routes = [
         }
       },
       {
-        path: 'roles/:id/view',
+        path: 'roles/:id',
         name: 'admin.role.view',
         component: Role,
         meta: {
@@ -146,7 +146,7 @@ const routes = [
         }
       },
       {
-        path: 'bans/:id/view',
+        path: 'bans/:id',
         name: 'admin.ban',
         component: Ban,
         meta: {
