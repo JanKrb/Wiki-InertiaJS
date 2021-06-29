@@ -189,6 +189,13 @@
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
+                    <a
+                      href="javascript:;"
+                      class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                      @click="this.deleteCategory(category.id)"
+                    >
+                      <Trash2Icon class="w-4 h-4 mr-2"/> Delete
+                    </a>
                   </div>
                 </div>
               </div>
@@ -563,13 +570,26 @@ export default defineComponent({
         parent_id: this.edit_category.parent_id
       })
         .then(response => {
-          toast.success('Category was updated successfully!')
+          toast.success('Category was successfully updated!')
           loader.hide()
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           console.log(error.response)
+          loader.hide()
+        })
+    },
+    deleteCategory(id) {
+      const loader = this.$loading.show()
+      axios.delete('http://localhost:8000/api/categories/' + id)
+        .then(response => {
+          toast.success('Category was successfully deleted!')
+          loader.hide()
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
           loader.hide()
         })
     }
