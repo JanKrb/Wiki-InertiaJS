@@ -19,13 +19,15 @@ class CategoryController extends BaseController
     protected $validations_create = [
         'title' => 'required|max:255',
         'description' => 'required',
-        'thumbnail' => 'required|max:255'
+        'thumbnail' => 'required|max:255',
+        'parent_id' => 'required|integer|exists:categories,id'
     ];
 
     protected $validations_update = [
         'title' => 'required|max:255',
         'description' => 'required',
-        'thumbnail' => 'required|max:255'
+        'thumbnail' => 'required|max:255',
+        'parent_id' => 'integer|exists:categories,id'
     ];
 
     public function structured(Request $request) {
