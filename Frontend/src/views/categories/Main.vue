@@ -25,7 +25,7 @@
                       aria-controls="properties"
                       aria-selected="true"
                     >
-                      <FileTextIcon class="w-4 h-4 mr-2" /> Properties
+                      <FileTextIcon class="w-4 h-4 mr-2"/> Properties
                     </Tippy>
                     <Tippy
                       id="assignment-tab"
@@ -38,7 +38,7 @@
                       role="tab"
                       aria-selected="false"
                     >
-                      <LayersIcon class="w-4 h-4 mr-2" /> Assignment
+                      <LayersIcon class="w-4 h-4 mr-2"/> Assignment
                     </Tippy>
                     <Tippy
                       id="settings-tab"
@@ -51,7 +51,7 @@
                       role="tab"
                       aria-selected="false"
                     >
-                      <SettingsIcon class="w-4 h-4 mr-2" /> Settings
+                      <SettingsIcon class="w-4 h-4 mr-2"/> Settings
                     </Tippy>
                   </div>
                   <div class="post__content tab-content">
@@ -72,7 +72,7 @@
                             <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
                               {{ this.validation_error?.title[0] }}
                             </div>
-                            <p class="mt-3">Category Title</p>
+                            <p class="mt-3">Category Description</p>
                             <textarea rows="7" :class="'form-control mt-2' + (this.validation_error?.description != null ? ' border-theme-6' : '')" placeholder="Description" v-model="this.edit_category.description"></textarea>
                             <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
                               {{ this.validation_error?.description[0] }}
@@ -563,11 +563,15 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
+
+      let parentId = null
+      if (this.edit_category.has_parent) { parentId = this.edit_category.parent_id }
+
       axios.put('http://localhost:8000/api/categories/' + this.edit_category.id, {
         title: this.edit_category.title,
         description: this.edit_category.description,
         thumbnail: this.edit_category.thumbnail,
-        parent_id: this.edit_category.parent_id
+        parent_id: parentId
       })
         .then(response => {
           toast.success('Category was successfully updated!')
