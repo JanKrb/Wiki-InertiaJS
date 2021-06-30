@@ -32,6 +32,7 @@ import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 import ProfilePostings from '../views/profile/ProfilePostings.vue'
 import CreateCategories from '../views/create-category/Main.vue'
+import EditorTest from '../views/editor-test/Main.vue'
 
 const routes = [
   {
@@ -91,6 +92,16 @@ const routes = [
         meta: {
           title: 'My Postings',
           auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'test',
+        name: 'editor_test',
+        component: EditorTest,
+        meta: {
+          title: 'Test Page',
+          auth: false,
           isAuth: false
         }
       }
