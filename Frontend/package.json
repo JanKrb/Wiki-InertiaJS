@@ -27,6 +27,7 @@
     "@ckeditor/ckeditor5-link": "^27.0.0",
     "@ckeditor/ckeditor5-paragraph": "^27.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.0.0",
+    "@ckeditor/ckeditor5-upload": "^27.1.0",
     "@fullcalendar/core": "^5.5.1",
     "@fullcalendar/daygrid": "^5.5.0",
     "@fullcalendar/interaction": "^5.5.0",
