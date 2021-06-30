@@ -32,6 +32,7 @@ import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 import ProfilePostings from '../views/profile/ProfilePostings.vue'
 import CreateCategories from '../views/create-category/Main.vue'
+import Search from '../views/search/Main.vue'
 
 const routes = [
   {
@@ -60,6 +61,16 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
+          auth: false,
+          isAuth: false
+        }
+      },
+      {
+        path: 'search',
+        name: 'search',
+        component: Search,
+        meta: {
+          title: 'Wiki Search',
           auth: false,
           isAuth: false
         }
