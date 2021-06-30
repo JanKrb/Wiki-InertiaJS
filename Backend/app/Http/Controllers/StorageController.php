@@ -30,6 +30,25 @@ class StorageController extends Controller
             'Image has been successfully uploaded');
     }
 
+    public function uploadEditor(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'upload' => $this->imageValidator
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
+        }
+
+        $result = $request->file('upload')->store('public');
+        $storage_url = Storage::url($result);
+
+        return [
+            'success' => true,
+            'message' => 'Image has been successfully uploaded',
+            'url' => config('app.url') . $storage_url
+        ];
+    }
+
     public function getFileName(Request $request) {
         $found_name = false;
 
