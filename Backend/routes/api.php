@@ -657,4 +657,16 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('storage/uploadImage', [StorageController::class, 'upload'])
         ->name('storage.uploadImage')
     ;
+
+    Route::post('storage/uploadEditor', [StorageController::class, 'uploadEditor'])
+        ->name('storage.uploadEditor')
+    ;
+});
+
+Route::get('test/email/{mail}', function($mail) {
+    for ($i = 0; $i < 15; $i++) {
+        dispatch(new App\Jobs\SendEmailJob($mail));
+    }
+
+    dd('send mail successfully !!');
 });
