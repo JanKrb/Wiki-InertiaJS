@@ -27,32 +27,6 @@
                     >
                       <FileTextIcon class="w-4 h-4 mr-2"/> Properties
                     </Tippy>
-                    <Tippy
-                      id="assignment-tab"
-                      tag="a"
-                      content="Customize the post & categories assignment"
-                      data-toggle="tab"
-                      data-target="#assignment"
-                      href="javascript:;"
-                      class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                      role="tab"
-                      aria-selected="false"
-                    >
-                      <LayersIcon class="w-4 h-4 mr-2"/> Assignment
-                    </Tippy>
-                    <Tippy
-                      id="settings-tab"
-                      tag="a"
-                      content="Manage the category settings"
-                      data-toggle="tab"
-                      data-target="#settings"
-                      href="javascript:;"
-                      class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                      role="tab"
-                      aria-selected="false"
-                    >
-                      <SettingsIcon class="w-4 h-4 mr-2"/> Settings
-                    </Tippy>
                   </div>
                   <div class="post__content tab-content">
                     <div
@@ -428,38 +402,23 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (this.$route.name === 'categories.subcategory') {
+      console.log('Search for subcategory')
+      this.loadSubcategory(this.$route.params.id)
+    }
     this.testPagePermissions()
-    this.loadStructure()
     this.loadAnnouncements()
     this.loadRecent()
   },
   watch: {
     $route(to, from) {
       if (this.$route.name === 'categories.subcategory') {
-        if (this.structure.length > 0) {
-          const category = this.filterCategory(this.structure, parseInt(this.$route.params.id))
-          this.view_structure.categories = category.children
-          this.view_structure.posts = category.posts
-        }
-      } else {
-        if (this.structure.length > 0) {
-          this.view_structure.posts = []
-          this.view_structure.categories = this.structure
-        }
+        console.log('Search for subcategory')
+        this.loadSubcategory(this.$route.params.id)
       }
     }
   },
   methods: {
-    filterCategory(data, id) {
-      for (const category in data) {
-        if (data[category].id === id) { return data[category] }
-        if (data[category].children.length > 0) {
-          const v = this.filterCategory(data[category].children, id)
-          if (v !== null) { return v }
-        }
-      }
-      return null
-    },
     loadRecent() {
       axios.get('http://localhost:8000/api/posts?recent=5')
         .then((res) => {
@@ -496,6 +455,28 @@ export default defineComponent({
         .catch((err) => {
           console.log(err)
           loader.hide()
+        })
+    },
+    filterCategory(data, id) {
+      for (const category in data) {
+        if (data[category].id === id) { return data[category] }
+        if (data[category].children.length > 0) {
+          const v = this.filterCategory(data[category].children, id)
+          if (v !== null) { return v }
+        }
+      }
+      return null
+    },
+    loadSubcategory(id) {
+      axios.get('http://localhost:8000/api/categories/' + id)
+        .then(response => {
+          this.view_structure.categories = response.data.data.children
+          this.view_structure.posts = response.data.data.posts
+          console.log(response)
+          this.fetchCategories()
+        })
+        .catch(error => {
+          console.error(error)
         })
     },
     showSubcategory(id) {
