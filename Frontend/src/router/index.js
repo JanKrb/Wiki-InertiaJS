@@ -34,6 +34,7 @@ import ProfilePostings from '../views/profile/ProfilePostings.vue'
 import CreateCategories from '../views/create-category/Main.vue'
 import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
+import PostSingle from '../views/post/PostSingle.vue'
 
 const routes = [
   {
@@ -62,6 +63,16 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
+          auth: false,
+          isAuth: false
+        }
+      },
+      {
+        path: 'posts/:id',
+        name: 'posts.view',
+        component: PostSingle,
+        meta: {
+          title: 'Single Posting',
           auth: false,
           isAuth: false
         }
