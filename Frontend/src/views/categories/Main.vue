@@ -507,7 +507,7 @@ export default defineComponent({
         .then(response => {
           console.log(response)
           this.categories = response.data
-          if (this.$route.name !== 'categories.subcategory') {
+          if (this.$route.name === 'categories') {
             this.view_structure.categories = response.data
           }
           loader.hide()
