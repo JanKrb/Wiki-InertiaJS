@@ -241,7 +241,7 @@
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ post?.content.substring(0,200)+"..." }}
+            {{ post?.content?.substring(0,200)+"..." }}
           </div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
@@ -276,16 +276,16 @@
     <div class="col-span-12 xxl:col-span-2">
       <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
-          <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3" v-if="this.$route.name === 'categories.subcategory'">
-            <div class="mt-5 intro-x float-left">
-              <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(0)"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
-            </div>
-            <div class="mt-5 intro-x float-right">
-              <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(this.lastPage)" v-if="this.lastPage !== 0"><CornerLeftUpIcon class="mr-2 h-5 w-5"/>Previous</button>
-            </div>
-          </div>
           <!-- BEGIN: Announcements -->
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
+            <div class="flex items-center h-10 mb-4" v-if="this.$route.name === 'categories.subcategory'">
+              <div class="mt-5 intro-x float-left mr-auto">
+                <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(0)"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
+              </div>
+              <div class="mt-5 intro-x float-right">
+                <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(this.lastPage)" v-if="this.lastPage !== 0"><CornerLeftUpIcon class="mr-2 h-5 w-5"/>Previous</button>
+              </div>
+            </div>
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-auto">
                 Announcements
@@ -440,7 +440,6 @@ export default defineComponent({
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
-          console.log(response)
           this.fetchCategories()
         })
         .catch(error => {
@@ -450,8 +449,7 @@ export default defineComponent({
     showSubcategory(id) {
       if (parseInt(this.$route.params.id) > 0) {
         this.lastPage = this.$route.params.id
-      }
-      if (id === 0) {
+      } else if (id === 0) {
         this.$router.push({ name: 'categories' })
       } else {
         this.$router.push({ name: 'categories.subcategory', params: { id: id } })
