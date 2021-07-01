@@ -175,7 +175,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="showSubcategory(category.id)">
+              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.$router.push({ name: 'categories.subcategory', params: { id: category.id } })">
                 {{ category.title }}
               </a>
             </div>
@@ -235,7 +235,7 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3">
+              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.$router.push({ name: 'posts.view', params: { id: post.id } })">
                 {{ post?.title }}
               </a>
             </div>
@@ -280,7 +280,7 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
             <div class="flex items-center h-10 mb-4" v-if="this.$route.name === 'categories.subcategory'">
               <div class="mt-5 intro-x float-left mr-auto">
-                <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(0)"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
+                <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
               </div>
               <div class="mt-5 intro-x float-right">
                 <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(this.lastPage)" v-if="this.lastPage !== 0"><CornerLeftUpIcon class="mr-2 h-5 w-5"/>Previous</button>
@@ -402,9 +402,8 @@ export default defineComponent({
   },
   mounted() {
     this.testPagePermissions()
-    if (this.$route.name === 'categories.subcategory') {
-      this.loadSubcategory(this.$route.params.id)
-    }
+    if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
+    if (this.categories.length === 0) { this.fetchCategories() }
     this.loadAnnouncements()
     this.loadRecent()
   },
@@ -412,6 +411,13 @@ export default defineComponent({
     $route(to, from) {
       if (this.$route.name === 'categories.subcategory') {
         this.loadSubcategory(this.$route.params.id)
+      }
+      if (this.categories.length === 0) {
+        this.fetchCategories()
+      } else {
+        if (this.$route.name === 'categories') {
+          this.view_structure.categories = this.categories
+        }
       }
     }
   },
@@ -440,7 +446,6 @@ export default defineComponent({
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
-          this.fetchCategories()
         })
         .catch(error => {
           console.error(error)
@@ -497,12 +502,19 @@ export default defineComponent({
         })
     },
     fetchCategories() {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
+          console.log(response)
           this.categories = response.data
+          if (this.$route.name !== 'categories.subcategory') {
+            this.view_structure.categories = response.data
+          }
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     },
     handleSubmit(e) {
@@ -525,7 +537,6 @@ export default defineComponent({
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
-          console.log(error.response)
           loader.hide()
         })
     },
