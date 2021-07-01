@@ -383,7 +383,6 @@ export default defineComponent({
     return {
       recent: [],
       announcements: [],
-      structure: [],
       view_structure: {
         posts: [],
         categories: []
@@ -402,18 +401,16 @@ export default defineComponent({
     }
   },
   mounted() {
+    this.testPagePermissions()
     if (this.$route.name === 'categories.subcategory') {
-      console.log('Search for subcategory')
       this.loadSubcategory(this.$route.params.id)
     }
-    this.testPagePermissions()
     this.loadAnnouncements()
     this.loadRecent()
   },
   watch: {
     $route(to, from) {
       if (this.$route.name === 'categories.subcategory') {
-        console.log('Search for subcategory')
         this.loadSubcategory(this.$route.params.id)
       }
     }
@@ -437,35 +434,6 @@ export default defineComponent({
         .catch((err) => {
           console.log(err)
         })
-    },
-    loadStructure() {
-      const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/categories/structured?paginate=0')
-        .then((res) => {
-          this.structure = res.data.data
-          this.view_structure.categories = res.data.data
-          if (this.$route.name === 'categories.subcategory') {
-            const category = this.filterCategory(res.data.data, parseInt(this.$route.params.id))
-            this.view_structure.categories = category.children
-            this.view_structure.posts = category.posts
-          }
-          loader.hide()
-          this.fetchCategories()
-        })
-        .catch((err) => {
-          console.log(err)
-          loader.hide()
-        })
-    },
-    filterCategory(data, id) {
-      for (const category in data) {
-        if (data[category].id === id) { return data[category] }
-        if (data[category].children.length > 0) {
-          const v = this.filterCategory(data[category].children, id)
-          if (v !== null) { return v }
-        }
-      }
-      return null
     },
     loadSubcategory(id) {
       axios.get('http://localhost:8000/api/categories/' + id)
