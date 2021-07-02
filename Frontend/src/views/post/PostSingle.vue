@@ -7,10 +7,10 @@
       </h2>
       <div class="intro-y text-gray-700 dark:text-gray-600 mt-3 text-xs sm:text-sm">
         {{ this.post?.created_at }} <span class="mx-1">•</span>
-        <a class="text-theme-1 dark:text-theme-10" href="">
-            Parent Category
-        </a>
-        <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 1000 * 60 }} Min read
+        <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
+            {{ this.post?.parent?.title }}
+        </router-link>
+        <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 800 * 60 }} Min read
       </div>
       <div class="intro-y mt-6">
         <div class="news__preview image-fit">
