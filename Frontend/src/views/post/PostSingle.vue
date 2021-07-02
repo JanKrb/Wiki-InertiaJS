@@ -113,16 +113,25 @@
       <!-- END: Blog Layout -->
       <!-- BEGIN: Comments -->
       <div class="intro-y my-5 pt-5 border-t border-gray-200 dark:border-dark-5">
-        <div class="text-base sm:text-lg font-medium">{{ this.post?.comments }} Responses</div>
+        <div class="text-base sm:text-lg font-medium">
+          Comments
+        </div>
         <div class="news__input relative mt-5">
           <MessageCircleIcon
             class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"
           />
+
           <textarea
             class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
             rows="1"
             placeholder="Post a comment..."
+            v-model='comment'
           ></textarea>
+
+          <SendIcon
+            class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"
+            v-on:click='writeComment()'
+          />
         </div>
       </div>
       <div class="pb-3" v-for="comment in this.post.post_comments" v-bind:key="comment.id">
@@ -154,6 +163,9 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -161,8 +173,10 @@ export default defineComponent({
       post: {
         title: '',
         content: '',
+        parent: {},
         post_comments: []
-      }
+      },
+      comment: ''
     }
   },
   mounted() {
@@ -185,6 +199,21 @@ export default defineComponent({
         .then(response => {
           this.post.post_comments = response.data.data
           console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    writeComment() {
+      const comment = this.comment
+      this.comment = ''
+
+      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/comments', {
+        content: comment
+      })
+        .then(response => {
+          this.post.post_comments.push(response.data.data)
+          toast.success('Comment has successfully been posted.')
         })
         .catch(error => {
           console.error(error)
