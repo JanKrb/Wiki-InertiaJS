@@ -7,10 +7,10 @@
       </h2>
       <div class="intro-y text-gray-700 dark:text-gray-600 mt-3 text-xs sm:text-sm">
         {{ this.post?.created_at }} <span class="mx-1">•</span>
-        <a class="text-theme-1 dark:text-theme-10" href="">
-            Parent Category
-        </a>
-        <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 1000 * 60 }} Min read
+        <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
+            {{ this.post?.parent?.title }}
+        </router-link>
+        <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 800 * 60 }} Min read
       </div>
       <div class="intro-y mt-6">
         <div class="news__preview image-fit">
@@ -61,9 +61,9 @@
         </div>
         <div class="absolute sm:relative -mt-12 sm:mt-0 w-full flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm">
           <div class="intro-x sm:mr-3 ml-auto">
-            Comments: <span class="font-medium mr-4">{{ this.post?.comments }}</span>
-            Changes: <span class="font-medium mr-4">{{ this.post?.histories }}</span>
-            Likes: <span class="font-medium">{{ this.post?.like_votes }}</span>
+            Comments: <span class="font-medium mr-4">{{ this.post?.comments_count }}</span>
+            Changes: <span class="font-medium mr-4">{{ this.post?.histories_count }}</span>
+            Likes: <span class="font-medium">{{ this.post?.like_votes_count }} / {{ this.post?.dislike_votes_count }}</span>
           </div>
         </div>
       </div>
@@ -93,17 +93,17 @@
         >
           Rate this Post:
           <Tippy
-            tag="a"
-            href=""
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border dark:border-dark-5 ml-2 text-gray-500 zoom-in"
+            tag="div"
+            v-on:click='this.votePost(1)'
+            :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 1 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
             content="Like"
           >
             <ThumbsUpIcon class="w-3 h-3 fill-current" />
           </Tippy>
           <Tippy
-            tag="a"
-            href=""
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border dark:border-dark-5 ml-2 text-gray-500 zoom-in"
+            tag="div"
+            v-on:click='this.votePost(2)'
+            :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 2 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
             content="Dislike"
           >
             <ThumbsDownIcon class="w-3 h-3 fill-current" />
@@ -113,16 +113,25 @@
       <!-- END: Blog Layout -->
       <!-- BEGIN: Comments -->
       <div class="intro-y my-5 pt-5 border-t border-gray-200 dark:border-dark-5">
-        <div class="text-base sm:text-lg font-medium">{{ this.post?.comments }} Responses</div>
+        <div class="text-base sm:text-lg font-medium">
+          Comments
+        </div>
         <div class="news__input relative mt-5">
           <MessageCircleIcon
             class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"
           />
+
           <textarea
             class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
             rows="1"
             placeholder="Post a comment..."
+            v-model='comment'
           ></textarea>
+
+          <SendIcon
+            class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"
+            v-on:click='writeComment()'
+          />
         </div>
       </div>
       <div class="pb-3" v-for="comment in this.post.post_comments" v-bind:key="comment.id">
@@ -137,7 +146,12 @@
           <div class="ml-3 flex-1">
             <div class="flex items-center">
               <a href="" class="font-medium">{{ comment?.user?.name }}</a>
-              <a href="" class="ml-auto text-xs text-gray-600">Reply</a>
+              <button
+                class="ml-auto text-xs text-gray-600"
+                v-on:click='this.comment = "@" + comment?.user?.name'
+              >
+                Reply
+              </button>
             </div>
             <div class="text-gray-600 text-xs sm:text-sm">
               {{ comment?.created_at }}
@@ -154,6 +168,9 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 export default defineComponent({
   data() {
@@ -161,8 +178,10 @@ export default defineComponent({
       post: {
         title: '',
         content: '',
+        parent: {},
         post_comments: []
-      }
+      },
+      comment: ''
     }
   },
   mounted() {
@@ -173,7 +192,6 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/posts/' + id)
         .then(response => {
           this.post = response.data.data
-          console.log(response)
           this.loadComments(id)
         })
         .catch(error => {
@@ -181,10 +199,46 @@ export default defineComponent({
         })
     },
     loadComments(id) {
-      axios.get('http://localhost:8000/api/posts/' + id + '/comments')
+      axios.get('http://localhost:8000/api/posts/' + id + '/comments', {
+        params: {
+          sort: {
+            column: 'updated_at',
+            method: 3
+          }
+        }
+      })
         .then(response => {
           this.post.post_comments = response.data.data
-          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    votePost(vote) {
+      if (vote === this.post?.liked) {
+        vote = 0
+      }
+
+      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/votes', {
+        vote: vote
+      })
+        .then(response => {
+          this.post.liked = response.data.data.vote
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    writeComment() {
+      const comment = this.comment
+      this.comment = ''
+
+      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/comments', {
+        content: comment
+      })
+        .then(response => {
+          this.post.post_comments.push(response.data.data)
+          toast.success('Comment has successfully been posted.')
         })
         .catch(error => {
           console.error(error)

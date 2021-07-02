@@ -23,7 +23,8 @@ class PostController extends BaseController
 
     protected $validations_create = [
         'title' => 'required|max:255',
-        'content' => ''
+        'content' => '',
+        'thumbnail' => 'string|max:255'
     ];
 
     public function update(Request $request, $post_id) {
@@ -42,7 +43,8 @@ class PostController extends BaseController
         $validator = Validator::make($input, [
             'title' => 'required|max:255',
             'content' => '',
-            'approve' => 'boolean'
+            'approve' => 'boolean',
+            'thumbnail' => 'string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -53,11 +55,13 @@ class PostController extends BaseController
             'post_id' => $post->id,
             'user_id' => $post->user_id,
             'title' => $post->title,
-            'content' => $post->content
+            'content' => $post->content,
+            'thumbnail' => $post->thumbnail
         ]);
 
         $post->title = $input['title'];
         $post->content = $input['content'];
+        $post->thumbnail = $input['thumbnail'];
 
         if ($input['approve'] && auth()->user()->hasPermission('posts_approve')) {
             $post->approved_by = auth()->user()->id;

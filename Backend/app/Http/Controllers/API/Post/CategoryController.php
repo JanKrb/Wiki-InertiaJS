@@ -27,7 +27,7 @@ class CategoryController extends BaseController
         'title' => 'required|max:255',
         'description' => 'required',
         'thumbnail' => 'required|max:255',
-        'parent_id' => 'integer|exists:categories,id'
+        'parent_id' => 'integer|exists:categories,id|nullable'
     ];
 
     public function structured(Request $request) {
