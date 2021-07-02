@@ -29,6 +29,7 @@ class Post extends JsonResource
             'user' => $this->user,
             'thumbnail' => $this->thumbnail,
             'tags' => new TagCollection($this->tags),
+            'parent' => $this->category,
             'histories_count' => sizeof($this->histories),
             'like_votes_count' => $this->votes->where('vote', 1)->count(),
             'dislike_votes_count' => $this->votes->where('vote', 0)->count(),
