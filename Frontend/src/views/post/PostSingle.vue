@@ -195,7 +195,14 @@ export default defineComponent({
         })
     },
     loadComments(id) {
-      axios.get('http://localhost:8000/api/posts/' + id + '/comments')
+      axios.get('http://localhost:8000/api/posts/' + id + '/comments', {
+        params: {
+          sort: {
+            column: 'updated_at',
+            method: 3
+          }
+        }
+      })
         .then(response => {
           this.post.post_comments = response.data.data
           console.log(response)
