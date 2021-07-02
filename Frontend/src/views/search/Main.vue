@@ -123,7 +123,11 @@ import axios from 'axios'
 export default defineComponent({
   data() {
     return {
-      search_result: []
+      search_results: {
+        categories: [],
+        posts: [],
+        users: []
+      }
     }
   },
   mounted() {
@@ -132,14 +136,19 @@ export default defineComponent({
   methods: {
     search(keywords) {
       axios.get('http://localhost:8000/api/search', {
-        keywords: keywords
+        params: {
+          keywords: keywords
+        }
       })
         .then(response => {
           console.log(response)
-          this.search_result = response.data.data
+          this.search_results.categories = response.data.data.cats
+          this.search_results.posts = response.data.data.posts
+          this.search_results.users = response.data.data.users
         })
         .catch(error => {
           console.error(error)
+          console.error(error.response)
         })
     }
   }
