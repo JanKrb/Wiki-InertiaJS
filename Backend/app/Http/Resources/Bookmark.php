@@ -18,15 +18,23 @@ class Bookmark extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'is_category' => $this->is_category,
-            'category' => new CategoryResource($this->category),
             'is_post' => $this->is_post,
-            'post' => new PostResource($this->post),
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
+
+        if ($this->is_category) {
+            $data['category'] = new CategoryResource($this->category);
+        }
+
+        if ($this->is_post) {
+            $data['post'] = new PostResource($this->post);
+        }
+
+        return $data;
     }
 }
