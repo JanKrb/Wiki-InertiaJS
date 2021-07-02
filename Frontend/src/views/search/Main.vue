@@ -40,17 +40,18 @@
       <!-- END: File Manager Menu -->
     </div>
     <div class="col-span-12 lg:col-span-9 xxl:col-span-10">
-      <!-- BEGIN: Directory & Files -->
+      <!-- BEGIN: List all results -->
       <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
+        <!-- BEGIN: Category Results -->
         <div
           v-for="result in this.search_results.categories"
           :key="result"
           class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
         >
-          <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-11 pl-4">
+          <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-9 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : './assets/images/placeholder.png'">
               </div>
               <div class="ml-4 mr-auto">
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
@@ -63,8 +64,32 @@
             </div>
           </div>
         </div>
+        <!-- END: Category Results -->
+        <!-- BEGIN: Category Results -->
+        <div
+          v-for="result in this.search_results.posts"
+          :key="result"
+          class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
+        >
+          <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-11 pl-4">
+            <div class="relative flex items-center">
+              <div class="w-12 h-12 flex-none image-fit">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : './assets/images/placeholder.png'">
+              </div>
+              <div class="ml-4 mr-auto">
+                <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
+                  {{ result.title }}
+                </a>
+                <div class="text-gray-600 mr-5 sm:mr-5">
+                  {{ result.content.substring(0,400)+"..." }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: Category Results -->
       </div>
-      <!-- END: Directory & Files -->
+      <!-- END: List all results -->
       <!-- BEGIN: Pagination -->
       <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
         <ul class="pagination">
