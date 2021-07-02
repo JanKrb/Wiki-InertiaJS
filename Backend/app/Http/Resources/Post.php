@@ -27,6 +27,7 @@ class Post extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'user' => $this->user,
+            'thumbnail' => $this->thumbnail,
             'tags' => new TagCollection($this->tags),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
