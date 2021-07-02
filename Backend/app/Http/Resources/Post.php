@@ -29,6 +29,10 @@ class Post extends JsonResource
             'user' => $this->user,
             'thumbnail' => $this->thumbnail,
             'tags' => new TagCollection($this->tags),
+            'histories_count' => sizeof($this->histories),
+            'like_votes_count' => $this->votes->where('vote', 1)->count(),
+            'dislike_votes_count' => $this->votes->where('vote', 0)->count(),
+            'comments_count' => sizeof($this->comments),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
@@ -42,11 +46,6 @@ class Post extends JsonResource
             $data['histories'] = new PostHistoryCollection($this->histories);
             $data['votes'] = new PostVoteCollection($this->votes);
             $data['comments'] = new PostCommentCollection($this->comments);
-        } else {
-            $data['histories'] = sizeof($this->histories);
-            $data['like_votes'] = sizeof($this->votes->where('vote', 1));
-            $data['dislike_votes'] = sizeof($this->votes->where('vote', 0));
-            $data['comments'] = sizeof($this->comments);
         }
 
         return $data;
