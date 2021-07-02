@@ -23,39 +23,25 @@
       </div>
       <div class="intro-y flex relative pt-16 sm:pt-6 items-center pb-6">
         <Tippy
-          tag="a"
-          href=""
-          class="intro-x w-8 h-8 sm:w-10 sm:h-10 flex flex-none items-center justify-center rounded-full border border-gray-400 dark:border-dark-5 dark:bg-dark-5 dark:text-gray-300 text-gray-600 mr-3"
+          tag="div"
+          :class="'intro-x w-8 h-8 sm:w-10 sm:h-10 flex flex-none items-center justify-center rounded-full mr-3 border dark:bg-dark-5 ' + (this.isBookmarked !== 0 ? 'border-blue-500 dark:border-blue-500 text-blue-500' : 'border-gray-400 text-gray-600 dark:border-dark-5 dark:text-gray-300')"
           content="Bookmark"
+          v-on:click='this.bookmarkPost()'
         >
           <BookmarkIcon class="w-3 h-3" />
         </Tippy>
         <div class="intro-x flex mr-3">
-          <div class="intro-x w-8 h-8 sm:w-10 sm:h-10 image-fit">
+          <div
+            class="intro-x w-8 h-8 sm:w-10 sm:h-10 image-fit"
+            v-for='(item, index) in this.bookmarks'
+            v-bind:key='index'
+          >
             <Tippy
               tag="img"
               alt=""
-              class="rounded-full border border-white zoom-in"
-              src="https://images.pexels.com/photos/937481/pexels-photo-937481.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-              :content="$f()[0].users[0].name"
-            />
-          </div>
-          <div class="intro-x w-8 h-8 sm:w-10 sm:h-10 image-fit -ml-4">
-            <Tippy
-              tag="img"
-              alt=""
-              class="rounded-full border border-white zoom-in"
-              src="https://images.pexels.com/photos/7410003/pexels-photo-7410003.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-              :content="$f()[0].users[1].name"
-            />
-          </div>
-          <div class="intro-x w-8 h-8 sm:w-10 sm:h-10 image-fit -ml-4">
-            <Tippy
-              tag="img"
-              alt=""
-              class="rounded-full border border-white zoom-in"
-              src="https://images.pexels.com/photos/8412730/pexels-photo-8412730.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              :content="$f()[0].users[2].name"
+              :class="'rounded-full border border-white zoom-in' + (index !== 0 ? ' -ml-' + (index * 4) : '')"
+              :src="item.user?.profile_picture"
+              :content="item.user?.pre_name + ' ' + item.user?.last_name"
             />
           </div>
         </div>
@@ -181,7 +167,9 @@ export default defineComponent({
         parent: {},
         post_comments: []
       },
-      comment: ''
+      comment: '',
+      bookmarks: [], // Recent 5
+      isBookmarked: false
     }
   },
   mounted() {
@@ -193,6 +181,7 @@ export default defineComponent({
         .then(response => {
           this.post = response.data.data
           this.loadComments(id)
+          this.loadBookmarks(id)
         })
         .catch(error => {
           console.error(error)
@@ -214,6 +203,26 @@ export default defineComponent({
           console.error(error)
         })
     },
+    loadBookmarks(id) {
+      axios.get('http://localhost:8000/api/posts/' + id + '/bookmarks', {
+        params: {
+          recent: 5
+        }
+      })
+        .then(response => {
+          this.bookmarks = response.data.data
+
+          const isBookmarkedArr = this.bookmarks.filter((item) => {
+            return item.user.id === JSON.parse(localStorage.getItem('user')).id
+          })
+
+          this.isBookmarked = (isBookmarkedArr.length > 0) ? isBookmarkedArr[0].id : 0
+        })
+        .catch(error => {
+          console.error(error)
+          console.log(error.response)
+        })
+    },
     votePost(vote) {
       if (vote === this.post?.liked) {
         vote = 0
@@ -224,6 +233,32 @@ export default defineComponent({
       })
         .then(response => {
           this.post.liked = response.data.data.vote
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    bookmarkPost() {
+      if (this.isBookmarked !== 0) {
+        axios.delete('http://localhost:8000/api/bookmarks/' + this.isBookmarked)
+          .then(response => {
+            this.loadBookmarks(this.$route.params.id)
+            toast.success('Post has been unbookmarked')
+          })
+          .catch(error => {
+            console.error(error)
+          })
+
+        return
+      }
+
+      axios.post('http://localhost:8000/api/bookmarks', {
+        is_post: 1,
+        post_id: this.$route.params.id
+      })
+        .then(response => {
+          this.loadBookmarks(this.$route.params.id)
+          toast.success('Post has been bookmarked')
         })
         .catch(error => {
           console.error(error)
