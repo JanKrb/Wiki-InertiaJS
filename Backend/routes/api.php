@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AnnouncementController;
 use App\Http\Controllers\API\EnvironmentController;
+use App\Http\Controllers\API\Post\BookmarkController;
 use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\Post\PostHistoryController;
@@ -254,6 +255,12 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('categories/{category}', [CategoryController::class, 'get_single'])
         ->name('categories.show')
         ->middleware(['permission:categories_get_single'])
+    ;
+
+    // Bookmarks
+    Route::get('categories/{category}/bookmarks', [BookmarkController::class, 'get_posts'])
+        ->name('categories.bookmarks.get_posts')
+        ->middleware(['permission:categories_bookmarks_get_posts'])
     ;
 });
 
@@ -545,6 +552,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_votes_store'])
     ;
 
+    // Bookmarks
+    Route::get('posts/{post}/bookmarks', [BookmarkController::class, 'get_posts'])
+        ->name('posts.bookmarks.get_posts')
+        ->middleware(['permission:posts_bookmarks_get_posts'])
+    ;
+
     // Posts
     Route::get('posts', [PostController::class, 'get_all'])
         ->name('posts.index')
@@ -578,6 +591,44 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('posts/{post}/recover', [PostController::class, 'recover'])
         ->name('posts.recover')
         ->middleware(['permission:posts_recover'])
+    ;
+});
+
+// Bookmark System
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('bookmarks', [BookmarkController::class, 'get_all'])
+        ->name('bookmarks.index')
+        ->middleware(['permission:bookmarks_get_all'])
+    ;
+
+    Route::get('bookmarks/{bookmark}', [BookmarkController::class, 'get_single'])
+        ->name('bookmarks.show')
+        ->middleware(['permission:bookmarks_get_single'])
+    ;
+
+    Route::post('bookmarks', [BookmarkController::class, 'store'])
+        ->name('bookmarks.store')
+        ->middleware(['permission:bookmarks_store'])
+    ;
+
+    Route::put('bookmarks/{bookmark}', [BookmarkController::class, 'update'])
+        ->name('bookmarks.update')
+        ->middleware(['permission:bookmarks_update'])
+    ;
+
+    Route::delete('bookmarks/{bookmark}', [BookmarkController::class, 'delete'])
+        ->name('bookmarks.delete')
+        ->middleware(['permission:bookmarks_delete'])
+    ;
+
+    Route::delete('bookmarks/{bookmark}/force', [BookmarkController::class, 'force_delete'])
+        ->name('bookmarks.force_delete')
+        ->middleware(['permission:bookmarks_force_delete'])
+    ;
+
+    Route::post('bookmarks/{bookmark}/recover', [BookmarkController::class, 'recover'])
+        ->name('bookmarks.recover')
+        ->middleware(['permission:bookmarks_recover'])
     ;
 });
 
