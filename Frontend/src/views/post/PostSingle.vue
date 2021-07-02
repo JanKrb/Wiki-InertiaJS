@@ -61,9 +61,9 @@
         </div>
         <div class="absolute sm:relative -mt-12 sm:mt-0 w-full flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm">
           <div class="intro-x sm:mr-3 ml-auto">
-            Comments: <span class="font-medium mr-4">{{ this.post?.comments }}</span>
-            Changes: <span class="font-medium mr-4">{{ this.post?.histories }}</span>
-            Likes: <span class="font-medium">{{ this.post?.like_votes }}</span>
+            Comments: <span class="font-medium mr-4">{{ this.post?.comments_count }}</span>
+            Changes: <span class="font-medium mr-4">{{ this.post?.histories_count }}</span>
+            Likes: <span class="font-medium">{{ this.post?.like_votes_count }} / {{ this.post?.dislike_votes_count }}</span>
           </div>
         </div>
       </div>
