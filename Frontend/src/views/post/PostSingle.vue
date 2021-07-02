@@ -146,7 +146,12 @@
           <div class="ml-3 flex-1">
             <div class="flex items-center">
               <a href="" class="font-medium">{{ comment?.user?.name }}</a>
-              <a href="" class="ml-auto text-xs text-gray-600">Reply</a>
+              <button
+                class="ml-auto text-xs text-gray-600"
+                v-on:click='this.comment = "@" + comment?.user?.name'
+              >
+                Reply
+              </button>
             </div>
             <div class="text-gray-600 text-xs sm:text-sm">
               {{ comment?.created_at }}
