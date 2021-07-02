@@ -43,7 +43,7 @@
       <!-- BEGIN: Directory & Files -->
       <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
         <div
-          v-for="result in this.search_result"
+          v-for="result in this.search_results.categories"
           :key="result"
           class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
         >
@@ -53,11 +53,11 @@
                 <img alt="" class="rounded" src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
               </div>
               <div class="ml-4 mr-auto">
-                <a href="" class="font-medium">
-                  {{ result }}
+                <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
+                  {{ result.title }}
                 </a>
                 <div class="text-gray-600 mr-5 sm:mr-5">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                  {{ result.description.substring(0,400)+"..." }}
                 </div>
               </div>
             </div>
