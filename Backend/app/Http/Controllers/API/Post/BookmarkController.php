@@ -31,23 +31,9 @@ class BookmarkController extends BaseController
 
     public function get_posts(Request $request, $post_id)
     {
-        /**
-         * Sort Indices
-         *
-         * 0 - SORT_REGULAR
-         * 1 - SORT_STRING
-         * 3 - SORT_DESC
-         * 4 - SORT_ASC
-         * 5 - SORT_LOCALE_STRING
-         * 6 - SORT_NATURAL
-         * 8 - SORT_FLAG_CASE
-         */
         $validator = Validator::make($request->all(), [
             'per_page' => 'integer',
             'paginate' => 'boolean',
-            'sort' => 'array',
-            'sort.column' => 'string|required_with:sort',
-            'sort.method' => 'integer|required_with:sort',
             'additional' => 'array',
             'recent' => 'integer'
         ]);
@@ -56,7 +42,7 @@ class BookmarkController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $data = $this->model::where('post_id', $post_id);
+        $data = $this->model::where('post_id', $post_id)->get();
 
         $per_page = $request->get('per_page', 15);
         $paginate_data = $request->get('paginate', true);
@@ -64,13 +50,6 @@ class BookmarkController extends BaseController
 
         if ($recent > 0) {
             $data = $data->sortBy('updated_at', SORT_ASC)->take($recent);
-        }
-
-        if ($request->has('sort')) {
-            $data = $data->sortBy(
-                $request->get('sort.column', 'id'),
-                $request->get('sort.method', SORT_ASC)
-            );
         }
 
         if ($paginate_data) {
@@ -94,23 +73,9 @@ class BookmarkController extends BaseController
 
     public function get_category(Request $request, $cat_id)
     {
-        /**
-         * Sort Indices
-         *
-         * 0 - SORT_REGULAR
-         * 1 - SORT_STRING
-         * 3 - SORT_DESC
-         * 4 - SORT_ASC
-         * 5 - SORT_LOCALE_STRING
-         * 6 - SORT_NATURAL
-         * 8 - SORT_FLAG_CASE
-         */
         $validator = Validator::make($request->all(), [
             'per_page' => 'integer',
             'paginate' => 'boolean',
-            'sort' => 'array',
-            'sort.column' => 'string|required_with:sort',
-            'sort.method' => 'integer|required_with:sort',
             'additional' => 'array',
             'recent' => 'integer'
         ]);
@@ -119,7 +84,7 @@ class BookmarkController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $data = $this->model::where('category_id', $cat_id);
+        $data = $this->model::where('category_id', $cat_id)->get();
 
         $per_page = $request->get('per_page', 15);
         $paginate_data = $request->get('paginate', true);
@@ -127,13 +92,6 @@ class BookmarkController extends BaseController
 
         if ($recent > 0) {
             $data = $data->sortBy('updated_at', SORT_ASC)->take($recent);
-        }
-
-        if ($request->has('sort')) {
-            $data = $data->sortBy(
-                $request->get('sort.column', 'id'),
-                $request->get('sort.method', SORT_ASC)
-            );
         }
 
         if ($paginate_data) {
