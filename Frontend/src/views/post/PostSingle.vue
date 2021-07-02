@@ -93,17 +93,17 @@
         >
           Rate this Post:
           <Tippy
-            tag="a"
-            href=""
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border dark:border-dark-5 ml-2 text-gray-500 zoom-in"
+            tag="div"
+            v-on:click='this.votePost(1)'
+            :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 1 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
             content="Like"
           >
             <ThumbsUpIcon class="w-3 h-3 fill-current" />
           </Tippy>
           <Tippy
-            tag="a"
-            href=""
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border dark:border-dark-5 ml-2 text-gray-500 zoom-in"
+            tag="div"
+            v-on:click='this.votePost(2)'
+            :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 2 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
             content="Dislike"
           >
             <ThumbsDownIcon class="w-3 h-3 fill-current" />
@@ -192,7 +192,6 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/posts/' + id)
         .then(response => {
           this.post = response.data.data
-          console.log(response)
           this.loadComments(id)
         })
         .catch(error => {
@@ -210,7 +209,21 @@ export default defineComponent({
       })
         .then(response => {
           this.post.post_comments = response.data.data
-          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    votePost(vote) {
+      if (vote === this.post?.liked) {
+        vote = 0
+      }
+
+      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/votes', {
+        vote: vote
+      })
+        .then(response => {
+          this.post.liked = response.data.data.vote
         })
         .catch(error => {
           console.error(error)

@@ -22,6 +22,12 @@ class Post extends JsonResource
      */
     public function toArray($request)
     {
+        $vote = \App\Models\PostVote::where([
+            ['user_id', auth()->user()->id],
+            ['post_id', $this->id]
+        ])->first();
+        $liked = !is_null($vote) ? $vote->vote : 0;
+
         $data = [
             'id' => $this->id,
             'title' => $this->title,
@@ -34,6 +40,7 @@ class Post extends JsonResource
             'like_votes_count' => $this->votes->where('vote', 1)->count(),
             'dislike_votes_count' => $this->votes->where('vote', 0)->count(),
             'comments_count' => sizeof($this->comments),
+            'liked' => $liked,
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];

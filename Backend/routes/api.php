@@ -6,6 +6,7 @@ use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\Post\PostHistoryController;
 use App\Http\Controllers\API\Post\PostReportController;
+use App\Http\Controllers\API\Post\PostVoteController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
 use App\Http\Controllers\API\User\BanController;
@@ -521,6 +522,27 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('posts/histories/{history}/recover', [PostHistoryController::class, 'recover'])
         ->name('posts.histories.recover')
         ->middleware(['permission:posts_history_recover'])
+    ;
+
+    // Post Votes
+    Route::get('posts/votes', [PostVoteController::class, 'index'])
+        ->name('posts.votes.get_all')
+        ->middleware(['permission:posts_votes_get_all'])
+    ;
+
+    Route::get('posts/{post}/votes', [PostVoteController::class, 'post_votes'])
+        ->name('posts.votes.post_comments')
+        ->middleware(['permission:posts_votes_get_post'])
+    ;
+
+    Route::get('posts/votes/{vote}', [PostVoteController::class, 'show'])
+        ->name('posts.votes.show')
+        ->middleware(['permission:posts_votes_get_single'])
+    ;
+
+    Route::post('posts/{post}/votes', [PostVoteController::class, 'vote'])
+        ->name('posts.votes.store')
+        ->middleware(['permission:posts_votes_store'])
     ;
 
     // Posts
