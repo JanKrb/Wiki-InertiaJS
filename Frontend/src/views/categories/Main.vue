@@ -409,6 +409,7 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
+      this.view_structure.posts = []
       if (this.$route.name === 'categories.subcategory') {
         this.loadSubcategory(this.$route.params.id)
       }
@@ -416,9 +417,16 @@ export default defineComponent({
         this.fetchCategories()
       } else {
         if (this.$route.name === 'categories') {
-          this.view_structure.categories = this.categories
+          this.view_structure.categories = this.mainCategories
         }
       }
+    }
+  },
+  computed: {
+    mainCategories: function () {
+      return this.categories.filter((category) => {
+        return category?.parent_id === null
+      })
     }
   },
   methods: {
@@ -508,7 +516,7 @@ export default defineComponent({
           console.log(response)
           this.categories = response.data
           if (this.$route.name === 'categories') {
-            this.view_structure.categories = response.data
+            this.view_structure.categories = this.mainCategories
           }
           loader.hide()
         })
