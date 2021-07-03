@@ -1,16 +1,65 @@
 <template>
   <div>
+    <!-- BEGIN: Report Post Modal -->
+    <div
+      id="report-post-modal"
+      class="modal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <form @submit.prevent="this.sendReport(this.report.content)">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="p-5 text-center">
+                <AlertCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3" />
+                <div class="text-3xl mt-5">Please write a Report reason!</div>
+                <div class="text-gray-600 mt-2">
+                  <textarea rows="3" class="form-control" v-model="report.content" required></textarea>
+                </div>
+              </div>
+              <div class="px-5 pb-8 text-center">
+                <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-24 dark:border-dark-5 dark:text-gray-300 mr-1">
+                  Cancel
+                </button>
+                <button type="submit" data-dismiss="modal" class="btn btn-danger w-24">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- BEGIN: Report Post Modal -->
     <div class="intro-y news xl:w-4/5 p-10 box mt-8">
       <!-- BEGIN: Blog Layout -->
-      <h2 class="intro-y font-medium text-xl sm:text-2xl">
-        {{ this.post?.title }}
-      </h2>
-      <div class="intro-y text-gray-700 dark:text-gray-600 mt-3 text-xs sm:text-sm">
-        {{ this.post?.created_at }} <span class="mx-1">•</span>
-        <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
-            {{ this.post?.parent?.title }}
-        </router-link>
-        <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 800 * 60 }} Min read
+      <div class="flex items-center px-5 py-4">
+        <div class="mr-auto">
+          <h2 class="intro-y font-medium text-xl sm:text-2xl ml-auto ml-3">
+            {{ this.post?.title }}
+          </h2>
+          <div class="flex text-gray-600 truncate text-xs mt-0.5">
+            {{ this.post?.created_at }} <span class="mx-1">•</span>
+            <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
+              {{ this.post?.parent?.title }}
+            </router-link>
+            <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 800 * 60 }} Min read
+          </div>
+        </div>
+        <div class="dropdown ml-3">
+          <a href="javascript:;" class="dropdown-toggle w-5 h-5 text-gray-600 dark:text-gray-300" aria-expanded="false">
+            <MoreVerticalIcon></MoreVerticalIcon>
+          </a>
+          <div class="dropdown-menu w-40">
+            <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
+              <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
+                <SlashIcon class="mr-3"></SlashIcon>
+                Report Post
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="intro-y mt-6">
         <div class="news__preview image-fit">
@@ -169,7 +218,10 @@ export default defineComponent({
       },
       comment: '',
       bookmarks: [], // Recent 5
-      isBookmarked: false
+      isBookmarked: false,
+      report: {
+        content: ''
+      }
     }
   },
   mounted() {
@@ -236,6 +288,7 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+          console.log(error.response)
         })
     },
     bookmarkPost() {
@@ -277,6 +330,14 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+        })
+    },
+    sendReport(content) {
+      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/reports', {
+        content: content
+      })
+        .then(response => {
+          toast.success('The post was successfully reported')
         })
     }
   }
