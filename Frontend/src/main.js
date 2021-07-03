@@ -7,7 +7,6 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import globalComponents from './global-components'
 import utils from './utils'
 import './libs'
-import moment from 'moment'
 import Toast, { POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import axios from 'axios'
@@ -33,68 +32,6 @@ app.use(VueLoading, {
   opacity: 0.5,
   zIndex: 999
 }, {})
-
-var formatter = {
-  date: function (value, format) {
-    if (value) {
-      return moment(String(value)).format(format || 'MM/DD/YY')
-    }
-  },
-  time: function (value, format) {
-    if (value) {
-      return moment(String(value)).format(format || 'h:mm A')
-    }
-  },
-  full_beauty: function (value, format) {
-    if (value) {
-      return moment(String(value)).format(format || 'MMM Do YYYY - hh:mm')
-    }
-  },
-  time_ago: function (value) {
-    if (value) {
-      const date = moment(value, 'YYYY-MM-DD HH:mm:ss')
-
-      const seconds = Math.floor((new Date() - date) / 1000)
-
-      let interval = seconds / 31536000
-
-      if (interval > 1) {
-        return Math.floor(interval) + ' years'
-      }
-      interval = seconds / 2592000
-
-      if (interval > 1) {
-        return Math.floor(interval) + ' months'
-      }
-      interval = seconds / 86400
-
-      if (interval > 1) {
-        return Math.floor(interval) + ' days'
-      }
-      interval = seconds / 3600
-
-      if (interval > 1) {
-        return Math.floor(interval) + ' hours'
-      }
-      interval = seconds / 60
-
-      if (interval > 1) {
-        return Math.floor(interval) + ' minutes'
-      }
-
-      return Math.floor(seconds) + ' seconds'
-    }
-  }
-}
-app.component('format', {
-  template: '<span>{{ formatter[fn](value, format) }}</span>',
-  props: ['value', 'fn', 'format'],
-  computed: {
-    formatter() {
-      return formatter
-    }
-  }
-})
 
 const toastOptions = {
   toastDefaults: {
