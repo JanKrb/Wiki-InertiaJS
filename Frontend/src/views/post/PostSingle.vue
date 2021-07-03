@@ -151,12 +151,8 @@
           </div>
         </div>
       </div>
-      <div class="intro-y text-justify leading-relaxed">
-        <p>{{ this.post?.content }}</p>
-      </div>
-      <div
-        class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center mt-5 pt-5 border-t border-gray-200 dark:border-dark-5"
-      >
+      <div class="intro-y text-justify leading-relaxed" v-html="this.post?.content"></div>
+      <div class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center mt-5 pt-5 border-t border-gray-200 dark:border-dark-5">
         <div class="flex items-center">
           <div class="w-12 h-12 flex-none image-fit">
             <img
