@@ -1,5 +1,50 @@
 <template>
   <div>
+    <!-- BEGIN: Post History Slide -->
+    <div id="post-history-slider" class="modal modal-slide-over" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header p-5">
+            <h2 class="font-medium text-base mr-auto">
+              Post History
+            </h2>
+          </div>
+          <div class="modal-body">
+            <div class="report-timeline mt-5 relative">
+              <div class="intro-x relative flex items-center mb-3" v-for="history in this.histories" v-bind:key="history.id">
+                <div class="report-timeline__image">
+                  <div
+                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
+                  >
+                    <img
+                      alt=""
+                      :src="history?.user?.profile_picture"
+                    />
+                  </div>
+                </div>
+                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
+                  <div class="flex items-center">
+                    <div class="font-medium">
+                      {{ history?.title }}
+                    </div>
+                    <div class="text-xs text-gray-500 ml-auto">{{ history?.created_at }}</div>
+                  </div>
+                  <div class="text-gray-600 mt-1">{{ history?.content }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-5 text-center" v-if="this.histories.length === 0">
+              <XCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3" />
+              <div class="text-3xl mt-5">No History!</div>
+              <div class="text-gray-600 mt-2">
+                This post has no recent History
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END: Post History Slide -->
     <!-- BEGIN: Report Post Modal -->
     <div
       id="report-post-modal"
@@ -56,6 +101,10 @@
               <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
                 <SlashIcon class="mr-3"></SlashIcon>
                 Report Post
+              </a>
+              <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
+                <ClockIcon class="mr-3"></ClockIcon>
+                Post History
               </a>
             </div>
           </div>
@@ -221,11 +270,13 @@ export default defineComponent({
       isBookmarked: false,
       report: {
         content: ''
-      }
+      },
+      histories: []
     }
   },
   mounted() {
     this.loadPost(this.$route.params.id)
+    this.loadHistory()
   },
   methods: {
     loadPost(id) {
@@ -338,6 +389,16 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('The post was successfully reported')
+        })
+    },
+    loadHistory() {
+      axios.get('http://localhost:8000/api/posts/' + this.$route.params.id + '/histories')
+        .then(response => {
+          this.histories = response.data.data
+          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   }
