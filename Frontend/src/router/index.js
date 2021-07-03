@@ -36,6 +36,7 @@ import CreatePosts from '../views/create-post/Main.vue'
 import EditPosts from '../views/edit-post/Main.vue'
 import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
+import TermsOfService from '../views/terms-of-service/Main.vue'
 import PostSingle from '../views/post/PostSingle.vue'
 
 const routes = [
@@ -85,6 +86,16 @@ const routes = [
         component: Search,
         meta: {
           title: 'Search',
+          auth: false,
+          isAuth: false
+        }
+      },
+      {
+        path: 'tos',
+        name: 'tos',
+        component: TermsOfService,
+        meta: {
+          title: 'Terms of Service',
           auth: false,
           isAuth: false
         }
