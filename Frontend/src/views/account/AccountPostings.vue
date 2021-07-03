@@ -27,9 +27,11 @@
                     <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
                   </router-link>
                   <div class="flex text-gray-600 truncate text-xs mt-0.5">
-                    <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
-                      Category
-                    </a>
+                    <router-link :to="{ name: 'categories.subcategory', params: { 'id': post?.parent?.id }}">
+                      <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
+                        {{ post?.parent?.title }}
+                      </a>
+                    </router-link>
                     <span class="mx-1">•</span> {{ post.created_at }}
                   </div>
                 </div>
@@ -39,7 +41,7 @@
                   </a>
                   <div class="dropdown-menu w-40">
                     <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                      <router-link :to="{ name: 'admin.ban', params: { 'id': post.id }}">
+                      <router-link :to="{ name: 'posts.view', params: { 'id': post.id }}">
                         <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                           <FileIcon class="w-4 h-4 mr-2"/> View Post
                         </a>
