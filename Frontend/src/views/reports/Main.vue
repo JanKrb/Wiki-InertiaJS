@@ -51,7 +51,7 @@
             </a>
             <div class="dropdown-menu w-40">
               <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': report.id } }">
+                <router-link :to="{ name: 'posts.view', params: { 'id': report.id } }">
                   <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                     <EyeIcon class="w-4 h-4 mr-2"/> View Post
                   </a>
@@ -75,11 +75,10 @@
           <div class="w-full flex text-gray-600 text-xs sm:text-sm">
             <div class="mr-2">
               Reported Post:
-              <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': report.post_id }}">
+              <router-link :to="{ name: 'posts.view', params: { 'id': report.post_id }}">
                 <span class="font-medium">#{{ report.post_id }}</span>
               </router-link>
             </div>
-            {{ report.active }}
             <div class="ml-auto">
               <span v-if="report.active"><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Open</span></span>
               <span v-else><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Closed</span></span>
