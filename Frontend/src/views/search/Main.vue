@@ -6,10 +6,12 @@
           <div class="file box rounded-md px-5 pt-2 pb-5 px-3 sm:px-5 relative bg-gray-600">
             <div class="relative text-lg bg-transparent text-gray-800">
               <div class="flex items-center border-b border-b-2 border-teal-500 py-2">
-                <input class="bg-transparent border-none mr-3 px-2 leading-tight focus:outline-none text-white" type="text" placeholder="Search">
-                <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
-                  <SearchIcon class="text-white mb-5"></SearchIcon>
-                </button>
+                <form @submit.prevent="this.search(this.search_keywords)">
+                  <input class="bg-transparent border-none mr-3 px-2 leading-tight focus:outline-none text-white" type="text" placeholder="Search" v-model="search_keywords">
+                  <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
+                    <SearchIcon class="text-white mb-5"></SearchIcon>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -23,15 +25,19 @@
           Search Filter
         </h2>
         <div class="border-t border-gray-200 dark:border-dark-5 mt-4 pt-4">
-          <a href="" class="flex items-center px-3 py-2 rounded-md">
+          <a href="javascript:;" @click="this.showFilter('all')" class="flex items-center px-3 py-2 rounded-md">
+            <div class="w-2 h-2 bg-theme-1 rounded-full mr-3"></div>
+            Show all
+          </a>
+          <a href="javascript:;" @click="this.showFilter('posts')" class="flex items-center px-3 py-2 mt-2 rounded-md">
             <div class="w-2 h-2 bg-theme-11 rounded-full mr-3"></div>
             Postings
           </a>
-          <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+          <a href="javascript:;" @click="this.showFilter('categories')" class="flex items-center px-3 py-2 mt-2 rounded-md">
             <div class="w-2 h-2 bg-theme-9 rounded-full mr-3"></div>
             Categories
           </a>
-          <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+          <a href="javascript:;" @click="this.showFilter('authors')" class="flex items-center px-3 py-2 mt-2 rounded-md">
             <div class="w-2 h-2 bg-theme-12 rounded-full mr-3"></div>
             Authors
           </a>
@@ -44,14 +50,14 @@
       <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
         <!-- BEGIN: Category Results -->
         <div
-          v-for="result in this.search_results.categories"
+          v-for="result in this.view_results.cats"
           :key="result"
           class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
         >
           <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-9 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : './assets/images/placeholder.png'">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('@/assets/images/placeholder.png')">
               </div>
               <div class="ml-4 mr-auto">
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
@@ -65,19 +71,19 @@
           </div>
         </div>
         <!-- END: Category Results -->
-        <!-- BEGIN: Category Results -->
+        <!-- BEGIN: Posts Results -->
         <div
-          v-for="result in this.search_results.posts"
+          v-for="result in this.view_results.posts"
           :key="result"
           class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
         >
           <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-11 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : './assets/images/placeholder.png'">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('@/assets/images/placeholder.png')">
               </div>
               <div class="ml-4 mr-auto">
-                <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
+                <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'posts.view', params: { id: result.id } })">
                   {{ result.title }}
                 </a>
                 <div class="text-gray-600 mr-5 sm:mr-5">
@@ -87,56 +93,46 @@
             </div>
           </div>
         </div>
-        <!-- END: Category Results -->
+        <!-- END: Posts Results -->
+        <!-- BEGIN: Authors Results -->
+        <div
+          v-for="result in this.view_results.users"
+          :key="result"
+          class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12"
+        >
+          <div class="file box rounded-md px-5 pt-4 pb-4 px-3 sm:px-5 relative border-l-2 border-theme-12 pl-4">
+            <div class="relative flex items-center">
+              <div class="w-12 h-12 flex-none image-fit">
+                <img alt="" class="rounded" :src="result.profile_picture ? result.profile_picture : require('@/assets/images/placeholder.png')">
+              </div>
+              <div class="ml-4 mr-auto">
+                <a href="javascript:;" class="font-medium">
+                  {{ result.name }}
+                </a>
+                <div class="text-gray-600 mr-5 sm:mr-5">
+                  {{ result.email }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: Authors Results -->
+        <!-- BEGIN: No Content -->
+        <div class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12" v-if="this.view_results?.cats?.length === 0 && this.view_results?.posts?.length === 0 && this.view_results?.users?.length === 0 ">
+          <div class="file box rounded-md px-5 pt-4 pb-4 px-3 sm:px-5 relative border-l-2 border-theme-6 pl-4">
+            <div class="relative flex items-center">
+              <div class="p-2">
+                <div class="text-3xl mt-5">Your search has not found any results!</div>
+                <div class="text-gray-600 mt-2 mb-5">
+                  Your search did not find any results, please search for another term or name.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: No Content -->
       </div>
       <!-- END: List all results -->
-      <!-- BEGIN: Pagination -->
-      <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
-        <ul class="pagination">
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronsLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">...</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">1</a>
-          </li>
-          <li>
-            <a class="pagination__link pagination__link--active" href="">2</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">3</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">...</a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li>
-            <a class="pagination__link" href="">
-              <ChevronsRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-        </ul>
-        <select class="w-20 form-select box mt-3 sm:mt-0">
-          <option>10</option>
-          <option>25</option>
-          <option>35</option>
-          <option>50</option>
-        </select>
-      </div>
-      <!-- END: Pagination -->
     </div>
   </div>
 </template>
@@ -149,14 +145,17 @@ export default defineComponent({
   data() {
     return {
       search_results: {
-        categories: [],
+        cats: [],
         posts: [],
         users: []
-      }
+      },
+      view_results: {
+        cats: [],
+        posts: [],
+        users: []
+      },
+      search_keywords: ''
     }
-  },
-  mounted() {
-    this.search('Lorem')
   },
   methods: {
     search(keywords) {
@@ -166,15 +165,24 @@ export default defineComponent({
         }
       })
         .then(response => {
-          console.log(response)
-          this.search_results.categories = response.data.data.cats
-          this.search_results.posts = response.data.data.posts
-          this.search_results.users = response.data.data.users
+          this.search_results = response.data.data
+          this.view_results = response.data.data
         })
         .catch(error => {
           console.error(error)
           console.error(error.response)
         })
+    },
+    showFilter(filter) {
+      this.view_results = {}
+
+      if (filter === 'categories') { this.view_results.cats = this.search_results.cats }
+      if (filter === 'posts') { this.view_results.posts = this.search_results.posts }
+      if (filter === 'authors') { this.view_results.users = this.search_results.users }
+
+      if (filter === 'all') {
+        this.view_results = this.search_results
+      }
     }
   }
 })

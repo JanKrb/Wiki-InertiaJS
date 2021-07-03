@@ -82,7 +82,7 @@ const routes = [
         name: 'search',
         component: Search,
         meta: {
-          title: 'Wiki Search',
+          title: 'Search',
           auth: false,
           isAuth: false
         }
