@@ -33,6 +33,7 @@ import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 import ProfilePostings from '../views/profile/ProfilePostings.vue'
 import CreateCategories from '../views/create-category/Main.vue'
 import CreatePosts from '../views/create-post/Main.vue'
+import EditPosts from '../views/edit-post/Main.vue'
 import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
 import PostSingle from '../views/post/PostSingle.vue'
@@ -364,6 +365,16 @@ const routes = [
         path: 'posts/create',
         name: 'moderation.posts.create',
         component: CreatePosts,
+        meta: {
+          title: 'Wiki Posts',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'posts/:id/edit',
+        name: 'moderation.posts.edit',
+        component: EditPosts,
         meta: {
           title: 'Wiki Posts',
           auth: true,
