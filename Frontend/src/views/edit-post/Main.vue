@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="handleSubmit">
       <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Create new Post</h2>
+        <h2 class="text-lg font-medium mr-auto">Update a Post</h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
           <button class="btn btn-primary shadow-md flex items-center" type="submit">
             <SaveIcon class="w-5 h-5 mr-2"></SaveIcon>Save
@@ -47,7 +47,7 @@
                     <div class="flex-1 mt-6 xl:mt-0">
                       <p class="mt-3">Post Title</p>
                       <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.post.title"/>
-                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                      <div v-if="this.validation_error?.title != null" class="text-theme-6 mt-2 mb-4">
                         {{ this.validation_error?.title[0] }}
                       </div>
                       <p class="mt-3">Post Content</p>
@@ -133,7 +133,7 @@
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="post.id" v-for="post in this.categories" v-bind:key="post.id">{{ post.title }}</option>
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.post.category_id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
@@ -186,32 +186,35 @@ export default defineComponent({
         content: ''
       },
       user: {},
-      categories: []
+      categories: [],
+      validation_error: {}
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchPost()
     this.fetchCategories()
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/posts', {
+      axios.put('http://localhost:8000/api/posts/' + this.$route.params.id, {
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        category_id: this.post.category_id
+        category_id: this.post.category_id,
+        approve: false
       })
         .then(response => {
-          toast.success('Post was created successfully!')
+          toast.success('Post was updated successfully!')
           loader.hide()
           this.$router.push({ name: 'categories' })
         })
         .catch(error => {
+          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
-          console.log(error.response)
           loader.hide()
         })
     },
@@ -247,6 +250,16 @@ export default defineComponent({
         .then(response => {
           this.categories = response.data
           console.log(response.data)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchPost() {
+      axios.get('http://localhost:8000/api/posts/' + this.$route.params.id)
+        .then(response => {
+          this.post = response.data.data
+          console.log(response.data.data)
         })
         .catch(error => {
           console.error(error)
