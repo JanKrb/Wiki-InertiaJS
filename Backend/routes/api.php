@@ -20,9 +20,8 @@ use App\Http\Controllers\API\Permission\PermissionController;
 use App\Http\Controllers\API\Permission\RoleController;
 use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\StorageController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\API\SearchController;
+use App\Http\Controllers\API\StorageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -741,11 +740,3 @@ Route::group(['middleware' => 'auth:api'], function() {
 Route::get('search', [SearchController::class, 'search'])
     ->name('search')
     ->middleware(['auth:api']);
-
-Route::get('test/email/{mail}', function($mail) {
-    for ($i = 0; $i < 15; $i++) {
-        dispatch(new App\Jobs\SendEmailJob($mail));
-    }
-
-    dd('send mail successfully !!');
-});
