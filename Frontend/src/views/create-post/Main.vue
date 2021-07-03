@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="handleSubmit">
       <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Create new Category</h2>
+        <h2 class="text-lg font-medium mr-auto">Create new Post</h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
           <button class="btn btn-primary shadow-md flex items-center" type="submit">
             <SaveIcon class="w-5 h-5 mr-2"></SaveIcon>Save
@@ -10,9 +10,9 @@
         </div>
       </div>
       <div class="pos intro-y grid grid-cols-12 gap-5 mt-5">
-        <!-- BEGIN: Create Category -->
+        <!-- BEGIN: Create Post -->
         <div class="intro-y col-span-12 lg:col-span-8">
-          <div class="post intro-y overflow-hidden box mt-5">
+          <div class="post intro-y overflow-hidden box">
             <div
               class="post__tabs nav nav-tabs flex-col sm:flex-row bg-gray-300 dark:bg-dark-2 text-gray-600"
               role="tablist"
@@ -20,7 +20,7 @@
               <Tippy
                 id="properties-tab"
                 tag="a"
-                content="Customize the category properties"
+                content="Customize the post properties"
                 data-toggle="tab"
                 data-target="#properties"
                 href="javascript:;"
@@ -30,32 +30,6 @@
                 aria-selected="true"
               >
                 <FileTextIcon class="w-4 h-4 mr-2" /> Properties
-              </Tippy>
-              <Tippy
-                id="assignment-tab"
-                tag="a"
-                content="Customize the post & categories assignment"
-                data-toggle="tab"
-                data-target="#assignment"
-                href="javascript:;"
-                class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                role="tab"
-                aria-selected="false"
-              >
-                <LayersIcon class="w-4 h-4 mr-2" /> Assignment
-              </Tippy>
-              <Tippy
-                id="settings-tab"
-                tag="a"
-                content="Manage the category settings"
-                data-toggle="tab"
-                data-target="#settings"
-                href="javascript:;"
-                class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                role="tab"
-                aria-selected="false"
-              >
-                <SettingsIcon class="w-4 h-4 mr-2" /> Settings
               </Tippy>
             </div>
             <div class="post__content tab-content">
@@ -67,19 +41,31 @@
               >
                 <div class="border border-gray-200 dark:border-dark-5 rounded-md p-5">
                   <div class="font-medium flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
-                    <ChevronDownIcon class="w-4 h-4 mr-2" /> Category settings
+                    <ChevronDownIcon class="w-4 h-4 mr-2" /> Post settings
                   </div>
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
-                      <p class="mt-3">Category Title</p>
-                      <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.category.title"/>
+                      <p class="mt-3">Post Title</p>
+                      <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.post.title"/>
                       <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
                         {{ this.validation_error?.title[0] }}
                       </div>
-                      <p class="mt-3">Category Title</p>
-                      <textarea rows="5" :class="'form-control mt-2' + (this.validation_error?.description != null ? ' border-theme-6' : '')" placeholder="Description" v-model="this.category.description"></textarea>
-                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.description[0] }}
+                      <p class="mt-3">Post Content</p>
+                      <!-- BEGIN: Standard Editor -->
+                      <div class="col-span-12 lg:col-span-6">
+                        <div id="standard-editor">
+                          <div class="preview">
+                            <CKEditor
+                              v-model="this.post.content"
+                              :editor="classicEditor"
+                              :config="editorConfig"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END: Standard Editor -->
+                      <div v-if="this.validation_error?.content != null" class="text-theme-6 mt-2 mb-4">
+                        {{ this.validation_error?.content[0] }}
                       </div>
                     </div>
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
@@ -88,7 +74,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.category.thumbnail ? this.category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.post.thumbnail ? this.post.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -132,40 +118,23 @@
               <label class="form-label">Title</label>
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="truncate">{{ this.category?.title?.substring(0,75) }}</div>
+                  <div class="truncate">{{ this.post?.title?.substring(0,75) }}</div>
                   <TagIcon class="w-4 h-4 ml-auto"/>
                 </div>
               </div>
             </div>
             <div class="mt-4">
-              <label class="form-label">Description</label>
+              <label class="form-label">Parent Category</label>
               <div class="dropdown">
-                <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="truncate">{{ this.category?.description?.substring(0,75) }}</div>
-                  <FileTextIcon class="w-4 h-4 ml-auto"/>
-                </div>
-              </div>
-            </div>
-            <div class="mt-4">
-              <label class="form-label">Category sorting</label>
-              <div class="dropdown">
-                <div class="w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start mb-3" role="button" aria-expanded="false">
-                  <div class="form-check">
-                    <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
-                    <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
-                  </div>
-                </div>
-                <div v-show="has_parent">
-                  <TailSelect
-                    v-model="this.category.parent_id"
-                    :options="{
-                    search: true,
-                    classNames: 'w-full'
-                  }"
-                  >
-                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
-                  </TailSelect>
-                </div>
+                <TailSelect
+                  v-model="this.post.parent_id"
+                  :options="{
+                  search: true,
+                  classNames: 'w-full'
+                }"
+                >
+                  <option :value="post.id" v-for="post in this.categories" v-bind:key="post.id">{{ post.title }}</option>
+                </TailSelect>
               </div>
             </div>
           </div>
@@ -177,20 +146,45 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
+import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
+import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
+import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
+import UnderlinePlugin from '@ckeditor/ckeditor5-basic-styles/src/underline'
+import StrikethroughPlugin from '@ckeditor/ckeditor5-basic-styles/src/strikethrough'
+import CodePlugin from '@ckeditor/ckeditor5-basic-styles/src/code'
+import SubscriptPlugin from '@ckeditor/ckeditor5-basic-styles/src/subscript'
+import SuperscriptPlugin from '@ckeditor/ckeditor5-basic-styles/src/superscript'
+import LinkPlugin from '@ckeditor/ckeditor5-link/src/link'
+import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph'
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter'
+import EasyImagePlugin from '@ckeditor/ckeditor5-easy-image/src/easyimage'
+import ImagePlugin from '@ckeditor/ckeditor5-image/src/image'
+import ImageUploadPlugin from '@ckeditor/ckeditor5-image/src/imageupload'
+import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert'
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
+import ImageAlternateText from '@ckeditor/ckeditor5-image/src/imagetextalternative'
+import ImageCrop from '@ckeditor/ckeditor5-image/src/imageresize'
+import CloudServicesPlugin from '@ckeditor/ckeditor5-cloud-services/src/cloudservices'
+import Font from '@ckeditor/ckeditor5-font/src/font'
+import Heading from '@ckeditor/ckeditor5-heading/src/heading'
+import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
+import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight'
 
 const toast = useToast()
 
 export default defineComponent({
   data() {
     return {
-      category: {
+      post: {
         title: '',
-        description: ''
+        content: ''
       },
-      has_parent: false,
       user: {},
       categories: []
     }
@@ -202,20 +196,15 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      let parentId = null
-      if (this.has_parent) {
-        parentId = this.category.parent_id
-      }
-      console.log(parentId)
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/categories', {
-        title: this.category.title,
-        description: this.category.description,
-        thumbnail: this.category.thumbnail,
-        ...(parentId ? { parent_id: parentId } : {})
+      axios.post('http://localhost:8000/api/posts', {
+        title: this.post.title,
+        content: this.post.content,
+        thumbnail: this.post.thumbnail,
+        category_id: this.post.category_id
       })
         .then(response => {
-          toast.success('Category was created successfully!')
+          toast.success('Post was created successfully!')
           loader.hide()
           this.$router.push({ name: 'categories' })
         })
@@ -243,7 +232,7 @@ export default defineComponent({
           }
         })
         .then((res) => {
-          this.category.thumbnail = res.data.data.url
+          this.post.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
           loader.hide()
         })
@@ -262,6 +251,78 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
+    }
+  },
+  setup() {
+    const date = ref('')
+    const classicEditor = ClassicEditor
+
+    const editorConfig = {
+      plugins: [
+        Font,
+        EssentialsPlugin,
+        BoldPlugin,
+        UnderlinePlugin,
+        StrikethroughPlugin,
+        ItalicPlugin,
+        LinkPlugin,
+        ParagraphPlugin,
+        CodePlugin,
+        SubscriptPlugin,
+        SuperscriptPlugin,
+        SimpleUploadAdapter,
+        EasyImagePlugin,
+        ImagePlugin,
+        ImageUploadPlugin,
+        ImageInsert,
+        ImageToolbar,
+        ImageCaption,
+        ImageStyle,
+        ImageAlternateText,
+        ImageCrop,
+        CloudServicesPlugin,
+        Heading,
+        HeadingButtonsUI,
+        Highlight
+      ],
+      toolbar: {
+        items: [
+          'fontSize',
+          'fontFamily',
+          'fontColor',
+          'fontBackgroundColor',
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'code',
+          'subscript',
+          'superscript',
+          'link',
+          'undo',
+          'redo',
+          '|',
+          'insertImage',
+          'imageStyle:full',
+          'imageStyle:side',
+          '|',
+          'highlight'
+        ]
+      },
+      simpleUpload: {
+        uploadUrl: 'http://localhost:8000/api/storage/uploadEditor',
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+    }
+    const editorData = ref('<p>Content of the editor.</p>')
+
+    return {
+      date,
+      classicEditor,
+      editorConfig,
+      editorData
     }
   }
 })
