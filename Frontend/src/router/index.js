@@ -101,7 +101,29 @@ const routes = [
         }
       },
       {
-        path: 'profile',
+        path: 'test',
+        name: 'editor_test',
+        component: EditorTest,
+        meta: {
+          title: 'Test Page',
+          auth: false,
+          isAuth: false
+        }
+      }
+    ]
+  },
+  {
+    path: '/profile',
+    component: TopMenu,
+    name: 'Profile',
+    meta: {
+      title: 'Wiki',
+      auth: false,
+      isAuth: false
+    },
+    children: [
+      {
+        path: 'informations',
         name: 'profile.informations',
         component: ProfileInformations,
         meta: {
@@ -111,7 +133,7 @@ const routes = [
         }
       },
       {
-        path: 'profile/change-password',
+        path: 'change-password',
         name: 'profile.security',
         component: ProfileSecurity,
         meta: {
@@ -121,22 +143,12 @@ const routes = [
         }
       },
       {
-        path: 'profile/postings',
+        path: 'postings',
         name: 'profile.postings',
         component: ProfilePostings,
         meta: {
           title: 'My Postings',
           auth: true,
-          isAuth: false
-        }
-      },
-      {
-        path: 'test',
-        name: 'editor_test',
-        component: EditorTest,
-        meta: {
-          title: 'Test Page',
-          auth: false,
           isAuth: false
         }
       }
