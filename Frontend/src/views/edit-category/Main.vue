@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="handleSubmit">
       <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Update a Post</h2>
+        <h2 class="text-lg font-medium mr-auto">Update a Category</h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
           <button class="btn btn-primary shadow-md flex items-center" type="submit">
             <SaveIcon class="w-5 h-5 mr-2"></SaveIcon>Save
@@ -10,17 +10,17 @@
         </div>
       </div>
       <div class="pos intro-y grid grid-cols-12 gap-5 mt-5">
-        <!-- BEGIN: Create Post -->
+        <!-- BEGIN: Create Category -->
         <div class="intro-y col-span-12 lg:col-span-8">
-          <div class="post intro-y overflow-hidden box">
+          <div class="category intro-y overflow-hidden box">
             <div
-              class="post__tabs nav nav-tabs flex-col sm:flex-row bg-gray-300 dark:bg-dark-2 text-gray-600"
+              class="category__tabs nav nav-tabs flex-col sm:flex-row bg-gray-300 dark:bg-dark-2 text-gray-600"
               role="tablist"
             >
               <Tippy
                 id="properties-tab"
                 tag="a"
-                content="Customize the post properties"
+                content="Customize the category properties"
                 data-toggle="tab"
                 data-target="#properties"
                 href="javascript:;"
@@ -32,7 +32,7 @@
                 <FileTextIcon class="w-4 h-4 mr-2" /> Properties
               </Tippy>
             </div>
-            <div class="post__content tab-content">
+            <div class="category__content tab-content">
               <div
                 id="properties"
                 class="tab-pane p-5 active"
@@ -41,31 +41,19 @@
               >
                 <div class="border border-gray-200 dark:border-dark-5 rounded-md p-5">
                   <div class="font-medium flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
-                    <ChevronDownIcon class="w-4 h-4 mr-2" /> Post settings
+                    <ChevronDownIcon class="w-4 h-4 mr-2" /> Category settings
                   </div>
                   <div class="flex flex-col-reverse xl:flex-row flex-col">
                     <div class="flex-1 mt-6 xl:mt-0">
-                      <p class="mt-3">Post Title</p>
-                      <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.post.title"/>
+                      <p class="mt-3">Category Title</p>
+                      <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.category.title"/>
                       <div v-if="this.validation_error?.title != null" class="text-theme-6 mt-2 mb-4">
                         {{ this.validation_error?.title[0] }}
                       </div>
-                      <p class="mt-3">Post Content</p>
-                      <!-- BEGIN: Standard Editor -->
-                      <div class="col-span-12 lg:col-span-6">
-                        <div id="standard-editor">
-                          <div class="preview">
-                            <CKEditor
-                              v-model="this.post.content"
-                              :editor="classicEditor"
-                              :config="editorConfig"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END: Standard Editor -->
-                      <div v-if="this.validation_error?.content != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.content[0] }}
+                      <p class="mt-3">Category Description</p>
+                      <textarea rows="5" class="form-control" v-model="this.category.description"></textarea>
+                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
+                        {{ this.validation_error?.description[0] }}
                       </div>
                     </div>
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
@@ -74,7 +62,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.post.thumbnail ? this.post.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.category.thumbnail ? this.category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -98,8 +86,8 @@
             </div>
           </div>
         </div>
-        <!-- END: Post Content -->
-        <!-- BEGIN: Post Info -->
+        <!-- END: Category Content -->
+        <!-- BEGIN: Category Info -->
         <div class="col-span-12 lg:col-span-4">
           <div class="intro-y box p-5">
             <div>
@@ -118,7 +106,7 @@
               <label class="form-label">Title</label>
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="truncate">{{ this.post?.title?.substring(0,75) }}</div>
+                  <div class="truncate">{{ this.category?.title?.substring(0,75) }}</div>
                   <TagIcon class="w-4 h-4 ml-auto"/>
                 </div>
               </div>
@@ -127,19 +115,20 @@
               <label class="form-label">Parent Category</label>
               <div class="dropdown">
                 <TailSelect
-                  v-model="this.post.parent.id"
+                  v-model="this.category.parent_id"
                   :options="{
                   search: true,
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.post?.parent?.id">{{ category.title }}</option>
+                  <option :value="null" :selected="this.category?.parent_id === null">No Parent</option>
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.category?.parent_id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
           </div>
         </div>
-        <!-- END: Post Info -->
+        <!-- END: Category Info -->
       </div>
     </form>
   </div>
@@ -181,7 +170,7 @@ const toast = useToast()
 export default defineComponent({
   data() {
     return {
-      post: {
+      category: {
         title: '',
         content: '',
         parent: {
@@ -195,29 +184,33 @@ export default defineComponent({
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
-    this.fetchPost()
+    this.fetchCategory()
     this.fetchCategories()
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
+      let parentId = null
+      if (this.has_parent) {
+        parentId = this.category.parent_id
+      }
+      console.log(parentId)
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/posts/' + this.$route.params.id, {
-        title: this.post.title,
-        content: this.post.content,
-        thumbnail: this.post.thumbnail,
-        category_id: this.post.parent.id,
-        approve: false
+      axios.put('http://localhost:8000/api/categories/' + this.$route.params.id, {
+        title: this.category.title,
+        description: this.category.description,
+        thumbnail: this.category.thumbnail,
+        ...(parentId ? { parent_id: parentId } : {})
       })
         .then(response => {
-          toast.success('Post was updated successfully!')
+          toast.success('Category was updated successfully!')
           loader.hide()
           this.$router.push({ name: 'categories' })
         })
         .catch(error => {
-          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
+          console.log(error.response)
           loader.hide()
         })
     },
@@ -230,7 +223,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.category('http://localhost:8000/api/storage/uploadImage',
         data,
         {
           headers: {
@@ -238,7 +231,7 @@ export default defineComponent({
           }
         })
         .then((res) => {
-          this.post.thumbnail = res.data.data.url
+          this.category.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
           loader.hide()
         })
@@ -252,20 +245,22 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
           this.categories = response.data
-          console.log(response.data)
         })
         .catch(error => {
           console.error(error)
         })
     },
-    fetchPost() {
-      axios.get('http://localhost:8000/api/posts/' + this.$route.params.id)
+    fetchCategory() {
+      const loader = this.$loading.show()
+      axios.get('http://localhost:8000/api/categories/' + this.$route.params.id)
         .then(response => {
-          this.post = response.data.data
-          console.log(response)
+          this.category = response.data.data
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          this.$router.push({ name: 'categories' })
+          loader.hide()
         })
     }
   },
