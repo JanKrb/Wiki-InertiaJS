@@ -185,6 +185,14 @@
           </div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
+              <Tippy
+                tag="div"
+                class="intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 text-gray-600 dark:text-gray-300"
+                content="Bookmark"
+                v-on:click='this.addBookmark("category", category.id)'
+              >
+                <BookmarkIcon class="w-5 h-5" />
+              </Tippy>
               <div class="mr-3">
                 <FolderIcon class="mr-1 w-5 h-5"></FolderIcon><span class="font-medium">Category</span>
               </div>
@@ -245,7 +253,7 @@
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
               <Tippy
                 tag="div"
-                :class="'intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 ' + (this.isBookmarked !== 0 ? 'text-blue-500' : 'text-gray-600 dark:text-gray-300')"
+                class="intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 text-gray-600 dark:text-gray-300"
                 content="Bookmark"
                 v-on:click='this.addBookmark("post", post.id)'
               >
@@ -404,7 +412,8 @@ export default defineComponent({
       },
       categories: [],
       validation_error: {},
-      user: {}
+      user: {},
+      isBookmarked: false
     }
   },
   mounted() {
@@ -412,6 +421,7 @@ export default defineComponent({
     this.testPagePermissions()
     if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
     if (this.categories.length === 0) { this.fetchCategories() }
+    this.loadBookmarks()
     this.loadAnnouncements()
     this.loadRecent()
   },
@@ -469,12 +479,22 @@ export default defineComponent({
     },
     loadBookmarks() {
       axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
+        .then(response => {
+          this.user.bookmarks = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
     },
     addBookmark(type, id) {
       let isPost = 0
       let isCategory = 0
       let postId = 0
       let categoryId = 0
+      let action = 1
+      let deleteId = 0
+
+      const loader = this.$loading.show()
 
       if (type === 'post') {
         isPost = 1
@@ -484,20 +504,49 @@ export default defineComponent({
         categoryId = id
       }
 
-      axios.post('http://localhost:8000/api/bookmarks/', {
-        ...(isPost ? { is_post: isPost } : {}),
-        ...(isCategory ? { is_category: isCategory } : {}),
-        ...(postId !== 0 ? { post_id: postId } : {}),
-        ...(categoryId !== 0 ? { category_id: categoryId } : {})
-      })
-        .then(response => {
-          console.log(response)
-          toast.success('Bookmark successfully added')
+      for (const bookmark in this.user.bookmarks) {
+        console.log(this.user.bookmarks[bookmark])
+        console.log(id === this.user.bookmarks[bookmark]?.post?.id)
+        console.log(id === this.user.bookmarks[bookmark]?.category?.id)
+        console.log(id)
+        if (id === this.user.bookmarks[bookmark]?.post?.id || id === this.user.bookmarks[bookmark]?.category?.id) {
+          action = 0
+          deleteId = this.user.bookmarks[bookmark]?.id
+        }
+      }
+
+      if (action) {
+        axios.post('http://localhost:8000/api/bookmarks/', {
+          ...(isPost ? { is_post: isPost } : {}),
+          ...(isCategory ? { is_category: isCategory } : {}),
+          ...(postId !== 0 ? { post_id: postId } : {}),
+          ...(categoryId !== 0 ? { category_id: categoryId } : {})
         })
-        .catch(error => {
-          console.log(error.response)
-          toast.error(error)
-        })
+          .then(response => {
+            console.log(response)
+            toast.success('Item has been bookmarked')
+            loader.hide()
+            this.loadBookmarks()
+          })
+          .catch(error => {
+            console.error(error)
+            toast.error(error)
+            loader.hide()
+          })
+      } else {
+        axios.delete('http://localhost:8000/api/bookmarks/' + deleteId)
+          .then(response => {
+            console.log(response)
+            toast.success('Item has been unbookmarked')
+            loader.hide()
+            this.loadBookmarks()
+          })
+          .catch(error => {
+            console.log(error)
+            toast.error(error)
+            loader.hide()
+          })
+      }
     },
     showSubcategory(id) {
       if (parseInt(this.$route.params.id) > 0) {
