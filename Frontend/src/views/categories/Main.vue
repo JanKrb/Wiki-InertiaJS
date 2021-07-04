@@ -243,8 +243,17 @@
           <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post.content.substring(0,200) + '...'"></div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
+              <Tippy
+                tag="div"
+                :class="'intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 ' + (this.isBookmarked !== 0 ? 'text-blue-500' : 'text-gray-600 dark:text-gray-300')"
+                content="Bookmark"
+                v-on:click='this.addBookmark("post", post.id)'
+              >
+                <BookmarkIcon class="w-5 h-5" />
+              </Tippy>
               <div class="mr-3">
-                <FileTextIcon class="mr-1 w-5 h-5"></FileTextIcon><span class="font-medium">Post</span>
+                <FileTextIcon class="mr-1 w-5 h-5"></FileTextIcon>
+                <span class="font-medium">Post</span>
               </div>
               <div class="ml-auto">
                 <HeartIcon class="mr-1 ml-4 w-5 h-5"></HeartIcon><span class="font-medium">{{ post.like_votes > 0 ? post.like_votes : 0 }}</span>
@@ -394,10 +403,12 @@ export default defineComponent({
         has_parent: false
       },
       categories: [],
-      validation_error: {}
+      validation_error: {},
+      user: {}
     }
   },
   mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
     this.testPagePermissions()
     if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
     if (this.categories.length === 0) { this.fetchCategories() }
@@ -456,6 +467,38 @@ export default defineComponent({
           console.error(error)
         })
     },
+    loadBookmarks() {
+      axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
+    },
+    addBookmark(type, id) {
+      let isPost = 0
+      let isCategory = 0
+      let postId = 0
+      let categoryId = 0
+
+      if (type === 'post') {
+        isPost = 1
+        postId = id
+      } else if (type === 'category') {
+        isCategory = 1
+        categoryId = id
+      }
+
+      axios.post('http://localhost:8000/api/bookmarks/', {
+        ...(isPost ? { is_post: isPost } : {}),
+        ...(isCategory ? { is_category: isCategory } : {}),
+        ...(postId !== 0 ? { post_id: postId } : {}),
+        ...(categoryId !== 0 ? { category_id: categoryId } : {})
+      })
+        .then(response => {
+          console.log(response)
+          toast.success('Bookmark successfully added')
+        })
+        .catch(error => {
+          console.log(error.response)
+          toast.error(error)
+        })
+    },
     showSubcategory(id) {
       if (parseInt(this.$route.params.id) > 0) {
         this.lastPage = this.$route.params.id
@@ -507,7 +550,6 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
           console.log(response)
@@ -515,11 +557,9 @@ export default defineComponent({
           if (this.$route.name === 'categories') {
             this.view_structure.categories = this.mainCategories
           }
-          loader.hide()
         })
         .catch(error => {
           console.error(error)
-          loader.hide()
         })
     },
     handleSubmit(e) {
