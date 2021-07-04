@@ -247,9 +247,8 @@
                 <FileTextIcon class="mr-1 w-5 h-5"></FileTextIcon><span class="font-medium">Post</span>
               </div>
               <div class="ml-auto">
-                <HeartIcon class="mr-1 ml-4 w-5 h-5"></HeartIcon><span class="font-medium">{{ post?.votes }}</span>
-                <MessageSquareIcon class="mr-1 ml-4 w-5 h-5"></MessageSquareIcon><span class="font-medium">{{ post?.comments }}</span>
-                <BookmarkIcon class="mr-1 ml-4 w-5 h-5"></BookmarkIcon>
+                <HeartIcon class="mr-1 ml-4 w-5 h-5"></HeartIcon><span class="font-medium">{{ post.like_votes > 0 ? post.like_votes : 0 }}</span>
+                <MessageSquareIcon class="mr-1 ml-4 w-5 h-5"></MessageSquareIcon><span class="font-medium">{{ post.comments > 0 ? post.comments : 0 }}</span>
               </div>
             </div>
           </div>
