@@ -34,9 +34,11 @@
         </router-link>
       </div>
       <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-        <a class="flex items-center" href="">
-          <BookIcon class="w-4 h-4 mr-2"/> Terms of service
-        </a>
+        <router-link :to="{ name: 'tos' }">
+          <a class="flex items-center" href="">
+            <BookIcon class="w-4 h-4 mr-2"/> Terms of service
+          </a>
+        </router-link>
         <a class="flex items-center mt-3" href="">
           <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
         </a>
