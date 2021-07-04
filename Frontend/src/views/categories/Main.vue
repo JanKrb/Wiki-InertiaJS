@@ -1,123 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
     <div class="col-span-12 xxl:col-span-10">
-      <!-- BEGIN: Edit Category Modal -->
-      <div id="edit-category-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-category-modal">
-        <div class="modal-dialog modal-xl">
-          <form @submit.prevent="handleSubmit">
-            <div class="modal-content">
-              <!-- BEGIN: Edit Category -->
-              <div class="intro-y col-span-12">
-                <div class="post intro-y overflow-hidden box mt-5">
-                  <div
-                    class="post__tabs nav nav-tabs flex-col sm:flex-row bg-gray-300 dark:bg-dark-2 text-gray-600"
-                    role="tablist"
-                  >
-                    <Tippy
-                      id="properties-tab"
-                      tag="a"
-                      content="Customize the category properties"
-                      data-toggle="tab"
-                      data-target="#properties"
-                      href="javascript:;"
-                      class="w-full sm:w-40 py-4 text-center flex justify-center items-center active"
-                      role="tab"
-                      aria-controls="properties"
-                      aria-selected="true"
-                    >
-                      <FileTextIcon class="w-4 h-4 mr-2"/> Properties
-                    </Tippy>
-                  </div>
-                  <div class="post__content tab-content">
-                    <div
-                      id="properties"
-                      class="tab-pane active"
-                      role="tabpanel"
-                      aria-labelledby="properties-tab"
-                    >
-                      <div class="p-5">
-                        <div class="font-medium flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
-                          <ChevronDownIcon class="w-4 h-4 mr-2" /> Category settings
-                        </div>
-                        <div class="flex flex-col-reverse xl:flex-row flex-col">
-                          <div class="flex-1 mt-6 xl:mt-0">
-                            <p class="mt-3">Category Title</p>
-                            <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.edit_category.title"/>
-                            <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.title[0] }}
-                            </div>
-                            <p class="mt-3">Category Description</p>
-                            <textarea rows="7" :class="'form-control mt-2' + (this.validation_error?.description != null ? ' border-theme-6' : '')" placeholder="Description" v-model="this.edit_category.description"></textarea>
-                            <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                              {{ this.validation_error?.description[0] }}
-                            </div>
-                            <div class="mt-4">
-                              <label class="form-label">Category sorting</label>
-                              <div class="dropdown">
-                                <div class="w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start mb-3" role="button" aria-expanded="false">
-                                  <div class="form-check">
-                                    <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="this.edit_category.has_parent">
-                                    <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
-                                  </div>
-                                </div>
-                                <div v-show="this.edit_category.has_parent">
-                                  <TailSelect
-                                    v-model="this.edit_category.parent_id"
-                                    :options="{
-                                      search: true,
-                                      classNames: 'w-full'
-                                    }"
-                                  >
-                                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === parseInt(this.$route.params.id)">{{ category.title }}</option>
-                                  </TailSelect>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="w-52 mx-auto xl:mr-0 xl:ml-6 mt-5 mr-3">
-                            <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
-                              <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                                <img
-                                  class="rounded-md"
-                                  alt=""
-                                  :src="this.edit_category?.thumbnail ? this.edit_category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
-                                />
-                              </div>
-                              <div class="mx-auto cursor-pointer relative mt-5">
-                                <button type="button" class="btn btn-primary w-full">
-                                  Change Thumbnail
-                                </button>
-                                <input
-                                  type="file"
-                                  class="w-full h-full top-0 left-0 absolute opacity-0"
-                                  @change="changePicture"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div v-if="this.validation_error?.thumbnail != null" class="text-theme-6 mt-2 mb-4">
-                            The thumbnail is required.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer text-right">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
-                      Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- END: Edit Category -->
-            </div>
-          </form>
-        </div>
-      </div>
-      <!-- END: Edit Category Modal -->
       <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
@@ -159,7 +42,7 @@
                       data-toggle="modal"
                       data-target="#edit-category-modal"
                       data-dismiss="dropdown"
-                      @click="this.edit_category = category; this.edit_category.has_parent = category.parent_id !== null"
+                      @click="this.$router.push({ name: 'moderation.categories.edit', params: { id: post.id } })"
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
@@ -235,7 +118,7 @@
                 </a>
                 <div class="dropdown-menu w-40">
                   <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                    <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                    <a href="javascript:;" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: post.id } })" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
                   </div>
@@ -420,23 +303,20 @@ export default defineComponent({
     this.user = JSON.parse(localStorage.getItem('user'))
     this.testPagePermissions()
     if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
-    if (this.categories.length === 0) { this.fetchCategories() }
+    if (this.$route.name === 'categories') { this.loadMainCategories(this.$route.params.id) }
     this.loadBookmarks()
     this.loadAnnouncements()
     this.loadRecent()
   },
   watch: {
     $route(to, from) {
+      this.view_structure.categories = []
       this.view_structure.posts = []
       if (this.$route.name === 'categories.subcategory') {
         this.loadSubcategory(this.$route.params.id)
       }
-      if (this.categories.length === 0) {
-        this.fetchCategories()
-      } else {
-        if (this.$route.name === 'categories') {
-          this.view_structure.categories = this.mainCategories
-        }
+      if (this.$route.name === 'categories') {
+        this.loadMainCategories()
       }
     }
   },
@@ -472,6 +352,17 @@ export default defineComponent({
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    loadMainCategories() {
+      axios.get('http://localhost:8000/api/categories?paginate=0')
+        .then(response => {
+          console.log(response)
+          this.categories = response.data
+          this.view_structure.categories = this.mainCategories
         })
         .catch(error => {
           console.error(error)
@@ -596,19 +487,6 @@ export default defineComponent({
           console.error(err)
           toast.error(err.response.data.message)
           loader.hide()
-        })
-    },
-    fetchCategories() {
-      axios.get('http://localhost:8000/api/categories?paginate=0')
-        .then(response => {
-          console.log(response)
-          this.categories = response.data
-          if (this.$route.name === 'categories') {
-            this.view_structure.categories = this.mainCategories
-          }
-        })
-        .catch(error => {
-          console.error(error)
         })
     },
     handleSubmit(e) {
