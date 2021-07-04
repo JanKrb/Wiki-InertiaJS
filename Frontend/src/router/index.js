@@ -31,6 +31,7 @@ import ErrorPage from '../views/error-page/Main.vue'
 import ProfileInformations from '../views/profile/ProfileInformations.vue'
 import ProfileSecurity from '../views/profile/ProfileSecurity.vue'
 import ProfilePostings from '../views/profile/ProfilePostings.vue'
+import ProfileBookmarks from '../views/profile/ProfileBookmarks.vue'
 import CreateCategories from '../views/create-category/Main.vue'
 import CreatePosts from '../views/create-post/Main.vue'
 import EditPosts from '../views/edit-post/Main.vue'
@@ -149,6 +150,16 @@ const routes = [
         component: ProfilePostings,
         meta: {
           title: 'My Postings',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'bookmarks',
+        name: 'profile.bookmarks',
+        component: ProfileBookmarks,
+        meta: {
+          title: 'My Bookmarks',
           auth: true,
           isAuth: false
         }
