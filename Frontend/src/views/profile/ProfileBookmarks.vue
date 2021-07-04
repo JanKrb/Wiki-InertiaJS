@@ -7,79 +7,54 @@
       <!-- BEGIN: Sidebar -->
       <Sidebar :user="this.user"></Sidebar>
       <!-- END: Sidebar -->
-      <!-- BEGIN: Recent Postings -->
+      <!-- BEGIN: Recent Bookmarks -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
-        <div class="grid grid-cols-12 gap-6 mt-5">
+        <div class="grid grid-cols-12 gap-4 mt-5">
           <div
-            v-for="post in this.postings"
-            :key="post.id"
+            v-for="bookmark in this.bookmarks"
+            :key="bookmark.id"
             class="intro-y col-span-12 md:col-span-6"
           >
-            <div class="box">
-              <div class="flex items-center border-b border-gray-200 dark:border-dark-5 px-5 py-4">
-                <div class="w-10 h-10 flex-none image-fit">
-                  <img
-                    alt=""
-                    class="rounded-full"
-                    :src="post.user.profile_picture"
-                  />
-                </div>
-                <div class="ml-3 mr-auto">
-                  <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
-                  <div class="flex text-gray-600 truncate text-xs mt-0.5">
-                    <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
-                      {{ post.created_at }}
-                    </a>
+            <router-link :to="{ name: bookmark.is_post ? 'posts.view' : 'categories.subcategory', params: { id: bookmark.is_post ? bookmark?.post?.id : bookmark?.category?.id }}">
+              <div class="intro-y">
+                <div class="box px-4 py-4 flex items-center zoom-in">
+                  <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
+                    <img alt="" :src="bookmark?.post?.thumbnail ? bookmark?.post?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_post">
+                    <img alt="" :src="bookmark?.category?.thumbnail ? bookmark?.category?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_category">
                   </div>
-                </div>
-                <div class="dropdown ml-3">
-                  <a href="javascript:;" class="dropdown-toggle w-5 h-5 text-gray-600 dark:text-gray-300" aria-expanded="false">
-                    <MoreVerticalIcon class="w-5 h-5"/>
-                  </a>
-                  <div class="dropdown-menu w-40">
-                    <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                      <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                        <FileIcon class="w-4 h-4 mr-2"/> View Post
-                      </a>
+                  <div class="ml-4 mr-auto">
+                    <div class="font-medium">
+                      {{ bookmark?.post?.title }} {{ bookmark?.category?.title }}
+                    </div>
+                    <div class="text-gray-600 text-xs mt-0.5">
+                      {{ bookmark.created_at }}
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="p-5">
-                <a class="block font-medium text-base">
-                  {{ post.title }}
-                </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
-              </div>
-              <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
-                <div class="w-full flex text-gray-600 text-xs sm:text-sm">
-                  <div class="mr-2">
-                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes > 0 ? post.like_votes : 0 }}
-                  </div>
-                  <div class="mr-2">
-                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments > 0 ? post.comments : 0 }}
-                  </div>
-                  <div class="ml-auto">
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
-                    <span v-if="false"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
+                  <div class="py-1 px-2 text-gray-600 cursor-pointer font-medium">
+                    <span v-if="bookmark.is_category">
+                        <FolderIcon class="mr-3"></FolderIcon>Category
+                    </span>
+                    <span v-if="bookmark.is_post">
+                        <FileTextIcon class="mr-3"></FileTextIcon>Post
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
+            </router-link>
           </div>
-          <div v-if="this.postings.length <= 0" class="intro-y col-span-12">
+          <div v-if="this.bookmarks.length <= 0" class="intro-y col-span-12">
             <div class="box">
               <div class="p-5 text-center">
-                <FolderIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
-                <div class="text-3xl mt-5">No recent Posts</div>
+                <BookmarkIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
+                <div class="text-3xl mt-5">No recent Bookmarks</div>
                 <div class="text-gray-600 mt-2 mb-5">
-                  You have no Posts, but you can create a new one!
+                  You have no Bookmarks, but you can subscribe to a new one!
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- END: Recent Postings -->
+        <!-- END: Recent Bookmarks -->
       </div>
     </div>
   </div>
@@ -89,10 +64,6 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
-import { useToast } from 'vue-toastification'
-import { useStore } from '@/store'
-
-const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -101,62 +72,32 @@ export default defineComponent({
   data() {
     return {
       user: {},
-      postings: [],
-      validation_error: {},
-      darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
+      bookmarks: [],
+      validation_error: {}
     }
   },
   mounted() {
     this.fetchUser()
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault()
-
-      const store = useStore()
-      const loader = this.$loading.show()
-
-      localStorage.setItem('darkmode', this.darkmode)
-      this.darkmode
-        ? cash('html').addClass('dark')
-        : cash('html').removeClass('dark')
-      store.dispatch('main/setDarkMode', this.darkmode)
-
-      axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
-        name: this.user.name,
-        pre_name: this.user.pre_name,
-        last_name: this.user.last_name,
-        email: this.user.email
-      })
-        .then(response => {
-          toast.success('Profile successfully updated')
-          loader.hide()
-          this.fetchUser()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
     fetchUser() {
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/auth/user')
         .then(response => {
           this.user = response.data.data.user
           loader.hide()
-          this.fetchPostings(response.data.data.user.id)
+          this.fetchBookmarks(response.data.data.user.id)
         })
         .catch(error => {
           console.log(error)
           loader.hide()
         })
     },
-    fetchPostings(id) {
-      axios.get('http://localhost:8000/api/posts?user=' + id)
+    fetchBookmarks() {
+      axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
         .then(response => {
           console.log(response)
-          this.postings = response.data.data
+          this.bookmarks = response.data.data
         })
         .catch(error => {
           console.error(error)
