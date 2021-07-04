@@ -34,6 +34,7 @@ import ProfilePostings from '../views/profile/ProfilePostings.vue'
 import CreateCategories from '../views/create-category/Main.vue'
 import CreatePosts from '../views/create-post/Main.vue'
 import EditPosts from '../views/edit-post/Main.vue'
+import EditCategories from '../views/edit-category/Main.vue'
 import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
 import TermsOfService from '../views/terms-of-service/Main.vue'
@@ -400,6 +401,16 @@ const routes = [
         component: EditPosts,
         meta: {
           title: 'Wiki Posts',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'categories/:id/edit',
+        name: 'moderation.categories.edit',
+        component: EditCategories,
+        meta: {
+          title: 'Wiki Categories',
           auth: true,
           isAuth: false
         }
