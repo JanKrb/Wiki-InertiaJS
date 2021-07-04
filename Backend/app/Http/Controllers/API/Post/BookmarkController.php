@@ -112,4 +112,46 @@ class BookmarkController extends BaseController
 
         return $response;
     }
+
+    public function get_users(Request $request, $user_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'per_page' => 'integer',
+            'paginate' => 'boolean',
+            'additional' => 'array',
+            'recent' => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
+        }
+
+        $data = $this->model::where('user_id', $user_id)->get();
+
+        $per_page = $request->get('per_page', 15);
+        $paginate_data = $request->get('paginate', true);
+        $recent = $request->get('recent', 0);
+
+        if ($recent > 0) {
+            $data = $data->sortBy('updated_at', SORT_ASC)->take($recent);
+        }
+
+        if ($paginate_data) {
+            $data = $data->paginate($per_page);
+        }
+
+        $response = (new $this->collection($data));
+
+        if ($request->has('additional')) {
+            $additional = $request->get('additional');
+
+            $response = $response::additional(array_merge([
+                'success' => true,
+                'message' => 'Successfully retrieved bookmarks'
+            ],
+                $additional));
+        }
+
+        return $response;
+    }
 }

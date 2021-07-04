@@ -629,6 +629,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('bookmarks.recover')
         ->middleware(['permission:bookmarks_recover'])
     ;
+
+    // User Bookmarks
+    Route::get('users/{user}/bookmarks', [BookmarkController::class, 'get_users'])
+        ->name('users.bookmarks.get_all')
+        ->middleware(['permission:users_bookmarks_get_all'])
+    ;
 });
 
 // Announcement System
