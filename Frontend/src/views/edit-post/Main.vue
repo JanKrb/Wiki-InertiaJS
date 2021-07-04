@@ -127,13 +127,13 @@
               <label class="form-label">Parent Category</label>
               <div class="dropdown">
                 <TailSelect
-                  v-model="this.post.parent_id"
+                  v-model="this.post.parent.id"
                   :options="{
                   search: true,
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.post.category_id">{{ category.title }}</option>
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.post?.parent?.id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
@@ -183,7 +183,10 @@ export default defineComponent({
     return {
       post: {
         title: '',
-        content: ''
+        content: '',
+        parent: {
+          id: 0
+        }
       },
       user: {},
       categories: [],
@@ -203,7 +206,7 @@ export default defineComponent({
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        category_id: this.post.category_id,
+        category_id: this.post.parent.id,
         approve: false
       })
         .then(response => {
@@ -259,7 +262,7 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/posts/' + this.$route.params.id)
         .then(response => {
           this.post = response.data.data
-          console.log(response.data.data)
+          console.log(response)
         })
         .catch(error => {
           console.error(error)
