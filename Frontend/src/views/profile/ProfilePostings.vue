@@ -49,9 +49,7 @@
                 <a class="block font-medium text-base">
                   {{ post.title }}
                 </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2">
-                  {{ post.content }}
-                </div>
+                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
               </div>
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
@@ -63,7 +61,7 @@
                   </div>
                   <div class="ml-auto">
                     <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
+                    <span v-if="false"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
                   </div>
                 </div>
               </div>
