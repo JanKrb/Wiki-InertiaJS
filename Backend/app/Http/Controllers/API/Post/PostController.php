@@ -51,7 +51,8 @@ class PostController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $history_post = PostHistory::create([
+        $old_post = $post;
+        PostHistory::create([
             'post_id' => $post->id,
             'user_id' => $post->user_id,
             'title' => $post->title,
@@ -72,7 +73,7 @@ class PostController extends BaseController
 
         return $this->sendResponse([
             'post' => new PostResource($post),
-            'history_post' => new PostResource($history_post)
+            'history_post' => new PostResource($old_post)
         ], 'Post updated successfully.');
     }
 }

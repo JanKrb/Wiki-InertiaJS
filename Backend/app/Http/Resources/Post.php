@@ -25,8 +25,9 @@ class Post extends JsonResource
         $vote = \App\Models\PostVote::where([
             ['user_id', auth()->user()->id],
             ['post_id', $this->id]
-        ])->first();
-        $liked = !is_null($vote) ? $vote->vote : 0;
+        ])->get();
+
+        $liked = sizeof($vote) > 0 ? $vote[0]["vote"] : 0;
 
         $data = [
             'id' => $this->id,
