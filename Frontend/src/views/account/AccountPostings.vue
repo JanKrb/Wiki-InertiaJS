@@ -46,11 +46,6 @@
                           <FileIcon class="w-4 h-4 mr-2"/> View Post
                         </a>
                       </router-link>
-                      <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': post.id }}">
-                        <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                          <Edit2Icon class="w-4 h-4 mr-2"/> Edit Post
-                        </a>
-                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -59,9 +54,7 @@
                 <a class="block font-medium text-base">
                   {{ post.title }}
                 </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2">
-                  {{ post.content }}
-                </div>
+                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
               </div>
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
@@ -136,13 +129,15 @@ export default defineComponent({
         })
     },
     fetchPosts(id) {
+      const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/posts?user=' + id)
         .then(response => {
-          console.log(response)
           this.posts = response.data.data
+          loader.hide()
         })
         .catch(error => {
           console.error(error)
+          loader.hide()
         })
     }
   }
