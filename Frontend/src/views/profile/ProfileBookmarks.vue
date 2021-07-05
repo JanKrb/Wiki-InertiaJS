@@ -96,7 +96,6 @@ export default defineComponent({
     fetchBookmarks() {
       axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
         .then(response => {
-          console.log(response)
           this.bookmarks = response.data.data
         })
         .catch(error => {
