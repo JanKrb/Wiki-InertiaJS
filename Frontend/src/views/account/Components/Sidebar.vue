@@ -74,6 +74,11 @@
             <PaperclipIcon class="w-4 h-4 mr-2"/> Postings
           </a>
         </router-link>
+        <router-link :to="{ 'name': 'admin.accounts.bookmarks', 'params': { id: this.$route.params.id }}">
+          <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.bookmarks' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
+            <BookmarkIcon class="w-4 h-4 mr-2"/> Bookmarks
+          </a>
+        </router-link>
         <router-link :to="{ 'name': 'admin.accounts.bans', 'params': { id: this.$route.params.id }}">
           <a :class="'flex items-center mt-5 ' + (this.$route.name === 'admin.accounts.bans' ? 'text-theme-1 dark:text-theme-10 font-medium' : '')" href="">
             <SlashIcon class="w-4 h-4 mr-2"/> Bans

@@ -17,6 +17,7 @@ import AccountInformations from '../views/account/AccountInformations.vue'
 import AccountSettings from '../views/account/AccountSettings.vue'
 import AccountSecurity from '../views/account/AccountSecurity.vue'
 import AccountPostings from '../views/account/AccountPostings.vue'
+import AccountBookmarks from '../views/account/AccountBookmarks.vue'
 import AccountBans from '../views/account/AccountBans.vue'
 import SettingsGeneral from '../views/settings/SettingsGeneral.vue'
 import SettingsDatabase from '../views/settings/SettingsDatabase.vue'
@@ -269,6 +270,16 @@ const routes = [
         path: 'accounts/:id/postings',
         name: 'admin.accounts.postings',
         component: AccountPostings,
+        meta: {
+          title: 'Wiki Account',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'accounts/:id/bookmarks',
+        name: 'admin.accounts.bookmarks',
+        component: AccountBookmarks,
         meta: {
           title: 'Wiki Account',
           auth: true,
