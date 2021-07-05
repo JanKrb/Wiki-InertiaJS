@@ -18,7 +18,7 @@ const state = () => {
           },
           {
             icon: 'FilterIcon',
-            pageName: 'moderation.tags',
+            pageName: 'moderation.authorizations',
             title: 'Authorization'
           },
           {
