@@ -136,32 +136,51 @@
                 </div>
                 <!-- END: Table Buttons -->
                 <!-- BEGIN: Datatable -->
-                <table class="table mt-5">
-                  <thead>
-                  <tr class="bg-primary-2 dark:bg-blue-800 text-white">
-                    <th class="whitespace-nowrap">#</th>
-                    <th class="whitespace-nowrap">Name</th>
-                    <th class="whitespace-nowrap">Creator</th>
-                    <th class="whitespace-nowrap">Updated at</th>
-                    <th class="whitespace-nowrap">Created at</th>
-                    <th class="whitespace-nowrap"></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="permission in role_permissions" v-bind:key="permission.id">
-                      <td class="border-b dark:border-dark-5">{{ permission.id }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission.user_id }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission.updated_at }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission.created_at }}</td>
-                      <td class="border-b dark:border-dark-5">
-                        <a class="text-small" href="javascript:;" @click="deletePermission(permission)">
-                          <Trash2Icon class="hover:text-blue-700"></Trash2Icon>
-                        </a>
+                <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                  <table class="table table-report -mt-2">
+                    <thead>
+                    <tr>
+                      <th class="text-center whitespace-nowrap">#</th>
+                      <th class="text-center whitespace-nowrap">NAME</th>
+                      <th class="text-center whitespace-nowrap">CREATOR</th>
+                      <th class="text-center whitespace-nowrap">LAST UPDATE</th>
+                      <th class="text-center whitespace-nowrap">CREATED AT</th>
+                      <th class="text-center whitespace-nowrap">ACTIONS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                      v-for="permission in role_permissions"
+                      v-bind:key="permission.id"
+                      class="intro-x"
+                    >
+                      <td class="text-center">
+                        {{ permission.id }}
+                      </td>
+                      <td class="text-center">
+                        {{ permission.name }}
+                      </td>
+                      <td class="text-center">
+                        {{ permission.user_id }}
+                      </td>
+                      <td class="text-center">
+                        {{ this.formatDate(permission.updated_at) }}
+                      </td>
+                      <td class="text-center">
+                        {{ this.formatDate(permission.created_at) }}
+                      </td>
+
+                      <td class="table-report__action w-56">
+                        <div class="flex justify-center items-center">
+                          <a class="text-small" href="javascript:;" @click="deletePermission(permission)">
+                            <Trash2Icon class="hover:text-blue-700"></Trash2Icon>
+                          </a>
+                        </div>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
                 <!-- END: Datatable -->
                 <!-- BEGIN: Datatable Pagination -->
                 <div class="flex flex-col items-center mt-5">
@@ -263,6 +282,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 const toast = useToast()
 
 export default defineComponent({
@@ -282,7 +302,7 @@ export default defineComponent({
   mounted() {
     this.fetchRole(this.$route.params.id)
     this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
-    this.fetchPermissions('http://localhost:8000/api/permissions?per_page=9999')
+    this.fetchPermissions('http://localhost:8000/api/permissions')
   },
   methods: {
     makePagination(meta, links) {
@@ -408,6 +428,9 @@ export default defineComponent({
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
     }
   }
 })
