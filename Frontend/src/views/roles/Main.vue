@@ -42,6 +42,19 @@
                 <label for="create-role-modal-color" class="form-label">Color</label>
                 <input id="create-role-modal-color" type="color" class="form-control" v-model="role.color"/>
               </div>
+              <div class="col-span-12">
+                <div class="flex items-center">
+                  <div>
+                     <a>
+                      Default Role
+                     </a>
+                     <div class="text-gray-600">
+                      Is the role a default user role?
+                     </div>
+                  </div>
+                  <input class="form-check-switch ml-auto" type="checkbox" v-model="role.is_default">
+                </div>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -84,6 +97,19 @@
               <div class="col-span-12">
                 <label for="edit-role-modal-color" class="form-label">Color</label>
                 <input id="edit-role-modal-color" type="color" class="form-control" v-model="edit_role.color"/>
+              </div>
+              <div class="col-span-12">
+                <div class="flex items-center">
+                  <div>
+                    <a>
+                      Default Role
+                    </a>
+                    <div class="text-gray-600">
+                      Is the role a default user role?
+                    </div>
+                  </div>
+                  <input class="form-check-switch ml-auto" type="checkbox" v-model="edit_role.is_default">
+                </div>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -186,7 +212,8 @@ export default defineComponent({
       role: {
         name: 'New Role',
         description: null,
-        color: '#000000'
+        color: '#000000',
+        is_default: 0
       },
       search: {
         role: ''
@@ -250,7 +277,8 @@ export default defineComponent({
       axios.post('http://localhost:8000/api/roles', {
         name: role.name,
         description: role.description,
-        color: role.color
+        color: role.color,
+        is_default: role.is_default
       })
         .then(response => {
           toast.success('Role was created successfully')
@@ -268,7 +296,8 @@ export default defineComponent({
       axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
         name: this.edit_role.name,
         description: this.edit_role.description,
-        color: this.edit_role.color
+        color: this.edit_role.color,
+        is_default: this.edit_role.is_default
       })
         .then(response => {
           toast.info('Role was successfully edited')
