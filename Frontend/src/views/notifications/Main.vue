@@ -709,7 +709,7 @@
                           </div>
                         </div>
                         <div class="text-center lg:text-left p-5">
-                          <div>{{ notification.content.substring(0,100)+"..." }}</div>
+                          <div>{{ notification.content.substring(0,100) }}{{ notification.content?.length > 100 ? '...' : '' }}</div>
                           <!-- BEGIN: Notification Seen -->
                           <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-5" v-if="notification.seen">
                             <EyeIcon class="w-3 h-3 mr-2"/>Seen

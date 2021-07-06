@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ category.description.substring(0,200)+"..." }}
+            {{ category.description.substring(0,200) }}{{ category.description?.length > 200 ? '...' : '' }}
           </div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
@@ -131,7 +131,7 @@
               </a>
             </div>
           </div>
-          <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post.content.substring(0,200) + '...'"></div>
+          <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post.content.substring(0,200)"></div>{{ post.content?.length > 200 ? '...' : '' }}
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
               <Tippy

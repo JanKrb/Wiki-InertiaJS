@@ -80,7 +80,7 @@
                 </div>
               </div>
             </div>
-            <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post.content.substring(0,200) + '...'"></div>
+            <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post.content.substring(0,200)"></div>{{ post.content?.length > 200 ? '...' : '' }}
           </div>
         </div>
       </div>
