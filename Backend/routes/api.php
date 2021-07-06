@@ -557,6 +557,22 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:posts_bookmarks_get_posts'])
     ;
 
+    // Post Tags
+    Route::post('posts/{post}/tags/{tag}/check', [PostsTagsController::class, 'check'])
+        ->name('posts.tags.check')
+        ->middleware(['permission:posts_tags_check'])
+    ;
+
+    Route::post('posts/{post}/tags/{tag}/attach', [PostsTagsController::class, 'attach'])
+        ->name('posts.tags.attach')
+        ->middleware(['permission:posts_tags_attach'])
+    ;
+
+    Route::post('posts/{post}/tags/{tag}/detach', [PostsTagsController::class, 'detach'])
+        ->name('posts.permissions.detach')
+        ->middleware(['permission:posts_permissions_detach'])
+    ;
+
     // Posts
     Route::get('posts', [PostController::class, 'get_all'])
         ->name('posts.index')
