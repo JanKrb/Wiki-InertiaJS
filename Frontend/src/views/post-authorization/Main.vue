@@ -110,7 +110,6 @@ export default defineComponent({
   mounted() {
     this.testPagePermissions()
     this.fetchPosts()
-    this.user = JSON.parse(localStorage.getItem('user'))
   },
   computed: {
     unauthorizedPosts: function () {
