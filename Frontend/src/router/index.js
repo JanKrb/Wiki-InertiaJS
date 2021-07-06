@@ -10,6 +10,7 @@ import Ban from '../views/ban/Main.vue'
 import Reports from '../views/reports/Main.vue'
 import Tags from '../views/tags/Main.vue'
 import Badges from '../views/badges/Main.vue'
+import PostAuthorization from '../views/post-authorization/Main.vue'
 import Announcements from '../views/announcements/Main.vue'
 import Notifications from '../views/notifications/Main.vue'
 import Accounts from '../views/accounts/Main.vue'
@@ -393,6 +394,16 @@ const routes = [
         component: Notifications,
         meta: {
           title: 'Wiki Notifications',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'authorizations',
+        name: 'moderation.authorizations',
+        component: PostAuthorization,
+        meta: {
+          title: 'Wiki Authorizations',
           auth: true,
           isAuth: false
         }
