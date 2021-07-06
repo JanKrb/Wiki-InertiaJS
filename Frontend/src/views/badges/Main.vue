@@ -45,7 +45,7 @@
                 {{ badge.title }}
               </div>
               <div class="text-gray-600 text-xs whitespace-nowrap mt-0.5">
-                {{ badge.description.substring(0, 15) }}...
+                {{ badge.description.substring(0, 15) }}{{ badge.description?.length > 15 ? '...' : '' }}
               </div>
             </td>
 
@@ -73,23 +73,20 @@
             <td class="table-report__action w-56">
               <div class="flex justify-center items-center">
                 <a
-                  class="flex items-center mr-3"
                   v-on:click='this.editModal = badge'
                   href='javascript:'
                   data-toggle='modal'
                   data-target='#edit-badge-modal'
-                >
-                  <CheckSquareIcon class="w-4 h-4 mr-1" />
-                  Edit
+                  class="text-small">
+                  <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
                 </a>
                 <a
-                  class="flex items-center text-theme-6"
                   v-on:click='this.deleteModal = badge'
                   href='javascript:'
                   data-toggle="modal"
                   data-target="#delete-confirmation-modal"
-                >
-                  <Trash2Icon class="w-4 h-4 mr-1" /> Delete
+                  class="text-small">
+                  <Trash2Icon class="w-5 h-5 hover:text-blue-700"></Trash2Icon>
                 </a>
               </div>
             </td>
