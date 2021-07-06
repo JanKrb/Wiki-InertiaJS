@@ -101,6 +101,24 @@
                 </p>
               </div>
               <!-- END: Role Description -->
+              <br>
+              <!-- BEGIN: Role Description -->
+              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5">
+                <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                  <p>
+                    <label class="bg-white text-gray-600 px-1">Default Role</label>
+                  </p>
+                </div>
+                <div class="flex items-center">
+                  <div>
+                    <div class="text-gray-600">
+                      Is the role a default user role?
+                    </div>
+                  </div>
+                  <input class="form-check-switch ml-auto" type="checkbox" v-model="role.is_default">
+                </div>
+              </div>
+              <!-- END: Role Description -->
             </div>
           </div>
           <div
