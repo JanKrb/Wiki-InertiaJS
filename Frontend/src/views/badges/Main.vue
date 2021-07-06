@@ -1,10 +1,8 @@
 <template>
   <div>
     <div class="grid grid-cols-12 gap-6 mt-5">
-      <div
-        class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2"
-      >
-        <button class="btn btn-primary shadow-md mr-2">Add New Product</button>
+      <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+        <a class="btn btn-primary shadow-md mr-2" data-toggle='modal' data-target='#create-badge-modal'>Add New Badge</a>
 
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
           <div class="w-56 relative text-gray-700 dark:text-gray-300">
@@ -259,6 +257,78 @@
       </div>
     </div>
     <!-- END: Edit Badge Modal -->
+
+    <!-- BEGIN: Create Badge Modal -->
+    <div id="create-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="create-badge-modal">
+      <div class="modal-dialog">
+        <form @submit.prevent="createBadge">
+          <div class="modal-content">
+            <!-- BEGIN: Modal Header -->
+            <div class="modal-header">
+              <h2 class="font-medium text-base mr-auto">
+                Create a new Badge
+              </h2>
+            </div>
+            <!-- END: Modal Header -->
+            <!-- BEGIN: Modal Body -->
+            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+              <div class="col-span-12">
+                <label for="create-badge-modal-name" class="form-label">Title</label>
+                <input id="create-badge-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="createModal.title"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-badge-modal-description" class="form-label">Description</label>
+                <textarea id="create-badge-modal-description" class="form-control" placeholder="Your Description" v-model="createModal.description"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-badge-modal-color" class="form-label">Color</label>
+                <input id="create-badge-modal-color" type="color" class="form-control" v-model="createModal.color"/>
+              </div>
+              <div class="col-span-12">
+                <label for="create-badge-modal-icon" class="form-label">Icon</label>
+                <input id="create-badge-modal-icon" type="text" class="form-control" placeholder="Your Name" v-model="createModal.icon"/>
+              </div>
+              <div class="col-span-12">
+                <div class="flex items-center mt-3">
+                  <div>
+                    <a href="" class="font-medium">Is role badge?</a>
+                    <div class="text-gray-600">A role badge is connected to a role</div>
+                  </div>
+                  <input class="form-check-switch ml-auto" type="checkbox" :checked="createModal.is_role_badge" v-model="createModal.is_role_badge">
+                </div>
+                <div class="col-span-12" v-if="createModal.is_role_badge">
+                  <hr class="my-5">
+                  <label class="form-label">Role</label>
+
+                  <TailSelect
+                    v-model="this.createModal.role_id"
+                    :class="'form-control' + (this.validation_error?.role_id != null ? ' border-theme-6' : '')"
+                    :options="{
+                      search: true,
+                      classNames: 'w-full'
+                    }"
+                  >
+                    <option :value="role.id" v-for="role in this.roles" v-bind:key="role.id">{{ role.name }}</option>
+                  </TailSelect>
+                </div>
+              </div>
+            </div>
+            <!-- END: Modal Body -->
+            <!-- BEGIN: Modal Footer -->
+            <div class="modal-footer text-right">
+              <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+                Create
+              </button>
+            </div>
+            <!-- END: Modal Footer -->
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- END: Create Badge Modal -->
   </div>
 </template>
 
@@ -280,11 +350,22 @@ export default defineComponent({
       per_page: 15,
       search: '',
       deleteModal: {},
-      editModal: {}
+      editModal: {},
+      roles: [],
+      validation_error: {},
+      createModal: {
+        title: '',
+        description: '',
+        icon: '',
+        color: '#000000',
+        is_role_badge: 0,
+        role_id: 0
+      }
     }
   },
   mounted() {
     this.fetchBadges('http://localhost:8000/api/badges')
+    this.fetchRoles()
   },
   methods: {
     fetchBadges(page) {
@@ -302,6 +383,34 @@ export default defineComponent({
         .catch((error) => {
           console.error(error)
         })
+    },
+    fetchRoles() {
+      axios.get('http://localhost:8000/api/roles')
+        .then((response) => {
+          this.roles = response.data.data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
+    createBadge() {
+      axios.post('http://localhost:8000/api/badges', {
+        title: this.createModal.title,
+        description: this.createModal.description,
+        color: this.createModal.color,
+        icon: this.createModal.icon,
+        is_role_badge: this.createModal.is_role_badge,
+        role_id: this.createModal.role_id
+      })
+        .then(response => {
+          toast.success('Badge successfully added')
+          this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+        })
+        .catch(error => {
+          toast.error(error.response.data.message)
+        })
+
+      this.createModal = {}
     },
     editBadge() {
       axios.put('http://localhost:8000/api/badges/' + this.editModal.id, {
