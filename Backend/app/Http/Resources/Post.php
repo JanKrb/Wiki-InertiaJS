@@ -46,7 +46,7 @@ class Post extends JsonResource
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
 
-        if ($this->approved_at) {
+        if ($this->approved_at != null) {
             $data['approved_at'] = $this->approved_at->format('Y-m-d h:m:i');
             $data['approved_by'] = $this->approved_user;
         }
