@@ -3,22 +3,26 @@
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:mr-auto">
-          <div class="w-56 relative text-gray-700 dark:text-gray-300">
-            <input
-              type="text"
-              class="form-control w-56 box pr-10 placeholder-theme-13"
-              placeholder="Search..."
-              v-model='search'
-            />
-            <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
+          <!-- BEGIN: Search Filter -->
+          <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
+            <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
+              <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 ml-3 left-0 z-10 text-gray-700 dark:text-gray-300"/>
+              <input
+                type="text"
+                class="form-control w-full sm:w-64 box px-10 text-gray-700 dark:text-gray-300 placeholder-theme-13"
+                placeholder="Search..."
+                v-model='keywords'
+              />
+            </div>
           </div>
+          <!-- END: Search Filter -->
         </div>
       </div>
       <!-- BEGIN: Data List -->
       <div class="col-span-12">
         <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
           <div
-            v-for="post in this.posts"
+            v-for="post in this.filteredPosts"
             v-bind:key="post.id"
             class="intro-y blog col-span-12 md:col-span-4 box"
           >
@@ -50,14 +54,11 @@
                   </a>
                   <div class="dropdown-menu w-40">
                     <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                      <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                      <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="approvePost(post)">
                         <ShareIcon class="w-4 h-4 mr-2"/> Publish
                       </a>
                       <a href="javascript:;" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: post.id } })" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                         <Edit2Icon class="w-4 h-4 mr-2"/> Edit
-                      </a>
-                      <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                        <SlashIcon class="w-4 h-4 mr-2"/> Deny
                       </a>
                     </div>
                   </div>
@@ -93,30 +94,38 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import moment from 'moment'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 export default defineComponent({
   data() {
     return {
       posts: [],
-      search: '',
+      keywords: '',
       per_page: 6,
-      permissions: []
+      permissions: [],
+      search_type: 0
     }
   },
   mounted() {
     this.testPagePermissions()
-    this.fetchPosts('http://localhost:8000/api/posts')
+    this.fetchPosts()
   },
   computed: {
     unauthorizedPosts: function () {
       return this.posts.filter((post) => {
-        return post?.approved_by !== null
+        return !post.approved_by && !post.approved_at
+      })
+    },
+    filteredPosts: function () {
+      return this.unauthorizedPosts.filter((post) => {
+        return post.title.toLowerCase().match(this.keywords.toLowerCase())
       })
     }
   },
   methods: {
-    fetchPosts(page) {
-      axios.get(page, {
+    fetchPosts() {
+      axios.get('http://localhost:8000/api/posts', {
         params: {
           per_page: this.per_page
         }
@@ -129,6 +138,22 @@ export default defineComponent({
           this.pagination.meta = response.data.meta
         })
         .catch((error) => {
+          console.error(error)
+        })
+    },
+    approvePost(post) {
+      axios.put('http://localhost:8000/api/posts/' + post.id, {
+        title: post.title,
+        content: post.content,
+        thumbnail: post.thumbnail,
+        approve: true
+      })
+        .then(response => {
+          toast.success('Post successfully approved')
+          console.log(response.data.data)
+          this.fetchPosts()
+        })
+        .catch(error => {
           console.error(error)
           console.log(error.response)
         })
@@ -156,7 +181,6 @@ export default defineComponent({
         })
         .catch((err) => {
           console.error(err)
-          console.log(err.response)
         })
     }
   },
