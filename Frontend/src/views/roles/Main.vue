@@ -129,42 +129,64 @@
     </div>
     <!-- END: Edit Role Modal -->
     <!-- BEGIN: Datatable -->
-    <table class="table mt-5">
-      <thead>
-        <tr class="bg-primary-2 dark:bg-blue-800 text-white">
-          <th class="whitespace-nowrap">#</th>
-          <th class="whitespace-nowrap">Name</th>
-          <th class="whitespace-nowrap">Description</th>
-          <th class="whitespace-nowrap">Color</th>
-          <th class="whitespace-nowrap">Updated at</th>
-          <th class="whitespace-nowrap">Created at</th>
-          <th class="whitespace-nowrap"></th>
+    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+      <table class="table table-report -mt-2">
+        <thead>
+        <tr>
+          <th class="text-center whitespace-nowrap">#</th>
+          <th class="text-center whitespace-nowrap">NAME</th>
+          <th class="text-center whitespace-nowrap">DESCRIPTION</th>
+          <th class="text-center whitespace-nowrap">COLOR</th>
+          <th class="text-center whitespace-nowrap">LAST UPDATE</th>
+          <th class="text-center whitespace-nowrap">CREATED AT</th>
+          <th class="text-center whitespace-nowrap">ACTIONS</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr v-for="role in this.filteredRoles" v-bind:key="role.id">
-          <td class="border-b dark:border-dark-5">{{ role.id }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.name }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.description }}</td>
-          <td class="border-b dark:border-dark-5"><span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ role.color">{{ role.color }}</span></td>
-          <td class="border-b dark:border-dark-5">{{ role.updated_at }}</td>
-          <td class="border-b dark:border-dark-5">{{ role.created_at }}</td>
-          <td class="border-b dark:border-dark-5">
-            <router-link :to="{ 'name': 'admin.role.view', 'params': { id: role.id }}">
-              <a href="javascript:;" class="text-small">
-                <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
+        </thead>
+        <tbody>
+        <tr
+          v-for="role in this.filteredRoles"
+          v-bind:key="role.id"
+          class="intro-x"
+        >
+
+          <td class="text-center">
+            {{ role.id }}
+          </td>
+          <td class="text-center">
+            {{ role.name }}
+          </td>
+          <td class="text-center">
+            {{ role.description?.substring(0, 30) }}{{ role.description?.length > 30 ? '...' : '' }}
+          </td>
+          <td class="text-center">
+            <span class="px-3 py-2 rounded-full text-white mr-1" :style="'background: '+ role.color">{{ role.color }}</span>
+          </td>
+          <td class="text-center">
+            {{ this.formatDate(role.updated_at) }}
+          </td>
+          <td class="text-center">
+            {{ this.formatDate(role.created_at) }}
+          </td>
+
+          <td class="table-report__action w-56">
+            <div class="flex justify-center items-center">
+              <router-link :to="{ 'name': 'admin.role.view', 'params': { id: role.id }}">
+                <a href="javascript:;" class="text-small">
+                  <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
+                </a>
+              </router-link>
+              <a href="javascript:;" @click="this.edit_role = role" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+                <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
               </a>
-            </router-link>
-            <a href="javascript:;" @click="this.edit_role = role" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
-              <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
-            </a>
-            <a href="javascript:;" @click="deleteRole(role.id)" class="text-small">
-              <Trash2Icon class="w-5 h-5 hover:text-blue-700"></Trash2Icon>
-            </a>
+              <a href="javascript:;" @click="deleteRole(role.id)" class="text-small">
+                <Trash2Icon class="w-5 h-5 hover:text-blue-700"></Trash2Icon>
+              </a>
+            </div>
           </td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
     <!-- END: Datatable -->
     <!-- BEGIN: Datatable Pagination -->
     <div class="flex flex-col items-center mt-5">
@@ -202,6 +224,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 const toast = useToast()
 
 export default defineComponent({
@@ -309,6 +332,9 @@ export default defineComponent({
           this.validation_error = error.response.data.data.errors
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
     }
   }
 })
