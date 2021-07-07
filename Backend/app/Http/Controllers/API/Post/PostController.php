@@ -64,7 +64,7 @@ class PostController extends BaseController
         $post->content = $input['content'];
         $post->thumbnail = $input['thumbnail'];
 
-        if ($input['approve'] && auth()->user()->hasPermission('posts_approve')) {
+        if ($request->has('approve') && auth()->user()->hasPermission('posts_approve')) {
             $post->approved_by = auth()->user()->id;
             $post->approved_at = now();
         }
