@@ -76,7 +76,7 @@
                   <span class="font-medium">{{ this.formatDate(post.created_at) }}</span>
                 </div>
                 <div class="ml-auto">
-                  <span class="px-2 py-1 rounded-full bg-theme-6 text-white">Unauthorized</span>
+                  <span class="px-2 py-1 rounded-full bg-theme-6 text-white" v-if="!post.approved_at">Unauthorized</span>
                 </div>
               </div>
             </div>
@@ -102,7 +102,6 @@ export default defineComponent({
     return {
       posts: [],
       keywords: '',
-      per_page: 6,
       permissions: [],
       search_type: 0
     }
@@ -119,23 +118,15 @@ export default defineComponent({
     },
     filteredPosts: function () {
       return this.unauthorizedPosts.filter((post) => {
-        return post.title.toLowerCase().match(this.keywords.toLowerCase())
+        return post.title.toLowerCase().match(this.keywords.toLowerCase()) || post.content.toLowerCase().match(this.keywords.toLowerCase())
       })
     }
   },
   methods: {
     fetchPosts() {
-      axios.get('http://localhost:8000/api/posts', {
-        params: {
-          per_page: this.per_page
-        }
-      })
+      axios.get('http://localhost:8000/api/posts')
         .then((response) => {
           this.posts = response.data.data
-          console.log(response.data.data)
-
-          this.pagination.links = response.data.links
-          this.pagination.meta = response.data.meta
         })
         .catch((error) => {
           console.error(error)
@@ -150,22 +141,12 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Post successfully approved')
-          console.log(response.data.data)
           this.fetchPosts()
         })
         .catch(error => {
           console.error(error)
           console.log(error.response)
         })
-    },
-    searchBadges(term) {
-      if (term === null || term === '' || term === ' ') {
-        return this.badges
-      }
-
-      return this.badges.filter((item) => {
-        return (item.title.toLowerCase().includes(term.toLowerCase()) || item.description.toLowerCase().includes(term.toLowerCase()) || item.user.name.toLowerCase().includes(term.toLowerCase()))
-      })
     },
     formatDate(timeString) {
       return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
