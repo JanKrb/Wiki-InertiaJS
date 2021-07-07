@@ -10,7 +10,7 @@ use App\Http\Resources\Permission as PermissionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PermissionController extends Controller
+class PermissionController extends BaseController
 {
     protected $model = Permission::class;
     protected $resource = PermissionResource::class;
