@@ -22,6 +22,7 @@ use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\API\StorageController;
+use App\Http\Controllers\PostsTagsController;
 use Illuminate\Support\Facades\Route;
 
 /*
