@@ -55,6 +55,28 @@
               <div class="intro-x mt-8">
                 <input
                   type="text"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.first_name != null ? ' border-theme-6' : '')"
+                  placeholder="Firstname"
+                  v-model="first_name"
+                />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.first_name != null'>
+                  {{ this.validation_error?.first_name[0] }}
+                </div>
+
+                <input
+                  type="text"
+                  :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.last_name != null ? ' border-theme-6' : '')"
+                  placeholder="Lastname"
+                  v-model="last_name"
+                />
+
+                <div class="text-theme-6 mt-2 mb-4" v-if='this.validation_error?.last_name != null'>
+                  {{ this.validation_error?.last_name[0] }}
+                </div>
+
+                <input
+                  type="text"
                   :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.name != null ? ' border-theme-6' : '')"
                   placeholder="Username"
                   v-model="name"
@@ -155,6 +177,8 @@ export default defineComponent({
   },
   data() {
     return {
+      first_name: '',
+      last_name: '',
       name: '',
       email: '',
       password: '',
@@ -167,6 +191,8 @@ export default defineComponent({
       e.preventDefault()
       const loader = this.$loading.show()
       axios.post('http://127.0.0.1:8000/api/auth/register', {
+        pre_name: this.first_name,
+        last_name: this.last_name,
         name: this.name,
         email: this.email,
         password: this.password,
@@ -182,6 +208,7 @@ export default defineComponent({
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
+          console.log(error.response.data)
           toast.error(error.response.data.data.error)
           loader.hide()
         })
