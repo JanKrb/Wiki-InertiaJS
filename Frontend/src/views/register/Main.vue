@@ -76,7 +76,7 @@
                 </div>
 
                 <input
-                  type="text"
+                  type="password"
                   :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password != null ? ' border-theme-6' : '')"
                   placeholder="Password"
                   v-model="password"
@@ -87,7 +87,7 @@
                 </div>
 
                 <input
-                  type="text"
+                  type="password"
                   :class="'intro-x login__input form-control py-3 px-4 border-gray-300 block mt-4' + (this.validation_error?.password_confirmation != null ? ' border-theme-6' : '')"
                   placeholder="Password Confirmation"
                   v-model="password_confirmation"
