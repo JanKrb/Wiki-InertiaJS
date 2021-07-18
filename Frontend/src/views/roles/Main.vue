@@ -330,6 +330,7 @@ export default defineComponent({
         .catch(error => {
           toast.error(error.response.data.message)
           this.validation_error = error.response.data.data.errors
+          console.log(this.validation_error)
           loader.hide()
         })
     },

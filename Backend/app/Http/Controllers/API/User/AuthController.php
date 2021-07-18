@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
@@ -89,6 +90,7 @@ class AuthController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['email_verification_code'] = Str::random(40);
+        $input['role_id'] = Role::where('is_default', 1)->first()->id;
         $user = User::create($input);
 
         $user->sendActivity('User Account has been created via registering.', '', $user);

@@ -22,6 +22,7 @@ class Role extends Model
         'name',
         'description',
         'color',
+        'is_default',
         'user_id'
     ];
 

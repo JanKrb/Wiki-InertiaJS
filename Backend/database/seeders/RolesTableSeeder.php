@@ -18,18 +18,21 @@ class RolesTableSeeder extends Seeder
             [
                 'name' => 'User',
                 'color' => '242424',
+                'is_default' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Moderator',
                 'color' => '0d8028',
+                'is_default' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Administrator',
                 'color' => '800d0d',
+                'is_default' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ]
