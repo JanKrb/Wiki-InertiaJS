@@ -314,6 +314,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:users_get_single'])
     ;
 
+    Route::get('users/{user}/posts', [UserMgmtController::class, 'get_posts'])
+        ->name('users.posts')
+        ->middleware(['permission:users_get_posts'])
+    ;
+
     Route::put('users/{user}', [UserMgmtController::class, 'update'])
         ->name('users.update')
         ->middleware(['permission:users_update'])

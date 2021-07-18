@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\UserCollection;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -114,5 +116,16 @@ class UserMgmtController extends BaseController
         $account->sendActivity('Password has been changed', 'The account\'s password has been changed trough an admin', $account);
 
         return $this->sendResponse([], 'Password changed successfully');
+    }
+
+    public function get_posts($account_id) {
+        $account = User::find($account_id);
+
+        if (is_null($account)) {
+            return $this->sendError('Invalid user', ['user_id' => $account_id]);
+        }
+
+        $posts = Post::where('user_idv', $account_id)->get();
+        return $this->sendResponse(new PostCollection($posts), 'Successfully retrieved user posts');
     }
 }
