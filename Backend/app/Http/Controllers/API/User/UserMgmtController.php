@@ -125,7 +125,7 @@ class UserMgmtController extends BaseController
             return $this->sendError('Invalid user', ['user_id' => $account_id]);
         }
 
-        $posts = Post::where('user_idv', $account_id)->get();
+        $posts = Post::where('user_id', $account_id)->get();
         return $this->sendResponse(new PostCollection($posts), 'Successfully retrieved user posts');
     }
 }
