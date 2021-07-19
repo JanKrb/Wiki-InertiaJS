@@ -118,13 +118,13 @@
               <label class="form-label">Parent Category</label>
               <div class="dropdown">
                 <TailSelect
-                  v-model="this.post.parent_id"
+                  v-model="this.post.category_id"
                   :options="{
                   search: true,
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="post.id" v-for="post in this.categories" v-bind:key="post.id">{{ post.title }}</option>
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
@@ -185,7 +185,8 @@ export default defineComponent({
     return {
       post: {
         title: '',
-        content: ''
+        content: '',
+        category_id: null
       },
       validation_error: null,
       user: {},
@@ -204,17 +205,19 @@ export default defineComponent({
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        category_id: this.post.category_id
+        ...(this.post.category_id ? { category_id: this.post.category_id } : {})
       })
         .then(response => {
           toast.success('Post was created successfully!')
           loader.hide()
-          this.$router.push({ name: 'categories' })
+          console.log(this.post)
+          if (this.post.category_id !== null) {
+            this.$router.push({ name: 'categories.subcategory', params: { id: this.post.category_id } })
+          }
         })
         .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          console.log(error.response)
+          this.validation_error = error.response?.data?.data?.errors
+          toast.error(error.response?.data?.message)
           loader.hide()
         })
     },
