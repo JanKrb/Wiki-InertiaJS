@@ -204,7 +204,7 @@
                 <ChevronRightIcon class="w-4 h-4"/>
               </button>
             </div>
-            <div class="mt-5 intro-x">
+            <div class="mt-2 intro-x">
               <div class="box zoom-in">
                 <TinySlider ref-key="announcementsRef" v-if='!this.announcementsLoading'>
                   <div
@@ -228,12 +228,32 @@
           </div>
           <!-- END: Announcements -->
 
-          <!-- BEGIN: Transactions -->
+          <!-- BEGIN: Author Tools -->
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
+            <div class="intro-x flex items-center h-10">
+              <h2 class="text-lg font-medium truncate mr-5">Wiki Tools</h2>
+            </div>
+            <div class="">
+              <router-link :to="{ name: 'moderation.categories.create' }" v-if="this.permissions?.categories_store">
+                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2">
+                  <FolderIcon class="w-4 h-4 mr-2" /> Create category
+                </button>
+              </router-link>
+              <router-link :to="{ name: 'moderation.posts.create' }" v-if="this.permissions?.posts_store">
+                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2">
+                  <EditIcon class="w-4 h-4 mr-2" /> Create new post
+                </button>
+              </router-link>
+            </div>
+          </div>
+          <!-- END: Author Tools -->
+
+          <!-- BEGIN: Recent Postings -->
           <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
-            <div class="mt-5">
+            <div class="mt-2">
               <div
                 v-for="activity in this.recent"
                 :key="activity.id"
@@ -261,7 +281,7 @@
               </a>
             </div>
           </div>
-          <!-- END: Transactions -->
+          <!-- END: Recent Postings -->
         </div>
       </div>
     </div>
@@ -451,7 +471,10 @@ export default defineComponent({
     testPagePermissions() {
       axios.post('http://localhost:8000/api/permissions/test', {
         permissions: [
-          'categories_update'
+          'categories_store',
+          'categories_update',
+          'posts_store',
+          'posts_update'
         ]
       })
         .then((response) => {
