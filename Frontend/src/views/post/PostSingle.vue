@@ -284,6 +284,8 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
+          toast.error(error.response.data.message)
+          this.$router.push({ name: 'categories' })
         })
     },
     loadComments(id) {
@@ -319,7 +321,6 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     },
     votePost(vote) {
@@ -335,7 +336,6 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     },
     bookmarkPost() {
