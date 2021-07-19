@@ -25,7 +25,6 @@
         v-bind:key="ban.id"
         class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box"
       >
-        <!-- BEGIN: Account Bans -->
         <div class="flex items-center border-b border-gray-200 dark:border-dark-5 px-5 py-4">
           <div class="w-10 h-10 flex-none image-fit">
             <img
@@ -77,9 +76,10 @@
           <div class="w-full flex text-gray-600 text-xs sm:text-sm">
             <div class="mr-2">
               Banned by:
-              <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': ban.staff.id }}">
-                <span class="font-medium">{{ ban.staff.name }}</span>
+              <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': ban?.staff?.id }}" v-if="ban.staff">
+                <span class="font-medium">{{ ban?.staff?.name }}</span>
               </router-link>
+              <span class="font-medium" v-if="!ban.staff">Unknown</span>
             </div>
             <div class="ml-auto">
               <span v-if="ban.active">Until: <span class="font-medium">{{ ban.ban_until }}</span></span>
@@ -87,9 +87,8 @@
             </div>
           </div>
         </div>
-      <!-- END: Account Bans -->
       </div>
-      <!-- BEGIN: Ban Layout -->
+      <!-- END: Account Bans -->
       <!-- BEGIN: Datatable Pagination -->
       <div class="intro-y col-span-12 items-center">
         <div class="flex flex-col items-center mt-5">
@@ -155,11 +154,12 @@ export default defineComponent({
       axios.get(url)
         .then(response => {
           this.bans = response.data.data
+          console.log(response.data.data)
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response)
           loader.hide()
         })
     },
