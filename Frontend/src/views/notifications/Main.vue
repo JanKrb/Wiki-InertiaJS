@@ -793,9 +793,9 @@ export default defineComponent({
     }
   },
   methods: {
-    fetchNotifications(page) {
+    fetchNotifications(url) {
       const loader = this.$loading.show()
-      axios.get(page)
+      axios.get(url)
         .then(response => {
           this.notifications = response.data.data
           loader.hide()
@@ -803,18 +803,17 @@ export default defineComponent({
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
-          console.error(error)
           loader.hide()
         })
     },
     fetchRecentNotifications() {
-      axios.get('http://localhost:8000/api/notifications/recent')
+      axios.get('http://localhost:8000/api/notifications?recent=15')
         .then(response => {
           this.recent_notifications = response.data.data
         })
         .catch(error => {
-          this.validation_error = error.response.data.data.errors
           console.error(error)
+          console.log(error.response)
         })
     },
     fetchUsers(page) {
