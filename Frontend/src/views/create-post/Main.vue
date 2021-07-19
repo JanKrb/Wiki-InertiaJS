@@ -47,9 +47,6 @@
                     <div class="flex-1 mt-6 xl:mt-0">
                       <p class="mt-3">Post Title</p>
                       <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.post.title"/>
-                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.title[0] }}
-                      </div>
                       <p class="mt-3">Post Content</p>
                       <!-- BEGIN: Standard Editor -->
                       <div class="col-span-12 lg:col-span-6">
@@ -64,9 +61,6 @@
                         </div>
                       </div>
                       <!-- END: Standard Editor -->
-                      <div v-if="this.validation_error?.content != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.content[0] }}
-                      </div>
                     </div>
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                       <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
@@ -74,7 +68,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.post.thumbnail ? this.post.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.post.thumbnail ? this.post.thumbnail : require('@/assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -88,9 +82,6 @@
                           />
                         </div>
                       </div>
-                    </div>
-                    <div v-if="this.validation_error?.thumbnail != null" class="text-theme-6 mt-2 mb-4">
-                      The thumbnail is required.
                     </div>
                   </div>
                 </div>
@@ -136,6 +127,17 @@
                   <option :value="post.id" v-for="post in this.categories" v-bind:key="post.id">{{ post.title }}</option>
                 </TailSelect>
               </div>
+            </div>
+            <div v-show="this.validation_error !== null">
+              <hr class="my-5">
+              <h2 class="text-lg font-medium mr-auto">The following errors have occurred</h2>
+              <ul class="list-disc mx-5">
+                <div class="text-theme-6 mt-2 mb-4">
+                  <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                    {{ error_message[0] }}
+                  </li>
+                </div>
+              </ul>
             </div>
           </div>
         </div>
@@ -185,6 +187,7 @@ export default defineComponent({
         title: '',
         content: ''
       },
+      validation_error: null,
       user: {},
       categories: []
     }
