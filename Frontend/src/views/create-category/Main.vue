@@ -31,32 +31,6 @@
               >
                 <FileTextIcon class="w-4 h-4 mr-2" /> Properties
               </Tippy>
-              <Tippy
-                id="assignment-tab"
-                tag="a"
-                content="Customize the post & categories assignment"
-                data-toggle="tab"
-                data-target="#assignment"
-                href="javascript:;"
-                class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                role="tab"
-                aria-selected="false"
-              >
-                <LayersIcon class="w-4 h-4 mr-2" /> Assignment
-              </Tippy>
-              <Tippy
-                id="settings-tab"
-                tag="a"
-                content="Manage the category settings"
-                data-toggle="tab"
-                data-target="#settings"
-                href="javascript:;"
-                class="w-full sm:w-40 py-4 text-center flex justify-center items-center"
-                role="tab"
-                aria-selected="false"
-              >
-                <SettingsIcon class="w-4 h-4 mr-2" /> Settings
-              </Tippy>
             </div>
             <div class="post__content tab-content">
               <div
@@ -73,22 +47,16 @@
                     <div class="flex-1 mt-6 xl:mt-0">
                       <p class="mt-3">Category Title</p>
                       <input type="text" :class="'form-control mt-2' + (this.validation_error?.title != null ? ' border-theme-6' : '')" placeholder="Title" v-model="this.category.title"/>
-                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.title[0] }}
-                      </div>
-                      <p class="mt-3">Category Title</p>
+                      <p class="mt-3">Category Description</p>
                       <textarea rows="5" :class="'form-control mt-2' + (this.validation_error?.description != null ? ' border-theme-6' : '')" placeholder="Description" v-model="this.category.description"></textarea>
-                      <div v-if="this.validation_error?.description != null" class="text-theme-6 mt-2 mb-4">
-                        {{ this.validation_error?.description[0] }}
-                      </div>
                     </div>
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
-                      <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
+                      <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-2 mt-5 mr-5">
                         <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.category.thumbnail ? this.category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.category.thumbnail ? this.category.thumbnail : require('@/assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -102,9 +70,6 @@
                           />
                         </div>
                       </div>
-                    </div>
-                    <div v-if="this.validation_error?.thumbnail != null" class="text-theme-6 mt-2 mb-4">
-                      The thumbnail is required.
                     </div>
                   </div>
                 </div>
@@ -168,6 +133,17 @@
                 </div>
               </div>
             </div>
+            <div v-show="this.validation_error !== null">
+              <hr class="my-5">
+              <h2 class="text-lg font-medium mr-auto">The following errors have occurred</h2>
+              <ul class="list-disc mx-5">
+                <div class="text-theme-6 mt-2 mb-4">
+                  <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                    {{ error_message[0] }}
+                  </li>
+                </div>
+              </ul>
+            </div>
           </div>
         </div>
         <!-- END: Post Info -->
@@ -190,6 +166,7 @@ export default defineComponent({
         title: '',
         description: ''
       },
+      validation_error: null,
       has_parent: false,
       user: {},
       categories: []
