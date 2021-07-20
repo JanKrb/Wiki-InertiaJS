@@ -7,6 +7,7 @@ use App\Http\Controllers\API\Post\PostCommentController;
 use App\Http\Controllers\API\Post\PostController;
 use App\Http\Controllers\API\Post\PostHistoryController;
 use App\Http\Controllers\API\Post\PostReportController;
+use App\Http\Controllers\API\Post\PostsTagsController;
 use App\Http\Controllers\API\Post\PostVoteController;
 use App\Http\Controllers\API\User\AuthController;
 use App\Http\Controllers\API\User\BadgeController;
@@ -22,7 +23,6 @@ use App\Http\Controllers\API\Permission\RolesPermissionsController;
 use App\Http\Controllers\API\Post\TagController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\API\StorageController;
-use App\Http\Controllers\PostsTagsController;
 use Illuminate\Support\Facades\Route;
 
 /*
