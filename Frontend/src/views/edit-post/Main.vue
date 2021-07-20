@@ -108,9 +108,9 @@
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
                   <div class="w-6 h-6 image-fit mr-3">
-                    <img class="rounded" alt="" :src="this.user?.profile_picture"/>
+                    <img class="rounded" alt="" :src="this.post?.user?.profile_picture"/>
                   </div>
-                  <div class="truncate">{{ this.user?.name }}</div>
+                  <div class="truncate">{{ this.post?.user?.name }}</div>
                   <UserIcon class="w-4 h-4 ml-auto"/>
                 </div>
               </div>
@@ -142,17 +142,32 @@
           <!-- END: Post Info -->
           <!-- BEGIN: Post Tags -->
           <div class="intro-y box p-5 mt-5">
-            <div>
-              <label class="form-label">Tags</label>
-              <div class="dropdown">
-                <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
-                  <div class="w-6 h-6 image-fit mr-3">
-                    <img class="rounded" alt="" :src="this.user?.profile_picture"/>
-                  </div>
-                  <div class="truncate">{{ this.user?.name }}</div>
-                  <UserIcon class="w-4 h-4 ml-auto"/>
-                </div>
+            <label class="form-label">Edit tags</label>
+            <TailSelect
+              v-model="this.selected_tags"
+              multiple
+              :options="
+              {
+                search: true,
+                descriptions: true,
+                hideSelected: false,
+                hideDisabled: false,
+                multiLimit: 15,
+                multiShowCount: false,
+                multiContainer: true,
+                classNames: 'w-full'
+              }"
+            >
+              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.some(post_tag => this.tags.includes(post_tag))">{{ tag.name }}</option>
+            </TailSelect>
+            <div v-if="this.post?.tags?.length > 0">
+              <label class="form-label mt-4">Current tags</label>
+              <div>
+                <span class="px-2 py-1 rounded-full bg-theme-1 text-white mr-1" v-for="tag in this.post.tags" v-bind:key="tag.id">{{ tag.name }}</span>
               </div>
+            </div>
+            <div v-else>
+              <label class="form-label mt-4">No current tags selected</label>
             </div>
           </div>
           <!-- END: Post Tags -->
@@ -206,20 +221,27 @@ export default defineComponent({
           id: 0
         }
       },
-      user: {},
+      tags: [],
+      selected_tags: [],
       categories: [],
       validation_error: {}
     }
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'))
     this.fetchPost()
     this.fetchCategories()
+    this.fetchTags()
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
+      for (const tag in this.post.tags) {
+        axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/tags/' + this.post.tags[tag].id + '/detach')
+      }
+      for (const tag in this.selected_tags) {
+        axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/tags/' + this.selected_tags[tag] + '/attach')
+      }
       axios.put('http://localhost:8000/api/posts/' + this.$route.params.id, {
         title: this.post.title,
         content: this.post.content,
@@ -230,7 +252,6 @@ export default defineComponent({
         .then(response => {
           toast.success('Post was updated successfully!')
           loader.hide()
-          this.$router.push({ name: 'categories' })
         })
         .catch(error => {
           console.log(error.response)
@@ -270,6 +291,15 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
           this.categories = response.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchTags() {
+      axios.get('http://localhost:8000/api/tags?paginate=0')
+        .then(response => {
+          this.tags = response.data
           console.log(response.data)
         })
         .catch(error => {
@@ -290,6 +320,7 @@ export default defineComponent({
   setup() {
     const date = ref('')
     const classicEditor = ClassicEditor
+    const select = ref('1')
 
     const editorConfig = {
       plugins: [
@@ -356,7 +387,8 @@ export default defineComponent({
       date,
       classicEditor,
       editorConfig,
-      editorData
+      editorData,
+      select
     }
   }
 })
