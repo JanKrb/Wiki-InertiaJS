@@ -18,6 +18,7 @@ class AddParentToCategories extends Migration
                 ->comment('Parent Category')
                 ->after('user_id')
                 ->nullable();
+
             $table->foreign('parent_id')
                 ->references('id')
                 ->on('categories')
