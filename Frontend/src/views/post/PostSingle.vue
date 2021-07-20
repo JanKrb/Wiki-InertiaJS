@@ -338,7 +338,6 @@ export default defineComponent({
       })
         .then(response => {
           this.post.liked = response.data.data.vote
-          this.loadPost(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
