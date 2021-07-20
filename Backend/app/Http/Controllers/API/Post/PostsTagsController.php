@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\Post;
 
+use App\Http\Controllers\RelationController;
 use App\Http\Resources\PostTag;
 use App\Http\Resources\PostTagCollection;
 use App\Models\Post;

@@ -16,8 +16,7 @@ class AddCategoryToPost extends Migration
         Schema::table('posts', function (Blueprint $table) {
             $table->unsignedBigInteger('category_id')
                 ->comment('Parent Category')
-                ->after('approved_at')
-                ->nullable();
+                ->after('approved_at');
 
             $table->foreign('category_id')
                 ->references('id')
