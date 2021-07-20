@@ -10,7 +10,7 @@
       <form @submit.prevent="this.sendReport(this.report.content)">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body pt-5 mt-10">
               <div class="p-5 text-center">
                 <AlertCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3" />
                 <div class="text-3xl mt-5">Please write a Report reason!</div>
