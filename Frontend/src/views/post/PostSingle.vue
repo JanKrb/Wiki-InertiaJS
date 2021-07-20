@@ -61,7 +61,7 @@
                     </div>
                     <div class="text-xs text-gray-500 ml-auto">{{ history?.created_at }}</div>
                   </div>
-                  <div class="text-gray-600 mt-1">{{ history?.content }}</div>
+                  <div class="text-gray-600 mt-1" v-html="history?.content"></div>
                 </div>
               </div>
             </div>
