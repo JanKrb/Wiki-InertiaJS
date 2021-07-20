@@ -99,8 +99,9 @@
           </div>
         </div>
         <!-- END: Post Content -->
-        <!-- BEGIN: Post Info -->
+        <!-- BEGIN: Post Sidebar -->
         <div class="col-span-12 lg:col-span-4">
+          <!-- BEGIN: Post Info -->
           <div class="intro-y box p-5">
             <div>
               <label class="form-label">Created by</label>
@@ -138,8 +139,25 @@
               </div>
             </div>
           </div>
+          <!-- END: Post Info -->
+          <!-- BEGIN: Post Tags -->
+          <div class="intro-y box p-5 mt-5">
+            <div>
+              <label class="form-label">Tags</label>
+              <div class="dropdown">
+                <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
+                  <div class="w-6 h-6 image-fit mr-3">
+                    <img class="rounded" alt="" :src="this.user?.profile_picture"/>
+                  </div>
+                  <div class="truncate">{{ this.user?.name }}</div>
+                  <UserIcon class="w-4 h-4 ml-auto"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END: Post Tags -->
         </div>
-        <!-- END: Post Info -->
+        <!-- END: Post Sidebar -->
       </div>
     </form>
   </div>
