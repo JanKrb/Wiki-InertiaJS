@@ -90,9 +90,10 @@
           </div>
         </div>
         <!-- END: Post Content -->
-        <!-- BEGIN: Post Info -->
+        <!-- BEGIN: Post Sidebar -->
         <div class="col-span-12 lg:col-span-4">
           <div class="intro-y box p-5">
+            <!-- BEGIN: Post Info -->
             <div>
               <label class="form-label">Created by</label>
               <div class="dropdown">
@@ -140,8 +141,9 @@
               </ul>
             </div>
           </div>
+          <!-- END: Post Info -->
         </div>
-        <!-- END: Post Info -->
+        <!-- END: Post Sidebar -->
       </div>
     </form>
   </div>
