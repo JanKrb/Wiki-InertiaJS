@@ -49,25 +49,28 @@
                 <a class="block font-medium text-base">
                   {{ post.title }}
                 </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
+                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post.content !== null ? post?.content?.substring(0,200) + '...' : 'This post has no content!'"></div>
               </div>
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
                   <div class="mr-2">
-                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes > 0 ? post.like_votes : 0 }}
+                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes_count }}
                   </div>
                   <div class="mr-2">
-                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments > 0 ? post.comments : 0 }}
+                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments_count }}
+                  </div>
+                  <div class="mr-2">
+                    <ClockIcon class="mr-1 h-4 w-4"></ClockIcon>{{ post.histories_count }}
                   </div>
                   <div class="ml-auto">
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
-                    <span v-if="false"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
+                    <span v-if="post.approved_at"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
+                    <span v-else><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Not Approved</span></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="this.postings.length <= 0" class="intro-y col-span-12">
+          <div v-if="this?.postings?.length <= 0" class="intro-y col-span-12">
             <div class="box">
               <div class="p-5 text-center">
                 <FolderIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
@@ -153,13 +156,13 @@ export default defineComponent({
         })
     },
     fetchPostings(id) {
-      axios.get('http://localhost:8000/api/posts?user=' + id)
+      axios.get('http://localhost:8000/api/posts?user=' + id + '&paginate=0')
         .then(response => {
-          console.log(response)
-          this.postings = response.data.data
+          this.postings = response.data
         })
         .catch(error => {
           console.error(error)
+          console.log(error.response)
         })
     }
   }
