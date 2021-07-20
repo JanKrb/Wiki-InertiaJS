@@ -397,7 +397,6 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/posts/' + this.$route.params.id + '/histories')
         .then(response => {
           this.histories = response.data.data
-          console.log(response)
         })
         .catch(error => {
           console.error(error)
