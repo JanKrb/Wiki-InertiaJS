@@ -350,21 +350,21 @@ export default defineComponent({
   methods: {
     loadRecent() {
       axios.get('http://localhost:8000/api/posts?recent=5')
-        .then((res) => {
-          this.recent = res.data.data
+        .then((response) => {
+          this.recent = response.data.data
         })
-        .catch((err) => {
-          console.log(err)
+        .catch((error) => {
+          console.error(error)
         })
     },
     loadAnnouncements() {
       axios.get('http://localhost:8000/api/announcements')
-        .then((res) => {
-          this.announcements = res.data.data
+        .then((response) => {
+          this.announcements = response.data.data
           this.announcementsLoading = false
         })
-        .catch((err) => {
-          console.log(err)
+        .catch((error) => {
+          console.error(error)
         })
     },
     loadSubcategory(id) {
@@ -380,7 +380,6 @@ export default defineComponent({
     loadMainCategories() {
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
-          console.log(response)
           this.categories = response.data
           this.view_structure.categories = this.mainCategories
         })
@@ -414,10 +413,6 @@ export default defineComponent({
       }
 
       for (const bookmark in this.user.bookmarks) {
-        console.log(this.user.bookmarks[bookmark])
-        console.log(id === this.user.bookmarks[bookmark]?.post?.id)
-        console.log(id === this.user.bookmarks[bookmark]?.category?.id)
-        console.log(id)
         if (id === this.user.bookmarks[bookmark]?.post?.id || id === this.user.bookmarks[bookmark]?.category?.id) {
           action = 0
           deleteId = this.user.bookmarks[bookmark]?.id
@@ -434,7 +429,6 @@ export default defineComponent({
           ...(categoryId !== 0 ? { category_id: categoryId } : {})
         })
           .then(response => {
-            console.log(response)
             toast.success('Item has been bookmarked')
             loader.hide()
             this.loadBookmarks()
@@ -447,13 +441,12 @@ export default defineComponent({
       } else {
         axios.delete('http://localhost:8000/api/bookmarks/' + deleteId)
           .then(response => {
-            console.log(response)
             toast.success('Item has been unbookmarked')
             loader.hide()
             this.loadBookmarks()
           })
           .catch(error => {
-            console.log(error)
+            console.error(error)
             toast.error(error)
             loader.hide()
           })
