@@ -46,9 +46,11 @@
             <BookIcon class="w-4 h-4 mr-2"/> Terms of service
           </a>
         </router-link>
-        <a class="flex items-center mt-3" href="">
-          <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
-        </a>
+        <router-link :to="{ name: 'privacy' }">
+          <a class="flex items-center mt-3" href="">
+            <ServerIcon class="w-4 h-4 mr-2"/> Privacy policy
+          </a>
+        </router-link>
       </div>
     </div>
   </div>
