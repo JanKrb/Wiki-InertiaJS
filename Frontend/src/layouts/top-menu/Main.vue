@@ -56,8 +56,8 @@
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
           <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
-            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'" v-if="breadcrum.name !== 'categories' && breadcrum.name !== 'categories.subcategory'">{{ breadcrum.meta.title }}</a>
-            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.name === this.$router.name"/>
+            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
+            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
@@ -325,6 +325,7 @@ export default defineComponent({
     this.fetchNotifications()
 
     this.breadcrums = this.$route.matched
+    console.log(this.$route)
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
