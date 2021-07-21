@@ -260,6 +260,73 @@
       <router-view/>
     </div>
     <!-- END: Content -->
+    <div class="footer mt-5">
+      <div>
+        <div class="max-w-6xl m-auto text-gray-800 flex flex-wrap justify-center">
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Home</div>
+            <router-link :to="{ name: 'categories' }">
+              <a class="my-3 block">Wiki</a>
+            </router-link>
+            <router-link :to="{ name: 'search' }">
+              <a class="my-3 block">Quick Search</a>
+            </router-link>
+            <router-link :to="{ name: 'profile.informations' }">
+              <a class="my-3 block">Profile</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">User</div>
+            <router-link :to="{ name: 'login' }">
+              <a class="my-3 block">Sign in</a>
+            </router-link>
+            <router-link :to="{ name: 'register' }">
+              <a class="my-3 block">New Account</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Support</div>
+            <a class="my-3 block" :href="wiki_settings.supportlink">Help Center</a>
+            <router-link :to="{ name: 'privacy' }">
+              <a class="my-3 block">Privacy Policy</a>
+            </router-link>
+            <router-link :to="{ name: 'tos' }">
+              <a class="my-3 block">Conditions</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Contact us</div>
+            <a class="my-3 block" href="/#">{{ wiki_settings.contactmail }} <span class="text-teal-600 text-xs p-1"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <div class="flex px-3 m-auto pt-5 border-t text-gray-800 text-sm flex-col md:flex-row max-w-6xl">
+          <div class="mt-2">© Copyright 2021. All Rights Reserved.</div>
+          <div class="md:flex-auto md:flex-row-reverse flex-row flex">
+            <a :href="wiki_settings.social_youtube" class="w-6 mx-1" v-if="wiki_settings.social_youtube !== null">
+              <YoutubeIcon></YoutubeIcon>
+            </a>
+            <a :href="wiki_settings.social_facebook" class="w-6 mx-1" v-if="wiki_settings.social_facebook !== null">
+              <FacebookIcon></FacebookIcon>
+            </a>
+            <a :href="wiki_settings.social_twitter" class="w-6 mx-1" v-if="wiki_settings.social_twitter !== null">
+              <TwitterIcon></TwitterIcon>
+            </a>
+            <a :href="wiki_settings.social_instagram" class="w-6 mx-1" v-if="wiki_settings.social_instagram !== null">
+              <InstagramIcon></InstagramIcon>
+            </a>
+            <a :href="wiki_settings.social_linkedin" class="w-6 mx-1" v-if="wiki_settings.social_linkedin !== null">
+              <LinkedinIcon></LinkedinIcon>
+            </a>
+            <a :href="wiki_settings.social_discord" class="w-6 mx-1" v-if="wiki_settings.social_discord !== null">
+              <mic-icon></mic-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -297,7 +364,15 @@ export default defineComponent({
       breadcrums: [],
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
-        logo: process.env.VUE_APP_LOGO
+        logo: process.env.VUE_APP_LOGO,
+        supportlink: process.env.VUE_APP_SUPPORTLINK,
+        contactmail: process.env.VUE_APP_CONTACTMAIL,
+        social_discord: process.env.VUE_APP_SOCIAL_DISCORD,
+        social_linkedin: process.env.VUE_APP_SOCIAL_LINKEDIN,
+        social_instagram: process.env.VUE_APP_SOCIAL_INSTAGRAM,
+        social_twitter: process.env.VUE_APP_SOCIAL_TWITTER,
+        social_facebook: process.env.VUE_APP_SOCIAL_FACEBOOK,
+        social_youtube: process.env.VUE_APP_SOCIAL_YOUTUBE
       }
     }
   },
