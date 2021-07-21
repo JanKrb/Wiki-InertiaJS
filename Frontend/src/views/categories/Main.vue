@@ -320,13 +320,13 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
+    if (this.$route.name === 'categories') { this.loadMainCategories() }
     this.user = JSON.parse(localStorage.getItem('user'))
     this.testPagePermissions()
-    if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
-    if (this.$route.name === 'categories') { this.loadMainCategories(this.$route.params.id) }
-    this.loadBookmarks()
     this.loadAnnouncements()
     this.loadRecent()
+    this.loadBookmarks()
   },
   watch: {
     $route(to, from) {
@@ -405,8 +405,6 @@ export default defineComponent({
       let action = 1
       let deleteId = 0
 
-      const loader = this.$loading.show()
-
       if (type === 'post') {
         isPost = 1
         postId = id
@@ -425,6 +423,8 @@ export default defineComponent({
           deleteId = this.user.bookmarks[bookmark]?.id
         }
       }
+
+      const loader = this.$loading.show()
 
       if (action) {
         axios.post('http://localhost:8000/api/bookmarks/', {
