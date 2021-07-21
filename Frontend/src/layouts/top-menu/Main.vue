@@ -45,10 +45,10 @@
           <img
             alt=""
             class="w-6"
-            :src="wiki_logo"
+            :src="this.wiki_settings.logo"
           />
           <span class="text-white text-lg ml-3">
-            <span class="font-medium">{{ wiki_name }}</span>
+            <span class="font-medium">{{ this.wiki_settings.name }}</span>
           </span>
         </router-link>
         <!-- END: Logo -->
@@ -294,9 +294,11 @@ export default defineComponent({
       view_notification: {},
       notifications: [],
       loggedIn: false,
-      wiki_name: this.$config.name,
-      wiki_logo: this.$config.logo,
-      breadcrums: []
+      breadcrums: [],
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO
+      }
     }
   },
   computed: {
