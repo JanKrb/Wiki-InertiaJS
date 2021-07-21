@@ -155,7 +155,7 @@
         </div>
         <!-- END: Posts Layout -->
 
-        <div v-if="this.view_structure.posts.length === 0 && this.view_structure.categories.length === 0" class="intro-y col-span-12">
+        <div v-if="this.view_structure.posts.length === 0 && this.view_structure.categories.length === 0 && this.loading.content === true" class="intro-y col-span-12">
           <div class="box">
             <div class="p-5 text-center">
               <div class="w-96 h-96 mx-auto mt-5">
@@ -167,6 +167,58 @@
               </div>
             </div>
           </div>
+        </div>
+        <!-- BEGIN: Placeholder Content Layout -->
+        <div
+          v-for="post in this.placeholder.content"
+          v-bind:key="post"
+          class="intro-y blog col-span-12 md:col-span-4 box"
+        >
+          <div class="blog__preview image-fit">
+            <img
+              :alt="'Thumbnail of ' + post?.title"
+              class="rounded-t-md"
+              :src="require('@/assets/images/placeholder.png')"
+            />
+            <div class="absolute w-full flex items-center px-5 pt-6 z-10">
+              <div class="w-10 h-10 flex-none image-fit">
+                <img
+                  alt=""
+                  class="rounded-full"
+                  :src="require('@/assets/images/placeholder.png')"
+                />
+              </div>
+              <div class="ml-3 text-white mr-auto">
+                <a><button class="btn w-32 rounded bg-gray-100 border-0 mr-1" disabled></button></a>
+                <div class="mt-0.5"><span class="px-7 rounded bg-gray-100 text-white mr-1"></span></div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
+              <a href="javascript:;" class="block font-medium text-xl mt-3">
+                <button class="btn w-48 rounded bg-gray-200 border-0 mr-1" disabled></button>
+              </a>
+            </div>
+          </div>
+          <div class="w-full p-5 text-gray-700 dark:text-gray-600">
+            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1" disabled></button>
+            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1" disabled></button>
+            <button class="btn w-32 rounded bg-gray-100 border-0 mr-1" disabled></button>
+          </div>
+          <div class="w-100 px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
+            <div class="flex text-gray-600 text-xs sm:text-sm">
+              <div class="mr-3">
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+              </div>
+              <div class="mr-3">
+                <span class="px-10 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+              </div>
+              <div class="ml-auto">
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+              </div>
+            </div>
+          </div>
+        <!-- END: Placeholder Content Layout -->
         </div>
       </div>
     </div>
@@ -206,7 +258,7 @@
             </div>
             <div class="mt-2 intro-x">
               <div class="box zoom-in">
-                <TinySlider ref-key="announcementsRef" v-if='!this.announcementsLoading'>
+                <TinySlider ref-key="announcementsRef" v-if='this.loading.announcements'>
                   <div
                     class="p-5"
                     v-for='announce in this.announcements'
@@ -220,6 +272,21 @@
                     </div>
                     <div class="text-gray-600 text-justify mt-1">
                       {{ announce?.description }}
+                    </div>
+                  </div>
+                </TinySlider>
+                <TinySlider ref-key="announcementsRef" v-else>
+                  <div class="p-5">
+                    <div class="text-base font-medium truncate">
+                      <button class="btn w-32 mt-2 rounded bg-gray-300 border-0 mr-1" disabled></button>
+                    </div>
+                    <div class="text-gray-500 mt-1">
+                      <button class="btn w-24 rounded bg-gray-100 border-0 mr-1" disabled></button>
+                    </div>
+                    <div class="text-gray-600 text-justify mt-1">
+                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                      <button class="btn w-16 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
                     </div>
                   </div>
                 </TinySlider>
@@ -253,7 +320,7 @@
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
-            <div class="mt-2">
+            <div class="mt-2" v-if="this.loading.recent === true">
               <div
                 v-for="activity in this.recent"
                 :key="activity.id"
@@ -280,6 +347,30 @@
                 View More
               </a>
             </div>
+            <div class="mt-2" v-else>
+              <div
+                v-for="activity in this.placeholder.recent"
+                :key="activity"
+                class="intro-x"
+              >
+                <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                  <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                    <img
+                      alt=""
+                      :src="require('@/assets/images/placeholder.png')"
+                    />
+                  </div>
+                  <div class="ml-4 mr-auto">
+                    <div class="font-medium">
+                      <button class="btn w-24 mt-3 rounded bg-gray-300 border-0 mr-1" disabled></button>
+                    </div>
+                    <div class="text-gray-600 text-xs mt-0.5">
+                      <button class="btn w-16 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- END: Recent Postings -->
         </div>
@@ -298,6 +389,15 @@ const toast = useToast()
 export default defineComponent({
   data() {
     return {
+      loading: {
+        content: false,
+        announcements: false,
+        recent: false
+      },
+      placeholder: {
+        content: 9,
+        recent: 5
+      },
       recent: [],
       announcements: [],
       view_structure: {
@@ -305,7 +405,6 @@ export default defineComponent({
         categories: []
       },
       lastPage: 0,
-      announcementsLoading: true,
       permissions: {},
       edit_category: {
         title: '',
@@ -349,39 +448,50 @@ export default defineComponent({
   },
   methods: {
     loadRecent() {
+      this.loading.recent = false
       axios.get('http://localhost:8000/api/posts?recent=5')
         .then((response) => {
           this.recent = response.data.data
+          this.loading.recent = true
         })
         .catch((error) => {
           console.error(error)
         })
     },
     loadAnnouncements() {
+      this.loading.announcements = false
       axios.get('http://localhost:8000/api/announcements')
         .then((response) => {
           this.announcements = response.data.data
-          this.announcementsLoading = false
+          this.loading.announcements = true
         })
         .catch((error) => {
           console.error(error)
         })
     },
     loadSubcategory(id) {
+      this.placeholder.content = 9
+      this.loading.content = false
       axios.get('http://localhost:8000/api/categories/' + id)
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
+          this.loading.content = true
+          this.placeholder.content = 0
         })
         .catch(error => {
           console.error(error)
         })
     },
     loadMainCategories() {
+      this.placeholder.content = 9
+      this.loading.content = false
       axios.get('http://localhost:8000/api/categories?paginate=0')
         .then(response => {
           this.categories = response.data
           this.view_structure.categories = this.mainCategories
+          this.loading.content = true
+          this.placeholder.content = 0
         })
         .catch(error => {
           console.error(error)
