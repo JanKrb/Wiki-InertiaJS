@@ -38,9 +38,9 @@ import CreateCategories from '../views/create-category/Main.vue'
 import CreatePosts from '../views/create-post/Main.vue'
 import EditPosts from '../views/edit-post/Main.vue'
 import EditCategories from '../views/edit-category/Main.vue'
-import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
 import TermsOfService from '../views/terms-of-service/Main.vue'
+import PrivacyPolicy from '../views/privacy-policy/Main.vue'
 import PostSingle from '../views/post/PostSingle.vue'
 
 const routes = [
@@ -105,11 +105,11 @@ const routes = [
         }
       },
       {
-        path: 'test',
-        name: 'editor_test',
-        component: EditorTest,
+        path: 'privacy',
+        name: 'privacy',
+        component: PrivacyPolicy,
         meta: {
-          title: 'Test Page',
+          title: 'Privacy Policy',
           auth: false,
           isAuth: false
         }
