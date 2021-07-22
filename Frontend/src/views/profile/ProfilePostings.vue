@@ -21,11 +21,11 @@
                   <img
                     alt=""
                     class="rounded-full"
-                    :src="post.user.profile_picture"
+                    :src="post?.user?.profile_picture"
                   />
                 </div>
                 <div class="ml-3 mr-auto">
-                  <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
+                  <a href="javascript:;" class="font-medium">{{ post?.user?.name }}</a>
                   <div class="flex text-gray-600 truncate text-xs mt-0.5">
                     <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
                       {{ post.created_at }}
@@ -92,10 +92,6 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
-import { useToast } from 'vue-toastification'
-import { useStore } from '@/store'
-
-const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -105,64 +101,21 @@ export default defineComponent({
     return {
       user: {},
       postings: [],
-      validation_error: {},
-      darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
+      validation_error: {}
     }
   },
   mounted() {
-    this.fetchUser()
+    this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchPostings(this.user.id)
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault()
-
-      const store = useStore()
-      const loader = this.$loading.show()
-
-      localStorage.setItem('darkmode', this.darkmode)
-      this.darkmode
-        ? cash('html').addClass('dark')
-        : cash('html').removeClass('dark')
-      store.dispatch('main/setDarkMode', this.darkmode)
-
-      axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
-        name: this.user.name,
-        pre_name: this.user.pre_name,
-        last_name: this.user.last_name,
-        email: this.user.email
-      })
-        .then(response => {
-          toast.success('Profile successfully updated')
-          loader.hide()
-          this.fetchUser()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
-    fetchUser() {
-      const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/auth/user')
-        .then(response => {
-          this.user = response.data.data.user
-          loader.hide()
-          this.fetchPostings(response.data.data.user.id)
-        })
-        .catch(error => {
-          console.log(error)
-          loader.hide()
-        })
-    },
     fetchPostings(id) {
-      axios.get('http://localhost:8000/api/posts?user=' + id + '&paginate=0')
+      axios.get('http://localhost:8000/api/users/' + id + '/posts?paginate=0')
         .then(response => {
-          this.postings = response.data
+          this.postings = response.data.data
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     }
   }
