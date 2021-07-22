@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Post;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\Category as CategoryResource;
+use App\Http\Resources\MiniCategoryCollection;
 use App\Http\Resources\SmallCategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
@@ -106,5 +107,27 @@ class CategoryController extends BaseController
         }
 
         return $response;
+    }
+
+    /**
+     * Get single data
+     *
+     * @param Request $request
+     * @param int $id
+     */
+    public function get_single(Request $request, int $id)
+    {
+        if ($id != 0) {
+            $item = $this->model::find($id);
+            if (is_null($item)) {
+                return $this->sendError('Item does not exists.');
+            }
+
+            $response = new $this->resource($item);
+            return $this->sendResponse($response, 'Successfully fetched item');
+        } else {
+            $data = $this->model::where('parent_id', null)->get();
+            return $this->sendResponse(new MiniCategoryCollection($data), 'Successfully fetched items of page 0');
+        }
     }
 }
