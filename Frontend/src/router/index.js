@@ -50,7 +50,7 @@ const routes = [
     name: 'TopMenu',
     meta: {
       title: 'Wiki',
-      auth: false,
+      auth: true,
       isAuth: false
     },
     children: [
@@ -60,7 +60,7 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -70,7 +70,7 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -80,7 +80,7 @@ const routes = [
         component: PostSingle,
         meta: {
           title: 'View Post',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -90,7 +90,7 @@ const routes = [
         component: Search,
         meta: {
           title: 'Search',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -100,7 +100,7 @@ const routes = [
         component: TermsOfService,
         meta: {
           title: 'Terms of Service',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -110,7 +110,7 @@ const routes = [
         component: PrivacyPolicy,
         meta: {
           title: 'Privacy Policy',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       }
@@ -122,7 +122,7 @@ const routes = [
     name: 'Profile',
     meta: {
       title: 'Profile',
-      auth: false,
+      auth: true,
       isAuth: false
     },
     children: [
