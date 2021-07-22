@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="intro-y flex items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
+      <h2 class="text-lg font-medium mr-auto">User Account</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
       <Sidebar :user="this.user"></Sidebar>
@@ -99,7 +99,7 @@ export default defineComponent({
     },
     fetchBookmarks(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks')
+      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
         .then(response => {
           this.bookmarks = response.data.data
           loader.hide()

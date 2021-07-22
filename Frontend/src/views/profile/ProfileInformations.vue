@@ -108,7 +108,7 @@
                       <img
                         class="rounded-md"
                         alt=""
-                        :src="this.user.profile_picture"
+                        :src="this.user.profile_picture ? this.user.profile_picture : require('@/assets/images/placeholder.png')"
                       />
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">

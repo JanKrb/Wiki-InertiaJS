@@ -10,7 +10,7 @@
       <form @submit.prevent="this.sendReport(this.report.content)">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body pt-5 mt-10">
               <div class="p-5 text-center">
                 <AlertCircleIcon class="w-16 h-16 text-theme-6 mx-auto mt-3" />
                 <div class="text-3xl mt-5">Please write a Report reason!</div>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="text-xs text-gray-500 ml-auto">{{ history?.created_at }}</div>
                   </div>
-                  <div class="text-gray-600 mt-1">{{ history?.content }}</div>
+                  <div class="text-gray-600 mt-1" v-html="history?.content"></div>
                 </div>
               </div>
             </div>
@@ -338,7 +338,6 @@ export default defineComponent({
       })
         .then(response => {
           this.post.liked = response.data.data.vote
-          this.loadPost(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
@@ -398,7 +397,6 @@ export default defineComponent({
       axios.get('http://localhost:8000/api/posts/' + this.$route.params.id + '/histories')
         .then(response => {
           this.histories = response.data.data
-          console.log(response)
         })
         .catch(error => {
           console.error(error)

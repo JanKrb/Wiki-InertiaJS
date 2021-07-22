@@ -21,11 +21,11 @@
                   <img
                     alt=""
                     class="rounded-full"
-                    :src="post.user.profile_picture"
+                    :src="post?.user?.profile_picture"
                   />
                 </div>
                 <div class="ml-3 mr-auto">
-                  <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
+                  <a href="javascript:;" class="font-medium">{{ post?.user?.name }}</a>
                   <div class="flex text-gray-600 truncate text-xs mt-0.5">
                     <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
                       {{ post.created_at }}
@@ -49,25 +49,28 @@
                 <a class="block font-medium text-base">
                   {{ post.title }}
                 </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
+                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post.content !== null ? post?.content?.substring(0,200) + '...' : 'This post has no content!'"></div>
               </div>
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
                   <div class="mr-2">
-                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes > 0 ? post.like_votes : 0 }}
+                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes_count }}
                   </div>
                   <div class="mr-2">
-                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments > 0 ? post.comments : 0 }}
+                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments_count }}
+                  </div>
+                  <div class="mr-2">
+                    <ClockIcon class="mr-1 h-4 w-4"></ClockIcon>{{ post.histories_count }}
                   </div>
                   <div class="ml-auto">
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
-                    <span v-if="false"><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Private</span></span>
+                    <span v-if="post.approved_at"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
+                    <span v-else><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Not Approved</span></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="this.postings.length <= 0" class="intro-y col-span-12">
+          <div v-if="this?.postings?.length <= 0" class="intro-y col-span-12">
             <div class="box">
               <div class="p-5 text-center">
                 <FolderIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
@@ -89,10 +92,6 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
-import { useToast } from 'vue-toastification'
-import { useStore } from '@/store'
-
-const toast = useToast()
 
 export default defineComponent({
   components: {
@@ -102,60 +101,17 @@ export default defineComponent({
     return {
       user: {},
       postings: [],
-      validation_error: {},
-      darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
+      validation_error: {}
     }
   },
   mounted() {
-    this.fetchUser()
+    this.user = JSON.parse(localStorage.getItem('user'))
+    this.fetchPostings(this.user.id)
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault()
-
-      const store = useStore()
-      const loader = this.$loading.show()
-
-      localStorage.setItem('darkmode', this.darkmode)
-      this.darkmode
-        ? cash('html').addClass('dark')
-        : cash('html').removeClass('dark')
-      store.dispatch('main/setDarkMode', this.darkmode)
-
-      axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
-        name: this.user.name,
-        pre_name: this.user.pre_name,
-        last_name: this.user.last_name,
-        email: this.user.email
-      })
-        .then(response => {
-          toast.success('Profile successfully updated')
-          loader.hide()
-          this.fetchUser()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
-    fetchUser() {
-      const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/auth/user')
-        .then(response => {
-          this.user = response.data.data.user
-          loader.hide()
-          this.fetchPostings(response.data.data.user.id)
-        })
-        .catch(error => {
-          console.log(error)
-          loader.hide()
-        })
-    },
     fetchPostings(id) {
-      axios.get('http://localhost:8000/api/posts?user=' + id)
+      axios.get('http://localhost:8000/api/users/' + id + '/posts?paginate=0')
         .then(response => {
-          console.log(response)
           this.postings = response.data.data
         })
         .catch(error => {

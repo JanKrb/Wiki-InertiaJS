@@ -1,22 +1,45 @@
 <template>
-  <div class="grid grid-cols-12 gap-6 mt-8">
+  <div class="grid grid-cols-12 gap-6 mt-2">
     <div class="col-span-12">
-      <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
-        <div class="intro-y col-span-12 sm:col-span-12 md:col-span-12 xxl:col-span-12">
-          <div class="file box rounded-md px-5 pt-2 pb-5 px-3 sm:px-5 relative bg-gray-600">
-            <div class="relative text-lg bg-transparent text-gray-800">
-              <div class="flex items-center border-b border-b-2 border-teal-500 py-2">
-                <form @submit.prevent="this.search(this.search_keywords)">
-                  <input class="bg-transparent border-none mr-3 px-2 leading-tight focus:outline-none text-white" type="text" placeholder="Search" v-model="search_keywords">
-                  <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
-                    <SearchIcon class="text-white mb-5"></SearchIcon>
-                  </button>
-                </form>
+      <section class="h-50 p-8">
+        <div class="container mx-auto">
+          <div class="text-gray-600 mt-2">
+            Your search has returned
+            <a class="text-black font-medium">
+              {{ this.search_results.posts.length + this.search_results.cats.length + this.search_results.users.length }}
+            </a>
+            hits
+          </div>
+          <form @submit.prevent="this.search(this.search_keywords)">
+            <div class="pt-2 relative mx-auto text-gray-600 w-full">
+              <input class="w-full h-16 px-3 rounded mb-8 focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg" type="text" placeholder="Search..." v-model="search_keywords">
+              <button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
+                <SearchIcon class="h-9 w-9"></SearchIcon>
+              </button>
+            </div>
+          </form>
+          <div class="h-full flex items-center">
+            <div class="mx-auto text-center">
+              <div class="text-gray-600 mt-1">
+                <PaperclipIcon class="mr-2 w-4 h-4"></PaperclipIcon>
+                1500 POSTS
+              </div>
+            </div>
+            <div class="mx-auto text-center">
+              <div class="text-gray-600 mt-1">
+                <FolderIcon class="mr-2 w-4 h-4"></FolderIcon>
+                20 CATEGORIES
+              </div>
+            </div>
+            <div class="mx-auto text-center">
+              <div class="text-gray-600 mt-1">
+                <UserIcon class="mr-2 w-4 h-4"></UserIcon>
+                10 AUTHORS
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
     <div class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <!-- BEGIN: File Manager Menu -->
@@ -63,8 +86,7 @@
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
                   {{ result.title }}
                 </a>
-                <div class="text-gray-600 mr-5 sm:mr-5">
-                  {{ result.description.substring(0,400)+"..." }}
+                <div class="text-gray-600 mr-5 sm:mr-5" v-html="result.description.substring(0,400)+'...'">
                 </div>
               </div>
             </div>
@@ -86,9 +108,7 @@
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'posts.view', params: { id: result.id } })">
                   {{ result.title }}
                 </a>
-                <div class="text-gray-600 mr-5 sm:mr-5">
-                  {{ result.content.substring(0,400)+"..." }}
-                </div>
+                <div class="text-gray-600 mr-5 sm:mr-5" v-html="result.content.substring(0,400)+'...'"></div>
               </div>
             </div>
           </div>

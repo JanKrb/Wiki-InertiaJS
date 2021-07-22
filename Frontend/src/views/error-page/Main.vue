@@ -21,11 +21,11 @@
           <div class="intro-x text-lg mt-3">
             You may have mistyped the address or the page may have moved.
           </div>
-          <button
-            class="intro-x btn py-3 px-4 text-white border-white dark:border-dark-5 dark:text-gray-300 mt-10"
-          >
-            Back to Home
-          </button>
+          <router-link :to="{ name: 'categories' }">
+            <button class="intro-x btn py-3 px-4 text-white border-white dark:border-dark-5 dark:text-gray-300 mt-10">
+              Back to Home
+            </button>
+          </router-link>
         </div>
       </div>
       <!-- END: Error Page -->

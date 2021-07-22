@@ -68,9 +68,7 @@
               />
             </div>
             <div class="ml-3">{{ result.title }}</div>
-            <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right">
-              {{ result.content }}
-            </div>
+            <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right" v-html="result.content.substring(0,20)"></div>
           </a>
         </div>
         <div class="search-result__content__title" v-if="this.search_results.users.length > 0">Authors</div>
@@ -94,9 +92,11 @@
             </div>
           </a>
         </div>
-        <button class="btn btn-primary mr-2 mb-2">
-          <SearchIcon class="w-4 h-4 mr-2" /> View Searchpage
-        </button>
+        <router-link :to="{ name: 'search' }">
+          <button class="btn btn-primary mr-2 mb-2">
+            <SearchIcon class="w-4 h-4 mr-2" /> View Searchpage
+          </button>
+        </router-link>
       </div>
     </div>
   </div>

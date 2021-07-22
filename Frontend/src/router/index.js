@@ -38,9 +38,9 @@ import CreateCategories from '../views/create-category/Main.vue'
 import CreatePosts from '../views/create-post/Main.vue'
 import EditPosts from '../views/edit-post/Main.vue'
 import EditCategories from '../views/edit-category/Main.vue'
-import EditorTest from '../views/editor-test/Main.vue'
 import Search from '../views/search/Main.vue'
 import TermsOfService from '../views/terms-of-service/Main.vue'
+import PrivacyPolicy from '../views/privacy-policy/Main.vue'
 import PostSingle from '../views/post/PostSingle.vue'
 
 const routes = [
@@ -50,7 +50,7 @@ const routes = [
     name: 'TopMenu',
     meta: {
       title: 'Wiki',
-      auth: false,
+      auth: true,
       isAuth: false
     },
     children: [
@@ -60,7 +60,7 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -70,7 +70,7 @@ const routes = [
         component: Categories,
         meta: {
           title: 'Categories',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -79,8 +79,8 @@ const routes = [
         name: 'posts.view',
         component: PostSingle,
         meta: {
-          title: 'Single Posting',
-          auth: false,
+          title: 'View Post',
+          auth: true,
           isAuth: false
         }
       },
@@ -90,7 +90,7 @@ const routes = [
         component: Search,
         meta: {
           title: 'Search',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
@@ -100,17 +100,17 @@ const routes = [
         component: TermsOfService,
         meta: {
           title: 'Terms of Service',
-          auth: false,
+          auth: true,
           isAuth: false
         }
       },
       {
-        path: 'test',
-        name: 'editor_test',
-        component: EditorTest,
+        path: 'privacy',
+        name: 'privacy',
+        component: PrivacyPolicy,
         meta: {
-          title: 'Test Page',
-          auth: false,
+          title: 'Privacy Policy',
+          auth: true,
           isAuth: false
         }
       }
@@ -121,8 +121,8 @@ const routes = [
     component: TopMenu,
     name: 'Profile',
     meta: {
-      title: 'Wiki',
-      auth: false,
+      title: 'Profile',
+      auth: true,
       isAuth: false
     },
     children: [
@@ -131,7 +131,7 @@ const routes = [
         name: 'profile.informations',
         component: ProfileInformations,
         meta: {
-          title: 'Profile',
+          title: 'General',
           auth: true,
           isAuth: false
         }
@@ -182,7 +182,7 @@ const routes = [
         name: 'admin.roles',
         component: Roles,
         meta: {
-          title: 'Wiki Roles',
+          title: 'Roles',
           auth: true,
           isAuth: false
         }
@@ -192,7 +192,7 @@ const routes = [
         name: 'admin.role.view',
         component: Role,
         meta: {
-          title: 'Wiki Role',
+          title: 'View Role',
           auth: true,
           isAuth: false
         }
@@ -202,7 +202,7 @@ const routes = [
         name: 'admin.permissions',
         component: Permissions,
         meta: {
-          title: 'Wiki Permissions',
+          title: 'Permissions',
           auth: true,
           isAuth: false
         }
@@ -212,7 +212,7 @@ const routes = [
         name: 'admin.bans',
         component: Bans,
         meta: {
-          title: 'Wiki Bans',
+          title: 'Bans',
           auth: true,
           isAuth: false
         }
@@ -222,7 +222,7 @@ const routes = [
         name: 'admin.ban',
         component: Ban,
         meta: {
-          title: 'Wiki Ban',
+          title: 'View Ban',
           auth: true,
           isAuth: false
         }
@@ -232,7 +232,7 @@ const routes = [
         name: 'admin.accounts',
         component: Accounts,
         meta: {
-          title: 'Wiki Accounts',
+          title: 'Accounts',
           auth: true,
           isAuth: false
         }
@@ -242,7 +242,7 @@ const routes = [
         name: 'admin.accounts.informations',
         component: AccountInformations,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Informations',
           auth: true,
           isAuth: false
         }
@@ -252,7 +252,7 @@ const routes = [
         name: 'admin.accounts.settings',
         component: AccountSettings,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Settings',
           auth: true,
           isAuth: false
         }
@@ -262,7 +262,7 @@ const routes = [
         name: 'admin.accounts.security',
         component: AccountSecurity,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Security',
           auth: true,
           isAuth: false
         }
@@ -272,7 +272,7 @@ const routes = [
         name: 'admin.accounts.postings',
         component: AccountPostings,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Postings',
           auth: true,
           isAuth: false
         }
@@ -282,7 +282,7 @@ const routes = [
         name: 'admin.accounts.bookmarks',
         component: AccountBookmarks,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Bookmarks',
           auth: true,
           isAuth: false
         }
@@ -292,7 +292,7 @@ const routes = [
         name: 'admin.accounts.bans',
         component: AccountBans,
         meta: {
-          title: 'Wiki Account',
+          title: 'Account Bans',
           auth: true,
           isAuth: false
         }
@@ -302,7 +302,7 @@ const routes = [
         name: 'admin.settings.general',
         component: SettingsGeneral,
         meta: {
-          title: 'Wiki Settings',
+          title: 'General Settings',
           auth: true,
           isAuth: false
         }
@@ -312,7 +312,7 @@ const routes = [
         name: 'admin.settings.database',
         component: SettingsDatabase,
         meta: {
-          title: 'Wiki Settings',
+          title: 'Database Settings',
           auth: true,
           isAuth: false
         }
@@ -322,7 +322,7 @@ const routes = [
         name: 'admin.settings.mail',
         component: SettingsMail,
         meta: {
-          title: 'Wiki Settings',
+          title: 'Mail Settings',
           auth: true,
           isAuth: false
         }
@@ -332,7 +332,7 @@ const routes = [
         name: 'admin.settings.security',
         component: SettingsSecurity,
         meta: {
-          title: 'Wiki Settings',
+          title: 'Security Settings',
           auth: true,
           isAuth: false
         }
@@ -342,7 +342,7 @@ const routes = [
         name: 'admin.badges',
         component: Badges,
         meta: {
-          title: 'Wiki Badges',
+          title: 'Badges',
           auth: true,
           isAuth: false
         }
@@ -363,7 +363,7 @@ const routes = [
         name: 'moderation.tags',
         component: Tags,
         meta: {
-          title: 'Wiki Tags',
+          title: 'Post Tags',
           auth: true,
           isAuth: false
         }
@@ -373,7 +373,7 @@ const routes = [
         name: 'moderation.announcements',
         component: Announcements,
         meta: {
-          title: 'Wiki Announcements',
+          title: 'Announcements',
           auth: true,
           isAuth: false
         }
@@ -383,7 +383,7 @@ const routes = [
         name: 'moderation.reports',
         component: Reports,
         meta: {
-          title: 'Wiki Reports',
+          title: 'Reports',
           auth: true,
           isAuth: false
         }
@@ -393,7 +393,7 @@ const routes = [
         name: 'moderation.notifications',
         component: Notifications,
         meta: {
-          title: 'Wiki Notifications',
+          title: 'Notifications',
           auth: true,
           isAuth: false
         }
@@ -403,7 +403,7 @@ const routes = [
         name: 'moderation.authorizations',
         component: PostAuthorization,
         meta: {
-          title: 'Wiki Authorizations',
+          title: 'Post Authorization',
           auth: true,
           isAuth: false
         }
@@ -413,7 +413,7 @@ const routes = [
         name: 'moderation.categories.create',
         component: CreateCategories,
         meta: {
-          title: 'Wiki Categories',
+          title: 'Create Category',
           auth: true,
           isAuth: false
         }
@@ -423,7 +423,7 @@ const routes = [
         name: 'moderation.posts.create',
         component: CreatePosts,
         meta: {
-          title: 'Wiki Posts',
+          title: 'Create Post',
           auth: true,
           isAuth: false
         }
@@ -433,7 +433,7 @@ const routes = [
         name: 'moderation.posts.edit',
         component: EditPosts,
         meta: {
-          title: 'Wiki Posts',
+          title: 'Edit Post',
           auth: true,
           isAuth: false
         }
@@ -443,7 +443,7 @@ const routes = [
         name: 'moderation.categories.edit',
         component: EditCategories,
         meta: {
-          title: 'Wiki Categories',
+          title: 'Edit Category',
           auth: true,
           isAuth: false
         }

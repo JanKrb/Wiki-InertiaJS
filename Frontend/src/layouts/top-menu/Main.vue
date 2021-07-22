@@ -45,10 +45,10 @@
           <img
             alt=""
             class="w-6"
-            :src="wiki_logo"
+            :src="this.wiki_settings.logo"
           />
           <span class="text-white text-lg ml-3">
-            <span class="font-medium">{{ wiki_name }}</span>
+            <span class="font-medium">{{ this.wiki_settings.name }}</span>
           </span>
         </router-link>
         <!-- END: Logo -->
@@ -56,8 +56,8 @@
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
           <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
-            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'" v-if="breadcrum.name !== 'categories' && breadcrum.name !== 'categories.subcategory'">{{ breadcrum.meta.title }}</a>
-            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.name === this.$router.name"/>
+            <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
+            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
@@ -260,6 +260,73 @@
       <router-view/>
     </div>
     <!-- END: Content -->
+    <div class="footer mt-5">
+      <div>
+        <div class="max-w-6xl m-auto text-gray-800 flex flex-wrap justify-center">
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Home</div>
+            <router-link :to="{ name: 'categories' }">
+              <a class="my-3 block dark:text-theme-2">Wiki</a>
+            </router-link>
+            <router-link :to="{ name: 'search' }">
+              <a class="my-3 block dark:text-theme-2">Quick Search</a>
+            </router-link>
+            <router-link :to="{ name: 'profile.informations' }">
+              <a class="my-3 block dark:text-theme-2">Profile</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">User</div>
+            <router-link :to="{ name: 'login' }">
+              <a class="my-3 block dark:text-theme-2">Sign in</a>
+            </router-link>
+            <router-link :to="{ name: 'register' }">
+              <a class="my-3 block dark:text-theme-2">New Account</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Support</div>
+            <a class="my-3 block dark:text-theme-2" :href="wiki_settings.supportlink">Help Center</a>
+            <router-link :to="{ name: 'privacy' }">
+              <a class="my-3 block dark:text-theme-2">Privacy Policy</a>
+            </router-link>
+            <router-link :to="{ name: 'tos' }">
+              <a class="my-3 block dark:text-theme-2">Conditions</a>
+            </router-link>
+          </div>
+          <div class="p-5 w-48 ">
+            <div class="text-xs uppercase text-gray-500 font-medium">Contact us</div>
+            <a class="my-3 block dark:text-theme-2" href="/#">{{ wiki_settings.contactmail }} <span class="text-teal-600 text-xs p-1"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <div class="flex px-3 m-auto pt-5 border-t text-gray-800 text-sm flex-col md:flex-row max-w-6xl">
+          <div class="mt-2 dark:text-theme-2">© Copyright 2021. All Rights Reserved.</div>
+          <div class="md:flex-auto md:flex-row-reverse flex-row flex">
+            <a :href="wiki_settings.social_youtube" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_youtube !== null">
+              <YoutubeIcon></YoutubeIcon>
+            </a>
+            <a :href="wiki_settings.social_facebook" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_facebook !== null">
+              <FacebookIcon></FacebookIcon>
+            </a>
+            <a :href="wiki_settings.social_twitter" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_twitter !== null">
+              <TwitterIcon></TwitterIcon>
+            </a>
+            <a :href="wiki_settings.social_instagram" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_instagram !== null">
+              <InstagramIcon></InstagramIcon>
+            </a>
+            <a :href="wiki_settings.social_linkedin" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_linkedin !== null">
+              <LinkedinIcon></LinkedinIcon>
+            </a>
+            <a :href="wiki_settings.social_discord" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_discord !== null">
+              <mic-icon></mic-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -294,9 +361,19 @@ export default defineComponent({
       view_notification: {},
       notifications: [],
       loggedIn: false,
-      wiki_name: this.$config.name,
-      wiki_logo: this.$config.logo,
-      breadcrums: []
+      breadcrums: [],
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO,
+        supportlink: process.env.VUE_APP_SUPPORTLINK,
+        contactmail: process.env.VUE_APP_CONTACTMAIL,
+        social_discord: process.env.VUE_APP_SOCIAL_DISCORD,
+        social_linkedin: process.env.VUE_APP_SOCIAL_LINKEDIN,
+        social_instagram: process.env.VUE_APP_SOCIAL_INSTAGRAM,
+        social_twitter: process.env.VUE_APP_SOCIAL_TWITTER,
+        social_facebook: process.env.VUE_APP_SOCIAL_FACEBOOK,
+        social_youtube: process.env.VUE_APP_SOCIAL_YOUTUBE
+      }
     }
   },
   computed: {
@@ -323,6 +400,7 @@ export default defineComponent({
     this.fetchNotifications()
 
     this.breadcrums = this.$route.matched
+    console.log(this.$route)
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
