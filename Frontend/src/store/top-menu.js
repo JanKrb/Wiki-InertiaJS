@@ -7,8 +7,25 @@ const state = () => {
         title: 'Categories'
       },
       {
+        icon: 'Edit3Icon',
+        pageName: 'author',
+        title: 'Author',
+        subMenu: [
+          {
+            icon: 'FileTextIcon',
+            pageName: 'moderation.posts.create',
+            title: 'Create Post'
+          },
+          {
+            icon: 'FolderIcon',
+            pageName: 'moderation.categories.create',
+            title: 'Create Category'
+          }
+        ]
+      },
+      {
         icon: 'ToolIcon',
-        pageName: 'mod.tags',
+        pageName: 'moderation.tags',
         title: 'Moderation',
         subMenu: [
           {
