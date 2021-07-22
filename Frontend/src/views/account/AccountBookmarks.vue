@@ -99,7 +99,7 @@ export default defineComponent({
     },
     fetchBookmarks(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks')
+      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
         .then(response => {
           this.bookmarks = response.data.data
           loader.hide()
