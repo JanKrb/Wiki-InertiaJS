@@ -136,7 +136,7 @@
             <div class="flex text-gray-600 text-xs sm:text-sm">
               <Tippy
                 tag="div"
-                class="intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 text-gray-600 dark:text-gray-300"
+                class="intro-x flex flex-none items-center justify-center mr-3 text-gray-600 dark:bg-dark-5 dark:text-gray-300"
                 content="Bookmark"
                 v-on:click='this.addBookmark("post", post.id)'
               >
@@ -182,39 +182,35 @@
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
-                <img
-                  alt=""
-                  class="rounded-full"
-                  :src="require('@/assets/images/placeholder.png')"
-                />
+                <button class="btn w-11 h-11 rounded-full bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-30" disabled></button>
               </div>
               <div class="ml-3 text-white mr-auto">
-                <a><button class="btn w-32 rounded bg-gray-100 border-0 mr-1" disabled></button></a>
-                <div class="mt-0.5"><span class="px-7 rounded bg-gray-100 text-white mr-1"></span></div>
+                <a><button class="btn w-32 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button></a>
+                <div class="mt-0.5"><span class="px-7 rounded bg-gray-200 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span></div>
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
               <a href="javascript:;" class="block font-medium text-xl mt-3">
-                <button class="btn w-48 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                <button class="btn w-48 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
               </a>
             </div>
           </div>
           <div class="w-full p-5 text-gray-700 dark:text-gray-600">
-            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1" disabled></button>
-            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1" disabled></button>
-            <button class="btn w-32 rounded bg-gray-100 border-0 mr-1" disabled></button>
+            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300dark:bg-dark-5 dark:text-gray-300" disabled></button>
+            <button class="btn w-32 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
           </div>
           <div class="w-100 px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="flex text-gray-600 text-xs sm:text-sm">
               <div class="mr-3">
-                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
               </div>
               <div class="mr-3">
-                <span class="px-10 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+                <span class="px-10 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
               </div>
               <div class="ml-auto">
-                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
-                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1"></span>
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
+                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
               </div>
             </div>
           </div>
@@ -278,15 +274,15 @@
                 <TinySlider ref-key="announcementsRef" v-else>
                   <div class="p-5">
                     <div class="text-base font-medium truncate">
-                      <button class="btn w-32 mt-2 rounded bg-gray-300 border-0 mr-1" disabled></button>
+                      <button class="btn w-32 mt-2 rounded bg-gray-300 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
                     </div>
                     <div class="text-gray-500 mt-1">
-                      <button class="btn w-24 rounded bg-gray-100 border-0 mr-1" disabled></button>
+                      <button class="btn w-24 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
                     </div>
                     <div class="text-gray-600 text-justify mt-1">
-                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
-                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
-                      <button class="btn w-16 mt-1 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+                      <button class="btn w-48 mt-1 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+                      <button class="btn w-16 mt-1 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
                     </div>
                   </div>
                 </TinySlider>
@@ -362,10 +358,10 @@
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">
-                      <button class="btn w-24 mt-3 rounded bg-gray-300 border-0 mr-1" disabled></button>
+                      <button class="btn w-24 mt-3 rounded bg-gray-300 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
                     </div>
                     <div class="text-gray-600 text-xs mt-0.5">
-                      <button class="btn w-16 rounded bg-gray-200 border-0 mr-1" disabled></button>
+                      <button class="btn w-16 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
                     </div>
                   </div>
                 </div>
