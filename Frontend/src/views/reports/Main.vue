@@ -51,8 +51,8 @@
             </a>
             <div class="dropdown-menu w-40">
               <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                <router-link :to="{ name: 'posts.view', params: { 'id': report.id } }">
-                  <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                <router-link :to="{ name: 'posts.view', params: { 'id': report.post_id } }">
+                  <a data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                     <EyeIcon class="w-4 h-4 mr-2"/> View Post
                   </a>
                 </router-link>
