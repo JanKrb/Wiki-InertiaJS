@@ -351,10 +351,7 @@
               >
                 <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
                   <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                    <img
-                      alt=""
-                      :src="require('@/assets/images/placeholder.png')"
-                    />
+                    <button class="btn w-11 h-11 rounded-full bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-30" disabled></button>
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">
