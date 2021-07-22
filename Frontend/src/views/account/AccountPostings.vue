@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="intro-y flex items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
+      <h2 class="text-lg font-medium mr-auto">User Account</h2>
     </div>
     <div class="grid grid-cols-12 gap-6">
       <Sidebar :user="this.user"></Sidebar>
@@ -59,13 +59,17 @@
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
                   <div class="mr-2">
-                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes > 0 ? post.like_votes : 0 }}
+                    <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes_count }}
                   </div>
                   <div class="mr-2">
-                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments > 0 ? post.comments : 0 }}
+                    <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments_count }}
+                  </div>
+                  <div class="mr-2">
+                    <ClockIcon class="mr-1 h-4 w-4"></ClockIcon>{{ post.histories_count }}
                   </div>
                   <div class="ml-auto">
-                    <span v-if="true"><span class="px-2 py-1 rounded-full bg-theme-6 text-white mr-1">Not Verified</span></span>
+                    <span v-if="post.approved_at"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1 dark:text-black">Public</span></span>
+                    <span v-else><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1 dark:text-black">Not Approved</span></span>
                   </div>
                 </div>
               </div>
@@ -130,7 +134,7 @@ export default defineComponent({
     },
     fetchPosts(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/posts?user=' + id)
+      axios.get('http://localhost:8000/api/users/' + id + '/posts?paginate=0')
         .then(response => {
           this.posts = response.data.data
           loader.hide()

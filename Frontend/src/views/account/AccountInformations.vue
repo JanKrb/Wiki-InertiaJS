@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="intro-y flex items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Update Profile</h2>
+      <h2 class="text-lg font-medium mr-auto">User Account</h2>
     </div>
     <!-- BEGIN: Modal Content -->
     <div
