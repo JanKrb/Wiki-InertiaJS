@@ -16,7 +16,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.user.profile_picture"
+                  :src="this.user.profile_picture ? this.user.profile_picture : require('@/assets/images/placeholder.png')"
                 />
               </div>
               <div class="ml-5">
@@ -306,13 +306,13 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="ban.staff.profile_picture"
+                        :src="ban.staff?.profile_picture ? ban.staff?.profile_picture : require('@/assets/images/placeholder.png')"
                       />
                     </div>
                     <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
                       <a href="" class="font-medium">{{ ban.reason }}</a>
                       <div class="text-gray-600 text-xs mt-0.5">
-                        {{ ban.staff.name }}
+                        {{ ban.staff?.name ? ban.staff?.name : 'Unknown' }}
                       </div>
                     </div>
                     <div class="lg:ml-2 text-center mt-3 lg:mt-0">
@@ -411,6 +411,7 @@ export default defineComponent({
               this.lastBan = ban
             }
           }
+          console.log(response)
           this.bans = response.data.data
           loader.hide()
           this.fetchBanCount(id)
