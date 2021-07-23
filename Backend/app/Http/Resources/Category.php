@@ -5,9 +5,17 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class Category extends JsonResource
 {
+    protected $onlyVerified;
+
+    public function onlyVerified($onlyVerified){
+        $this->onlyVerified = $onlyVerified;
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -24,9 +32,13 @@ class Category extends JsonResource
             'user' => new UserResource($this->user),
             'parent_id' => $this->parent_id,
             'children' => new CategoryCollection($this->subcategory),
-            'posts' => new PostCollection($this->posts),
+            'posts' => new PostCollection($this->onlyVerified ? $this->posts->where('approved_at', '!=', null) : $this->posts),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
+    }
+
+    public static function collection($resource) {
+        return new CategoryCollection($resource);
     }
 }
