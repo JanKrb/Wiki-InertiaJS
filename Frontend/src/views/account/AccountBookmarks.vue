@@ -40,7 +40,7 @@
               </div>
             </router-link>
           </div>
-          <div v-if="this.bookmarks.length <= 0" class="intro-y col-span-12">
+          <div v-if="this?.bookmarks?.length <= 0" class="intro-y col-span-12">
             <div class="box">
               <div class="p-5 text-center">
                 <BookmarkIcon class="w-16 h-16 text-theme-1 mx-auto mt-5"/>
@@ -101,7 +101,7 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
         .then(response => {
-          this.bookmarks = response.data.data
+          this.bookmarks = response.data
           loader.hide()
         })
         .catch(error => {
