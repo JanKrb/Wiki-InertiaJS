@@ -113,24 +113,22 @@
             </div>
             <div class="mt-4">
               <label class="form-label">Category sorting</label>
-              <div class="dropdown">
-                <div class="w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start mb-3" role="button" aria-expanded="false">
-                  <div class="form-check">
-                    <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
-                    <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
-                  </div>
+              <div class="w-full flex items-center justify-start mb-3" aria-expanded="false">
+                <div class="form-check">
+                  <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
+                  <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
                 </div>
-                <div v-show="has_parent">
-                  <TailSelect
-                    v-model="this.category.parent_id"
-                    :options="{
-                    search: true,
-                    classNames: 'w-full'
-                  }"
-                  >
-                    <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
-                  </TailSelect>
-                </div>
+              </div>
+              <div v-show="has_parent">
+                <TailSelect
+                  v-model="this.category.parent_id"
+                  :options="{
+                  search: true,
+                  classNames: 'w-full'
+                }"
+                >
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
+                </TailSelect>
               </div>
             </div>
             <div v-show="this.validation_error !== null">
