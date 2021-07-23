@@ -7,7 +7,7 @@
           <img
             alt=""
             class="rounded-full"
-            :src="this.user.profile_picture"
+            :src="this.user.profile_picture ? this.user.profile_picture : require('@/assets/images/placeholder.png')"
           />
         </div>
         <div class="ml-4 mr-auto">
@@ -16,38 +16,6 @@
           </div>
           <div class="text-gray-600">
             {{ this.user.role?.name }}
-          </div>
-        </div>
-        <div class="dropdown">
-          <a
-            class="dropdown-toggle w-5 h-5 block"
-            href="javascript:;"
-            aria-expanded="false"
-          >
-            <MoreHorizontalIcon class="w-5 h-5 text-gray-600 dark:text-gray-300"/>
-          </a>
-          <div class="dropdown-menu w-56">
-            <div class="dropdown-menu__content box dark:bg-dark-1">
-              <div class="p-4 border-b border-gray-200 dark:border-dark-5 font-medium">
-                Export Options
-              </div>
-              <div class="p-2">
-                <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                  <ActivityIcon class="w-4 h-4 text-gray-700 dark:text-gray-300 mr-2"/>English
-                </a>
-                <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                  <BoxIcon class="w-4 h-4 text-gray-700 dark:text-gray-300 mr-2"/>German
-                  <div class="text-xs text-white px-1 rounded-full bg-theme-6 ml-auto">
-                    10
-                  </div>
-                </a>
-              </div>
-              <div class="px-3 py-3 border-t border-gray-200 dark:border-dark-5 font-medium flex">
-                <button type="button" class="btn btn-primary py-1 px-2 ml-auto">
-                  View Profile
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

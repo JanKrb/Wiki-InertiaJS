@@ -19,7 +19,7 @@
                 <img
                   :alt="'Thumbnail of ' + category?.title"
                   class="rounded-full"
-                  :src="category.user?.profile_picture"
+                  :src="category.user.profile_picture ? category.user.profile_picture : require('@/assets/images/placeholder.png')"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
@@ -326,7 +326,7 @@
                   <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                     <img
                       alt=""
-                      :src="activity?.user?.profile_picture"
+                      :src="activity.user.profile_picture ? activity.user.profile_picture : require('@/assets/images/placeholder.png')"
                     />
                   </div>
                   <div class="ml-4 mr-auto">

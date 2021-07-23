@@ -166,7 +166,7 @@
                       <img
                         class="rounded-md"
                         alt=""
-                        :src="user.profile_picture"
+                        :src="user.profile_picture ? user.profile_picture : require('@/assets/images/placeholder.png')"
                       />
                       <Tippy
                         tag="div"
