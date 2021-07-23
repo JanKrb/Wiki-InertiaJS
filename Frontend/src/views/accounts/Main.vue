@@ -118,11 +118,13 @@
               <img
                 alt=""
                 class="rounded-full"
-                :src="account.profile_picture"
+                :src="account.profile_picture ? account.profile_picture : require('@/assets/images/placeholder.png')"
               />
             </div>
             <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-              <a href="" class="font-medium">{{ account?.name }}</a>
+              <router-link :to="{ 'name': 'admin.accounts.informations', 'params': { 'id': account.id }}">
+                <a class="font-medium">{{ account?.name }}</a>
+              </router-link>
               <div class="text-gray-600 text-xs mt-0.5">
                 {{ account.role?.name }}
               </div>
