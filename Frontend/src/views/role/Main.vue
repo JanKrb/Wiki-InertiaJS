@@ -66,47 +66,47 @@
             <div class="box p-5 mt-5">
               <!-- BEGIN: Role Title/Color -->
               <div class="grid lg:grid-cols-2 gap-6 my-5">
-                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-white">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
-                      <label for="name" class="bg-white text-gray-600 px-1">Name</label>
+                      <label for="name" class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Name</label>
                     </p>
                   </div>
                   <p>
-                    <input id="name" autocomplete="false" tabindex="0" type="text" class="py-1 px-1 text-gray-900 outline-none block h-full w-full" v-model="role.name">
+                    <input id="name" autocomplete="false" tabindex="0" type="text" class="py-1 px-1 text-gray-900 outline-none block h-full w-full dark:bg-dark-5 dark:text-gray-300" v-model="role.name">
                   </p>
                 </div>
-                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-white">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
-                      <label for="color" class="bg-white text-gray-600 px-1">Color</label>
+                      <label for="color" class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Color</label>
                     </p>
                   </div>
                   <p>
-                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full" v-model="role.color">
+                    <input id="color" autocomplete="false" tabindex="0" type="color" class="py-1 px-1 outline-none block h-full w-full dark:bg-dark-5 dark:text-gray-300" v-model="role.color">
                   </p>
                 </div>
               </div>
               <!-- END: Role Title/Color -->
               <br>
               <!-- BEGIN: Role Description -->
-              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5">
+              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-white">
                 <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                   <p>
-                    <label class="bg-white text-gray-600 px-1">Description</label>
+                    <label class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Description</label>
                   </p>
                 </div>
                 <p>
-                  <textarea autocomplete="false" tabindex="0" class="py-1 px-1 text-gray-900 outline-none block h-full w-full" v-model="role.description"></textarea>
+                  <textarea autocomplete="false" tabindex="0" class="py-1 px-1 text-gray-900 outline-none block h-full w-full dark:bg-dark-5 dark:text-gray-300" v-model="role.description"></textarea>
                 </p>
               </div>
               <!-- END: Role Description -->
               <br>
               <!-- BEGIN: Role Description -->
-              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5">
+              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-white">
                 <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                   <p>
-                    <label class="bg-white text-gray-600 px-1">Default Role</label>
+                    <label class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Default Role</label>
                   </p>
                 </div>
                 <div class="flex items-center">
