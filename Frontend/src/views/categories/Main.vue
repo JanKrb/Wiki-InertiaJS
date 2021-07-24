@@ -432,13 +432,6 @@ export default defineComponent({
       }
     }
   },
-  computed: {
-    mainCategories: function () {
-      return this.categories.filter((category) => {
-        return category?.parent_id === null
-      })
-    }
-  },
   methods: {
     loadRecent() {
       this.loading.recent = false
@@ -479,10 +472,9 @@ export default defineComponent({
     loadMainCategories() {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('http://localhost:8000/api/categories?paginate=0')
+      axios.get('http://localhost:8000/api/categories/0')
         .then(response => {
-          this.categories = response.data
-          this.view_structure.categories = this.mainCategories
+          this.view_structure.categories = response.data.data
           this.loading.content = true
           this.placeholder.content = 0
         })
