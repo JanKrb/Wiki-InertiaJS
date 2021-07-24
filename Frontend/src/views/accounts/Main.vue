@@ -70,6 +70,16 @@
                 <label for="create-account-modal-password_confirmation" class="form-label">Password Confirmation</label>
                 <input id="create-account-modal-password_confirmation" type="password" class="form-control" placeholder="Your Password again" v-model="account.password_confirmation"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -77,7 +87,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -202,7 +212,7 @@ export default defineComponent({
     return {
       pagination: {},
       accounts: [],
-      validation_error: {},
+      validation_error: null,
       search: {
         account: ''
       },
@@ -210,6 +220,7 @@ export default defineComponent({
         name: '',
         pre_name: '',
         last_name: '',
+        password: '',
         email: '',
         role: {
           name: 'Not set'
@@ -275,12 +286,15 @@ export default defineComponent({
           })
           .catch(error => {
             this.validation_error = error.response.data.data.errors
+            console.log(error.response.data.data.errors)
             toast.error(error.response.data.message)
             loader.hide()
           })
       } else {
         this.account.password = ''
         this.account.password_confirmation = ''
+        toast.error('Please make sure that you specify a password that matches')
+        this.validation_error = { password: ['Please make sure that you specify a password that matches'] }
       }
     }
   }
