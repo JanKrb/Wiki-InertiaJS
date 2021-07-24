@@ -102,7 +102,15 @@ class AuthController extends Controller
         $success['token'] =  $user->createToken('PersonalAccessToken')->accessToken;
         $user->sendActivity('Session token has been created.', 'A session token for login and api requests has been created and passed.');
 
-        $success['user'] =  $user;
+        $success['user'] =  $user->only([
+            'id',
+            'name',
+            'pre_name',
+            'last_name',
+            'email',
+            'role_id',
+            'profile_picture'
+        ]);
 
         return $this->sendResponse($success, 'User register successfully.');
     }
