@@ -29,12 +29,12 @@ class User extends JsonResource
             'pre_name' => $this->pre_name,
             'last_name' => $this->last_name,
             'profile_picture' => $this->profile_picture,
-            'role' => new RoleResource($this->role, true),
-            'created_at' => $this->created_at->format('Y-m-d h:m:i'),
-            'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
+            'role' => new RoleResource($this->role, true)
         ];
 
         if ($this->detailed) {
+            $data['created_at'] = $this->created_at->format('Y-m-d h:m:i');
+            $data['updated_at'] = $this->updated_at->format('Y-m-d h:m:i');
             $data['email_verified_at'] = $this->email_verified_at;
             $data['subscribed_newsletter'] = $this->subscribed_newsletter;
         }
