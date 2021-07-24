@@ -66,7 +66,7 @@
             <div class="box p-5 mt-5">
               <!-- BEGIN: Role Title/Color -->
               <div class="grid lg:grid-cols-2 gap-6 my-5">
-                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-white">
+                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-dark-5">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
                       <label for="name" class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Name</label>
@@ -76,7 +76,7 @@
                     <input id="name" autocomplete="false" tabindex="0" type="text" class="py-1 px-1 text-gray-900 outline-none block h-full w-full dark:bg-dark-5 dark:text-gray-300" v-model="role.name">
                   </p>
                 </div>
-                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-white">
+                <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 dark:border-dark-5">
                   <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                     <p>
                       <label for="color" class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Color</label>
@@ -90,7 +90,7 @@
               <!-- END: Role Title/Color -->
               <br>
               <!-- BEGIN: Role Description -->
-              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-white">
+              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-dark-5">
                 <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                   <p>
                     <label class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Description</label>
@@ -103,7 +103,7 @@
               <!-- END: Role Description -->
               <br>
               <!-- BEGIN: Role Description -->
-              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-white">
+              <div class="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 mb-5 dark:border-dark-5">
                 <div class="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                   <p>
                     <label class="bg-white text-gray-600 px-1 dark:bg-dark-3 dark:text-gray-300">Default Role</label>
@@ -302,7 +302,7 @@ export default defineComponent({
   mounted() {
     this.fetchRole(this.$route.params.id)
     this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
-    this.fetchPermissions('http://localhost:8000/api/permissions')
+    this.fetchPermissions()
   },
   methods: {
     makePagination(meta, links) {
@@ -382,7 +382,7 @@ export default defineComponent({
           loader.hide()
           toast.success('Permission removed successfully')
           this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
-          this.fetchRolePermissions(this.all_permissions.length)
+          this.fetchRolePermissions()
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -390,18 +390,18 @@ export default defineComponent({
           loader.hide()
         })
     },
-    fetchPermissions(page) {
-      axios.get(page)
+    fetchPermissions() {
+      axios.get('http://localhost:8000/api/permissions?paginate=0')
         .then(response => {
-          this.all_permissions = response.data.data
-          this.fetchRolePermissions(response.data.data.length)
+          this.all_permissions = response.data
+          this.fetchRolePermissions()
         })
         .catch(error => {
           console.error(error)
         })
     },
-    fetchRolePermissions(perms) {
-      axios.get('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions?per_page=' + perms)
+    fetchRolePermissions() {
+      axios.get('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions?paginate=0')
         .then(response => {
           this.all_role_permissions = response.data.data
           this.fetchSelectablePermissions()
@@ -422,7 +422,7 @@ export default defineComponent({
           loader.hide()
           toast.success('Permission successfully added')
           this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
-          this.fetchRolePermissions(this.all_permissions.length)
+          this.fetchRolePermissions()
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
