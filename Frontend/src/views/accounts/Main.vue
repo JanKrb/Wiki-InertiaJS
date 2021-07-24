@@ -33,7 +33,7 @@
     </div>
     <!-- END: Delete Modal -->
     <!-- BEGIN: Create Modal -->
-    <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState" @hide="modalState = false">
       <div class="modal-dialog">
         <form @submit.prevent="handleSubmit">
           <div class="modal-content">
@@ -100,7 +100,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">Wiki Accounts</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="javascript:;" data-toggle="modal" data-target="#create-account-modal" class="btn btn-primary">Create new Account</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-account-modal" class="btn btn-primary" @click="this.modalState = true">Create new Account</a>
         <div class="hidden md:block mx-auto text-gray-600">
           Showing {{ this.pagination.showing_from }} to {{ this.pagination.showing_to }} of {{ this.pagination.total }} entries
         </div>
@@ -210,6 +210,7 @@ const toast = useToast()
 export default defineComponent({
   data() {
     return {
+      modalState: false,
       pagination: {},
       accounts: [],
       validation_error: null,
@@ -281,6 +282,7 @@ export default defineComponent({
         })
           .then(response => {
             toast.success('Account successfully created')
+            this.modalState = false
             loader.hide()
             this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
           })
