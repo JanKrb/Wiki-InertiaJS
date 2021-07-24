@@ -12,12 +12,12 @@
           />
           <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
         </div>
-        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary">Add New Role</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary" @click="this.modalState.create = true">Add New Role</a>
       </div>
     </div>
 
     <!-- BEGIN: Create Role Modal -->
-    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="addRole(this.role)">
           <div class="modal-content">
@@ -73,7 +73,7 @@
     </div>
     <!-- END: Create Role Modal -->
     <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+    <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editRole">
           <div class="modal-content">
@@ -230,6 +230,10 @@ const toast = useToast()
 export default defineComponent({
   data() {
     return {
+      modalState: {
+        create: false,
+        edit: false
+      },
       roles: [],
       edit_role: {},
       role: {
@@ -306,12 +310,14 @@ export default defineComponent({
         .then(response => {
           toast.success('Role was created successfully')
           loader.hide()
+          this.modalState.create = false
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           toast.error(error.response.data.message)
           loader.hide()
-          this.validation_error = error.response.data.data.errors
+          this.validation_error = error.response?.data?.data?.errors
+          console.log(error.response)
         })
     },
     editRole() {
@@ -325,6 +331,7 @@ export default defineComponent({
         .then(response => {
           toast.info('Role was successfully edited')
           loader.hide()
+          this.modalState.edit = false
           this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
