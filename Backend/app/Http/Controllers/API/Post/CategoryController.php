@@ -123,7 +123,7 @@ class CategoryController extends BaseController
                 return $this->sendError('Item does not exists.');
             }
 
-            $response = new $this->resource($item);
+            $response = (new $this->resource($item))->onlyVerified(true);
             return $this->sendResponse($response, 'Successfully fetched item');
         } else {
             $data = $this->model::where('parent_id', null)->get();
