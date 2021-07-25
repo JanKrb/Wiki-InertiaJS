@@ -12,7 +12,7 @@
           />
           <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
         </div>
-        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary" @click="this.modalState.create = true">Add New Role</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-role-modal" class="btn btn-primary" @click="this.modalState.create = true">Add new Role</a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
               </div>
               <div class="col-span-12">
                 <label for="create-role-modal-description" class="form-label">Description</label>
-                <textarea id="create-role-modal-description" class="form-control" placeholder="Your Description" v-model="role.description"/>
+                <textarea id="create-role-modal-description" class="form-control" placeholder="Your Description" rows="5" v-model="role.description"/>
               </div>
               <div class="col-span-12">
                 <label for="create-role-modal-color" class="form-label">Color</label>
@@ -82,8 +82,9 @@
       </div>
     </div>
     <!-- END: Create Role Modal -->
+
     <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
+    <div id="edit-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editRole">
           <div class="modal-content">
@@ -102,7 +103,7 @@
               </div>
               <div class="col-span-12">
                 <label for="edit-role-modal-description" class="form-label">Description</label>
-                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" v-model="edit_role.description"/>
+                <textarea id="edit-role-modal-description" class="form-control" placeholder="Your Description" rows="5" v-model="edit_role.description"/>
               </div>
               <div class="col-span-12">
                 <label for="edit-role-modal-color" class="form-label">Color</label>
@@ -139,7 +140,7 @@
                 Cancel
               </button>
               <button type="submit" class="btn btn-primary w-20">
-                Create
+                Save
               </button>
             </div>
             <!-- END: Modal Footer -->
@@ -195,7 +196,7 @@
                   <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
                 </a>
               </router-link>
-              <a href="javascript:;" @click="this.edit_role = role" data-toggle="modal" data-target="#edit-role-modal" class="text-small">
+              <a @click="this.edit_role = role; this.modalState.edit = true" class="text-small" href="javascript:;" data-toggle="modal" data-target="#edit-role-modal">
                 <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
               </a>
               <a href="javascript:;" @click="deleteRole(role.id)" class="text-small">
