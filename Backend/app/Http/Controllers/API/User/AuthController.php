@@ -37,23 +37,24 @@ class AuthController extends Controller
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $credentials = ['password' => $request->password];
-
-        if ($request->has('email')) {
-            $credentials['email'] = $request->email;
-        } else {
-            $credentials['name'] = $request->name;
-        }
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->all())) {
             $user = Auth::user();
-            $success['token'] =  $user->createToken('PersonalAccessToken')-> accessToken;
-            $success['user'] =  $user;
 
             $now = now();
             $user->sendActivity('Successful login.', "$user->name [$user->id] logged in on $now", $user);
 
-            return $this->sendResponse($success, 'User login successfully.');
+            return $this->sendResponse([
+                'token' => $user->createToken('PersonalAccessToken')->accessToken,
+                'user' => $user->only([
+                    'id',
+                    'name',
+                    'pre_name',
+                    'last_name',
+                    'email',
+                    'role_id',
+                    'profile_picture'
+                ])
+            ], 'User login successfully.');
         }
 
         Activity::create([
@@ -61,7 +62,7 @@ class AuthController extends Controller
             'issuer_id' => 1,
             'short' => 'Failed login.',
             'details' => "{$request->ip()} failed to log in into account",
-            'attributes' => json_encode($credentials)
+            'attributes' => json_encode($request->all())
         ]);
 
         return $this->sendError('Unauthorised.', ['error' => 'Login failed.']);
@@ -101,7 +102,15 @@ class AuthController extends Controller
         $success['token'] =  $user->createToken('PersonalAccessToken')->accessToken;
         $user->sendActivity('Session token has been created.', 'A session token for login and api requests has been created and passed.');
 
-        $success['user'] =  $user;
+        $success['user'] =  $user->only([
+            'id',
+            'name',
+            'pre_name',
+            'last_name',
+            'email',
+            'role_id',
+            'profile_picture'
+        ]);
 
         return $this->sendResponse($success, 'User register successfully.');
     }
