@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="intro-y text-lg font-medium mt-10">Wiki Announcements</h2>
+    <h2 class="intro-y text-lg font-medium mt-10">Announcements</h2>
     <!-- BEGIN: Create Announcement Modal -->
-    <div id="create-announcement-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-announcement-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="addAnnouncement(this.announcement)">
           <div class="modal-content">
@@ -20,6 +20,16 @@
                 <label for="create-announcement-modal-description" class="form-label">Description</label>
                 <textarea id="create-announcement-modal-description" class="form-control" placeholder="Your Content" v-model="announcement.description"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -27,7 +37,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -38,7 +48,7 @@
     </div>
     <!-- END: Create Tag Modal -->
     <!-- BEGIN: Edit Announcement Modal -->
-    <div id="edit-announcement-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal">
+    <div id="edit-announcement-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="updateAnnouncement()">
           <div class="modal-content">
@@ -56,12 +66,22 @@
                 <label for="edit-announcement-modal-description" class="form-label">Description</label>
                 <textarea id="edit-announcement-modal-description" class="form-control" placeholder="Your Content" v-model="edit_announcement.description"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <div class="modal-footer text-right">
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Save
               </button>
             </div>
@@ -77,6 +97,7 @@
           class="btn btn-primary btn-sm mr-2"
           data-toggle="modal"
           data-target="#create-announcement-modal"
+          @click="modalState.create = true"
         >
           <PlusIcon class="w-4 h-4"></PlusIcon>
         </a>
@@ -140,7 +161,7 @@
                    data-toggle="modal"
                    data-target="#edit-announcement-modal"
                    class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                   @click="this.edit_announcement = announce"
+                   @click="this.edit_announcement = announce; modalState.edit = true"
                 >
                   <EditIcon class="w-4 h-4 mr-2"/> Edit
                 </a>
@@ -228,7 +249,11 @@ export default defineComponent({
         title: 'New Title',
         description: 'New Description'
       },
-      validation_error: {}
+      validation_error: null,
+      modalState: {
+        create: false,
+        edit: false
+      }
     }
   },
   mounted() {
@@ -277,6 +302,7 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Announcement added successfully')
+          this.modalState.create = false
           loader.hide()
           this.fetchAnnouncements('http://localhost:8000/api/announcements?page=' + this.pagination.current_page)
         })
@@ -294,6 +320,7 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Announcement updated successfully')
+          this.modalState.edit = false
           loader.hide()
           this.fetchAnnouncements('http://localhost:8000/api/announcements?page=' + this.pagination.current_page)
         })
