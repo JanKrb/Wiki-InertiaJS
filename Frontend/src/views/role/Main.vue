@@ -263,7 +263,7 @@
                   classNames: 'w-full'
                 }"
               >
-                <option v-for="permission in this.selectable_permissions" v-bind:key="permission.id">{{ permission.name }}</option>
+                <option :value="permission.id" v-for="permission in this.selectable_permissions" v-bind:key="permission.id">{{ permission.name }}</option>
               </TailSelect>
             </div>
             <button type="submit" class="btn btn-primary btn-sm w-20 mt-3">
@@ -296,7 +296,7 @@ export default defineComponent({
       selectable_permissions: [],
       pagination: {},
       validation_error: {},
-      newPermission: 'NewPermission'
+      newPermission: null
     }
   },
   mounted() {
@@ -377,7 +377,7 @@ export default defineComponent({
     },
     deletePermission(permission) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/roles/' + this.role.id + '/permissions/' + permission.id)
+      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions/' + permission.id + '/detach')
         .then(response => {
           loader.hide()
           toast.success('Permission removed successfully')
@@ -415,18 +415,18 @@ export default defineComponent({
     },
     addPermission() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions', {
-        name: this.newPermission
-      })
+      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions/' + this.newPermission + '/attach')
         .then(response => {
-          loader.hide()
           toast.success('Permission successfully added')
+          this.newPermission = null
+          loader.hide()
           this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
           this.fetchRolePermissions()
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
+          toast.error('No permission selected')
+          loader.hide()
         })
     },
     formatDate(timeString) {

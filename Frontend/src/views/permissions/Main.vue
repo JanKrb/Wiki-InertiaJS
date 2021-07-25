@@ -12,11 +12,11 @@
           />
           <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
         </div>
-        <a href="javascript:;" data-toggle="modal" data-target="#create-permission-modal" class="btn btn-primary">Create new Permission</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-permission-modal" class="btn btn-primary" @click="this.modalState.create = true">Create new Permission</a>
       </div>
     </div>
     <!-- BEGIN: Create Permission Modal -->
-    <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="createPermission(this.permission)">
           <div class="modal-content">
@@ -33,6 +33,16 @@
                 <label for="create-permission-modal-name" class="form-label">Name</label>
                 <input id="create-permission-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="permission.name"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -40,7 +50,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -51,7 +61,7 @@
     </div>
     <!-- END: Create Permission Modal -->
     <!-- BEGIN: Edit Permission Modal -->
-    <div id="edit-permission-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-permission-modal">
+    <div id="edit-permission-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-permission-modal" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editPermission">
           <div class="modal-content">
@@ -68,6 +78,16 @@
                 <label for="edit-permission-modal-name" class="form-label">Name</label>
                 <input id="edit-permission-modal-name" type="text" class="form-control" placeholder="Your Name" v-model="edit_permission.name"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -75,7 +95,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Save
               </button>
             </div>
@@ -117,7 +137,7 @@
           </td>
           <td class="table-report__action w-56">
             <div class="flex justify-center items-center">
-              <a href="javascript:;" @click="this.edit_permission = permission" data-toggle="modal" data-target="#edit-permission-modal" class="text-small">
+              <a href="javascript:;" @click="this.edit_permission = permission; this.modalState.edit = true" data-toggle="modal" data-target="#edit-permission-modal" class="text-small">
                 <edit2-icon class="mr-5 hover:text-blue-700"></edit2-icon>
               </a>
               <Trash2Icon class="hover:text-blue-700" @click="deletePermission(permission.id)"></Trash2Icon>
@@ -179,7 +199,11 @@ export default defineComponent({
         permission: ''
       },
       pagination: {},
-      validation_error: {}
+      validation_error: null,
+      modalState: {
+        create: false,
+        edit: false
+      }
     }
   },
   mounted() {
@@ -240,6 +264,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Permission successfully created')
           loader.hide()
+          this.modalState.create = false
           this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
@@ -256,6 +281,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Permission successfully edited')
           loader.hide()
+          this.modalState.edit = false
           this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
