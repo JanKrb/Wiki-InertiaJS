@@ -55,6 +55,16 @@
                   <input class="form-check-switch ml-auto" type="checkbox" v-model="role.is_default">
                 </div>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -73,7 +83,7 @@
     </div>
     <!-- END: Create Role Modal -->
     <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal" v-if="modalState.edit" @hide="modalState.edit = false">
+    <div id="edit-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="editRole">
           <div class="modal-content">
@@ -111,6 +121,16 @@
                   <input class="form-check-switch ml-auto" type="checkbox" v-model="edit_role.is_default">
                 </div>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -118,8 +138,8 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
-                Save
+              <button type="submit" class="btn btn-primary w-20">
+                Create
               </button>
             </div>
             <!-- END: Modal Footer -->
@@ -246,7 +266,7 @@ export default defineComponent({
         role: ''
       },
       pagination: {},
-      validation_error: {}
+      validation_error: null
     }
   },
   mounted() {
@@ -315,9 +335,8 @@ export default defineComponent({
         })
         .catch(error => {
           toast.error(error.response.data.message)
+          this.validation_error = error.response.data.data.errors
           loader.hide()
-          this.validation_error = error.response?.data?.data?.errors
-          console.log(error.response)
         })
     },
     editRole() {
