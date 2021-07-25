@@ -12,12 +12,12 @@
           />
           <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"/>
         </div>
-        <a href="javascript:;" data-toggle="modal" data-target="#create-tag-modal" class="btn btn-primary">Add New Tag</a>
+        <a href="javascript:;" data-toggle="modal" data-target="#create-tag-modal" class="btn btn-primary" @click="this.modalState.create = true">Add new Tag</a>
       </div>
     </div>
 
     <!-- BEGIN: Create Tag Modal -->
-    <div id="create-tag-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="create-tag-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="addTag(this.tag)">
           <div class="modal-content">
@@ -46,6 +46,16 @@
                 <label for="create-tag-modal-icon" class="form-label">Icon</label>
                 <input id="create-tag-modal-icon" type="text" class="form-control" placeholder="Your Icon" v-model="tag.icon"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -53,7 +63,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -64,7 +74,7 @@
     </div>
     <!-- END: Create Tag Modal -->
     <!-- BEGIN: Edit Tag Modal -->
-    <div id="edit-tag-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-tag-modal">
+    <div id="edit-tag-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-tag-modal" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editTag">
           <div class="modal-content">
@@ -93,6 +103,16 @@
                 <label for="edit-tag-modal-icon" class="form-label">Icon</label>
                 <input id="edit-tag-modal-icon" type="text" class="form-control" placeholder="Your Name" v-model="edit_tag.icon"/>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -100,7 +120,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Save
               </button>
             </div>
@@ -115,7 +135,6 @@
       <table class="table table-report -mt-2">
         <thead>
         <tr>
-          <th class="text-center whitespace-nowrap">#</th>
           <th class="text-center whitespace-nowrap">NAME</th>
           <th class="text-center whitespace-nowrap">DESCRIPTION</th>
           <th class="text-center whitespace-nowrap">COLOR</th>
@@ -130,9 +149,6 @@
           v-bind:key="tag.id"
           class="intro-x"
         >
-          <td class="text-center">
-              {{ tag.id }}
-          </td>
           <td class="text-center">
             {{ tag.name }}
           </td>
@@ -152,7 +168,7 @@
 
           <td class="table-report__action w-56">
             <div class="flex justify-center items-center">
-              <a href="javascript:;" @click="this.edit_tag = tag" data-toggle="modal" data-target="#edit-tag-modal" class="text-small">
+              <a href="javascript:;" @click="this.edit_tag = tag; this.modalState.edit = true" data-toggle="modal" data-target="#edit-tag-modal" class="text-small">
                 <edit2-icon class="w-5 h-5 mr-5 hover:text-blue-700"></edit2-icon>
               </a>
               <a href="javascript:;" @click="deleteTag(tag.id)" class="text-small">
@@ -219,7 +235,11 @@ export default defineComponent({
         tag: ''
       },
       pagination: {},
-      validation_error: {}
+      validation_error: null,
+      modalState: {
+        create: false,
+        edit: false
+      }
     }
   },
   mounted() {
@@ -281,11 +301,11 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Tag successfully added')
+          this.modalState.create = false
           loader.hide()
           this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
-          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
@@ -301,6 +321,7 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Tag successfully updated')
+          this.modalState.edit = false
           loader.hide()
           this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
         })
