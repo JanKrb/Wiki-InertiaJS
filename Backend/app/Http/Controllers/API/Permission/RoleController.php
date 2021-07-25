@@ -43,7 +43,7 @@ class RoleController extends BaseController
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $this->model::where('is_default', 1)->update('is_default', 0);
+        $this->model::where('is_default', 1)->update(['is_default' => 0]);
 
         $data = array_merge($request->all(), $this->additionalCreateData);
         $created_object = $this->model::create($data);
