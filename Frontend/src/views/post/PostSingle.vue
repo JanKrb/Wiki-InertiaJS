@@ -59,7 +59,7 @@
                     <div class="font-medium">
                       {{ history?.title }}
                     </div>
-                    <div class="text-xs text-gray-500 ml-auto">{{ history?.created_at }}</div>
+                    <div class="text-xs text-gray-500 ml-auto">{{ this.formatDate(history?.created_at) }}</div>
                   </div>
                   <div class="text-gray-600 mt-1" v-html="history?.content"></div>
                 </div>
@@ -86,11 +86,11 @@
                 {{ this.post?.title }}
               </h2>
               <div class="flex text-gray-600 truncate text-xs mt-0.5">
-                {{ this.post?.created_at }} <span class="mx-1">•</span>
+                {{ this.formatDate(this.post?.created_at) }} <span class="mx-1">•</span>
                 <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
                   {{ this.post?.parent?.title }}
                 </router-link>
-                <span class="mx-1">•</span> {{ this.post?.content.split(' ').length / 800 * 60 }} Min read
+                <span class="mx-1">•</span> {{ Math.round(this.post?.content.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
               </div>
             </div>
             <div class="dropdown ml-3">
@@ -169,7 +169,7 @@
                   />
                 </div>
                 <div class="ml-3 mr-auto">
-                  <a href="" class="font-medium">
+                  <a class="font-medium">
                     {{ this.post?.user?.name }}
                   </a>, Author
                   <div class="text-gray-600">{{ this.post?.user?.email }}</div>
@@ -254,6 +254,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 
 const toast = useToast()
 
@@ -401,6 +402,9 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
     }
   }
 })
