@@ -2,7 +2,7 @@
   <div>
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a class="btn btn-primary shadow-md mr-2" data-toggle='modal' data-target='#create-badge-modal'>Add New Badge</a>
+        <a class="btn btn-primary shadow-md mr-2" data-toggle='modal' data-target='#create-badge-modal' @click="modalState.create = true">Add new Badge</a>
 
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
           <div class="w-56 relative text-gray-700 dark:text-gray-300">
@@ -71,7 +71,7 @@
             <td class="table-report__action w-56">
               <div class="flex justify-center items-center">
                 <a
-                  v-on:click='this.editModal = badge'
+                  v-on:click='this.editModal = badge; modalState.edit = true'
                   href='javascript:'
                   data-toggle='modal'
                   data-target='#edit-badge-modal'
@@ -187,7 +187,7 @@
     <!-- END: Delete Confirmation Modal -->
 
     <!-- BEGIN: Edit Badge Modal -->
-    <div id="edit-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-badge-modal">
+    <div id="edit-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-badge-modal" v-if="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editBadge">
           <div class="modal-content">
@@ -214,7 +214,7 @@
               </div>
               <div class="col-span-12">
                 <label for="edit-badge-modal-icon" class="form-label">Icon</label>
-                <input id="edit-badge-modal-icon" type="text" class="form-control" placeholder="Your Name" v-model="editModal.icon"/>
+                <input id="edit-badge-modal-icon" type="text" class="form-control" placeholder="Icon Name" v-model="editModal.icon"/>
               </div>
               <div class="col-span-12">
                 <div class="flex items-center mt-3">
@@ -239,6 +239,16 @@
                     <option :value="role.id" v-for="role in this.roles" v-bind:key="role.id" :selected="role.id === this.editModal.role?.id">{{ role.name }}</option>
                   </TailSelect>
                 </div>
+                <div class="col-span-12" v-show="this.validation_error !== null">
+                  <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                  <ul class="list-disc mx-5">
+                    <div class="text-theme-6 mt-2 mb-4">
+                      <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                        {{ error_message[0] }}
+                      </li>
+                    </div>
+                  </ul>
+                </div>
               </div>
             </div>
             <!-- END: Modal Body -->
@@ -247,7 +257,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Save
               </button>
             </div>
@@ -259,7 +269,7 @@
     <!-- END: Edit Badge Modal -->
 
     <!-- BEGIN: Create Badge Modal -->
-    <div id="create-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="create-badge-modal">
+    <div id="create-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="create-badge-modal" v-if="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="createBadge">
           <div class="modal-content">
@@ -286,7 +296,7 @@
               </div>
               <div class="col-span-12">
                 <label for="create-badge-modal-icon" class="form-label">Icon</label>
-                <input id="create-badge-modal-icon" type="text" class="form-control" placeholder="Your Name" v-model="createModal.icon"/>
+                <input id="create-badge-modal-icon" type="text" class="form-control" placeholder="Icon Name" v-model="createModal.icon"/>
               </div>
               <div class="col-span-12">
                 <div class="flex items-center mt-3">
@@ -312,6 +322,16 @@
                   </TailSelect>
                 </div>
               </div>
+              <div class="col-span-12" v-show="this.validation_error !== null">
+                <h5 class="text-lg font-medium mr-auto">The following errors have occurred</h5>
+                <ul class="list-disc mx-5">
+                  <div class="text-theme-6 mt-2 mb-4">
+                    <li v-for="error_message in this.validation_error" v-bind:key="error_message">
+                      {{ error_message[0] }}
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
             <!-- END: Modal Body -->
             <!-- BEGIN: Modal Footer -->
@@ -319,7 +339,7 @@
               <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary w-20" data-dismiss="modal">
+              <button type="submit" class="btn btn-primary w-20">
                 Create
               </button>
             </div>
@@ -352,7 +372,11 @@ export default defineComponent({
       deleteModal: {},
       editModal: {},
       roles: [],
-      validation_error: {},
+      validation_error: null,
+      modalState: {
+        create: false,
+        edit: false
+      },
       createModal: {
         title: '',
         description: '',
@@ -404,9 +428,11 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Badge successfully added')
+          this.modalState.create = false
           this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
+          this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
         })
 
@@ -423,13 +449,14 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Badge successfully edited')
+          this.modalState.edit = false
+          this.editModal = {}
           this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
+          this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
         })
-
-      this.editModal = {}
     },
     deleteBadge(id) {
       axios.delete('http://localhost:8000/api/badges/' + id)
@@ -438,7 +465,8 @@ export default defineComponent({
           this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
-          console.error(error)
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
         })
       this.deleteModal = {}
     },
