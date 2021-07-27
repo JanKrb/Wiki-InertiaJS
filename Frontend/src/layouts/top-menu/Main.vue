@@ -261,68 +261,18 @@
     </div>
     <!-- END: Content -->
     <div class="footer mt-5">
-      <div>
-        <div class="max-w-6xl m-auto text-gray-800 flex flex-wrap justify-center">
-          <div class="p-5 w-48 ">
-            <div class="text-xs uppercase text-gray-500 font-medium">Home</div>
-            <router-link :to="{ name: 'categories' }">
-              <a class="my-3 block dark:text-theme-2">Wiki</a>
-            </router-link>
-            <router-link :to="{ name: 'search' }">
-              <a class="my-3 block dark:text-theme-2">Quick Search</a>
-            </router-link>
-            <router-link :to="{ name: 'profile.informations' }">
-              <a class="my-3 block dark:text-theme-2">Profile</a>
-            </router-link>
-          </div>
-          <div class="p-5 w-48 ">
-            <div class="text-xs uppercase text-gray-500 font-medium">User</div>
-            <router-link :to="{ name: 'login' }">
-              <a class="my-3 block dark:text-theme-2">Sign in</a>
-            </router-link>
-            <router-link :to="{ name: 'register' }">
-              <a class="my-3 block dark:text-theme-2">New Account</a>
-            </router-link>
-          </div>
-          <div class="p-5 w-48 ">
-            <div class="text-xs uppercase text-gray-500 font-medium">Support</div>
-            <a class="my-3 block dark:text-theme-2" :href="wiki_settings.supportlink">Help Center</a>
-            <router-link :to="{ name: 'privacy' }">
-              <a class="my-3 block dark:text-theme-2">Privacy Policy</a>
-            </router-link>
-            <router-link :to="{ name: 'tos' }">
-              <a class="my-3 block dark:text-theme-2">Conditions</a>
-            </router-link>
-          </div>
-          <div class="p-5 w-48 ">
-            <div class="text-xs uppercase text-gray-500 font-medium">Contact us</div>
-            <a class="my-3 block dark:text-theme-2" href="/#">{{ wiki_settings.contactmail }} <span class="text-teal-600 text-xs p-1"></span></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-2">
-        <div class="flex px-3 m-auto pt-5 border-t text-gray-800 text-sm flex-col md:flex-row max-w-6xl">
-          <div class="mt-2 dark:text-theme-2">© Copyright 2021. All Rights Reserved.</div>
+      <div class="my-5">
+        <div class="flex px-3 m-auto text-gray-800 text-sm flex-col md:flex-row max-w-6xl">
+          <div class="my-3 dark:text-theme-2">© Copyright 2021. All Rights Reserved.</div>
           <div class="md:flex-auto md:flex-row-reverse flex-row flex">
-            <a :href="wiki_settings.social_youtube" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_youtube !== null">
-              <YoutubeIcon></YoutubeIcon>
-            </a>
-            <a :href="wiki_settings.social_facebook" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_facebook !== null">
-              <FacebookIcon></FacebookIcon>
-            </a>
-            <a :href="wiki_settings.social_twitter" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_twitter !== null">
-              <TwitterIcon></TwitterIcon>
-            </a>
-            <a :href="wiki_settings.social_instagram" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_instagram !== null">
-              <InstagramIcon></InstagramIcon>
-            </a>
-            <a :href="wiki_settings.social_linkedin" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_linkedin !== null">
-              <LinkedinIcon></LinkedinIcon>
-            </a>
-            <a :href="wiki_settings.social_discord" class="w-6 mx-1 dark:text-theme-2" v-if="wiki_settings.social_discord !== null">
-              <mic-icon></mic-icon>
-            </a>
+            <a class="my-3 block dark:text-theme-2" :href="'mailto:' + wiki_settings.contactmail">Contact <span class="text-teal-600 text-xs p-1"></span></a>
+            <router-link :to="{ name: 'tos' }">
+              <a class="my-3 block dark:text-theme-2 mr-4">Conditions</a>
+            </router-link>
+            <router-link :to="{ name: 'privacy' }">
+              <a class="my-3 block dark:text-theme-2 mr-4">Privacy Policy</a>
+            </router-link>
+            <a class="my-3 block dark:text-theme-2 mr-4" :href="wiki_settings.supportlink">Help</a>
           </div>
         </div>
       </div>
