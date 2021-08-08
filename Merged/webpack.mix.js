@@ -18,4 +18,6 @@ mix
 
     .js('resources/js/app.js', 'public/js')
 
+    .vue({version: 3})
+
     .version();
