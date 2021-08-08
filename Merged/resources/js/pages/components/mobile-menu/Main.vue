@@ -6,7 +6,7 @@
         <img
           alt="Icewall Tailwind HTML Admin Template"
           class="w-6"
-          src="@/assets/images/logo.svg"
+          src="../../../assets/images/logo.svg"
         />
       </a>
       <BarChart2Icon
@@ -86,9 +86,9 @@
                         <a
                           href="javascript:;"
                           class="menu"
-                          :class="{ 'menu--active': lastSubMenu.active }"
-                          @click="linkTo(lastSubMenu, router)"
-                        >
+                          :class="{ 'menu--active': lastSubMenu.active }">
+                          <!-- @click="linkTo(lastSubMenu, router)" -->
+
                           <div class="menu__icon">
                             <ZapIcon />
                           </div>
@@ -115,9 +115,9 @@
 
 <script>
 import { defineComponent, computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from '@/store'
-import { helper as $h } from '@/utils/helper'
+import { useStore } from '../../../store'
+
+import { helper as $h } from '../../../utils/helper'
 import {
   activeMobileMenu,
   toggleMobileMenu,
@@ -125,12 +125,10 @@ import {
   enter,
   leave
 } from './index'
-import { nestedMenu } from '@/layouts/side-menu'
+import { nestedMenu } from '../../../layouts/side-menu'
 
 export default defineComponent({
   setup() {
-    const route = useRoute()
-    const router = useRouter()
     const store = useStore()
     const formattedMenu = ref([])
     const mobileMenu = computed(() =>
@@ -152,7 +150,6 @@ export default defineComponent({
       activeMobileMenu,
       toggleMobileMenu,
       formattedMenu,
-      router,
       linkTo,
       enter,
       leave

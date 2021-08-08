@@ -28,6 +28,8 @@
         "@ckeditor/ckeditor5-basic-styles": "^27.0.0",
         "@ckeditor/ckeditor5-block-quote": "^27.0.0",
         "@ckeditor/ckeditor5-cloud-services": "^27.0.0",
+        "@ckeditor/ckeditor5-dev-utils": "^25.3.0",
+        "@ckeditor/ckeditor5-dev-webpack-plugin": "^25.3.0",
         "@ckeditor/ckeditor5-easy-image": "^27.0.0",
         "@ckeditor/ckeditor5-editor-balloon": "^27.0.0",
         "@ckeditor/ckeditor5-editor-classic": "^27.0.0",
@@ -90,7 +92,10 @@
         "uuid": "^7.0.3",
         "velocity-animate": "^1.5.2",
         "vue": "^3.1.4",
+        "vue-toastification": "^2.0.0-rc.1",
         "vue3-vt-notifications": "^1.0.1",
-        "vuex": "^4.0.2"
+        "vuex": "^4.0.2",
+        "xlsx": "^0.17.0",
+        "zoom-vanilla.js": "^2.0.6"
     }
 }

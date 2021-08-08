@@ -116,7 +116,7 @@
               <img
                 alt=""
                 class="rounded-md"
-                :src="this.post?.thumbnail ? this.post?.thumbnail : require('@/assets/images/placeholder.png')"
+                :src="this.post?.thumbnail ? this.post?.thumbnail : require('../../assets/images/placeholder.png')"
               />
             </div>
           </div>

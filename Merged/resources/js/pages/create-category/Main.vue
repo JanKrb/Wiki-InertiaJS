@@ -56,7 +56,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.category.thumbnail ? this.category.thumbnail : require('@/assets/images/placeholder.png')"
+                            :src="this.category.thumbnail ? this.category.thumbnail : require('../../assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">

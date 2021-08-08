@@ -76,7 +76,7 @@
                 </label>
                 <div class="border-2 shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
                   <div class="h-40 mx-auto image-fit">
-                    <img alt="" :src="this.wiki_settings.logo ? this.wiki_settings.logo : require('@/assets/images/placeholder.png')"/>
+                    <img alt="" :src="this.wiki_settings.logo ? this.wiki_settings.logo : require('../../assets/images/placeholder.png')"/>
                   </div>
                 </div>
               </div>

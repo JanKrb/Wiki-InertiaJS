@@ -108,7 +108,7 @@
                       <img
                         class="rounded-md"
                         alt=""
-                        :src="this.user.profile_picture ? this.user.profile_picture : require('@/assets/images/placeholder.png')"
+                        :src="this.user.profile_picture ? this.user.profile_picture : require('../../assets/images/placeholder.png')"
                       />
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
@@ -138,7 +138,7 @@ import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
 import { useToast } from 'vue-toastification'
-import { useStore } from '@/store'
+import { useStore } from '../../store'
 
 const toast = useToast()
 

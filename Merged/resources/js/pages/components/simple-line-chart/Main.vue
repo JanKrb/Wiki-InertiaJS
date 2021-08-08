@@ -10,7 +10,7 @@
 
 <script>
 import { defineComponent, computed } from 'vue'
-import { helper as $h } from '@/utils/helper'
+import { helper as $h } from '../../../utils/helper'
 
 export default defineComponent({
   props: {

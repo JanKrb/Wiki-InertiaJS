@@ -80,7 +80,7 @@
           <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-9 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('@/assets/images/placeholder.png')">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('../../assets/images/placeholder.png')">
               </div>
               <div class="ml-4 mr-auto">
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'categories.subcategory', params: { id: result.id } })">
@@ -102,7 +102,7 @@
           <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative border-l-2 border-theme-11 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('@/assets/images/placeholder.png')">
+                <img alt="" class="rounded" :src="result.thumbnail ? result.thumbnail : require('../../assets/images/placeholder.png')">
               </div>
               <div class="ml-4 mr-auto">
                 <a href="javascript:;" class="font-medium" @click="this.$router.push({ name: 'posts.view', params: { id: result.id } })">
@@ -123,7 +123,7 @@
           <div class="file box rounded-md px-5 pt-4 pb-4 px-3 sm:px-5 relative border-l-2 border-theme-12 pl-4">
             <div class="relative flex items-center">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="" class="rounded" :src="result.profile_picture ? result.profile_picture : require('@/assets/images/placeholder.png')">
+                <img alt="" class="rounded" :src="result.profile_picture ? result.profile_picture : require('../../assets/images/placeholder.png')">
               </div>
               <div class="ml-4 mr-auto">
                 <a href="javascript:;" class="font-medium">

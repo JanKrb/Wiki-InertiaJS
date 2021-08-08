@@ -141,7 +141,7 @@ import { defineComponent } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
-import { useStore } from '@/store'
+import { useStore } from '../../store'
 const toast = useToast()
 
 export default defineComponent({

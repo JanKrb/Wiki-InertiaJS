@@ -9,7 +9,7 @@
             <img
               alt="Icewall Tailwind HTML Admin Template"
               class="w-6"
-              :src="require(`@/assets/images/logo.svg`)"
+              :src="require(`../../assets/images/logo.svg`)"
             />
             <span class="text-white text-lg ml-3">
               Ru<span class="font-medium">bick</span>
@@ -19,7 +19,7 @@
             <img
               alt="Icewall Tailwind HTML Admin Template"
               class="-intro-x w-1/2 -mt-16"
-              :src="require(`@/assets/images/illustration.svg`)"
+              :src="require(`../../assets/images/illustration.svg`)"
             />
             <div
               class="-intro-x text-white font-medium text-4xl leading-tight mt-10"
@@ -114,7 +114,7 @@
 
 <script>
 import { defineComponent, onMounted } from 'vue'
-import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
+import DarkModeSwitcher from '../components/dark-mode-switcher/Main.vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
 const toast = useToast()

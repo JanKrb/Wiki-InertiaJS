@@ -12,14 +12,14 @@
             <img
               :alt="'Thumbnail of ' + category?.title"
               class="rounded-t-md"
-              :src="category?.thumbnail ? category?.thumbnail : require('@/assets/images/placeholder.png')"
+              :src="category?.thumbnail ? category?.thumbnail : require('../../assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
                   :alt="'Thumbnail of ' + category?.title"
                   class="rounded-full"
-                  :src="category.user.profile_picture ? category.user.profile_picture : require('@/assets/images/placeholder.png')"
+                  :src="category.user.profile_picture ? category.user.profile_picture : require('../../assets/images/placeholder.png')"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
@@ -94,7 +94,7 @@
             <img
               :alt="'Thumbnail of ' + post?.title"
               class="rounded-t-md"
-              :src="post?.thumbnail ? post?.thumbnail : require('@/assets/images/placeholder.png')"
+              :src="post?.thumbnail ? post?.thumbnail : require('../../assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
@@ -178,7 +178,7 @@
             <img
               :alt="'Thumbnail of ' + post?.title"
               class="rounded-t-md"
-              :src="require('@/assets/images/placeholder.png')"
+              :src="require('../../assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
@@ -326,7 +326,7 @@
                   <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                     <img
                       alt=""
-                      :src="activity.user.profile_picture ? activity.user.profile_picture : require('@/assets/images/placeholder.png')"
+                      :src="activity.user.profile_picture ? activity.user.profile_picture : require('../../assets/images/placeholder.png')"
                     />
                   </div>
                   <div class="ml-4 mr-auto">

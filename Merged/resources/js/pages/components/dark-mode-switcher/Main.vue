@@ -17,7 +17,8 @@
 
 <script>
 import { defineComponent, onMounted, computed } from 'vue'
-import { useStore } from '@/store'
+import { useStore } from '../../../store'
+
 
 export default defineComponent({
   data() {

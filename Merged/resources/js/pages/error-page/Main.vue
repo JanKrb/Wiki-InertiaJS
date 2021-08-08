@@ -10,7 +10,7 @@
           <img
             alt="Icewall Tailwind HTML Admin Template"
             class="h-48 lg:h-auto"
-            :src="require(`@/assets/images/error-illustration.svg`)"
+            :src="require('../../assets/images/error-illustration.svg')"
           />
         </div>
         <div class="text-white mt-10 lg:mt-0">
@@ -35,7 +35,7 @@
 
 <script>
 import { defineComponent, onMounted } from 'vue'
-import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
+import DarkModeSwitcher from '../components/dark-mode-switcher/Main.vue'
 
 export default defineComponent({
   components: {

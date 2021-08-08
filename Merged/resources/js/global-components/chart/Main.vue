@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent, onMounted, ref, inject, watch } from 'vue'
-import { helper as $h } from '@/utils/helper'
+import { helper as $h } from '../../utils/helper'
 import Chart from 'chart.js'
 
 export default defineComponent({

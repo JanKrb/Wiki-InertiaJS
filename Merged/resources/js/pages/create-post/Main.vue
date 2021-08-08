@@ -68,7 +68,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.post.thumbnail ? this.post.thumbnail : require('@/assets/images/placeholder.png')"
+                            :src="this.post.thumbnail ? this.post.thumbnail : require('../../assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">

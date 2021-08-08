@@ -30,7 +30,7 @@
               <img
                 :alt="'Thumbnail of ' + post?.title"
                 class="rounded-t-md"
-                :src="post?.thumbnail ? post?.thumbnail : require('@/assets/images/placeholder.png')"
+                :src="post?.thumbnail ? post?.thumbnail : require('../../assets/images/placeholder.png')"
               />
               <div class="absolute w-full flex items-center px-5 pt-6 z-10">
                 <div class="w-10 h-10 flex-none image-fit">
