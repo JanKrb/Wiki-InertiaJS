@@ -31,7 +31,10 @@
         "@inertiajs/inertia": "^0.9.2",
         "@inertiajs/inertia-vue3": "^0.4.7",
         "@inertiajs/progress": "^0.2.5",
+        "@tailwindcss/forms": "^0.3.3",
+        "@tailwindcss/typography": "^0.4.1",
         "@vue/eslint-config-standard": "^5.1.2",
+        "@zhuowenli/vue-feather-icons": "^5.0.2",
         "dayjs": "^1.10.6",
         "dropzone": "^5.9.2",
         "eslint": "^7.30.0",
@@ -42,13 +45,11 @@
         "eslint-plugin-vue": "^7.13.0",
         "eslint-webpack-plugin": "^2.5.4",
         "litepie-datepicker": "^1.0.14",
+        "moment": "^2.29.1",
+        "tailwindcss": "^2.2.4",
         "url-loader": "^4.1.1",
         "uuid": "^7.0.3",
         "vue": "^3.1.4",
-        "vue3-vt-notifications": "^1.0.1",
-        "tailwindcss": "^2.2.4",
-        "moment": "^2.29.1",
-        "@tailwindcss/forms": "^0.3.3",
-        "@tailwindcss/typography": "^0.4.1"
+        "vue3-vt-notifications": "^1.0.1"
     }
 }
