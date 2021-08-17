@@ -82,7 +82,7 @@ export default defineComponent({
   },
   methods: {
     fetchBookmarks(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
+      axios.get('users/' + id + '/bookmarks?paginate=0')
         .then(response => {
           this.bookmarks = response.data
         })

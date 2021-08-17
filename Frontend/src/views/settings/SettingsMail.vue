@@ -223,7 +223,7 @@ export default defineComponent({
   methods: {
     changeMail() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/environment/mail', {
+      axios.post('environment/mail', {
         hostname: this.hostname,
         port: this.port,
         username: this.username,

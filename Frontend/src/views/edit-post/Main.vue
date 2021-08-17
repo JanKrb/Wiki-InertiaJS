@@ -237,12 +237,12 @@ export default defineComponent({
       e.preventDefault()
       const loader = this.$loading.show()
       for (const tag in this.post.tags) {
-        axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/tags/' + this.post.tags[tag].id + '/detach')
+        axios.post('posts/' + this.$route.params.id + '/tags/' + this.post.tags[tag].id + '/detach')
       }
       for (const tag in this.selected_tags) {
-        axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/tags/' + this.selected_tags[tag] + '/attach')
+        axios.post('posts/' + this.$route.params.id + '/tags/' + this.selected_tags[tag] + '/attach')
       }
-      axios.put('http://localhost:8000/api/posts/' + this.$route.params.id, {
+      axios.put('posts/' + this.$route.params.id, {
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
@@ -269,7 +269,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -288,7 +288,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('http://localhost:8000/api/categories?paginate=0')
+      axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
         })
@@ -297,7 +297,7 @@ export default defineComponent({
         })
     },
     fetchTags() {
-      axios.get('http://localhost:8000/api/tags?paginate=0')
+      axios.get('tags?paginate=0')
         .then(response => {
           this.tags = response.data
           console.log(response.data)
@@ -307,7 +307,7 @@ export default defineComponent({
         })
     },
     fetchPost() {
-      axios.get('http://localhost:8000/api/posts/' + this.$route.params.id)
+      axios.get('posts/' + this.$route.params.id)
         .then(response => {
           this.post = response.data.data
           console.log(response)
@@ -375,7 +375,7 @@ export default defineComponent({
         ]
       },
       simpleUpload: {
-        uploadUrl: 'http://localhost:8000/api/storage/uploadEditor',
+        uploadUrl: 'storage/uploadEditor',
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }

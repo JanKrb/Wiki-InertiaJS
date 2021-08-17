@@ -190,7 +190,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
-      axios.post('http://127.0.0.1:8000/api/auth/register', {
+      axios.post('auth/register', {
         pre_name: this.first_name,
         last_name: this.last_name,
         name: this.name,

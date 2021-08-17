@@ -358,7 +358,7 @@ export default defineComponent({
   },
   methods: {
     logout() {
-      axios.get('http://127.0.0.1:8000/api/auth/logout')
+      axios.get('auth/logout')
         .then(response => {
           localStorage.removeItem('token')
           localStorage.removeItem('user')
@@ -369,7 +369,7 @@ export default defineComponent({
         })
     },
     fetchNotifications() {
-      axios.get('http://localhost:8000/api/users/' + this.user.id + '/notifications')
+      axios.get('users/' + this.user.id + '/notifications')
         .then(response => {
           this.notifications = response.data.data
         })
@@ -379,7 +379,7 @@ export default defineComponent({
     },
     viewNotification(notification) {
       this.view_notification = notification
-      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+      axios.put('notifications/' + notification.id, {
         title: notification.title,
         color: notification.color,
         content: notification.content,

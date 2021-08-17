@@ -203,7 +203,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/posts', {
+      axios.post('posts', {
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
@@ -232,7 +232,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -251,7 +251,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('http://localhost:8000/api/categories?paginate=0')
+      axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
           console.log(response.data)
@@ -318,7 +318,7 @@ export default defineComponent({
         ]
       },
       simpleUpload: {
-        uploadUrl: 'http://localhost:8000/api/storage/uploadEditor',
+        uploadUrl: 'storage/uploadEditor',
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }

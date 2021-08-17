@@ -271,7 +271,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchRoles('http://localhost:8000/api/roles')
+    this.fetchRoles('roles')
   },
   computed: {
     filteredRoles: function () {
@@ -308,9 +308,9 @@ export default defineComponent({
     },
     deleteRole(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/roles/' + id)
+      axios.delete('roles/' + id)
         .then(response => {
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          this.fetchRoles('roles?page=' + this.pagination.current_page)
           toast.success('Role successfully deleted')
           loader.hide()
         })
@@ -322,7 +322,7 @@ export default defineComponent({
     },
     addRole(role) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/roles', {
+      axios.post('roles', {
         name: role.name,
         description: role.description,
         color: role.color,
@@ -332,7 +332,7 @@ export default defineComponent({
           toast.success('Role was created successfully')
           loader.hide()
           this.modalState.create = false
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          this.fetchRoles('roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           toast.error(error.response.data.message)
@@ -342,7 +342,7 @@ export default defineComponent({
     },
     editRole() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/roles/' + this.edit_role.id, {
+      axios.put('roles/' + this.edit_role.id, {
         name: this.edit_role.name,
         description: this.edit_role.description,
         color: this.edit_role.color,
@@ -352,7 +352,7 @@ export default defineComponent({
           toast.info('Role was successfully edited')
           loader.hide()
           this.modalState.edit = false
-          this.fetchRoles('http://localhost:8000/api/roles?page=' + this.pagination.current_page)
+          this.fetchRoles('roles?page=' + this.pagination.current_page)
         })
         .catch(error => {
           toast.error(error.response.data.message)

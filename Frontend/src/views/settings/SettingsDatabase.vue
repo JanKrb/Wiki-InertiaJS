@@ -189,7 +189,7 @@ export default defineComponent({
   methods: {
     changeDatabase() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/environment/mysql', {
+      axios.post('environment/mysql', {
         hostname: this.hostname,
         port: this.port,
         database: this.database,

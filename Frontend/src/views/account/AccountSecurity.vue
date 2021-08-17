@@ -137,7 +137,7 @@ export default defineComponent({
   methods: {
     sendVerifyMail(id) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + id + '/verify_email')
+      axios.post('users/' + id + '/verify_email')
         .then(response => {
           toast.success('Verification mail sent')
           loader.hide()
@@ -150,7 +150,7 @@ export default defineComponent({
     },
     sendResetMail(id) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + id + '/reset_password')
+      axios.post('users/' + id + '/reset_password')
         .then(response => {
           toast.success('Password-reset mail sent')
           loader.hide()
@@ -163,7 +163,7 @@ export default defineComponent({
     },
     resetPassword() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/change_password', {
+      axios.post('users/' + this.$route.params.id + '/change_password', {
         password: this.password,
         password_confirmation: this.password_confirmation
       })
@@ -179,7 +179,7 @@ export default defineComponent({
     },
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
           this.user_role = response.data.data.role.id

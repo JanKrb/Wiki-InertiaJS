@@ -179,7 +179,7 @@ export default defineComponent({
   },
   methods: {
     search(keywords) {
-      axios.get('http://localhost:8000/api/search', {
+      axios.get('search', {
         params: {
           keywords: keywords
         }

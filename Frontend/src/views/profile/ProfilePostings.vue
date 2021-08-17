@@ -110,7 +110,7 @@ export default defineComponent({
   },
   methods: {
     fetchPostings(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/posts?paginate=0')
+      axios.get('users/' + id + '/posts?paginate=0')
         .then(response => {
           this.postings = response.data.data
         })

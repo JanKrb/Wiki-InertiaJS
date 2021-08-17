@@ -378,7 +378,7 @@ export default defineComponent({
   methods: {
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           console.log(response.data.data)
           this.user = response.data.data
@@ -391,7 +391,7 @@ export default defineComponent({
         })
     },
     fetchBanCount(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/bans/count')
+      axios.get('users/' + id + '/bans/count')
         .then(response => {
           this.banCount = response.data.data
         })
@@ -402,7 +402,7 @@ export default defineComponent({
     fetchBans(id) {
       this.isBanned = false
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bans')
+      axios.get('users/' + id + '/bans')
         .then(response => {
           for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
             ban = response.data.data[ban]
@@ -423,7 +423,7 @@ export default defineComponent({
     },
     createBan(ban) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/bans', {
+      axios.post('users/' + this.$route.params.id + '/bans', {
         reason: ban.reason,
         description: ban.description,
         ban_until: this.ban_time.date + ' ' + this.ban_time.time + ':00',

@@ -122,7 +122,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://127.0.0.1:8000/api/auth/password/recover', {
+      axios.post('auth/password/recover', {
         email: this.email
       })
         .then(response => {

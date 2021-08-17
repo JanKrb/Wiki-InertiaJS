@@ -146,7 +146,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://127.0.0.1:8000/api/auth/password/reset', {
+      axios.post('auth/password/reset', {
         token: this.$route.query.token,
         email: this.email,
         password: this.password,

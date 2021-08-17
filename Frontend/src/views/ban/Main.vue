@@ -308,7 +308,7 @@ export default defineComponent({
   methods: {
     fetchBan(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/bans/' + id)
+      axios.get('bans/' + id)
         .then(response => {
           // Set General ban
           this.ban = response.data.data
@@ -327,7 +327,7 @@ export default defineComponent({
         })
     },
     fetchBanCount(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/bans/count')
+      axios.get('users/' + id + '/bans/count')
         .then(response => {
           this.banCount = response.data.data
         })
@@ -336,7 +336,7 @@ export default defineComponent({
         })
     },
     fetchRole(id) {
-      axios.get('http://localhost:8000/api/roles/' + id)
+      axios.get('roles/' + id)
         .then(response => {
           this.ban.target.role = response.data.data
         })
@@ -346,7 +346,7 @@ export default defineComponent({
     },
     updateBan(ban) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/bans/' + this.$route.params.id, {
+      axios.put('bans/' + this.$route.params.id, {
         target_id: ban.target.id,
         reason: ban.reason,
         description: ban.description,
@@ -367,7 +367,7 @@ export default defineComponent({
     checkBans(id) {
       this.isBanned = false
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bans')
+      axios.get('users/' + id + '/bans')
         .then(response => {
           for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
             ban = response.data.data[ban]

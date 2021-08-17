@@ -3,7 +3,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">Wiki Reports</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="javascript:;" @click="fetchReports('http://localhost:8000/api/posts/reports?page=' + pagination.current_page)" class="btn btn-primary btn-sm"><RepeatIcon class="w-4 h-4"></RepeatIcon></a>
+        <a href="javascript:;" @click="fetchReports('posts/reports?page=' + pagination.current_page)" class="btn btn-primary btn-sm"><RepeatIcon class="w-4 h-4"></RepeatIcon></a>
         <div class="hidden md:block mx-auto text-gray-600">
           Showing {{ this.pagination.showing_from }} to {{ this.pagination.showing_to }} of {{ this.pagination.total }} entries
         </div>
@@ -140,7 +140,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchReports('http://localhost:8000/api/posts/reports')
+    this.fetchReports('posts/reports')
   },
   computed: {
     filteredReports: function () {
@@ -166,14 +166,14 @@ export default defineComponent({
     changeStatus(report) {
       const active = !report.active
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/posts/reports/' + report.id, {
+      axios.put('posts/reports/' + report.id, {
         content: report.content,
         active: active
       })
         .then(response => {
           toast.success('Status changed successfully')
           loader.hide()
-          this.fetchReports('http://localhost:8000/api/posts/reports?page=' + this.pagination.current_page)
+          this.fetchReports('posts/reports?page=' + this.pagination.current_page)
         })
         .catch(error => {
           console.log(error)

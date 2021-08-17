@@ -537,9 +537,10 @@ router.beforeEach(async (to, from, next) => {
 
   axios.defaults.headers.common['Content-Type'] = 'application/json'
   axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('token')
+  axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
 
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/auth/user')
+    const response = await axios.get('auth/user')
     isLoggedIn = response.data.success
   } catch (error) { }
 

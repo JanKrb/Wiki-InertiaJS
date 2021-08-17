@@ -183,7 +183,7 @@ export default defineComponent({
       }
       console.log(parentId)
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/categories', {
+      axios.post('categories', {
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
@@ -210,7 +210,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -229,7 +229,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('http://localhost:8000/api/categories?paginate=0')
+      axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
           console.log(response.data)

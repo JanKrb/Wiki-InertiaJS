@@ -209,7 +209,7 @@ export default defineComponent({
     },
     deleteUserBadges(badges) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/users/' + this.$route.params.id + '/badges/multiple', {
+      axios.delete('users/' + this.$route.params.id + '/badges/multiple', {
         data: {
           badges: badges
         }
@@ -226,7 +226,7 @@ export default defineComponent({
     },
     createUserBadges(badges) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/badges/multiple', {
+      axios.post('users/' + this.$route.params.id + '/badges/multiple', {
         badges: badges
       })
         .then(response => {
@@ -241,7 +241,7 @@ export default defineComponent({
     },
     updateUser(user) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/users/' + this.$route.params.id, {
+      axios.put('users/' + this.$route.params.id, {
         name: user.name,
         pre_name: user.pre_name,
         last_name: user.last_name,
@@ -261,7 +261,7 @@ export default defineComponent({
     },
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
           this.user_role = response.data.data.role.id
@@ -276,7 +276,7 @@ export default defineComponent({
         })
     },
     fetchRoles() {
-      axios.get('http://localhost:8000/api/roles')
+      axios.get('roles')
         .then(response => {
           this.roles = response.data.data
         })
@@ -286,7 +286,7 @@ export default defineComponent({
     },
     fetchBadges() {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/badges')
+      axios.get('badges')
         .then(response => {
           this.badges = response.data.data
           loader.hide()
@@ -297,7 +297,7 @@ export default defineComponent({
         })
     },
     fetchUserBadges(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/badges')
+      axios.get('users/' + id + '/badges')
         .then(response => {
           this.user_badges = response.data.data
         })
@@ -315,7 +315,7 @@ export default defineComponent({
         : cash('html').removeClass('dark')
       store.dispatch('main/setDarkMode', this.darkmode)
 
-      axios.put('http://localhost:8000/api/users/' + this.user.id, {
+      axios.put('users/' + this.user.id, {
         verify_mail: this.new_verified,
         subscribed_newsletter: this.new_newsletter
       })

@@ -435,7 +435,7 @@ export default defineComponent({
   methods: {
     loadRecent() {
       this.loading.recent = false
-      axios.get('http://localhost:8000/api/posts?recent=5')
+      axios.get('posts?recent=5')
         .then((response) => {
           this.recent = response.data.data
           this.loading.recent = true
@@ -446,7 +446,7 @@ export default defineComponent({
     },
     loadAnnouncements() {
       this.loading.announcements = false
-      axios.get('http://localhost:8000/api/announcements')
+      axios.get('announcements')
         .then((response) => {
           this.announcements = response.data.data
           this.loading.announcements = true
@@ -458,7 +458,7 @@ export default defineComponent({
     loadSubcategory(id) {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('http://localhost:8000/api/categories/' + id)
+      axios.get('categories/' + id)
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
@@ -472,7 +472,7 @@ export default defineComponent({
     loadMainCategories() {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('http://localhost:8000/api/categories/0')
+      axios.get('categories/0')
         .then(response => {
           this.view_structure.categories = response.data.data
           this.loading.content = true
@@ -483,7 +483,7 @@ export default defineComponent({
         })
     },
     loadBookmarks() {
-      axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
+      axios.get('users/' + this.user.id + '/bookmarks')
         .then(response => {
           this.user.bookmarks = response.data.data
         })
@@ -517,7 +517,7 @@ export default defineComponent({
       const loader = this.$loading.show()
 
       if (action) {
-        axios.post('http://localhost:8000/api/bookmarks/', {
+        axios.post('bookmarks/', {
           ...(isPost ? { is_post: isPost } : {}),
           ...(isCategory ? { is_category: isCategory } : {}),
           ...(postId !== 0 ? { post_id: postId } : {}),
@@ -534,7 +534,7 @@ export default defineComponent({
             loader.hide()
           })
       } else {
-        axios.delete('http://localhost:8000/api/bookmarks/' + deleteId)
+        axios.delete('bookmarks/' + deleteId)
           .then(response => {
             toast.success('Item has been unbookmarked')
             loader.hide()
@@ -557,7 +557,7 @@ export default defineComponent({
       }
     },
     testPagePermissions() {
-      axios.post('http://localhost:8000/api/permissions/test', {
+      axios.post('permissions/test', {
         permissions: [
           'categories_store',
           'categories_update',
@@ -582,7 +582,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -607,7 +607,7 @@ export default defineComponent({
       let parentId = null
       if (this.edit_category.has_parent) { parentId = this.edit_category.parent_id }
 
-      axios.put('http://localhost:8000/api/categories/' + this.edit_category.id, {
+      axios.put('categories/' + this.edit_category.id, {
         title: this.edit_category.title,
         description: this.edit_category.description,
         thumbnail: this.edit_category.thumbnail,
@@ -625,7 +625,7 @@ export default defineComponent({
     },
     deleteCategory(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/categories/' + id)
+      axios.delete('categories/' + id)
         .then(response => {
           toast.success('Category was successfully deleted!')
           loader.hide()

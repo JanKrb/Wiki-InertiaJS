@@ -103,7 +103,7 @@
         </a>
         <a
           href="javascript:;"
-          @click="fetchAnnouncements('http://localhost:8000/api/announcements?page=' + pagination.current_page)"
+          @click="fetchAnnouncements('announcements?page=' + pagination.current_page)"
           class="btn btn-primary btn-sm"
         >
           <RepeatIcon class="w-4 h-4"></RepeatIcon>
@@ -257,7 +257,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchAnnouncements('http://localhost:8000/api/announcements')
+    this.fetchAnnouncements('announcements')
   },
   computed: {
     filteredAnnouncements: function () {
@@ -282,11 +282,11 @@ export default defineComponent({
     },
     deleteAnnouncement(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/announcements/' + id)
+      axios.delete('announcements/' + id)
         .then(response => {
           toast.success('Announcement successfully deleted')
           loader.hide()
-          this.fetchAnnouncements('http://localhost:8000/api/announcements?page=' + this.pagination.current_page)
+          this.fetchAnnouncements('announcements?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -296,7 +296,7 @@ export default defineComponent({
     },
     addAnnouncement(announcement) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/announcements', {
+      axios.post('announcements', {
         title: announcement.title,
         description: announcement.description
       })
@@ -304,7 +304,7 @@ export default defineComponent({
           toast.success('Announcement added successfully')
           this.modalState.create = false
           loader.hide()
-          this.fetchAnnouncements('http://localhost:8000/api/announcements?page=' + this.pagination.current_page)
+          this.fetchAnnouncements('announcements?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -314,7 +314,7 @@ export default defineComponent({
     },
     updateAnnouncement() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/announcements/' + this.edit_announcement.id, {
+      axios.put('announcements/' + this.edit_announcement.id, {
         title: this.edit_announcement.title,
         description: this.edit_announcement.description
       })
@@ -322,7 +322,7 @@ export default defineComponent({
           toast.success('Announcement updated successfully')
           this.modalState.edit = false
           loader.hide()
-          this.fetchAnnouncements('http://localhost:8000/api/announcements?page=' + this.pagination.current_page)
+          this.fetchAnnouncements('announcements?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors

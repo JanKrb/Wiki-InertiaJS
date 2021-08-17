@@ -196,7 +196,7 @@ export default defineComponent({
       }
       console.log(parentId)
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/categories/' + this.$route.params.id, {
+      axios.put('categories/' + this.$route.params.id, {
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
@@ -223,7 +223,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.category('http://localhost:8000/api/storage/uploadImage',
+      axios.category('storage/uploadImage',
         data,
         {
           headers: {
@@ -242,7 +242,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('http://localhost:8000/api/categories?paginate=0')
+      axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
         })
@@ -252,7 +252,7 @@ export default defineComponent({
     },
     fetchCategory() {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/categories/' + this.$route.params.id)
+      axios.get('categories/' + this.$route.params.id)
         .then(response => {
           this.category = response.data.data
           loader.hide()
@@ -321,7 +321,7 @@ export default defineComponent({
         ]
       },
       simpleUpload: {
-        uploadUrl: 'http://localhost:8000/api/storage/uploadEditor',
+        uploadUrl: 'storage/uploadEditor',
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }

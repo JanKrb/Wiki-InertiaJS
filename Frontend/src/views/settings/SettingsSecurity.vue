@@ -97,7 +97,7 @@ export default defineComponent({
   },
   methods: {
     fetchDefaultRole() {
-      axios.get('http://localhost:8000/api/roles')
+      axios.get('roles')
         .then(response => {
           for (const role in response.data.data) {
             if (response.data.data[role].is_default) {

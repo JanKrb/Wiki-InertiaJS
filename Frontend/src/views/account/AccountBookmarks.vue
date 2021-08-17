@@ -85,7 +85,7 @@ export default defineComponent({
   methods: {
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
           loader.hide()
@@ -99,7 +99,7 @@ export default defineComponent({
     },
     fetchBookmarks(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
+      axios.get('users/' + id + '/bookmarks?paginate=0')
         .then(response => {
           this.bookmarks = response.data
           loader.hide()

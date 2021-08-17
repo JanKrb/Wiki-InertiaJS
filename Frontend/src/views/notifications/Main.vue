@@ -775,8 +775,8 @@ export default defineComponent({
   },
   mounted() {
     this.fetchUser()
-    this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
-    this.fetchUsers('http://localhost:8000/api/users?per_page=100000')
+    this.fetchNotifications('notifications?per_page=100000')
+    this.fetchUsers('users?per_page=100000')
     this.fetchRecentNotifications()
     this.testPagePermissions()
   },
@@ -807,7 +807,7 @@ export default defineComponent({
         })
     },
     fetchRecentNotifications() {
-      axios.get('http://localhost:8000/api/notifications?recent=15')
+      axios.get('notifications?recent=15')
         .then(response => {
           this.recent_notifications = response.data.data
         })
@@ -831,7 +831,7 @@ export default defineComponent({
         })
     },
     fetchUser() {
-      axios.get('http://localhost:8000/api/auth/user')
+      axios.get('auth/user')
         .then(response => {
           this.user = response.data.data.user
         })
@@ -842,7 +842,7 @@ export default defineComponent({
         })
     },
     testPagePermissions() {
-      axios.post('http://localhost:8000/api/permissions/test', {
+      axios.post('permissions/test', {
         permissions: [
           'users_update'
         ]
@@ -870,7 +870,7 @@ export default defineComponent({
     },
     updateNotification(notification) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+      axios.put('notifications/' + notification.id, {
         title: notification.title,
         content: notification.content,
         type: notification.type,
@@ -883,7 +883,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification updated successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
         })
         .catch(error => {
           console.log(error.response)
@@ -894,11 +894,11 @@ export default defineComponent({
     },
     deleteNotification(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/notifications/' + id)
+      axios.delete('notifications/' + id)
         .then(response => {
           toast.success('Notification deleted successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
           this.active_tab = 0
         })
         .catch(error => {
@@ -909,7 +909,7 @@ export default defineComponent({
     },
     createNotification(notification) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/notifications', {
+      axios.post('notifications', {
         title: notification.title,
         content: notification.content,
         type: notification.type,
@@ -921,7 +921,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification created successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
         })
         .catch(error => {
           console.log(error.response)
