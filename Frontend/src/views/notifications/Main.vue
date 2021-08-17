@@ -61,7 +61,7 @@
               >
                 <div class="pr-1">
                   <div class="box px-5 pt-5 pb-5 lg:pb-0 mt-5">
-                    <div class="relative text-gray-700 dark:text-gray-300">
+                    <div class="relative text-gray-700 dark:text-gray-300 mb-5">
                       <input
                         type="text"
                         class="form-control py-3 px-4 border-transparent bg-gray-200 pr-10 placeholder-theme-13"
@@ -78,7 +78,7 @@
                           v-for="notification in this.recent_notifications.slice(0, 5)"
                           v-bind:key="notification.id"
                           href="javascript:;"
-                          class="w-14 mr-4 cursor-pointer mb-3"
+                          class="mr-4 cursor-pointer mb-3"
                           @click="showUserHistory(notification.user)"
                         >
                           <div class="w-14 h-14 flex-none image-fit rounded-full">
@@ -148,7 +148,7 @@
                 </div>
                 <div class="chat__user-list overflow-y-auto scrollbar-hidden pr-1 pt-1">
                   <div
-                    class="cursor-pointer box relative flex items-center p-5 mt-5"
+                    class="cursor-pointer box flex items-center p-5 mt-5"
                     v-for="user in this.filteredUsers"
                     v-bind:key="user.id"
                     @click="showCreateNotification(user)"
