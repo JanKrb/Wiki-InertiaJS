@@ -124,12 +124,15 @@ export default defineComponent({
   },
   methods: {
     fetchPosts() {
+      const loader = this.$loading.show()
       axios.get('posts')
         .then((response) => {
           this.posts = response.data.data
+          loader.hide()
         })
         .catch((error) => {
           console.error(error)
+          loader.hide()
         })
     },
     approvePost(post) {
@@ -160,8 +163,8 @@ export default defineComponent({
         .then((response) => {
           this.permissions = response.data.data
         })
-        .catch((err) => {
-          console.error(err)
+        .catch((error) => {
+          console.error(error)
         })
     }
   },
