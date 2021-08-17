@@ -22,7 +22,7 @@ class Notification extends Model
         'user_id',
         'type',
         'icon',
-        'target_user',
+        'target_id',
         'seen'
     ];
 
@@ -34,6 +34,6 @@ class Notification extends Model
     }
 
     public function target() {
-        return $this->belongsTo(User::class, 'target_user');
+        return $this->belongsTo(User::class, 'target_id');
     }
 }
