@@ -7,19 +7,19 @@
         <div class="hidden xl:flex flex-col min-h-screen">
           <a href="" class="-intro-x flex items-center pt-5">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              alt=""
               class="w-6"
-              :src="require(`@/assets/images/logo.svg`)"
+              :src="this.wiki_settings.logo"
             />
             <span class="text-white text-lg ml-3">
-              Ru<span class="font-medium">bick</span>
+              {{ this.wiki_settings.name }}
             </span>
           </a>
           <div class="my-auto">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              alt=""
               class="-intro-x w-1/2 -mt-16"
-              :src="require(`@/assets/images/illustration.svg`)"
+              :src="require(`@/assets/images/register-illustration.svg`)"
             />
             <div
               class="-intro-x text-white font-medium text-4xl leading-tight mt-10"
@@ -30,7 +30,7 @@
             <div
               class="-intro-x mt-5 text-lg text-white text-opacity-70 dark:text-gray-500"
             >
-              Manage all your e-commerce accounts in one place
+              Free of charge and opensource developed by KRB-Development
             </div>
           </div>
         </div>
@@ -49,8 +49,7 @@
               <div
                 class="intro-x mt-2 text-gray-500 dark:text-gray-500 xl:hidden text-center"
               >
-                A few more clicks to sign in to your account. Manage all your
-                e-commerce accounts in one place
+                A few more clicks to sign in to your account.
               </div>
               <div class="intro-x mt-8">
                 <input
@@ -183,6 +182,10 @@ export default defineComponent({
       email: '',
       password: '',
       password_confirmation: '',
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO
+      },
       validation_error: {}
     }
   },
