@@ -38,8 +38,7 @@
               Sign In
             </h2>
             <div class="intro-x mt-2 text-gray-500 xl:hidden text-center">
-              A few more clicks to sign in to your account. Manage all your
-              e-commerce accounts in one place
+              A few more clicks to sign in to your account.
             </div>
             <form @submit.prevent="handleSubmit">
               <div class="intro-x mt-8">
