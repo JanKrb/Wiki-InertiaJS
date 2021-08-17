@@ -73,9 +73,9 @@
                       />
                     </div>
                     <div class="overflow-x-auto scrollbar-hidden">
-                      <div class="flex mt-3">
+                      <div class="flex mt-3 justify-center">
                         <a
-                          v-for="notification in this.recent_notifications"
+                          v-for="notification in this.recent_notifications.slice(0, 5)"
                           v-bind:key="notification.id"
                           href="javascript:;"
                           class="w-14 mr-4 cursor-pointer mb-3"
@@ -212,7 +212,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="notification.target_user?.profile_picture"
+                        :src="notification.target_id?.profile_picture"
                       />
                     </div>
                     <div class="ml-2 overflow-hidden">
@@ -595,6 +595,7 @@
                               User
                             </label>
                             <TailSelect
+                              v-model="this.create_notification.target_id"
                               :class="'form-control' + (this.validation_error?.target_id != null ? ' border-theme-6' : '')"
                               :options="{
                                   search: true,
@@ -719,7 +720,7 @@
                           </div>
                           <!-- END: Notification Seen -->
                           <!-- BEGIN: Notification Type -->
-                          <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-if="notification.target_user !== null">
+                          <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-if="notification.target_id !== null">
                             <UserIcon class="w-3 h-3 mr-2" />User Notification
                           </div>
                           <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-else>
@@ -764,6 +765,7 @@ export default defineComponent({
         content: 'New Content',
         color: '#000000',
         type: 1,
+        target_id: null,
         icon: 'BellIcon',
         user_id: 0
       },
@@ -775,8 +777,8 @@ export default defineComponent({
   },
   mounted() {
     this.fetchUser()
-    this.fetchNotifications('notifications?per_page=100000')
-    this.fetchUsers('users?per_page=100000')
+    this.fetchNotifications('notifications')
+    this.fetchUsers('users')
     this.fetchRecentNotifications()
     this.testPagePermissions()
   },
@@ -813,7 +815,6 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     },
     fetchUsers(page) {
