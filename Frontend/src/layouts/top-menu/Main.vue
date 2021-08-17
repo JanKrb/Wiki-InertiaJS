@@ -55,9 +55,9 @@
 
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
-          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
+          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path" class="flex">
             <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
-            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.children.length !== 0"/>
+            <ChevronRightIcon class="breadcrumb__icon content-center" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
