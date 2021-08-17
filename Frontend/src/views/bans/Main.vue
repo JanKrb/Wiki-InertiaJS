@@ -154,7 +154,6 @@ export default defineComponent({
       axios.get(url)
         .then(response => {
           this.bans = response.data.data
-          console.log(response.data.data)
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })
