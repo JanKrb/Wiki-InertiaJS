@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\Category as CategoryResource;
 use App\Http\Resources\MiniCategoryCollection;
-use App\Http\Resources\SmallCategory;
+use App\Http\Resources\NoDepthCategory;
 use App\Http\Resources\SmallCategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
@@ -131,7 +131,7 @@ class CategoryController extends BaseController
             if ($load_depth) {
                 $response = (new $this->resource($item))->onlyVerified(true);
             } else {
-                $response = (new SmallCategory($item))->onlyVerified(true);
+                $response = (new NoDepthCategory($item))->onlyVerified(true);
             }
 
             return $this->sendResponse($response, 'Successfully fetched item');
