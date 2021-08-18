@@ -112,8 +112,14 @@
               </div>
             </div>
             <div class="mt-4">
-              <label class="form-label">Parent Category</label>
-              <div>
+              <label class="form-label">Category sorting</label>
+              <div class="w-full flex items-center justify-start mb-3" aria-expanded="false">
+                <div class="form-check">
+                  <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
+                  <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
+                </div>
+              </div>
+              <div v-show="has_parent">
                 <TailSelect
                   v-model="this.category.parent_id"
                   :options="{
@@ -159,6 +165,7 @@ export default defineComponent({
         description: ''
       },
       validation_error: null,
+      has_parent: false,
       user: {},
       categories: []
     }
@@ -170,9 +177,18 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-
+      let parentId = null
+      if (this.has_parent) {
+        parentId = this.category.parent_id
+      }
+      console.log(parentId)
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/categories', this.category)
+      axios.post('http://localhost:8000/api/categories', {
+        title: this.category.title,
+        description: this.category.description,
+        thumbnail: this.category.thumbnail,
+        ...(parentId ? { parent_id: parentId } : {})
+      })
         .then(response => {
           toast.success('Category was created successfully!')
           loader.hide()
