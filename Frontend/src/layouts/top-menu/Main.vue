@@ -80,7 +80,7 @@
               <div
                 v-for="notification in this.notifications"
                 v-bind:key="notification.id"
-                class="cursor-pointer relative flex items-center mb-3"
+                class="cursor-pointer flex items-center mb-3"
               >
                 <div class="w-12 h-12 flex-none image-fit mr-1">
                   <img
@@ -92,16 +92,16 @@
                     class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"
                   ></div>
                 </div>
-                <div class="ml-2 overflow-hidden justify-items">
+                <div class="ml-2 overflow-hidden w-full">
                   <div class="flex items-center">
                     <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
-                    <div class="text-xs text-gray-500 mr-auto whitespace-nowrap">
-                      {{ notification.created_at }}
+                    <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">
+                      {{ formatDate(notification.created_at) }}
                     </div>
                   </div>
-                  <div class="w-full truncate text-gray-600 mt-0.5">
+                  <div class="truncate text-gray-600 mt-0.5">
                     {{ notification.content }}
                   </div>
                 </div>
@@ -297,6 +297,7 @@ import {
 } from './index'
 import { nestedMenu, linkTo } from '@/layouts/side-menu'
 import Searchbar from './Searchbar.vue'
+import moment from 'moment'
 
 export default defineComponent({
   components: {
@@ -376,6 +377,9 @@ export default defineComponent({
         .then(response => {
           this.fetchNotifications()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   },
   setup() {
