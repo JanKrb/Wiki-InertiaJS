@@ -194,7 +194,6 @@ export default defineComponent({
       if (this.has_parent) {
         parentId = this.category.parent_id
       }
-      console.log(parentId)
       const loader = this.$loading.show()
       axios.put('categories/' + this.$route.params.id, {
         title: this.category.title,
@@ -210,7 +209,6 @@ export default defineComponent({
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
-          console.log(error.response)
           loader.hide()
         })
     },
@@ -242,7 +240,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('categories?paginate=0')
+      axios.get('categories?paginate=0&load_depth=0')
         .then(response => {
           this.categories = response.data
         })
@@ -252,7 +250,7 @@ export default defineComponent({
     },
     fetchCategory() {
       const loader = this.$loading.show()
-      axios.get('categories/' + this.$route.params.id)
+      axios.get('categories/' + this.$route.params.id + '?load_depth=0')
         .then(response => {
           this.category = response.data.data
           loader.hide()

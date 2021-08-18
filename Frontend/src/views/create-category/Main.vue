@@ -227,7 +227,7 @@ export default defineComponent({
         })
     },
     fetchCategories() {
-      axios.get('categories?paginate=0')
+      axios.get('categories?paginate=0&load_depth=0')
         .then(response => {
           this.categories = response.data
         })
