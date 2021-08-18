@@ -24,7 +24,7 @@
               </div>
               <div class="ml-3 text-white mr-auto">
                 <a href="" class="font-medium">{{ category.user?.name }}</a>
-                <div class="text-xs mt-0.5">{{ category.updated_at }}</div>
+                <div class="text-xs mt-0.5">{{ formatDate(category.updated_at) }}</div>
               </div>
               <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
                 <a
@@ -106,7 +106,7 @@
               </div>
               <div class="ml-3 text-white mr-auto">
                 <a href="" class="font-medium">{{ post?.user?.name }}</a>
-                <div class="text-xs mt-0.5">{{ post?.updated_at }}</div>
+                <div class="text-xs mt-0.5">{{ formatDate(post?.updated_at) }}</div>
               </div>
               <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
                 <a
@@ -189,22 +189,17 @@
                 <div class="mt-0.5"><span class="px-7 rounded bg-gray-200 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span></div>
               </div>
             </div>
-            <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3">
-                <button class="btn w-48 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
-              </a>
+            <div class="absolute bottom-0 text-white px-5 pb-6 z-10 w-full">
+              <button class="btn w-2/3 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
             </div>
           </div>
           <div class="w-full p-5 text-gray-700 dark:text-gray-600">
-            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
-            <button class="btn w-80 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300dark:bg-dark-5 dark:text-gray-300" disabled></button>
-            <button class="btn w-32 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+            <button class="btn w-4/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+            <button class="btn w-4/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
+            <button class="btn w-2/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
           </div>
-          <div class="w-100 px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
+          <div class="w-full px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="flex text-gray-600 text-xs sm:text-sm">
-              <div class="mr-3">
-                <span class="px-4 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
-              </div>
               <div class="mr-3">
                 <span class="px-10 pt-1 rounded bg-gray-100 text-white mr-1 dark:bg-dark-5 dark:text-gray-300"></span>
               </div>
@@ -264,7 +259,7 @@
                       {{ announce?.title }}
                     </div>
                     <div class="text-gray-500 mt-1">
-                      {{ announce?.updated_at }}
+                      {{ formatDate(announce?.updated_at) }}
                     </div>
                     <div class="text-gray-600 text-justify mt-1">
                       {{ announce?.description }}
@@ -376,6 +371,7 @@
 import { defineComponent, ref, provide } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 
 const toast = useToast()
 
@@ -458,8 +454,9 @@ export default defineComponent({
     loadSubcategory(id) {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('categories/' + id)
+      axios.get('categories/' + id + '?load_depth=0')
         .then(response => {
+          console.log(response)
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
           this.loading.content = true
@@ -636,6 +633,9 @@ export default defineComponent({
           toast.error(error.response.data.message)
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   },
   setup() {
