@@ -4,12 +4,14 @@ const state = () => {
       {
         icon: 'HomeIcon',
         pageName: 'categories',
-        title: 'Categories'
+        title: 'Categories',
+        permission: 'category_default'
       },
       {
         icon: 'Edit3Icon',
         pageName: 'author',
         title: 'Author',
+        permission: 'category_author',
         subMenu: [
           {
             icon: 'FileTextIcon',
@@ -27,6 +29,7 @@ const state = () => {
         icon: 'ToolIcon',
         pageName: 'moderation.tags',
         title: 'Moderation',
+        permission: 'category_moderation',
         subMenu: [
           {
             icon: 'TagIcon',
@@ -59,6 +62,7 @@ const state = () => {
         icon: 'SlidersIcon',
         pageName: 'admin.roles',
         title: 'Administration',
+        permission: 'category_administration',
         subMenu: [
           {
             icon: 'ShieldIcon',
