@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="grid grid-cols-12 gap-6 mt-5">
+    <div class="grid grid-cols-12 gap-6 my-5 pb-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:mr-auto">
           <!-- BEGIN: Search Filter -->
@@ -87,6 +87,35 @@
         <!-- END: Posts Layout -->
       <!-- END: Data List -->
     </div>
+    <!-- BEGIN: Datatable Pagination -->
+    <div class="flex flex-col items-center mt-5">
+      <ul class="flex">
+        <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchPosts(pagination.first_page_url)">
+            <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
+          </button>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" @click="fetchPosts(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+            <span class="mx-1"><ChevronLeftIcon></ChevronLeftIcon></span>
+          </button>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" @click="fetchPosts(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+            <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
+          </button>
+        </li>
+        <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+          <button class="flex items-center font-bold" :disabled="!pagination.last_page_url" @click="fetchPosts(pagination.last_page_url)">
+            <span class="mx-1"><ChevronsRightIcon></ChevronsRightIcon></span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <!-- END: Datatable Pagination -->
   </div>
 </template>
 
@@ -103,12 +132,13 @@ export default defineComponent({
       posts: [],
       keywords: '',
       permissions: [],
+      pagination: {},
       search_type: 0
     }
   },
   mounted() {
     this.testPagePermissions()
-    this.fetchPosts()
+    this.fetchPosts('posts/unauthorized')
   },
   computed: {
     unauthorizedPosts: function () {
@@ -123,17 +153,29 @@ export default defineComponent({
     }
   },
   methods: {
-    fetchPosts() {
+    fetchPosts($url) {
       const loader = this.$loading.show()
-      axios.get('posts')
+      axios.get($url)
         .then((response) => {
           this.posts = response.data.data
           loader.hide()
+          this.makePagination(response.data.meta, response.data.links)
         })
         .catch((error) => {
           console.error(error)
           loader.hide()
         })
+    },
+    makePagination(meta, links) {
+      const pagination = {
+        current_page: meta.current_page,
+        last_page: meta.last_page,
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev
+      }
+      this.pagination = pagination
     },
     approvePost(post) {
       axios.put('posts/' + post.id, {
@@ -148,7 +190,6 @@ export default defineComponent({
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     },
     formatDate(timeString) {
@@ -166,14 +207,6 @@ export default defineComponent({
         .catch((error) => {
           console.error(error)
         })
-    }
-  },
-  watch: {
-    search: function (val) {
-      this.searchBadges(val)
-    },
-    per_page: function (val) {
-      this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
     }
   }
 })
