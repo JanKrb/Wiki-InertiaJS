@@ -427,6 +427,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Posts System
 Route::group(['middleware' => 'auth:api'], function() {
+    // Unauthorized
+    Route::get('posts/unauthorized', [PostController::class, 'get_unauthorized_posts'])
+        ->name('posts.unauthorized')
+        ->middleware(['permission:posts_get_unauthorized']);
+
     // History
     Route::get('posts/histories', [PostController::class, 'history'])
         ->name('posts_history.get_all')
