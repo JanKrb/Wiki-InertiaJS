@@ -55,4 +55,24 @@ class NotificationController extends BaseController
             'message' => 'Successfully retrieved user notifications'
         ]);
     }
+
+    public function get_own(Request $request) {
+        $request->validate([
+           'unseen' => 'boolean'
+        ]);
+
+        $per_page = $request->get('per_page', 15);
+        $unseen = $request->get('unseen', 0);
+
+        $data = Notification::where('user_id', auth()->user()->id);
+
+        if ($unseen) {
+            $data->where('seen', null);
+        }
+
+        return (new NotificationCollection($data->paginate($per_page)))->additional([
+            'success' => true,
+            'message' => 'Successfully retrieved own notifications'
+        ]);
+    }
 }
