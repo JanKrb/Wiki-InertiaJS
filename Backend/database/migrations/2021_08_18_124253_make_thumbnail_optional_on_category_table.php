@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDefaultToIssuerTypeOfActivity extends Migration
+class MakeThumbnailOptionalOnCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDefaultToIssuerTypeOfActivity extends Migration
      */
     public function up()
     {
-        Schema::table('activities', function (Blueprint $table) {
-            $table->integer('issuer_type')->after('id')->default(0)->change();
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('thumbnail')->nullable()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddDefaultToIssuerTypeOfActivity extends Migration
      */
     public function down()
     {
-        Schema::table('issuer_type_of_activity', function (Blueprint $table) {
-            $table->dropColumn('issuer_type');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('thumbnail')->change();
         });
     }
 }
