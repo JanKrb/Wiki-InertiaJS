@@ -1,12 +1,12 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
     <div class="col-span-12 xxl:col-span-10">
-      <div class="grid grid-cols-12 gap-5 mt-6 -mb-6">
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-6 gap-8 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
           v-for="category in this.view_structure.categories"
           v-bind:key="category.id"
-          class="intro-y blog col-span-12 md:col-span-4 box"
+          class="intro-y blog box"
         >
           <div class="blog__preview image-fit">
             <img
@@ -89,7 +89,7 @@
         <div
           v-for="post in this.view_structure.posts"
           v-bind:key="post.id"
-          class="intro-y blog col-span-12 md:col-span-4 box"
+          class="intro-y blog box"
         >
           <div class="blog__preview image-fit">
             <img
@@ -173,7 +173,7 @@
         <div
           v-for="post in this.placeholder.content"
           v-bind:key="post"
-          class="intro-y blog col-span-12 md:col-span-4 box"
+          class="intro-y blog box"
         >
           <div class="blog__preview image-fit">
             <img
@@ -318,26 +318,30 @@
                 :key="activity.id"
                 class="intro-x"
               >
-                <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                  <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                    <img
-                      alt=""
-                      :src="activity.user.profile_picture ? activity.user.profile_picture : require('@/assets/images/placeholder.png')"
-                    />
-                  </div>
-                  <div class="ml-4 mr-auto">
-                    <div class="font-medium">
-                      {{ activity?.title }}
+                <router-link :to="{ name: 'posts.view', params: { id: activity.id } }">
+                  <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                    <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                      <img
+                        alt=""
+                        :src="activity.user.profile_picture ? activity.user.profile_picture : require('@/assets/images/placeholder.png')"
+                      />
                     </div>
-                    <div class="text-gray-600 text-xs mt-0.5">
-                      {{ activity?.user?.name }}
+                    <div class="ml-4 mr-auto">
+                      <div class="font-medium">
+                        {{ activity?.title }}
+                      </div>
+                      <div class="text-gray-600 text-xs mt-0.5">
+                        {{ activity?.user?.name }}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </router-link>
               </div>
-              <a href="" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">
-                View More
-              </a>
+              <router-link :to="{ name: 'categories' }" v-if="this.$route.name !== 'categories'">
+                <button class="intro-x w-full block text-center rounded-md py-3 border border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">
+                  View More
+                </button>
+              </router-link>
             </div>
             <div class="mt-2" v-else>
               <div
