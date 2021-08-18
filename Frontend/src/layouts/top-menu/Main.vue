@@ -178,18 +178,16 @@
     <nav class="top-nav">
       <ul>
         <!-- BEGIN: First Child -->
+        <!-- Checking User Permissions v-show="menu.permission === null || this?.permissions?.includes(menu?.permission)"-->
         <li v-for="(menu, menuKey) in formattedMenu" :key="menuKey">
           <a
-            :href="
-              menu.subMenu
-                ? 'javascript:;'
-                : router.resolve({ name: menu.pageName }).path
-            "
+            :href="menu.subMenu ? 'javascript:;' : router.resolve({ name: menu.pageName }).path"
             class="top-menu"
             :class="{
               'top-menu--active': menu.active
             }"
             @click="linkTo(menu, router, $event)"
+            v-if="this.permissions[menu.permission]"
           >
             <div class="top-menu__icon">
               <component :is="menu.icon" />
@@ -313,6 +311,8 @@ export default defineComponent({
       notifications: [],
       loggedIn: false,
       breadcrums: [],
+      permissions: [],
+      available_permissions: [],
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
         logo: process.env.VUE_APP_LOGO,
@@ -329,16 +329,17 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
-      this.breadcrums = this.$route.matched
       if (this.$route.name === 'TopMenu') {
         this.$router.push({ name: 'categories' })
       }
+      this.breadcrums = this.$route.matched
     }
   },
   mounted() {
     if (this.$route.name === 'TopMenu') {
       this.$router.push({ name: 'categories' })
     }
+    this.testPagePermissions()
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
     this.fetchNotifications()
@@ -356,6 +357,22 @@ export default defineComponent({
           localStorage.removeItem('token')
           localStorage.removeItem('user')
           this.$router.push({ name: 'login' })
+        })
+    },
+    testPagePermissions() {
+      for (const category in this.formattedMenu) {
+        if (this.formattedMenu[category].permission) {
+          this.available_permissions.push(this.formattedMenu[category].permission)
+        }
+      }
+      axios.post('permissions/test', {
+        permissions: this.available_permissions
+      })
+        .then((response) => {
+          this.permissions = response.data.data
+        })
+        .catch((error) => {
+          console.error(error)
         })
     },
     fetchNotifications() {
