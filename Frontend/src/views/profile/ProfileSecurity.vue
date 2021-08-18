@@ -101,7 +101,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
-      axios.post('http://127.0.0.1:8000/api/auth/password/change', {
+      axios.post('auth/password/change', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         email: this.user.email,
         old_password: this.old_password,
@@ -121,7 +121,7 @@ export default defineComponent({
     },
     fetchUser() {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/auth/user')
+      axios.get('auth/user')
         .then(response => {
           this.user = response.data.data.user
           loader.hide()

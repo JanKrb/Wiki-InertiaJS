@@ -243,7 +243,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchTags('http://localhost:8000/api/tags')
+    this.fetchTags('tags')
   },
   computed: {
     filteredTags: function () {
@@ -279,11 +279,11 @@ export default defineComponent({
     },
     deleteTag(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/tags/' + id)
+      axios.delete('tags/' + id)
         .then(response => {
           toast.success('Tag successfully deleted')
           loader.hide()
-          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
+          this.fetchTags('tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -293,7 +293,7 @@ export default defineComponent({
     },
     addTag(tag) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/tags', {
+      axios.post('tags', {
         name: tag.name,
         description: tag.description,
         color: tag.color,
@@ -303,7 +303,7 @@ export default defineComponent({
           toast.success('Tag successfully added')
           this.modalState.create = false
           loader.hide()
-          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
+          this.fetchTags('tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -313,7 +313,7 @@ export default defineComponent({
     },
     editTag() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/tags/' + this.edit_tag.id, {
+      axios.put('tags/' + this.edit_tag.id, {
         name: this.edit_tag.name,
         description: this.edit_tag.description,
         color: this.edit_tag.color,
@@ -323,7 +323,7 @@ export default defineComponent({
           toast.success('Tag successfully updated')
           this.modalState.edit = false
           loader.hide()
-          this.fetchTags('http://localhost:8000/api/tags?page=' + this.pagination.current_page)
+          this.fetchTags('tags?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors

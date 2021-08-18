@@ -31,10 +31,10 @@
                     </div>
                   </div>
                   <div class="py-1 px-2 text-gray-600 cursor-pointer font-medium">
-                    <span v-if="bookmark.is_category">
+                    <span v-if="bookmark.is_category" class="flex">
                         <FolderIcon class="mr-3"></FolderIcon>Category
                     </span>
-                    <span v-if="bookmark.is_post">
+                    <span v-if="bookmark.is_post" class="flex">
                         <FileTextIcon class="mr-3"></FileTextIcon>Post
                     </span>
                   </div>
@@ -82,7 +82,7 @@ export default defineComponent({
   },
   methods: {
     fetchBookmarks(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/bookmarks?paginate=0')
+      axios.get('users/' + id + '/bookmarks?paginate=0')
         .then(response => {
           this.bookmarks = response.data
         })

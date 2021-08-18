@@ -124,16 +124,19 @@ export default defineComponent({
   },
   methods: {
     fetchPosts() {
-      axios.get('http://localhost:8000/api/posts')
+      const loader = this.$loading.show()
+      axios.get('posts')
         .then((response) => {
           this.posts = response.data.data
+          loader.hide()
         })
         .catch((error) => {
           console.error(error)
+          loader.hide()
         })
     },
     approvePost(post) {
-      axios.put('http://localhost:8000/api/posts/' + post.id, {
+      axios.put('posts/' + post.id, {
         title: post.title,
         content: post.content,
         thumbnail: post.thumbnail,
@@ -152,7 +155,7 @@ export default defineComponent({
       return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
     },
     testPagePermissions() {
-      axios.post('http://localhost:8000/api/permissions/test', {
+      axios.post('permissions/test', {
         permissions: [
           'posts_update'
         ]
@@ -160,8 +163,8 @@ export default defineComponent({
         .then((response) => {
           this.permissions = response.data.data
         })
-        .catch((err) => {
-          console.error(err)
+        .catch((error) => {
+          console.error(error)
         })
     }
   },
@@ -170,7 +173,7 @@ export default defineComponent({
       this.searchBadges(val)
     },
     per_page: function (val) {
-      this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+      this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
     }
   }
 })

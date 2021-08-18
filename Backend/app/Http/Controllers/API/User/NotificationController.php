@@ -21,7 +21,7 @@ class NotificationController extends BaseController
         'content' => 'required',
         'type' => 'required|integer',
         'icon' => 'required_if:type,1',
-        'target_user' => 'required_if:type,2',
+        'target_id' => 'required_if:type,2',
         'seen' => 'boolean'
     ];
 
@@ -31,6 +31,10 @@ class NotificationController extends BaseController
     ];
 
     public function get_users(Request $request, $user_id) {
+        $request->validate([
+           'unseen' => 'boolean'
+        ]);
+
         $user = User::find($user_id);
 
         if (is_null($user)) {
@@ -38,8 +42,15 @@ class NotificationController extends BaseController
         }
 
         $per_page = $request->get('per_page', 15);
+        $unseen = $request->get('unseen', 0);
 
-        return (new NotificationCollection(Notification::where('user_id', $user_id)->paginate($per_page)))->additional([
+        $data = Notification::where('user_id', $user_id);
+
+        if ($unseen) {
+            $data->where('seen', null);
+        }
+
+        return (new NotificationCollection($data->paginate($per_page)))->additional([
             'success' => true,
             'message' => 'Successfully retrieved user notifications'
         ]);

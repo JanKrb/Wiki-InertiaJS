@@ -58,13 +58,13 @@
               </div>
               <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
-                  <div class="mr-2">
+                  <div class="mr-2 flex">
                     <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes_count }}
                   </div>
-                  <div class="mr-2">
+                  <div class="mr-2 flex">
                     <MessageCircleIcon class="mr-1 h-4 w-4"></MessageCircleIcon>{{ post.comments_count }}
                   </div>
-                  <div class="mr-2">
+                  <div class="mr-2 flex">
                     <ClockIcon class="mr-1 h-4 w-4"></ClockIcon>{{ post.histories_count }}
                   </div>
                   <div class="ml-auto">
@@ -120,7 +120,7 @@ export default defineComponent({
   methods: {
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
           loader.hide()
@@ -134,7 +134,7 @@ export default defineComponent({
     },
     fetchPosts(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/posts?paginate=0')
+      axios.get('users/' + id + '/posts?paginate=0')
         .then(response => {
           this.posts = response.data.data
           loader.hide()

@@ -61,7 +61,7 @@
               >
                 <div class="pr-1">
                   <div class="box px-5 pt-5 pb-5 lg:pb-0 mt-5">
-                    <div class="relative text-gray-700 dark:text-gray-300">
+                    <div class="relative text-gray-700 dark:text-gray-300 mb-5">
                       <input
                         type="text"
                         class="form-control py-3 px-4 border-transparent bg-gray-200 pr-10 placeholder-theme-13"
@@ -73,12 +73,12 @@
                       />
                     </div>
                     <div class="overflow-x-auto scrollbar-hidden">
-                      <div class="flex mt-3">
+                      <div class="flex mt-3 justify-center">
                         <a
-                          v-for="notification in this.recent_notifications"
+                          v-for="notification in this.recent_notifications.slice(0, 5)"
                           v-bind:key="notification.id"
                           href="javascript:;"
-                          class="w-14 mr-4 cursor-pointer mb-3"
+                          class="mr-4 cursor-pointer mb-3"
                           @click="showUserHistory(notification.user)"
                         >
                           <div class="w-14 h-14 flex-none image-fit rounded-full">
@@ -148,7 +148,7 @@
                 </div>
                 <div class="chat__user-list overflow-y-auto scrollbar-hidden pr-1 pt-1">
                   <div
-                    class="cursor-pointer box relative flex items-center p-5 mt-5"
+                    class="cursor-pointer box flex items-center p-5 mt-5"
                     v-for="user in this.filteredUsers"
                     v-bind:key="user.id"
                     @click="showCreateNotification(user)"
@@ -212,7 +212,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="notification.target_user?.profile_picture"
+                        :src="notification.target_id?.profile_picture"
                       />
                     </div>
                     <div class="ml-2 overflow-hidden">
@@ -595,6 +595,7 @@
                               User
                             </label>
                             <TailSelect
+                              v-model="this.create_notification.target_id"
                               :class="'form-control' + (this.validation_error?.target_id != null ? ' border-theme-6' : '')"
                               :options="{
                                   search: true,
@@ -719,7 +720,7 @@
                           </div>
                           <!-- END: Notification Seen -->
                           <!-- BEGIN: Notification Type -->
-                          <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-if="notification.target_user !== null">
+                          <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-if="notification.target_id !== null">
                             <UserIcon class="w-3 h-3 mr-2" />User Notification
                           </div>
                           <div class="flex items-center justify-center lg:justify-start text-gray-600 mt-1" v-else>
@@ -764,6 +765,7 @@ export default defineComponent({
         content: 'New Content',
         color: '#000000',
         type: 1,
+        target_id: null,
         icon: 'BellIcon',
         user_id: 0
       },
@@ -775,8 +777,8 @@ export default defineComponent({
   },
   mounted() {
     this.fetchUser()
-    this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
-    this.fetchUsers('http://localhost:8000/api/users?per_page=100000')
+    this.fetchNotifications('notifications')
+    this.fetchUsers('users')
     this.fetchRecentNotifications()
     this.testPagePermissions()
   },
@@ -807,13 +809,12 @@ export default defineComponent({
         })
     },
     fetchRecentNotifications() {
-      axios.get('http://localhost:8000/api/notifications?recent=15')
+      axios.get('notifications?recent=15')
         .then(response => {
           this.recent_notifications = response.data.data
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     },
     fetchUsers(page) {
@@ -831,7 +832,7 @@ export default defineComponent({
         })
     },
     fetchUser() {
-      axios.get('http://localhost:8000/api/auth/user')
+      axios.get('auth/user')
         .then(response => {
           this.user = response.data.data.user
         })
@@ -842,7 +843,7 @@ export default defineComponent({
         })
     },
     testPagePermissions() {
-      axios.post('http://localhost:8000/api/permissions/test', {
+      axios.post('permissions/test', {
         permissions: [
           'users_update'
         ]
@@ -870,7 +871,7 @@ export default defineComponent({
     },
     updateNotification(notification) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+      axios.put('notifications/' + notification.id, {
         title: notification.title,
         content: notification.content,
         type: notification.type,
@@ -883,7 +884,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification updated successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
         })
         .catch(error => {
           console.log(error.response)
@@ -894,11 +895,11 @@ export default defineComponent({
     },
     deleteNotification(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/notifications/' + id)
+      axios.delete('notifications/' + id)
         .then(response => {
           toast.success('Notification deleted successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
           this.active_tab = 0
         })
         .catch(error => {
@@ -909,7 +910,7 @@ export default defineComponent({
     },
     createNotification(notification) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/notifications', {
+      axios.post('notifications', {
         title: notification.title,
         content: notification.content,
         type: notification.type,
@@ -921,7 +922,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification created successfully')
           loader.hide()
-          this.fetchNotifications('http://localhost:8000/api/notifications?per_page=100000')
+          this.fetchNotifications('notifications?per_page=100000')
         })
         .catch(error => {
           console.log(error.response)

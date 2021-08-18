@@ -24,7 +24,7 @@ class PostController extends BaseController
     protected $validations_create = [
         'title' => 'required|max:255',
         'content' => '',
-        'thumbnail' => 'string|max:255'
+        'thumbnail' => 'nullable|string|max:255'
     ];
 
     public function update(Request $request, $post_id) {
@@ -44,7 +44,7 @@ class PostController extends BaseController
             'title' => 'required|max:255',
             'content' => '',
             'approve' => 'boolean',
-            'thumbnail' => 'string|max:255'
+            'thumbnail' => 'nullable|string|max:255'
         ]);
 
         if ($validator->fails()) {

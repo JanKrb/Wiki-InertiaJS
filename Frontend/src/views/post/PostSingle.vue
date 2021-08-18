@@ -281,7 +281,7 @@ export default defineComponent({
   },
   methods: {
     loadPost(id) {
-      axios.get('http://localhost:8000/api/posts/' + id)
+      axios.get('posts/' + id)
         .then(response => {
           this.post = response.data.data
           this.loadComments(id)
@@ -295,7 +295,7 @@ export default defineComponent({
         })
     },
     loadComments(id) {
-      axios.get('http://localhost:8000/api/posts/' + id + '/comments', {
+      axios.get('posts/' + id + '/comments', {
         params: {
           sort: {
             column: 'updated_at',
@@ -311,7 +311,7 @@ export default defineComponent({
         })
     },
     loadBookmarks(id) {
-      axios.get('http://localhost:8000/api/posts/' + id + '/bookmarks', {
+      axios.get('posts/' + id + '/bookmarks', {
         params: {
           recent: 5
         }
@@ -334,7 +334,7 @@ export default defineComponent({
         vote = 0
       }
 
-      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/votes', {
+      axios.post('posts/' + this.$route.params.id + '/votes', {
         vote: vote
       })
         .then(response => {
@@ -346,7 +346,7 @@ export default defineComponent({
     },
     bookmarkPost() {
       if (this.isBookmarked !== 0) {
-        axios.delete('http://localhost:8000/api/bookmarks/' + this.isBookmarked)
+        axios.delete('bookmarks/' + this.isBookmarked)
           .then(response => {
             this.loadBookmarks(this.$route.params.id)
             toast.success('Post has been unbookmarked')
@@ -358,7 +358,7 @@ export default defineComponent({
         return
       }
 
-      axios.post('http://localhost:8000/api/bookmarks', {
+      axios.post('bookmarks', {
         is_post: 1,
         post_id: this.$route.params.id
       })
@@ -374,7 +374,7 @@ export default defineComponent({
       const comment = this.comment
       this.comment = ''
 
-      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/comments', {
+      axios.post('posts/' + this.$route.params.id + '/comments', {
         content: comment
       })
         .then(response => {
@@ -387,7 +387,7 @@ export default defineComponent({
         })
     },
     sendReport(content) {
-      axios.post('http://localhost:8000/api/posts/' + this.$route.params.id + '/reports', {
+      axios.post('posts/' + this.$route.params.id + '/reports', {
         content: content
       })
         .then(response => {
@@ -395,7 +395,7 @@ export default defineComponent({
         })
     },
     loadHistory() {
-      axios.get('http://localhost:8000/api/posts/' + this.$route.params.id + '/histories')
+      axios.get('posts/' + this.$route.params.id + '/histories')
         .then(response => {
           this.histories = response.data.data
         })

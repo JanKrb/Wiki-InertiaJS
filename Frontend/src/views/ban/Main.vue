@@ -40,19 +40,19 @@
               </div>
             </div>
             <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-gray-200 dark:border-dark-5 pt-5 lg:pt-0">
-              <div class="text-center rounded-md w-40 py-3">
+              <div class="text-center rounded-md py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
                   {{ this.banCount.global }}
                 </div>
                 <div class="text-gray-600">Global Bans</div>
               </div>
-              <div class="text-center rounded-md w-40 py-3">
+              <div class="text-center rounded-md py-3 mx-5">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
                   {{ this.banCount.comments }}
                 </div>
                 <div class="text-gray-600">Comment Bans</div>
               </div>
-              <div class="text-center rounded-md w-40 py-3">
+              <div class="text-center rounded-md py-3">
                 <div class="font-medium text-theme-1 dark:text-theme-10 text-xl">
                   {{ this.banCount.posts }}
                 </div>
@@ -203,7 +203,7 @@
                 <div class="flex-1 mt-6 xl:mt-0">
                   <div class="grid grid-cols-12 gap-x-5 mb-4">
                     <div class="col-span-12">
-                      <div v-if="this.isBanned === false" class="p-5 text-center">
+                      <div v-if="this.isBanned === false" class="text-center pt-10">
                         <CheckCircleIcon class="w-16 h-16 text-theme-9 mx-auto mt-3"/>
                         <div class="text-3xl mt-5">Unbanned</div>
                         <div class="text-gray-600 mt-2">
@@ -222,13 +222,13 @@
                             </div>
                             <div class="flex flex-col justify-center items-center lg:items-start mt-4">
                               <div class="truncate sm:whitespace-normal flex items-center">
-                                <LockIcon class="w-4 h-4 mr-2"/>Type: {{ this.lastBan.type === 0 ? 'Global Ban' : this.lastBan.type === 1 ? 'Comment Ban' : 'Post Ban' }}
+                                <LockIcon class="w-4 h-4 mr-2"/>{{ this.lastBan.type === 0 ? 'Global Ban' : this.lastBan.type === 1 ? 'Comment Ban' : 'Post Ban' }}
                               </div>
                               <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                                <AlignLeftIcon class="w-4 h-4 mr-2" />Reason: {{ this.lastBan.reason }}
+                                <AlignLeftIcon class="w-4 h-4 mr-2"/>{{ this.lastBan.reason.substring(0, 25) }}{{ this.lastBan.reason.length > 25 ? '...' : '' }}
                               </div>
                               <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                                <ClockIcon class="w-4 h-4 mr-2" />Until: {{ this.lastBan.ban_until }}
+                                <ClockIcon class="w-4 h-4 mr-2"/>{{ this.lastBan.ban_until }}
                               </div>
                             </div>
                           </div>
@@ -308,7 +308,7 @@ export default defineComponent({
   methods: {
     fetchBan(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/bans/' + id)
+      axios.get('bans/' + id)
         .then(response => {
           // Set General ban
           this.ban = response.data.data
@@ -318,7 +318,7 @@ export default defineComponent({
           // Stop Animation, Load other values
           loader.hide()
           this.fetchBanCount(response.data.data.target.id)
-          this.fetchRole(response.data.data.target.role_id)
+          this.fetchRole(response.data.data.target.role.id)
           this.checkBans(response.data.data.target.id)
         })
         .catch(error => {
@@ -327,7 +327,7 @@ export default defineComponent({
         })
     },
     fetchBanCount(id) {
-      axios.get('http://localhost:8000/api/users/' + id + '/bans/count')
+      axios.get('users/' + id + '/bans/count')
         .then(response => {
           this.banCount = response.data.data
         })
@@ -336,17 +336,18 @@ export default defineComponent({
         })
     },
     fetchRole(id) {
-      axios.get('http://localhost:8000/api/roles/' + id)
+      axios.get('roles/' + id)
         .then(response => {
           this.ban.target.role = response.data.data
         })
         .catch(error => {
           console.error(error)
+          console.log(error.log)
         })
     },
     updateBan(ban) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/bans/' + this.$route.params.id, {
+      axios.put('bans/' + this.$route.params.id, {
         target_id: ban.target.id,
         reason: ban.reason,
         description: ban.description,
@@ -367,7 +368,7 @@ export default defineComponent({
     checkBans(id) {
       this.isBanned = false
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id + '/bans')
+      axios.get('users/' + id + '/bans')
         .then(response => {
           for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
             ban = response.data.data[ban]

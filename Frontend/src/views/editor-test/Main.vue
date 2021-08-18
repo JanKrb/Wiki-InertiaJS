@@ -110,7 +110,7 @@ export default defineComponent({
         ]
       },
       simpleUpload: {
-        uploadUrl: 'http://localhost:8000/api/storage/uploadEditor',
+        uploadUrl: 'storage/uploadEditor',
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }

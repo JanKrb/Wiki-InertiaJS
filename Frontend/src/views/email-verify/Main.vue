@@ -78,7 +78,7 @@ export default defineComponent({
       this.$router.push({ name: 'login' })
     }
 
-    axios.post('http://127.0.0.1:8000/api/auth/email/confirm', {
+    axios.post('auth/email/confirm', {
       token: this.$route.query.token
     })
       .then(response => {

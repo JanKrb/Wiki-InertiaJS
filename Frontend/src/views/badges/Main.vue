@@ -388,7 +388,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchBadges('http://localhost:8000/api/badges')
+    this.fetchBadges('badges')
     this.fetchRoles()
   },
   methods: {
@@ -409,7 +409,7 @@ export default defineComponent({
         })
     },
     fetchRoles() {
-      axios.get('http://localhost:8000/api/roles')
+      axios.get('roles')
         .then((response) => {
           this.roles = response.data.data
         })
@@ -418,7 +418,7 @@ export default defineComponent({
         })
     },
     createBadge() {
-      axios.post('http://localhost:8000/api/badges', {
+      axios.post('badges', {
         title: this.createModal.title,
         description: this.createModal.description,
         color: this.createModal.color,
@@ -429,7 +429,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Badge successfully added')
           this.modalState.create = false
-          this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+          this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -439,7 +439,7 @@ export default defineComponent({
       this.createModal = {}
     },
     editBadge() {
-      axios.put('http://localhost:8000/api/badges/' + this.editModal.id, {
+      axios.put('badges/' + this.editModal.id, {
         title: this.editModal.title,
         description: this.editModal.description,
         color: this.editModal.color,
@@ -451,7 +451,7 @@ export default defineComponent({
           toast.success('Badge successfully edited')
           this.modalState.edit = false
           this.editModal = {}
-          this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+          this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -459,10 +459,10 @@ export default defineComponent({
         })
     },
     deleteBadge(id) {
-      axios.delete('http://localhost:8000/api/badges/' + id)
+      axios.delete('badges/' + id)
         .then(response => {
           toast.success('Badge successfully deleted')
-          this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+          this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -488,7 +488,7 @@ export default defineComponent({
       this.searchBadges(val)
     },
     per_page: function (val) {
-      this.fetchBadges('http://localhost:8000/api/badges?page=' + this.pagination.meta.current_page)
+      this.fetchBadges('badges?page=' + this.pagination.meta.current_page)
     }
   }
 })

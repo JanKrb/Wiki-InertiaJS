@@ -3,7 +3,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">Wiki Bans</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="javascript:;" @click="fetchBans('http://localhost:8000/api/bans?page=' + pagination.current_page)" class="btn btn-primary btn-sm"><RepeatIcon class="w-4 h-4"></RepeatIcon></a>
+        <a href="javascript:;" @click="fetchBans('bans?page=' + pagination.current_page)" class="btn btn-primary btn-sm"><RepeatIcon class="w-4 h-4"></RepeatIcon></a>
         <div class="hidden md:block mx-auto text-gray-600">
           Showing {{ this.pagination.showing_from }} to {{ this.pagination.showing_to }} of {{ this.pagination.total }} entries
         </div>
@@ -146,7 +146,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchBans('http://localhost:8000/api/bans')
+    this.fetchBans('bans')
   },
   methods: {
     fetchBans(url) {
@@ -154,7 +154,6 @@ export default defineComponent({
       axios.get(url)
         .then(response => {
           this.bans = response.data.data
-          console.log(response.data.data)
           loader.hide()
           this.makePagination(response.data.meta, response.data.links)
         })

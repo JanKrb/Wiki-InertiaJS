@@ -207,7 +207,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchPermissions('http://localhost:8000/api/permissions')
+    this.fetchPermissions('permissions')
   },
   computed: {
     filteredPermissions: function () {
@@ -244,11 +244,11 @@ export default defineComponent({
     },
     deletePermission(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/permissions/' + id)
+      axios.delete('permissions/' + id)
         .then(response => {
           toast.success('Permission successfully deleted')
           loader.hide()
-          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
+          this.fetchPermissions('permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -258,14 +258,14 @@ export default defineComponent({
     },
     createPermission(permission) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/permissions', {
+      axios.post('permissions', {
         name: permission.name
       })
         .then(response => {
           toast.success('Permission successfully created')
           loader.hide()
           this.modalState.create = false
-          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
+          this.fetchPermissions('permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -275,14 +275,14 @@ export default defineComponent({
     },
     editPermission() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/permissions/' + this.edit_permission.id, {
+      axios.put('permissions/' + this.edit_permission.id, {
         name: this.edit_permission.name
       })
         .then(response => {
           toast.success('Permission successfully edited')
           loader.hide()
           this.modalState.edit = false
-          this.fetchPermissions('http://localhost:8000/api/permissions?page=' + this.pagination.current_page)
+          this.fetchPermissions('permissions?page=' + this.pagination.current_page)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors

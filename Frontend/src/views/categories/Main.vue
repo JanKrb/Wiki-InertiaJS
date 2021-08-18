@@ -42,7 +42,7 @@
                       data-toggle="modal"
                       data-target="#edit-category-modal"
                       data-dismiss="dropdown"
-                      @click="this.$router.push({ name: 'moderation.categories.edit', params: { id: post.id } })"
+                      @click="this.$router.push({ name: 'moderation.categories.edit', params: { id: category.id } })"
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
@@ -76,7 +76,7 @@
               >
                 <BookmarkIcon class="w-5 h-5" />
               </Tippy>
-              <div class="mr-3">
+              <div class="mr-3 flex">
                 <FolderIcon class="mr-1 w-5 h-5"></FolderIcon><span class="font-medium">Category</span>
               </div>
             </div>
@@ -142,11 +142,11 @@
               >
                 <BookmarkIcon class="w-5 h-5" />
               </Tippy>
-              <div class="mr-3">
+              <div class="mr-3 flex">
                 <FileTextIcon class="mr-1 w-5 h-5"></FileTextIcon>
                 <span class="font-medium">Post</span>
               </div>
-              <div class="ml-auto">
+              <div class="ml-auto flex">
                 <HeartIcon class="mr-1 ml-4 w-5 h-5"></HeartIcon><span class="font-medium">{{ post.like_votes > 0 ? post.like_votes : 0 }}</span>
                 <MessageSquareIcon class="mr-1 ml-4 w-5 h-5"></MessageSquareIcon><span class="font-medium">{{ post.comments > 0 ? post.comments : 0 }}</span>
               </div>
@@ -298,12 +298,12 @@
             </div>
             <div class="">
               <router-link :to="{ name: 'moderation.categories.create' }" v-if="this.permissions?.categories_store">
-                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2">
+                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2 flex">
                   <FolderIcon class="w-4 h-4 mr-2" /> Create category
                 </button>
               </router-link>
               <router-link :to="{ name: 'moderation.posts.create' }" v-if="this.permissions?.posts_store">
-                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2">
+                <button class="intro-x w-full block text-center rounded-md py-3 btn btn-primary w-24 mr-1 mb-2 flex">
                   <EditIcon class="w-4 h-4 mr-2" /> Create new post
                 </button>
               </router-link>
@@ -435,7 +435,7 @@ export default defineComponent({
   methods: {
     loadRecent() {
       this.loading.recent = false
-      axios.get('http://localhost:8000/api/posts?recent=5')
+      axios.get('posts?recent=5')
         .then((response) => {
           this.recent = response.data.data
           this.loading.recent = true
@@ -446,7 +446,7 @@ export default defineComponent({
     },
     loadAnnouncements() {
       this.loading.announcements = false
-      axios.get('http://localhost:8000/api/announcements')
+      axios.get('announcements')
         .then((response) => {
           this.announcements = response.data.data
           this.loading.announcements = true
@@ -458,7 +458,7 @@ export default defineComponent({
     loadSubcategory(id) {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('http://localhost:8000/api/categories/' + id)
+      axios.get('categories/' + id)
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
@@ -472,7 +472,7 @@ export default defineComponent({
     loadMainCategories() {
       this.placeholder.content = 9
       this.loading.content = false
-      axios.get('http://localhost:8000/api/categories/0')
+      axios.get('categories/0')
         .then(response => {
           this.view_structure.categories = response.data.data
           this.loading.content = true
@@ -483,7 +483,7 @@ export default defineComponent({
         })
     },
     loadBookmarks() {
-      axios.get('http://localhost:8000/api/users/' + this.user.id + '/bookmarks')
+      axios.get('users/' + this.user.id + '/bookmarks')
         .then(response => {
           this.user.bookmarks = response.data.data
         })
@@ -517,7 +517,7 @@ export default defineComponent({
       const loader = this.$loading.show()
 
       if (action) {
-        axios.post('http://localhost:8000/api/bookmarks/', {
+        axios.post('bookmarks/', {
           ...(isPost ? { is_post: isPost } : {}),
           ...(isCategory ? { is_category: isCategory } : {}),
           ...(postId !== 0 ? { post_id: postId } : {}),
@@ -534,7 +534,7 @@ export default defineComponent({
             loader.hide()
           })
       } else {
-        axios.delete('http://localhost:8000/api/bookmarks/' + deleteId)
+        axios.delete('bookmarks/' + deleteId)
           .then(response => {
             toast.success('Item has been unbookmarked')
             loader.hide()
@@ -557,7 +557,7 @@ export default defineComponent({
       }
     },
     testPagePermissions() {
-      axios.post('http://localhost:8000/api/permissions/test', {
+      axios.post('permissions/test', {
         permissions: [
           'categories_store',
           'categories_update',
@@ -582,7 +582,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -607,7 +607,7 @@ export default defineComponent({
       let parentId = null
       if (this.edit_category.has_parent) { parentId = this.edit_category.parent_id }
 
-      axios.put('http://localhost:8000/api/categories/' + this.edit_category.id, {
+      axios.put('categories/' + this.edit_category.id, {
         title: this.edit_category.title,
         description: this.edit_category.description,
         thumbnail: this.edit_category.thumbnail,
@@ -625,7 +625,7 @@ export default defineComponent({
     },
     deleteCategory(id) {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/categories/' + id)
+      axios.delete('categories/' + id)
         .then(response => {
           toast.success('Category was successfully deleted!')
           loader.hide()

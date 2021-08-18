@@ -237,7 +237,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.fetchAccounts('http://localhost:8000/api/users')
+    this.fetchAccounts('users')
   },
   methods: {
     fetchAccounts(url) {
@@ -272,7 +272,7 @@ export default defineComponent({
       if (this.account.password === this.account.password_confirmation && this.account.password.length > 0) {
         const loader = this.$loading.show()
         console.log(this.account)
-        axios.post('http://127.0.0.1:8000/api/auth/register', {
+        axios.post('auth/register', {
           name: this.account.name,
           pre_name: this.account.pre_name,
           last_name: this.account.last_name,
@@ -284,7 +284,7 @@ export default defineComponent({
             toast.success('Account successfully created')
             this.modalState = false
             loader.hide()
-            this.fetchAccounts('http://localhost:8000/api/users?page=' + this.pagination.current_page)
+            this.fetchAccounts('users?page=' + this.pagination.current_page)
           })
           .catch(error => {
             this.validation_error = error.response.data.data.errors

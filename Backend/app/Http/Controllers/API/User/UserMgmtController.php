@@ -128,4 +128,21 @@ class UserMgmtController extends BaseController
         $posts = Post::where('user_id', $account_id)->get();
         return $this->sendResponse(new PostCollection($posts), 'Successfully retrieved user posts');
     }
+
+    /**
+     * Get single data
+     *
+     * @param Request $request
+     * @param int $id
+     */
+    public function get_single(Request $request, int $id)
+    {
+        $item = $this->model::find($id);
+        if (is_null($item)) {
+            return $this->sendError('Item does not exists.');
+        }
+
+        $response = new $this->resource($item, true);
+        return $this->sendResponse($response, 'Successfully fetched item');
+    }
 }

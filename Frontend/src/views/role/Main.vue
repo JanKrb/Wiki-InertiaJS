@@ -301,7 +301,7 @@ export default defineComponent({
   },
   mounted() {
     this.fetchRole(this.$route.params.id)
-    this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+    this.fetchPagePermissions('roles/' + this.$route.params.id + '/permissions')
     this.fetchPermissions()
   },
   methods: {
@@ -318,7 +318,7 @@ export default defineComponent({
     },
     deleteRole() {
       const loader = this.$loading.show()
-      axios.delete('http://localhost:8000/api/roles/' + this.role.id)
+      axios.delete('roles/' + this.role.id)
         .then(response => {
           toast.success('Role deleted successfully')
           loader.hide()
@@ -332,7 +332,7 @@ export default defineComponent({
     },
     editRole() {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/roles/' + this.role.id, {
+      axios.put('roles/' + this.role.id, {
         name: this.role.name,
         description: this.role.description,
         color: this.role.color
@@ -350,7 +350,7 @@ export default defineComponent({
     },
     fetchRole(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/roles/' + id)
+      axios.get('roles/' + id)
         .then(response => {
           this.role = response.data.data
           loader.hide()
@@ -377,11 +377,11 @@ export default defineComponent({
     },
     deletePermission(permission) {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions/' + permission.id + '/detach')
+      axios.post('roles/' + this.$route.params.id + '/permissions/' + permission.id + '/detach')
         .then(response => {
           loader.hide()
           toast.success('Permission removed successfully')
-          this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+          this.fetchPagePermissions('roles/' + this.$route.params.id + '/permissions')
           this.fetchRolePermissions()
         })
         .catch(error => {
@@ -391,7 +391,7 @@ export default defineComponent({
         })
     },
     fetchPermissions() {
-      axios.get('http://localhost:8000/api/permissions?paginate=0')
+      axios.get('permissions?paginate=0')
         .then(response => {
           this.all_permissions = response.data
           this.fetchRolePermissions()
@@ -401,7 +401,7 @@ export default defineComponent({
         })
     },
     fetchRolePermissions() {
-      axios.get('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions?paginate=0')
+      axios.get('roles/' + this.$route.params.id + '/permissions?paginate=0')
         .then(response => {
           this.all_role_permissions = response.data.data
           this.fetchSelectablePermissions()
@@ -415,12 +415,12 @@ export default defineComponent({
     },
     addPermission() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions/' + this.newPermission + '/attach')
+      axios.post('roles/' + this.$route.params.id + '/permissions/' + this.newPermission + '/attach')
         .then(response => {
           toast.success('Permission successfully added')
           this.newPermission = null
           loader.hide()
-          this.fetchPagePermissions('http://localhost:8000/api/roles/' + this.$route.params.id + '/permissions')
+          this.fetchPagePermissions('roles/' + this.$route.params.id + '/permissions')
           this.fetchRolePermissions()
         })
         .catch(error => {

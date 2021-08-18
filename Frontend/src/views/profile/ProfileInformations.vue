@@ -170,7 +170,7 @@ export default defineComponent({
         : cash('html').removeClass('dark')
       store.dispatch('main/setDarkMode', this.darkmode)
 
-      axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
+      axios.post('auth/update-details/' + this.user.id, {
         name: this.user.name,
         pre_name: this.user.pre_name,
         last_name: this.user.last_name,
@@ -189,7 +189,7 @@ export default defineComponent({
     },
     fetchUser() {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/auth/user')
+      axios.get('auth/user')
         .then(response => {
           this.user = response.data.data.user
           localStorage.setItem('user', JSON.stringify(response.data.data.user))
@@ -209,7 +209,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -219,7 +219,7 @@ export default defineComponent({
         .then((res) => {
           this.user.profile_picture = res.data.data.url
 
-          axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.user.id, {
+          axios.post('auth/update-details/' + this.user.id, {
             name: this.user.name,
             pre_name: this.user.pre_name,
             last_name: this.user.last_name,

@@ -55,9 +55,9 @@
 
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
-          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path">
+          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path" class="flex">
             <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
-            <ChevronRightIcon class="breadcrumb__icon" v-if="breadcrum.children.length !== 0"/>
+            <ChevronRightIcon class="breadcrumb__icon content-center" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
@@ -66,7 +66,7 @@
         <div class="intro-x dropdown mr-4 sm:mr-6" v-show='this.loggedIn'>
           <div
             class="dropdown-toggle notification notification--light cursor-pointer"
-            :class="this.unseenNotifications.length > 0 ? 'notification--bullet' : ''"
+            :class="this.notifications.length > 0 ? 'notification--bullet' : ''"
             role="button"
             aria-expanded="false"
           >
@@ -78,7 +78,7 @@
             >
               <div class="notification-content__title">Notifications</div>
               <div
-                v-for="notification in this.unseenNotifications"
+                v-for="notification in this.notifications"
                 v-bind:key="notification.id"
                 class="cursor-pointer relative flex items-center mb-3"
               >
@@ -106,7 +106,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="this.unseenNotifications.length === 0" class="text-xs text-gray-500 ml-auto whitespace-nowrap">
+              <div v-if="this.notifications.length === 0" class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                 No recent Notifications!
               </div>
             </div>
@@ -326,13 +326,6 @@ export default defineComponent({
       }
     }
   },
-  computed: {
-    unseenNotifications: function () {
-      return this.notifications.filter((notification) => {
-        return notification.seen === 0
-      })
-    }
-  },
   watch: {
     $route(to, from) {
       this.breadcrums = this.$route.matched
@@ -350,7 +343,6 @@ export default defineComponent({
     this.fetchNotifications()
 
     this.breadcrums = this.$route.matched
-    console.log(this.$route)
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
@@ -358,7 +350,7 @@ export default defineComponent({
   },
   methods: {
     logout() {
-      axios.get('http://127.0.0.1:8000/api/auth/logout')
+      axios.get('auth/logout')
         .then(response => {
           localStorage.removeItem('token')
           localStorage.removeItem('user')
@@ -369,7 +361,7 @@ export default defineComponent({
         })
     },
     fetchNotifications() {
-      axios.get('http://localhost:8000/api/users/' + this.user.id + '/notifications')
+      axios.get('users/' + this.user.id + '/notifications?unseen=1')
         .then(response => {
           this.notifications = response.data.data
         })
@@ -379,7 +371,7 @@ export default defineComponent({
     },
     viewNotification(notification) {
       this.view_notification = notification
-      axios.put('http://localhost:8000/api/notifications/' + notification.id, {
+      axios.put('notifications/' + notification.id, {
         title: notification.title,
         color: notification.color,
         content: notification.content,
@@ -388,12 +380,10 @@ export default defineComponent({
         seen: 1
       })
         .then(response => {
-          console.log(response)
           this.fetchNotifications()
         })
         .catch(error => {
           console.error(error)
-          console.log(error.response)
         })
     }
   },

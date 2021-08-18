@@ -224,7 +224,7 @@ export default defineComponent({
   methods: {
     fetchUser(id) {
       const loader = this.$loading.show()
-      axios.get('http://localhost:8000/api/users/' + id)
+      axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
           loader.hide()
@@ -237,7 +237,7 @@ export default defineComponent({
     },
     updatedUser(user) {
       const loader = this.$loading.show()
-      axios.put('http://localhost:8000/api/users/' + user.id, {
+      axios.put('users/' + user.id, {
         name: user.name,
         pre_name: user.pre_name,
         last_name: user.last_name,
@@ -257,7 +257,7 @@ export default defineComponent({
     },
     deleteUser() {
       const loader = this.$loading.show()
-      axios.post('http://localhost:8000/api/users/' + this.$route.params.id + '/delete')
+      axios.post('users/' + this.$route.params.id + '/delete')
         .then(response => {
           loader.hide()
           toast.success('Account successfully deleted')
@@ -278,7 +278,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.post('http://localhost:8000/api/storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
@@ -288,7 +288,7 @@ export default defineComponent({
         .then((res) => {
           this.user.profile_picture = res.data.data.url
 
-          axios.post('http://127.0.0.1:8000/api/auth/update-details/' + this.$route.params.id, {
+          axios.post('auth/update-details/' + this.$route.params.id, {
             name: this.user.name,
             pre_name: this.user.pre_name,
             last_name: this.user.last_name,
