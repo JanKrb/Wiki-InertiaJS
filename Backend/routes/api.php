@@ -722,6 +722,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:notifications_get_all'])
     ;
 
+    Route::get('notifications/own', [NotificationController::class, 'get_own'])
+        ->name('notifications.get_own')
+        ->middleware(['permission:notifications_get_own'])
+    ;
+
     Route::get('users/{user}/notifications', [NotificationController::class, 'get_users'])
         ->name('notifications.get_users')
         ->middleware(['permission:notifications_get_user'])
