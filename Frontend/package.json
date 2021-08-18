@@ -62,7 +62,7 @@
     "vue-router": "^4.0.0-0",
     "vue-toastification": "^2.0.0-rc.1",
     "vuex": "^4.0.0-0",
-    "xlsx": "^0.16.9",
+    "xlsx": "^0.17.0",
     "zoom-vanilla.js": "^2.0.6"
   },
   "devDependencies": {
