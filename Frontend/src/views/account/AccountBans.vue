@@ -380,23 +380,19 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get('users/' + id)
         .then(response => {
-          console.log(response.data.data)
           this.user = response.data.data
           this.user_role = response.data.data.role.id
           loader.hide()
         })
         .catch(error => {
-          console.error(error)
           loader.hide()
+          console.error(error)
         })
     },
     fetchBanCount(id) {
       axios.get('users/' + id + '/bans/count')
         .then(response => {
           this.banCount = response.data.data
-        })
-        .catch(error => {
-          console.error(error)
         })
     },
     fetchBans(id) {
@@ -411,7 +407,6 @@ export default defineComponent({
               this.lastBan = ban
             }
           }
-          console.log(response)
           this.bans = response.data.data
           loader.hide()
           this.fetchBanCount(id)
