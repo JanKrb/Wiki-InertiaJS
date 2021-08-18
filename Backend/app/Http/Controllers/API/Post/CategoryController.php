@@ -118,7 +118,7 @@ class CategoryController extends BaseController
      */
     public function get_single(Request $request, int $id)
     {
-        $load_death = $request->get('load_death', true);
+        $load_depth = $request->get('load_depth', true);
 
         if ($id != 0) {
             $item = $this->model::find($id);
@@ -128,7 +128,7 @@ class CategoryController extends BaseController
 
             $response = [];
 
-            if ($load_death) {
+            if ($load_depth) {
                 $response = (new $this->resource($item))->onlyVerified(true);
             } else {
                 $response = (new SmallCategory($item))->onlyVerified(true);
