@@ -456,7 +456,6 @@ export default defineComponent({
       this.loading.content = false
       axios.get('categories/' + id + '?load_depth=0')
         .then(response => {
-          console.log(response)
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
           this.loading.content = true
