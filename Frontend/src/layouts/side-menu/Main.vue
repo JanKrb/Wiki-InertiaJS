@@ -14,11 +14,8 @@
           <img
             alt=""
             class="w-6"
-            src="@/assets/images/logo.svg"
+            :src="this.wiki_settings.logo"
           />
-          <span class="hidden xl:block text-white text-lg ml-3">
-            Ru<span class="font-medium">bick</span>
-          </span>
         </router-link>
         <!-- END: Logo -->
         <div class="side-nav__devider my-6"></div>
@@ -117,7 +114,7 @@
                             @click="linkTo(lastSubMenu, router, $event)"
                           >
                             <div class="side-menu__icon">
-                              <ZapIcon />
+                              <component :is="lastSubMenuKey.icon" />
                             </div>
                             <div class="side-menu__title">
                               {{ lastSubMenu.title }}
@@ -164,6 +161,14 @@ export default defineComponent({
     MobileMenu,
     DarkModeSwitcher,
     SideMenuTooltip
+  },
+  data() {
+    return {
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO
+      }
+    }
   },
   setup() {
     const route = useRoute()
