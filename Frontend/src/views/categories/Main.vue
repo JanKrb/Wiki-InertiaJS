@@ -50,6 +50,7 @@
                       href="javascript:;"
                       class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                       @click="this.deleteCategory(category.id)"
+                      data-dismiss="dropdown"
                     >
                       <Trash2Icon class="w-4 h-4 mr-2"/> Delete
                     </a>
@@ -70,7 +71,7 @@
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
               <Tippy
                 tag="div"
-                class="intro-x flex flex-none items-center justify-center mr-3 dark:bg-dark-5 text-gray-600 dark:text-gray-300"
+                class="intro-x flex flex-none items-center justify-center mr-3 text-gray-600 dark:text-gray-300"
                 content="Bookmark"
                 v-on:click='this.addBookmark("category", category.id)'
               >
@@ -289,7 +290,7 @@
           <!-- BEGIN: Author Tools -->
           <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
             <div class="intro-x flex items-center h-10">
-              <h2 class="text-lg font-medium truncate mr-5">Wiki Tools</h2>
+              <h2 class="text-lg font-medium truncate mr-5">Author Tools</h2>
             </div>
             <div class="">
               <router-link :to="{ name: 'moderation.categories.create' }" v-if="this.permissions?.categories_store">
@@ -408,8 +409,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    if (this.$route.name === 'categories.subcategory') { this.loadSubcategory(this.$route.params.id) }
-    if (this.$route.name === 'categories') { this.loadMainCategories() }
+    this.initialLoad()
     this.user = JSON.parse(localStorage.getItem('user'))
     this.testPagePermissions()
     this.loadAnnouncements()
@@ -420,15 +420,18 @@ export default defineComponent({
     $route(to, from) {
       this.view_structure.categories = []
       this.view_structure.posts = []
+      this.initialLoad()
+    }
+  },
+  methods: {
+    initialLoad() {
       if (this.$route.name === 'categories.subcategory') {
         this.loadSubcategory(this.$route.params.id)
       }
       if (this.$route.name === 'categories') {
         this.loadMainCategories()
       }
-    }
-  },
-  methods: {
+    },
     loadRecent() {
       this.loading.recent = false
       axios.get('posts?recent=5')
@@ -625,7 +628,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Category was successfully deleted!')
           loader.hide()
-          this.$router.push({ name: 'categories' })
+          this.initialLoad()
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors

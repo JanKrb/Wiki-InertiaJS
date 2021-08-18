@@ -57,7 +57,7 @@
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
           <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path" class="flex">
             <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
-            <ChevronRightIcon class="breadcrumb__icon content-center" v-if="breadcrum.children.length !== 0"/>
+            <ChevronRightIcon class="breadcrumb__icon self-center" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
@@ -92,12 +92,12 @@
                     class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"
                   ></div>
                 </div>
-                <div class="ml-2 overflow-hidden">
+                <div class="ml-2 overflow-hidden justify-items">
                   <div class="flex items-center">
                     <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
-                    <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">
+                    <div class="text-xs text-gray-500 mr-auto whitespace-nowrap">
                       {{ notification.created_at }}
                     </div>
                   </div>
