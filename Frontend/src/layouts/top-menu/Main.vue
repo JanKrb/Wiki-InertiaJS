@@ -358,8 +358,9 @@ export default defineComponent({
         })
     },
     fetchNotifications() {
-      axios.get('users/' + this.user.id + '/notifications?unseen=1')
+      axios.get('notifications/own?unseen=1')
         .then(response => {
+          console.log(response)
           this.notifications = response.data.data
         })
     },
