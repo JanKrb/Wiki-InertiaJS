@@ -26,7 +26,7 @@ class AddDefaultToIssuerTypeOfActivity extends Migration
     public function down()
     {
         Schema::table('issuer_type_of_activity', function (Blueprint $table) {
-            //
+            $table->dropColumn('issuer_type');
         });
     }
 }

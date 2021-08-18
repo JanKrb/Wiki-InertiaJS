@@ -112,7 +112,7 @@
               </div>
             </div>
             <div class="mt-4">
-              <label class="form-label">Category sorting</label>
+              <label class="form-label">Parent Category</label>
               <div class="w-full flex items-center justify-start mb-3" aria-expanded="false">
                 <div class="form-check">
                   <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
@@ -181,7 +181,7 @@ export default defineComponent({
       if (this.has_parent) {
         parentId = this.category.parent_id
       }
-      console.log(parentId)
+
       const loader = this.$loading.show()
       axios.post('categories', {
         title: this.category.title,
@@ -197,7 +197,6 @@ export default defineComponent({
         .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
-          console.log(error.response)
           loader.hide()
         })
     },
@@ -223,7 +222,6 @@ export default defineComponent({
           loader.hide()
         })
         .catch((err) => {
-          console.error(err)
           toast.error(err.response.data.message)
           loader.hide()
         })
@@ -232,7 +230,6 @@ export default defineComponent({
       axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
-          console.log(response.data)
         })
         .catch(error => {
           console.error(error)
