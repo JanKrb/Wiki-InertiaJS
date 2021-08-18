@@ -8,6 +8,13 @@ use App\Http\Resources\User as UserResource;
 
 class SmallCategory extends JsonResource
 {
+    protected $onlyVerified;
+
+    public function onlyVerified($onlyVerified){
+        $this->onlyVerified = $onlyVerified;
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -23,7 +30,7 @@ class SmallCategory extends JsonResource
             'thumbnail' => $this->thumbnail,
             'user' => new UserResource($this->user),
             'parent_id' => $this->parent_id,
-            'posts' => new PostCollection($this->posts),
+            'posts' => new PostCollection($this->onlyVerified ? $this->posts->where('approved_at', '!=', null) : $this->posts),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];

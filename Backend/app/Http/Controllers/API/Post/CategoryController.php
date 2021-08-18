@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\Category as CategoryResource;
 use App\Http\Resources\MiniCategoryCollection;
+use App\Http\Resources\SmallCategory;
 use App\Http\Resources\SmallCategoryCollection;
 use App\Http\Resources\StructuredCategory as StructuredCategoryResource;
 use App\Models\Category;
@@ -117,13 +118,22 @@ class CategoryController extends BaseController
      */
     public function get_single(Request $request, int $id)
     {
+        $load_depth = $request->get('load_depth', true);
+
         if ($id != 0) {
             $item = $this->model::find($id);
             if (is_null($item)) {
                 return $this->sendError('Item does not exists.');
             }
 
-            $response = (new $this->resource($item))->onlyVerified(true);
+            $response = [];
+
+            if ($load_depth) {
+                $response = (new $this->resource($item))->onlyVerified(true);
+            } else {
+                $response = (new SmallCategory($item))->onlyVerified(true);
+            }
+
             return $this->sendResponse($response, 'Successfully fetched item');
         } else {
             $data = $this->model::where('parent_id', null)->get();
