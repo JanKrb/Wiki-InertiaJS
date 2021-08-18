@@ -78,7 +78,7 @@
     </div>
     <!-- END: Post History Slide -->
     <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
-      <div class="col-span-8 intro-y">
+      <div class="col-span-12 lg:col-span-8 intro-y">
         <div class="box news p-5">
           <div class="flex items-center px-5 py-4">
             <div class="mr-auto">
@@ -156,7 +156,7 @@
           <!-- END: Blog Layout -->
         </div>
       </div>
-      <div class="col-span-4 intro-y">
+      <div class="col-span-12 lg:col-span-4 intro-y">
         <div class="box p-5 news">
           <!-- BEGIN: Rating -->
             <div class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center mt-5 pb-5 border-b border-gray-200 dark:border-dark-5">
@@ -178,7 +178,7 @@
               <div
                 class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0"
               >
-                Rate this Post:
+                <div class="hidden xl:block">Rate this Post:</div>
                 <Tippy
                   tag="div"
                   v-on:click='this.votePost(1)'

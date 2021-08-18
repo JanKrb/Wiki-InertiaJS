@@ -238,7 +238,7 @@
                     @click="linkTo(lastSubMenu, router, $event)"
                   >
                     <div class="top-menu__icon">
-                      <component :is="'zap-icon'" />
+                      <component :is="lastSubMenu.icon" />
                     </div>
                     <div class="top-menu__title">
                       {{ lastSubMenu.title }}
@@ -356,17 +356,11 @@ export default defineComponent({
           localStorage.removeItem('user')
           this.$router.push({ name: 'login' })
         })
-        .catch(error => {
-          console.error(error.message)
-        })
     },
     fetchNotifications() {
       axios.get('users/' + this.user.id + '/notifications?unseen=1')
         .then(response => {
           this.notifications = response.data.data
-        })
-        .catch(error => {
-          console.error(error)
         })
     },
     viewNotification(notification) {
@@ -381,9 +375,6 @@ export default defineComponent({
       })
         .then(response => {
           this.fetchNotifications()
-        })
-        .catch(error => {
-          console.error(error)
         })
     }
   },

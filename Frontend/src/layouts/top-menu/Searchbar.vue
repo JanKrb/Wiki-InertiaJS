@@ -137,10 +137,6 @@ export default defineComponent({
           this.search_results = response.data.data
           this.view_results = response.data.data
         })
-        .catch(error => {
-          console.error(error)
-          console.error(error.response)
-        })
     }
   },
   setup() {

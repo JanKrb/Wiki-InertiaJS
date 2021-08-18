@@ -4,9 +4,9 @@
     <div class="mobile-menu-bar">
       <a href class="flex mr-auto">
         <img
-          alt="Icewall Tailwind HTML Admin Template"
+          alt=""
           class="w-6"
-          src="@/assets/images/logo.svg"
+          :src="this.wiki_settings.logo"
         />
       </a>
       <BarChart2Icon
@@ -61,7 +61,7 @@
                     @click="linkTo(subMenu, router)"
                   >
                     <div class="menu__icon">
-                      <ActivityIcon />
+                      <component :is="subMenu.icon" />
                     </div>
                     <div class="menu__title">
                       {{ subMenu.title }}
@@ -90,7 +90,7 @@
                           @click="linkTo(lastSubMenu, router)"
                         >
                           <div class="menu__icon">
-                            <ZapIcon />
+                            <component :is="lastSubMenu.icon" />
                           </div>
                           <div class="menu__title">
                             {{ lastSubMenu.title }}
@@ -128,6 +128,14 @@ import {
 import { nestedMenu } from '@/layouts/side-menu'
 
 export default defineComponent({
+  data() {
+    return {
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO
+      }
+    }
+  },
   setup() {
     const route = useRoute()
     const router = useRouter()
