@@ -84,10 +84,10 @@ class CategoryController extends BaseController
             $data = $data->sortBy('updated_at', SORT_ASC)->take($recent);
         }
 
-        if ($request->has('sort')) {
-            $data = $data->sortBy(
+        if ($request->has('sort.column') && $request->has('sort.method')) {
+            $data = $data->orderBy(
                 $request->get('sort.column', 'id'),
-                $request->get('sort.method', SORT_ASC)
+                $request->get('sort.method', 'ASC')
             );
         }
 
