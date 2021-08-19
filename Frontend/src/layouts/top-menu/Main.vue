@@ -312,7 +312,6 @@ export default defineComponent({
       loggedIn: false,
       breadcrums: [],
       permissions: [],
-      available_permissions: [],
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
         logo: process.env.VUE_APP_LOGO,
@@ -339,11 +338,12 @@ export default defineComponent({
     if (this.$route.name === 'TopMenu') {
       this.$router.push({ name: 'categories' })
     }
-    this.testPagePermissions()
+
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
-    this.fetchNotifications()
+    this.testPagePermissions()
 
+    this.fetchNotifications()
     this.breadcrums = this.$route.matched
 
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
@@ -360,13 +360,14 @@ export default defineComponent({
         })
     },
     testPagePermissions() {
+      const availablePermissions = []
       for (const category in this.formattedMenu) {
         if (this.formattedMenu[category].permission) {
-          this.available_permissions.push(this.formattedMenu[category].permission)
+          availablePermissions.push(this.formattedMenu[category].permission)
         }
       }
       axios.post('permissions/test', {
-        permissions: this.available_permissions
+        permissions: availablePermissions
       })
         .then((response) => {
           this.permissions = response.data.data

@@ -438,7 +438,14 @@ export default defineComponent({
     },
     loadRecent() {
       this.loading.recent = false
-      axios.get('posts?recent=5')
+      axios.get('posts?recent=5', {
+        data: {
+          sort: {
+            column: 'updated_at',
+            method: 'DESC'
+          }
+        }
+      })
         .then((response) => {
           this.recent = response.data.data
           this.loading.recent = true
