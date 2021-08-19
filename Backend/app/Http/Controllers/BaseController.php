@@ -59,7 +59,7 @@ class BaseController extends Controller
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $data = $this->model;
+        $data = (new $this->model);
 
         $per_page = $request->get('per_page', 15);
         $paginate_data = $request->get('paginate', true);
