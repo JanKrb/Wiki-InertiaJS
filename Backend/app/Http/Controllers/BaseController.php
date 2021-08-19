@@ -50,7 +50,7 @@ class BaseController extends Controller
             'paginate' => 'boolean',
             'sort' => 'array',
             'sort.column' => 'string|required_with:sort',
-            'sort.method' => 'integer|required_with:sort',
+            'sort.method' => 'string|required_with:sort',
             'additional' => 'array',
             'recent' => 'integer'
         ]);
@@ -66,14 +66,16 @@ class BaseController extends Controller
         $recent = $request->get('recent', 0);
 
         if ($request->has('sort.column') && $request->has('sort.method')) {
-            $data = $data::orderBy(
-                $request->get('sort.column', 'id'),
-                $request->get('sort.method', 'ASC')
+            error_log(print_r($request->get('sort'), true));
+
+            $data = $data->orderBy(
+                $request->get('sort')['column'],
+                $request->get('sort')['method'],
             );
         }
 
         if ($recent > 0) {
-            $data = $data::take($recent);
+            $data = $data->take($recent);
         }
 
         if ($paginate_data) {
