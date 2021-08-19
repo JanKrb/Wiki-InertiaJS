@@ -18,26 +18,6 @@
               </button>
             </div>
           </form>
-          <div class="h-full flex items-center">
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <PaperclipIcon class="mr-2 w-4 h-4"></PaperclipIcon>
-                1500 POSTS
-              </div>
-            </div>
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <FolderIcon class="mr-2 w-4 h-4"></FolderIcon>
-                20 CATEGORIES
-              </div>
-            </div>
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <UserIcon class="mr-2 w-4 h-4"></UserIcon>
-                10 AUTHORS
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </div>
