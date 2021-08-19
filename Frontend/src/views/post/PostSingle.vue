@@ -107,6 +107,10 @@
                     <ClockIcon class="mr-3"></ClockIcon>
                     Post History
                   </a>
+                  <a v-if="this.permissions?.posts_update" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: this.post.id }})" data-dismiss="dropdown">
+                    <Edit2Icon class="mr-3"></Edit2Icon>
+                    Edit
+                  </a>
                 </div>
               </div>
             </div>
@@ -138,7 +142,7 @@
                 <Tippy
                   tag="img"
                   alt=""
-                  :class="'rounded-full border border-white zoom-in' + (index !== 0 ? ' -ml-' + (index * 4) : '')"
+                  :class="'rounded-full border border-white zoom-in ' + (index !== 0 ? ' -ml-' + (index * 4) : '')"
                   :src="item.user?.profile_picture"
                   :content="item.user?.pre_name + ' ' + item.user?.last_name"
                 />
@@ -157,65 +161,83 @@
         </div>
       </div>
       <div class="col-span-12 lg:col-span-4 intro-y">
-        <div class="box p-5 news">
-          <!-- BEGIN: Rating -->
-            <div class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center mt-5 pb-5 border-b border-gray-200 dark:border-dark-5">
-              <div class="flex items-center">
-                <div class="w-12 h-12 flex-none image-fit">
-                  <img
-                    alt=""
-                    class="rounded-full"
-                    :src="this.post?.user?.profile_picture"
-                  />
-                </div>
-                <div class="ml-3 mr-auto">
-                  <a class="font-medium">
-                    {{ this.post?.user?.name }}
-                  </a>, Author
-                  <div class="text-gray-600">{{ this.post?.user?.email }}</div>
-                </div>
+        <!-- BEGIN: Rating -->
+        <div class="box p-5 news mb-6">
+          <div class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center" v-bind:class="{ 'border-b border-gray-200 dark:border-dark-5 mb-3 pb-5' : post.tags.length > 0 }">
+            <div class="flex items-center">
+              <div class="w-12 h-12 flex-none image-fit">
+                <img
+                  alt=""
+                  class="rounded-full"
+                  :src="this.post?.user?.profile_picture"
+                />
               </div>
-              <div
-                class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0"
-              >
-                <div class="hidden xl:block">Rate this Post:</div>
-                <Tippy
-                  tag="div"
-                  v-on:click='this.votePost(1)'
-                  :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 1 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
-                  content="Like"
-                >
-                  <ThumbsUpIcon class="w-3 h-3 fill-current" />
-                </Tippy>
-                <Tippy
-                  tag="div"
-                  v-on:click='this.votePost(2)'
-                  :class="'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 2 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
-                  content="Dislike"
-                >
-                  <ThumbsDownIcon class="w-3 h-3 fill-current" />
-                </Tippy>
+              <div class="ml-3 mr-auto">
+                <a class="font-medium">
+                  {{ this.post?.user?.name }}
+                </a>, {{ this.post?.user?.role?.name }}
+                <div class="text-gray-600">{{ this.post?.user?.email }}</div>
               </div>
             </div>
-          <!-- END: Rating -->
+            <div
+              class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0"
+            >
+              <div class="hidden xl:block">Rate this Post:</div>
+              <Tippy
+                tag="div"
+                v-on:click='this.votePost(1)'
+                :class="'w-12 h-12 md:w-9 md:h-9 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 1 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
+                content="Like"
+              >
+                <ThumbsUpIcon class="w-5 h-5 md:w-3 md:h-3 fill-current" />
+              </Tippy>
+              <Tippy
+                tag="div"
+                v-on:click='this.votePost(2)'
+                :class="'w-12 h-12 md:w-9 md:h-9 rounded-full flex items-center justify-center ml-2 zoom-in ' + (this.post?.liked === 2 ? 'border border-blue-500 text-blue-500' : 'border dark:border-dark-5 text-gray-500')"
+                content="Dislike"
+              >
+                <ThumbsDownIcon class="w-5 h-5 md:w-3 md:h-3 fill-current" />
+              </Tippy>
+            </div>
+          </div>
+          <!-- BEGIN: Post Tags -->
+          <div v-if="this.post.tags.length > 0">
+            <button
+              class="bg-gray-200 py-1 px-2 rounded-lg mr-2"
+              :style="'color: ' + tag.color + ';'"
+              v-for="tag in this.post.tags"
+              v-bind:key="tag.id"
+            >
+              <component :is="tag.icon" class="mr-1 h-4 w-4"></component>{{ tag.name }}
+            </button>
+          </div>
+          <!-- END: Post Tags -->
+        </div>
+        <!-- END: Rating -->
+
+        <!-- BEGIN: Comment Box -->
+        <div class="box p-5 news">
           <!-- BEGIN: Comments -->
           <div class="intro-y my-5">
             <div class="text-base sm:text-lg font-medium">
               Comments
             </div>
-            <div class="news__input relative mt-5">
-              <MessageCircleIcon class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"/>
-              <textarea
-                class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
-                rows="1"
-                placeholder="Post a comment..."
-                v-model='comment'
-              ></textarea>
-              <SendIcon
-                class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"
-                v-on:click='writeComment()'
-              />
-            </div>
+            <form @submit.prevent="writeComment()">
+              <div class="news__input relative mt-5">
+                <MessageCircleIcon class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"/>
+                <input
+                  type="text"
+                  class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
+                  rows="1"
+                  placeholder="Post a comment..."
+                  v-model='comment'
+                >
+                <Button type="submit">
+                  <SendIcon class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"/>
+                </Button>
+              </div>
+            </form>
           </div>
           <div class="pb-3" v-for="comment in this.post.post_comments" v-bind:key="comment.id">
             <div class="flex box p-3 bg-gray-200">
@@ -245,6 +267,7 @@
           </div>
           <!-- END: Comments -->
         </div>
+        <!-- END: Comment Box -->
       </div>
     </div>
   </div>
@@ -265,9 +288,11 @@ export default defineComponent({
         title: '',
         content: '',
         parent: {},
+        tags: [],
         post_comments: []
       },
       comment: '',
+      permissions: {},
       bookmarks: [], // Recent 5
       isBookmarked: false,
       report: {
@@ -285,6 +310,7 @@ export default defineComponent({
         .then(response => {
           this.post = response.data.data
           this.loadComments(id)
+          this.testPagePermissions()
           this.loadBookmarks(id)
           this.loadHistory()
         })
@@ -392,6 +418,22 @@ export default defineComponent({
           this.histories = response.data.data
         })
         .catch(error => {
+          console.error(error)
+        })
+    },
+    testPagePermissions() {
+      axios.post('permissions/test', {
+        permissions: [
+          'categories_update',
+          'categories_delete',
+          'posts_update',
+          'posts_delete'
+        ]
+      })
+        .then((response) => {
+          this.permissions = response.data.data
+        })
+        .catch((error) => {
           console.error(error)
         })
     },
