@@ -21,9 +21,6 @@
                 id="properties-tab"
                 tag="a"
                 content="Customize the post properties"
-                data-toggle="tab"
-                data-target="#properties"
-                href="javascript:;"
                 class="w-full sm:w-40 py-4 text-center flex justify-center items-center active"
                 role="tab"
                 aria-controls="properties"
@@ -125,7 +122,7 @@
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id">{{ category.title }}</option>
+                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
@@ -207,7 +204,7 @@ export default defineComponent({
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        ...(this.post.category_id ? { category_id: this.post.category_id } : {})
+        category_id: this.post.category_id ?? this.categories[0].id
       })
         .then(response => {
           toast.success('Post was created successfully!')
@@ -254,7 +251,7 @@ export default defineComponent({
       axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
-          console.log(response.data)
+          console.error(response.data)
         })
         .catch(error => {
           console.error(error)
