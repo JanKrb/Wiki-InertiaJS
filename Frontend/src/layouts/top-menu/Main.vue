@@ -74,13 +74,13 @@
           </div>
           <div class="notification-content pt-2 dropdown-menu">
             <div
-              class="notification-content__box dropdown-menu__content box dark:bg-dark-6"
+              class="p-3 dropdown-menu__content box dark:bg-dark-6"
             >
               <div class="notification-content__title">Notifications</div>
               <div
                 v-for="notification in this.notifications"
                 v-bind:key="notification.id"
-                class="cursor-pointer flex items-center mb-3"
+                class="cursor-pointer flex items-center hover:bg-gray-200 p-2 rounded-lg"
               >
                 <div class="w-12 h-12 flex-none image-fit mr-1">
                   <img
