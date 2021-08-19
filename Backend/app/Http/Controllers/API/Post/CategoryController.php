@@ -67,7 +67,7 @@ class CategoryController extends BaseController
             'sort.column' => 'string|required_with:sort',
             'sort.method' => 'integer|required_with:sort',
             'additional' => 'array',
-            'recent' => 'integer'
+            'recent' => 'integer',
         ]);
 
         if ($validator->fails()) {
