@@ -60,9 +60,12 @@ class PostCommentController extends Controller
         if (sizeof($active_bans) > 0) {
             return response()->json([
                 'success' => false,
-                'data'    => $active_bans,
+                'data'    => [
+                    'banned' => true,
+                    'bans' => $active_bans
+                ],
                 'message' => "User has comment ban",
-            ], 401);
+            ], 403);
         }
 
         $post = Post::find($post_id);

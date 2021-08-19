@@ -30,9 +30,12 @@ class CheckBan
         if (sizeof($active_bans) > 0) {
             return response()->json([
                 'success' => false,
-                'data'    => $active_bans,
+                'data'    => [
+                    'banned' => true,
+                    'bans' => $active_bans
+                ],
                 'message' => "User has global ban",
-            ], 401);
+            ], 403);
         }
 
         return $next($request);

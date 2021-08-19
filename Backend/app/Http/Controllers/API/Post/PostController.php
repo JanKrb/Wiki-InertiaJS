@@ -43,9 +43,12 @@ class PostController extends BaseController
         if (sizeof($active_bans) > 0) {
             return response()->json([
                 'success' => false,
-                'data'    => $active_bans,
+                'data'    => [
+                    'banned' => true,
+                    'bans' => $active_bans
+                ],
                 'message' => "User has post ban",
-            ], 401);
+            ], 403);
         }
 
         $validator = Validator::make($request->all(), $this->validations_create);
