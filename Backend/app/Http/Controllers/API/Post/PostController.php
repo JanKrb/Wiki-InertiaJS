@@ -27,6 +27,47 @@ class PostController extends BaseController
         'thumbnail' => 'nullable|string|max:255'
     ];
 
+    /**
+     * Store data
+     *
+     * @param Request $request
+     */
+    public function store(Request $request)
+    {
+        $active_bans = $request->user()->bans()->where(['type' => 2])->get()->filter(function ($b) {
+            if ($b->is_active()) {
+                return $b;
+            }
+        });
+
+        if (sizeof($active_bans) > 0) {
+            return response()->json([
+                'success' => false,
+                'data'    => [
+                    'banned' => true,
+                    'bans' => $active_bans
+                ],
+                'message' => "User has post ban",
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), $this->validations_create);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
+        }
+
+        $data = array_merge($request->all(), $this->additionalCreateData);
+        $created_object = $this->model::create($data);
+
+        if (is_null($created_object)) {
+            return $this->sendError('Unknown error while creating the model', [], 500);
+        }
+
+        $response = new $this->resource($created_object);
+        return $this->sendResponse($response, 'Successfully stored item');
+    }
+
     public function update(Request $request, $post_id) {
         $post = Post::find($post_id);
 

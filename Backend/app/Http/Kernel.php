@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckBan;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RolesAuth;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -52,6 +53,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            CheckBan::class,
         ],
     ];
 
@@ -72,6 +74,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'permission' => RolesAuth::class
+        'permission' => RolesAuth::class,
     ];
 }
