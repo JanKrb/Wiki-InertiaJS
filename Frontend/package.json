@@ -1,9 +1,9 @@
 {
-  "name": "rubick",
+  "name": "Loading",
   "version": "3.0.3",
   "private": true,
-  "description": "TailwindCSS HTML Admin Template",
-  "author": "Left4code",
+  "description": "Free of charge and opensource Wikisoftware developed by KRB-Development\n",
+  "author": "KRB-Development",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
