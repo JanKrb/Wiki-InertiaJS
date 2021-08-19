@@ -27,8 +27,6 @@ class CheckBan
             }
         });
 
-        error_log(print_r($active_bans, true));
-
         if (sizeof($active_bans) > 0) {
             return response()->json([
                 'success' => false,
