@@ -51,6 +51,20 @@ class PostCommentController extends Controller
 
     public function store(Request $request, $post_id): JsonResponse
     {
+        $active_bans = $request->user()->bans()->where(['type' => 1])->get()->filter(function ($b) {
+            if ($b->is_active()) {
+                return $b;
+            }
+        });
+
+        if (sizeof($active_bans) > 0) {
+            return response()->json([
+                'success' => false,
+                'data'    => $active_bans,
+                'message' => "User has comment ban",
+            ], 401);
+        }
+
         $post = Post::find($post_id);
 
         if (is_null($post)) {
