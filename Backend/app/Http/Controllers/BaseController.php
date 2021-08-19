@@ -70,9 +70,9 @@ class BaseController extends Controller
         }
 
         if ($request->has('sort')) {
-            $data = $data->sortBy(
+            $data = $data->orderBy(
                 $request->get('sort.column', 'id'),
-                $request->get('sort.method', SORT_ASC)
+                $request->get('sort.method', 'ASC')
             );
         }
 
