@@ -209,7 +209,6 @@ export default defineComponent({
         .then(response => {
           toast.success('Post was created successfully!')
           loader.hide()
-          console.log(this.post)
           if (this.post.category_id !== null) {
             this.$router.push({ name: 'categories.subcategory', params: { id: this.post.category_id } })
           }
@@ -251,7 +250,6 @@ export default defineComponent({
       axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
-          console.error(response.data)
         })
         .catch(error => {
           console.error(error)

@@ -297,7 +297,6 @@ export default defineComponent({
       axios.get('tags?paginate=0')
         .then(response => {
           this.tags = response.data
-          console.log(response.data)
         })
         .catch(error => {
           console.error(error)
@@ -307,7 +306,6 @@ export default defineComponent({
       axios.get('posts/' + this.$route.params.id)
         .then(response => {
           this.post = response.data.data
-          console.log(response)
         })
         .catch(error => {
           console.error(error)
