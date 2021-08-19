@@ -64,9 +64,6 @@
               </a>
             </div>
           </div>
-          <div class="p-5 text-gray-700 dark:text-gray-600">
-            {{ category?.description?.substring(0,200) }}
-          </div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="w-full flex text-gray-600 text-xs sm:text-sm">
               <Tippy
@@ -132,7 +129,6 @@
               </a>
             </div>
           </div>
-          <div class="w-full p-5 text-gray-700 dark:text-gray-600" v-html="post?.content?.substring(0,200)"></div>
           <div class="w-100 px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="flex text-gray-600 text-xs sm:text-sm">
               <Tippy
@@ -193,11 +189,6 @@
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10 w-full">
               <button class="btn w-2/3 rounded bg-gray-200 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
             </div>
-          </div>
-          <div class="w-full p-5 text-gray-700 dark:text-gray-600">
-            <button class="btn w-4/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
-            <button class="btn w-4/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
-            <button class="btn w-2/5 rounded bg-gray-100 border-0 mr-1 dark:bg-dark-5 dark:text-gray-300" disabled></button>
           </div>
           <div class="w-full px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
             <div class="flex text-gray-600 text-xs sm:text-sm">
@@ -578,9 +569,8 @@ export default defineComponent({
         .then((response) => {
           this.permissions = response.data.data
         })
-        .catch((err) => {
-          console.error(err)
-          console.log(err.response)
+        .catch((error) => {
+          console.error(error)
         })
     },
     changePicture(event) {

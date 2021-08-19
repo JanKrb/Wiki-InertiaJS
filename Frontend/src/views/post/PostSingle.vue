@@ -295,14 +295,7 @@ export default defineComponent({
         })
     },
     loadComments(id) {
-      axios.get('posts/' + id + '/comments', {
-        params: {
-          sort: {
-            column: 'updated_at',
-            method: 3
-          }
-        }
-      })
+      axios.get('posts/' + id + '/comments?paginate=0&sort.column=updated_at&sort.method=desc')
         .then(response => {
           this.post.post_comments = response.data.data
         })
@@ -380,7 +373,6 @@ export default defineComponent({
         .then(response => {
           this.post.post_comments.push(response.data.data)
           toast.success('Comment has successfully been posted.')
-          this.loadComments(this.$route.params.id)
         })
         .catch(error => {
           console.error(error)
