@@ -56,7 +56,7 @@ module.exports = {
       container: {
         center: true
       },
-      margin: {
+      '-margin': {
         '-4': '-1rem',
         '-8': '-2rem',
         '-12': '-3rem',

@@ -204,7 +204,7 @@
           <!-- BEGIN: Post Tags -->
           <div v-if="this.post.tags.length > 0">
             <button
-              class="bg-gray-200 py-1 px-2 rounded-lg mr-2"
+              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex"
               :style="'color: ' + tag.color + ';'"
               v-for="tag in this.post.tags"
               v-bind:key="tag.id"
