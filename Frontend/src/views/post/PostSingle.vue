@@ -142,8 +142,8 @@
                 <Tippy
                   tag="img"
                   alt=""
-                  :class="'rounded-full border border-white zoom-in'"
-                  :style="index !== 0 ? 'margin-left: ' + (index * 4) + ';' : ''"
+                  class="rounded-full border border-white zoom-in"
+                  :style="index !== 0 ? 'margin-left: -' + index + 'rem;' : ''"
                   :src="item.user?.profile_picture"
                   :content="item.user?.name"
                 />
