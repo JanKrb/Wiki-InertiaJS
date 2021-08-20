@@ -42,6 +42,7 @@
                   'side-menu--open': menu.activeDropdown
                 }"
                 @click="linkTo(menu, router, $event)"
+                v-if="this.permissions[menu.permission]"
               >
                 <div class="side-menu__icon">
                   <component :is="menu.icon" />
@@ -154,6 +155,7 @@ import MobileMenu from '@/components/mobile-menu/Main.vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import SideMenuTooltip from '@/components/side-menu-tooltip/Main.vue'
 import { linkTo, nestedMenu, enter, leave } from './index'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
@@ -167,7 +169,30 @@ export default defineComponent({
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
         logo: process.env.VUE_APP_LOGO
+      },
+      permissions: []
+    }
+  },
+  mounted() {
+    this.testPagePermissions()
+  },
+  methods: {
+    testPagePermissions() {
+      const availablePermissions = []
+      for (const category in this.formattedMenu) {
+        if (this.formattedMenu[category].permission) {
+          availablePermissions.push(this.formattedMenu[category].permission)
+        }
       }
+      axios.post('permissions/test', {
+        permissions: availablePermissions
+      })
+        .then((response) => {
+          this.permissions = response.data.data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   },
   setup() {
