@@ -142,9 +142,10 @@
                 <Tippy
                   tag="img"
                   alt=""
-                  :class="'rounded-full border border-white zoom-in ' + (index !== 0 ? ' -ml-' + (index * 4) : '')"
+                  class="rounded-full border border-white zoom-in"
+                  :style="index !== 0 ? 'margin-left: -' + index + 'rem;' : ''"
                   :src="item.user?.profile_picture"
-                  :content="item.user?.pre_name + ' ' + item.user?.last_name"
+                  :content="item.user?.name"
                 />
               </div>
             </div>
@@ -202,9 +203,9 @@
             </div>
           </div>
           <!-- BEGIN: Post Tags -->
-          <div v-if="this.post.tags.length > 0">
+          <div v-if="this.post.tags.length > 0" class="flex">
             <button
-              class="bg-gray-200 py-1 px-2 rounded-lg mr-2"
+              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex"
               :style="'color: ' + tag.color + ';'"
               v-for="tag in this.post.tags"
               v-bind:key="tag.id"
