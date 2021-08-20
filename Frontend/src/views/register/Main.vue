@@ -118,20 +118,20 @@
                   {{ this.validation_error?.password_confirmation[0] }}
                 </div>
               </div>
-              <div
-                class="intro-x flex items-center text-gray-700 dark:text-gray-600 mt-4 text-xs sm:text-sm"
-              >
+              <div class="intro-x flex items-center text-gray-700 dark:text-gray-600 mt-4 text-xs sm:text-sm">
                 <input
                   id="remember-me"
                   type="checkbox"
                   class="form-check-input border mr-2"
                 />
-                <label class="cursor-pointer select-none" for="remember-me"
-                  >I agree to the </label
-                >
-                <a class="text-theme-1 dark:text-theme-10 ml-1" href=""
-                  >Privacy Policy</a
-                >.
+                <label class="cursor-pointer select-none" for="remember-me">
+                  I agree to the
+                </label>
+                <router-link :to="{ name: 'privacy' }">
+                  <a class="text-theme-1 dark:text-theme-10 ml-1">
+                    Privacy Policy.
+                  </a>
+                </router-link>
               </div>
               <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                 <button
