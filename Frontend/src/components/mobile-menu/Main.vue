@@ -32,6 +32,7 @@
                 'menu--open': menu.activeDropdown
               }"
               @click="linkTo(menu, router)"
+              v-if="this.permissions[menu.permission]"
             >
               <div class="menu__icon">
                 <component :is="menu.icon" />
@@ -126,6 +127,7 @@ import {
   leave
 } from './index'
 import { nestedMenu } from '@/layouts/side-menu'
+import axios from 'axios'
 
 export default defineComponent({
   data() {
@@ -133,7 +135,30 @@ export default defineComponent({
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
         logo: process.env.VUE_APP_LOGO
+      },
+      permissions: []
+    }
+  },
+  mounted() {
+    this.testPagePermissions()
+  },
+  methods: {
+    testPagePermissions() {
+      const availablePermissions = []
+      for (const category in this.formattedMenu) {
+        if (this.formattedMenu[category].permission) {
+          availablePermissions.push(this.formattedMenu[category].permission)
+        }
       }
+      axios.post('permissions/test', {
+        permissions: availablePermissions
+      })
+        .then((response) => {
+          this.permissions = response.data.data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   },
   setup() {
