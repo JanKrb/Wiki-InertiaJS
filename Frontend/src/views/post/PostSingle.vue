@@ -99,17 +99,21 @@
               </a>
               <div class="dropdown-menu w-40">
                 <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                  <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
+                  <a v-if="this.permissions?.posts_report_store" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
                     <SlashIcon class="mr-3"></SlashIcon>
                     Report Post
                   </a>
-                  <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
+                  <a v-if="this.permissions?.posts_history_get_post" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
                     <ClockIcon class="mr-3"></ClockIcon>
                     Post History
                   </a>
                   <a v-if="this.permissions?.posts_update" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: this.post.id }})" data-dismiss="dropdown">
                     <Edit2Icon class="mr-3"></Edit2Icon>
                     Edit
+                  </a>
+                  <a v-if="this.permissions?.posts_delete" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.deletePost(this.post.id)" data-dismiss="dropdown">
+                    <Trash2Icon class="mr-3"></Trash2Icon>
+                    Delete
                   </a>
                 </div>
               </div>
@@ -319,6 +323,20 @@ export default defineComponent({
     this.loadPost(this.$route.params.id)
   },
   methods: {
+    deletePost(id) {
+      const loader = this.$loading.show()
+      axios.delete('posts/' + id)
+        .then(response => {
+          this.$router.push({ name: 'categories.subcategory', params: { id: this.post.parent.id } })
+          loader.hide()
+          toast.success('Post was successfully deleted!')
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
+    },
     loadPost(id) {
       axios.get('posts/' + id)
         .then(response => {
@@ -406,21 +424,19 @@ export default defineComponent({
           .catch(error => {
             console.error(error)
           })
-
-        return
+      } else {
+        axios.post('bookmarks', {
+          is_post: 1,
+          post_id: this.$route.params.id
+        })
+          .then(response => {
+            this.loadBookmarks(this.$route.params.id)
+            toast.success('Post has been bookmarked')
+          })
+          .catch(error => {
+            console.error(error)
+          })
       }
-
-      axios.post('bookmarks', {
-        is_post: 1,
-        post_id: this.$route.params.id
-      })
-        .then(response => {
-          this.loadBookmarks(this.$route.params.id)
-          toast.success('Post has been bookmarked')
-        })
-        .catch(error => {
-          console.error(error)
-        })
     },
     writeComment() {
       axios.post('posts/' + this.$route.params.id + '/comments', {
@@ -454,8 +470,8 @@ export default defineComponent({
     testPagePermissions() {
       axios.post('permissions/test', {
         permissions: [
-          'categories_update',
-          'categories_delete',
+          'posts_report_store',
+          'posts_history_get_post',
           'posts_update',
           'posts_delete'
         ]
