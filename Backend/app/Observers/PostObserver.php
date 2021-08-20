@@ -53,7 +53,7 @@ class PostObserver
             'issuer_type' => 7, // 7 => Post
             'issuer_id' => $post->id,
             'short' => 'Post has been soft-deleted.',
-            'details' => "Post \"$post->title\" has been soft-deleted on $role->deleted_at.",
+            'details' => "Post \"$post->title\" has been soft-deleted on $post->deleted_at.",
             'attributes' => $post->toJson()
         ]);
     }
