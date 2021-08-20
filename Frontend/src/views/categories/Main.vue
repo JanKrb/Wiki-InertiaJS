@@ -26,7 +26,7 @@
                 <a href="" class="font-medium">{{ category.user?.name }}</a>
                 <div class="text-xs mt-0.5">{{ formatDate(category.updated_at) }}</div>
               </div>
-              <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
+              <div class="dropdown ml-3" v-if='this.permissions?.categories_update || this.permissions?.categories_delete'>
                 <a
                   href="javascript:;"
                   class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
@@ -39,10 +39,9 @@
                     <a
                       href="javascript:;"
                       class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
-                      data-toggle="modal"
-                      data-target="#edit-category-modal"
                       data-dismiss="dropdown"
                       @click="this.$router.push({ name: 'moderation.categories.edit', params: { id: category.id } })"
+                      v-if="this.permissions?.categories_update"
                     >
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
                     </a>
@@ -51,6 +50,7 @@
                       class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                       @click="this.deleteCategory(category.id)"
                       data-dismiss="dropdown"
+                      v-if="this.permissions?.categories_delete"
                     >
                       <Trash2Icon class="w-4 h-4 mr-2"/> Delete
                     </a>
@@ -106,7 +106,7 @@
                 <a href="" class="font-medium">{{ post?.user?.name }}</a>
                 <div class="text-xs mt-0.5">{{ formatDate(post?.updated_at) }}</div>
               </div>
-              <div class="dropdown ml-3" v-if='this.permissions?.categories_update'>
+              <div class="dropdown ml-3" v-if='this.permissions?.posts_update || this.permissions?.posts_delete'>
                 <a
                   href='javascript:'
                   class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
@@ -116,8 +116,20 @@
                 </a>
                 <div class="dropdown-menu w-40">
                   <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                    <a href="javascript:;" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: post.id } })" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                    <a
+                      v-if="this.permissions?.posts_update"
+                      href="javascript:;"
+                      @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: post.id } })"
+                      data-dismiss="dropdown"
+                      class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                       <Edit2Icon class="w-4 h-4 mr-2"/> Edit
+                    </a>
+                    <a
+                      v-if="this.permissions?.posts_delete"
+                      href="javascript:;" @click="this.deletePost(post.id)"
+                      data-dismiss="dropdown"
+                      class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                      <Trash2Icon class="w-4 h-4 mr-2"/> Delete
                     </a>
                   </div>
                 </div>
@@ -151,7 +163,7 @@
           </div>
         </div>
         <!-- END: Posts Layout -->
-
+        <!-- BEGIN: No Content Placeholder -->
         <div v-if="this.view_structure.posts.length === 0 && this.view_structure.categories.length === 0 && this.loading.content === true" class="intro-y col-span-12">
           <div class="box">
             <div class="p-5 text-center">
@@ -165,6 +177,7 @@
             </div>
           </div>
         </div>
+        <!-- END: No Content Placeholder -->
         <!-- BEGIN: Placeholder Content Layout -->
         <div
           v-for="post in this.placeholder.content"
@@ -173,7 +186,7 @@
         >
           <div class="blog__preview image-fit">
             <img
-              :alt="'Thumbnail of ' + post?.title"
+              alt="Thumbnail of Placeholder"
               class="rounded-t-md"
               :src="require('@/assets/images/placeholder.png')"
             />
@@ -213,9 +226,6 @@
             <div class="flex items-center h-10 mb-4" v-if="this.$route.name === 'categories.subcategory'">
               <div class="mt-5 intro-x float-left mr-auto">
                 <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
-              </div>
-              <div class="mt-5 intro-x float-right">
-                <button class="btn btn-primary shadow-md mr-2" @click="showSubcategory(this.lastPage)" v-if="this.lastPage !== 0"><CornerLeftUpIcon class="mr-2 h-5 w-5"/>Previous</button>
               </div>
             </div>
             <div class="intro-x flex items-center h-10">
@@ -258,6 +268,7 @@
                     </div>
                   </div>
                 </TinySlider>
+                <!-- BEGIN: Placeholder Content -->
                 <TinySlider ref-key="announcementsRef" v-else>
                   <div class="p-5">
                     <div class="text-base font-medium truncate">
@@ -273,6 +284,7 @@
                     </div>
                   </div>
                 </TinySlider>
+                <!-- END: Placeholder Content -->
               </div>
             </div>
           </div>
@@ -334,6 +346,7 @@
                 </button>
               </router-link>
             </div>
+            <!-- BEGIN: Placeholder Content -->
             <div class="mt-2" v-else>
               <div
                 v-for="activity in this.placeholder.recent"
@@ -355,6 +368,7 @@
                 </div>
               </div>
             </div>
+            <!-- BEGIN: Placeholder Content -->
           </div>
           <!-- END: Recent Postings -->
         </div>
@@ -389,18 +403,9 @@ export default defineComponent({
         posts: [],
         categories: []
       },
-      lastPage: 0,
       permissions: {},
-      edit_category: {
-        title: '',
-        description: '',
-        thumbnail: '',
-        has_parent: false
-      },
-      categories: [],
       validation_error: {},
-      user: {},
-      isBookmarked: false
+      user: {}
     }
   },
   mounted() {
@@ -555,8 +560,10 @@ export default defineComponent({
         permissions: [
           'categories_store',
           'categories_update',
+          'categories_delete',
           'posts_store',
-          'posts_update'
+          'posts_update',
+          'posts_delete'
         ]
       })
         .then((response) => {
@@ -628,6 +635,21 @@ export default defineComponent({
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
+        })
+    },
+    deletePost(id) {
+      const loader = this.$loading.show()
+      axios.delete('posts/' + id)
+        .then(response => {
+          toast.success('Post was successfully deleted!')
+          loader.hide()
+          this.initialLoad()
+        })
+        .catch(error => {
+          console.error(error.response)
+          loader.hide()
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
         })
     },
     formatDate(timeString) {

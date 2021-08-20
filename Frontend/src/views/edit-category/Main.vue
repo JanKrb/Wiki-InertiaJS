@@ -110,7 +110,13 @@
             </div>
             <div class="mt-4">
               <label class="form-label">Parent Category</label>
-              <div class="dropdown">
+              <div class="w-full flex items-center justify-start mb-3" aria-expanded="false">
+                <div class="form-check">
+                  <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
+                  <label class="form-check-label" for="checkbox-has_parent">Has parent Category {{ has_parent }}</label>
+                </div>
+              </div>
+              <div v-show="has_parent">
                 <TailSelect
                   v-model="this.category.parent_id"
                   :options="{
@@ -118,8 +124,7 @@
                   classNames: 'w-full'
                 }"
                 >
-                  <option :value="null" :selected="this.category?.parent_id === null">No Parent</option>
-                  <option :value="category.id" v-for="category in this.categories" v-bind:key="category.id" :selected="category.id === this.category?.parent_id">{{ category.title }}</option>
+                  <option :value="category.id" v-for="category in this.categories" :selected="category.id === this.prev_parent" v-bind:key="category.id">{{ category.title }}</option>
                 </TailSelect>
               </div>
             </div>
@@ -174,6 +179,8 @@ export default defineComponent({
           id: 0
         }
       },
+      has_parent: false,
+      prev_parent: null,
       user: {},
       categories: [],
       validation_error: {}
@@ -196,7 +203,7 @@ export default defineComponent({
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
-        ...(parentId ? { parent_id: parentId } : {})
+        parent_id: parentId
       })
         .then(response => {
           toast.success('Category was updated successfully!')
@@ -250,6 +257,10 @@ export default defineComponent({
       axios.get('categories/' + this.$route.params.id + '?load_depth=0')
         .then(response => {
           this.category = response.data.data
+          if (this.category.parent_id) {
+            this.has_parent = true
+            this.prev_parent = this.category.parent_id
+          }
           loader.hide()
         })
         .catch(error => {
