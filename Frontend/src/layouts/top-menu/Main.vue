@@ -61,7 +61,7 @@
           </div>
         </div>
         <!-- END: Breadcrumb -->
-        <Searchbar></Searchbar>
+        <Searchbar v-show='this.loggedIn'></Searchbar>
         <!-- BEGIN: Notifications -->
         <div class="intro-x dropdown mr-4 sm:mr-6" v-show='this.loggedIn'>
           <div
