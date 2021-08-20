@@ -100,7 +100,7 @@ const routes = [
         component: TermsOfService,
         meta: {
           title: 'Terms of Service',
-          auth: true,
+          auth: false,
           isAuth: false
         }
       },
@@ -110,7 +110,7 @@ const routes = [
         component: PrivacyPolicy,
         meta: {
           title: 'Privacy Policy',
-          auth: true,
+          auth: false,
           isAuth: false
         }
       }
