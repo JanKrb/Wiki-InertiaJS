@@ -341,11 +341,12 @@ export default defineComponent({
 
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
-    this.testPagePermissions()
+    if (this.loggedIn) {
+      this.testPagePermissions()
 
-    this.fetchNotifications()
-    this.breadcrums = this.$route.matched
-
+      this.fetchNotifications()
+      this.breadcrums = this.$route.matched
+    }
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
       : cash('html').removeClass('dark')
