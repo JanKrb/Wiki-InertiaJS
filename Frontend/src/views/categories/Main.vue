@@ -181,6 +181,7 @@
         <!-- BEGIN: Placeholder Content Layout -->
         <div
           v-for="post in this.placeholder.content"
+          v-show="!this.loading.content"
           v-bind:key="post"
           class="intro-y blog box"
         >
@@ -214,7 +215,7 @@
               </div>
             </div>
           </div>
-        <!-- END: Placeholder Content Layout -->
+          <!-- END: Placeholder Content Layout -->
         </div>
       </div>
     </div>
@@ -394,7 +395,7 @@ export default defineComponent({
         recent: false
       },
       placeholder: {
-        content: 9,
+        content: 12,
         recent: 5
       },
       recent: [],
@@ -433,7 +434,6 @@ export default defineComponent({
       }
     },
     loadRecent() {
-      this.loading.recent = false
       axios.get('posts?recent=5&sort.column=updated_at&sort.method=desc&paginate=0')
         .then((response) => {
           this.recent = response.data
@@ -444,7 +444,6 @@ export default defineComponent({
         })
     },
     loadAnnouncements() {
-      this.loading.announcements = false
       axios.get('announcements')
         .then((response) => {
           this.announcements = response.data.data
@@ -455,27 +454,21 @@ export default defineComponent({
         })
     },
     loadSubcategory(id) {
-      this.placeholder.content = 9
-      this.loading.content = false
       axios.get('categories/' + id + '?load_depth=0')
         .then(response => {
           this.view_structure.categories = response.data.data.children
           this.view_structure.posts = response.data.data.posts
           this.loading.content = true
-          this.placeholder.content = 0
         })
         .catch(error => {
           console.error(error)
         })
     },
     loadMainCategories() {
-      this.placeholder.content = 9
-      this.loading.content = false
       axios.get('categories/0')
         .then(response => {
           this.view_structure.categories = response.data.data
           this.loading.content = true
-          this.placeholder.content = 0
         })
         .catch(error => {
           console.error(error)
@@ -544,15 +537,6 @@ export default defineComponent({
             toast.error(error)
             loader.hide()
           })
-      }
-    },
-    showSubcategory(id) {
-      if (parseInt(this.$route.params.id) > 0) {
-        this.lastPage = this.$route.params.id
-      } else if (id === 0) {
-        this.$router.push({ name: 'categories' })
-      } else {
-        this.$router.push({ name: 'categories.subcategory', params: { id: id } })
       }
     },
     testPagePermissions() {
@@ -627,9 +611,9 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('categories/' + id)
         .then(response => {
-          toast.success('Category was successfully deleted!')
-          loader.hide()
           this.initialLoad()
+          loader.hide()
+          toast.success('Category was successfully deleted!')
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -641,15 +625,14 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.delete('posts/' + id)
         .then(response => {
-          toast.success('Post was successfully deleted!')
-          loader.hide()
           this.initialLoad()
+          loader.hide()
+          toast.success('Post was successfully deleted!')
         })
         .catch(error => {
-          console.error(error.response)
-          loader.hide()
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
+          loader.hide()
         })
     },
     formatDate(timeString) {
