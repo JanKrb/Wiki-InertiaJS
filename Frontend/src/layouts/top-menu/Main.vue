@@ -77,10 +77,14 @@
               class="p-3 dropdown-menu__content box dark:bg-dark-6"
             >
               <div class="notification-content__title">Notifications</div>
-              <div
+              <a
                 v-for="notification in this?.notifications"
                 v-bind:key="notification.id"
-                class="cursor-pointer flex items-center hover:bg-gray-200 p-2 rounded-lg"
+                class="cursor-pointer flex items-center hover:bg-gray-200 p-2 rounded-lg w-full"
+                type="button"
+                @click="this.viewNotification(notification)"
+                data-toggle="modal"
+                data-target="#view-notification-modal"
               >
                 <div class="w-12 h-12 flex-none image-fit mr-1">
                   <img
@@ -88,24 +92,22 @@
                     class="rounded-full"
                     :src="notification.user.profile_picture"
                   />
-                  <div
-                    class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"
-                  ></div>
+                  <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                 </div>
                 <div class="ml-2 overflow-hidden w-full">
                   <div class="flex items-center">
-                    <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
+                    <a href="javascript:;" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
                     <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                       {{ formatDate(notification.created_at) }}
                     </div>
                   </div>
-                  <div class="truncate text-gray-600 mt-0.5">
+                  <div class="flex truncate text-gray-600 mt-0.5">
                     {{ notification.content }}
                   </div>
                 </div>
-              </div>
+              </a>
               <div v-if="this.notifications.length === 0" class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                 No recent Notifications!
               </div>
