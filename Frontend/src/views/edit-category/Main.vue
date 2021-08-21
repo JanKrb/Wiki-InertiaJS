@@ -113,7 +113,7 @@
               <div class="w-full flex items-center justify-start mb-3" aria-expanded="false">
                 <div class="form-check">
                   <input id="checkbox-has_parent" class="form-check-switch" type="checkbox" v-model="has_parent">
-                  <label class="form-check-label" for="checkbox-has_parent">Has parent Category {{ has_parent }}</label>
+                  <label class="form-check-label" for="checkbox-has_parent">Has parent Category</label>
                 </div>
               </div>
               <div v-show="has_parent">

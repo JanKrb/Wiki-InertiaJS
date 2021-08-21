@@ -142,6 +142,7 @@
             <label class="form-label">Edit tags</label>
             <TailSelect
               v-model="this.selected_tags"
+              @input="console.error('select')"
               multiple
               :options="
               {
@@ -155,17 +156,8 @@
                 classNames: 'w-full'
               }"
             >
-              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.some(post_tag => this.tags.includes(post_tag))">{{ tag.name }}</option>
+              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.find( post_tag => post_tag.id === tag.id )">{{ tag.name }}</option>
             </TailSelect>
-            <div v-if="this.post?.tags?.length > 0">
-              <label class="form-label mt-4">Current tags</label>
-              <div>
-                <span class="px-2 py-1 rounded-full bg-theme-1 text-white mr-1" v-for="tag in this.post.tags" v-bind:key="tag.id">{{ tag.name }}</span>
-              </div>
-            </div>
-            <div v-else>
-              <label class="form-label mt-4">No current tags selected</label>
-            </div>
           </div>
           <!-- END: Post Tags -->
         </div>
@@ -297,6 +289,7 @@ export default defineComponent({
       axios.get('tags?paginate=0')
         .then(response => {
           this.tags = response.data
+          for (const tag in response.data) { this.selected_tags.push(response.data[tag].id) }
         })
         .catch(error => {
           console.error(error)

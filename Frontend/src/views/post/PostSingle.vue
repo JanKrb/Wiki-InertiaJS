@@ -99,17 +99,21 @@
               </a>
               <div class="dropdown-menu w-40">
                 <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                  <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
+                  <a v-if="this.permissions?.posts_report_store" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
                     <SlashIcon class="mr-3"></SlashIcon>
                     Report Post
                   </a>
-                  <a href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
+                  <a v-if="this.permissions?.posts_history_get_post" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
                     <ClockIcon class="mr-3"></ClockIcon>
                     Post History
                   </a>
                   <a v-if="this.permissions?.posts_update" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: this.post.id }})" data-dismiss="dropdown">
                     <Edit2Icon class="mr-3"></Edit2Icon>
                     Edit
+                  </a>
+                  <a v-if="this.permissions?.posts_delete" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.deletePost(this.post.id)" data-dismiss="dropdown">
+                    <Trash2Icon class="mr-3"></Trash2Icon>
+                    Delete
                   </a>
                 </div>
               </div>
@@ -230,9 +234,8 @@
                 <input
                   type="text"
                   class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
-                  rows="1"
                   placeholder="Post a comment..."
-                  v-model='comment'
+                  v-model='new_comment'
                 >
                 <Button type="submit">
                   <SendIcon class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"/>
@@ -240,7 +243,7 @@
               </div>
             </form>
           </div>
-          <div class="pb-3" v-for="comment in this.post.post_comments" v-bind:key="comment.id">
+          <div class="pb-3" v-for="comment in this.comments" v-bind:key="comment.id">
             <div class="flex box p-3 bg-gray-200">
               <div class="w-10 h-10 sm:w-12 sm:h-12 flex-none image-fit">
                 <img
@@ -253,13 +256,13 @@
                 <div class="flex items-center">
                   <a href="" class="font-medium">{{ comment?.user?.name }}</a>
                   <button
-                    class="ml-auto text-xs text-gray-600"
-                    v-on:click='this.comment = "@" + comment?.user?.name'
+                    class="ml-auto text-sm text-gray-600"
+                    @click='this.new_comment = "@" + comment?.user?.name'
                   >
                     Reply
                   </button>
                 </div>
-                <div class="text-gray-600 text-xs sm:text-sm">
+                <div class="text-gray-600 text-xs">
                   {{ comment?.created_at }}
                 </div>
                 <div class="mt-2">{{ comment?.content }}</div>
@@ -267,6 +270,17 @@
             </div>
           </div>
           <!-- END: Comments -->
+          <!-- BEGIN: Load more comments button -->
+          <div>
+            <Button
+              class="btn w-full bg-theme-1 hover:bg-theme-23 text-white p-2 rounded-lg"
+              v-show="this.pagination?.next_page_url !== null"
+              @click="loadComments(this.pagination.next_page_url + '&per_page=5')"
+            >
+              Load more <LoadingIcon icon="oval" color="white" class="w-4 h-4 ml-2" v-show="this.loading_comments" />
+            </Button>
+          </div>
+          <!-- END: Load more comments button -->
         </div>
         <!-- END: Comment Box -->
       </div>
@@ -289,13 +303,16 @@ export default defineComponent({
         title: '',
         content: '',
         parent: {},
+        pagination: {},
         tags: [],
         post_comments: []
       },
-      comment: '',
+      new_comment: '',
       permissions: {},
       bookmarks: [], // Recent 5
+      comments: [], // Post Comments
       isBookmarked: false,
+      loading_comments: false,
       report: {
         content: ''
       },
@@ -306,11 +323,25 @@ export default defineComponent({
     this.loadPost(this.$route.params.id)
   },
   methods: {
+    deletePost(id) {
+      const loader = this.$loading.show()
+      axios.delete('posts/' + id)
+        .then(response => {
+          this.$router.push({ name: 'categories.subcategory', params: { id: this.post.parent.id } })
+          loader.hide()
+          toast.success('Post was successfully deleted!')
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
+        })
+    },
     loadPost(id) {
       axios.get('posts/' + id)
         .then(response => {
           this.post = response.data.data
-          this.loadComments(id)
+          this.loadComments('posts/' + id + '/comments?per_page=5')
           this.testPagePermissions()
           this.loadBookmarks(id)
           this.loadHistory()
@@ -321,14 +352,33 @@ export default defineComponent({
           this.$router.push({ name: 'categories' })
         })
     },
-    loadComments(id) {
-      axios.get('posts/' + id + '/comments?paginate=0&sort.column=updated_at&sort.method=desc')
+    loadComments(url) {
+      this.loading_comments = true
+      axios.get(url)
         .then(response => {
-          this.post.post_comments = response.data.data
+          for (const comment in response.data.data) {
+            this.comments.push(response.data.data[comment])
+          }
+          this.loading_comments = false
+          this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
           console.error(error)
         })
+    },
+    makePagination(meta, links) {
+      const pagination = {
+        current_page: meta.current_page,
+        last_page: meta.last_page,
+        last_page_url: links.last,
+        first_page_url: links.first,
+        next_page_url: links.next,
+        prev_page_url: links.prev,
+        showing_from: meta.from,
+        showing_to: meta.to,
+        total: meta.total
+      }
+      this.pagination = pagination
     },
     loadBookmarks(id) {
       axios.get('posts/' + id + '/bookmarks', {
@@ -374,31 +424,26 @@ export default defineComponent({
           .catch(error => {
             console.error(error)
           })
-
-        return
+      } else {
+        axios.post('bookmarks', {
+          is_post: 1,
+          post_id: this.$route.params.id
+        })
+          .then(response => {
+            this.loadBookmarks(this.$route.params.id)
+            toast.success('Post has been bookmarked')
+          })
+          .catch(error => {
+            console.error(error)
+          })
       }
-
-      axios.post('bookmarks', {
-        is_post: 1,
-        post_id: this.$route.params.id
-      })
-        .then(response => {
-          this.loadBookmarks(this.$route.params.id)
-          toast.success('Post has been bookmarked')
-        })
-        .catch(error => {
-          console.error(error)
-        })
     },
     writeComment() {
-      const comment = this.comment
-      this.comment = ''
-
       axios.post('posts/' + this.$route.params.id + '/comments', {
-        content: comment
+        content: this.new_comment
       })
         .then(response => {
-          this.post.post_comments.push(response.data.data)
+          this.post.comments.push(response.data.data)
           toast.success('Comment has successfully been posted.')
         })
         .catch(error => {
@@ -425,8 +470,8 @@ export default defineComponent({
     testPagePermissions() {
       axios.post('permissions/test', {
         permissions: [
-          'categories_update',
-          'categories_delete',
+          'posts_report_store',
+          'posts_history_get_post',
           'posts_update',
           'posts_delete'
         ]
