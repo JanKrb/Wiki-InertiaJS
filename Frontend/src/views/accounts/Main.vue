@@ -170,7 +170,7 @@
       <div class="intro-y col-span-12 items-center">
         <div class="flex flex-col items-center mt-5">
           <ul class="flex">
-            <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
+            <li class="self-center mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
               <button class="flex items-center font-bold" :disabled="!pagination.first_page_url" @click="fetchAccounts(pagination.first_page_url)">
                 <span class="mx-1"><ChevronsLeftIcon></ChevronsLeftIcon></span>
               </button>
@@ -181,11 +181,11 @@
               </button>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-              <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+              <a class="font-bold">{{ pagination.current_page }} / {{ pagination.last_page }}</a>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
               <button class="flex items-center font-bold" @click="fetchAccounts(pagination.next_page_url)" :disabled="!pagination.next_page_url">
-                <span class="mx-1"><ChevronRightIcon></ChevronRightIcon></span>
+                <span class="mx-1"><ChevronRightIcon class="self-center"></ChevronRightIcon></span>
               </button>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
