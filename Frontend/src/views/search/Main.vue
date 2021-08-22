@@ -5,14 +5,14 @@
         <div class="container mx-auto">
           <div class="text-gray-600">
             Your search has returned
-            <a class="text-black font-medium">
+            <a class="text-black dark:text-white font-medium">
               {{ this.search_results.posts.length + this.search_results.cats.length + this.search_results.users.length }}
             </a>
             hits
           </div>
           <form @submit.prevent="this.search(this.search_keywords)">
             <div class="pt-2 relative mx-auto text-gray-600 w-full">
-              <input class="w-full h-16 px-3 rounded focus:outline-none focus:shadow-outline text-xl px-8 shadow" type="text" placeholder="Search..." v-model="search_keywords">
+              <input class="w-full h-16 px-3 rounded focus:outline-none focus:shadow-outline text-xl px-8 shadow dark:bg-dark-2" type="text" placeholder="Search..." v-model="search_keywords">
               <button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
                 <SearchIcon class="h-9 w-9"></SearchIcon>
               </button>

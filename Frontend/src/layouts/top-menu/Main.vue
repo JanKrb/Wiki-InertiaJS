@@ -80,7 +80,7 @@
               <a
                 v-for="notification in this?.notifications"
                 v-bind:key="notification.id"
-                class="cursor-pointer flex items-center hover:bg-gray-200 p-2 rounded-lg w-full"
+                class="cursor-pointer flex items-center hover:bg-gray-200 dark:hover:bg-dark-3 p-2 rounded-lg w-full"
                 type="button"
                 @click="this.viewNotification(notification)"
                 data-toggle="modal"
