@@ -124,7 +124,7 @@
           >
             <img
               alt=""
-              :src="user?.profile_picture"
+              :src="user.profile_picture ?? require('@/assets/images/placeholder.png')"
             />
           </div>
           <div class="dropdown-menu w-56">
