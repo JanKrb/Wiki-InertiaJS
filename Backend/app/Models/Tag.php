@@ -31,6 +31,8 @@ class Tag extends Model
 
     /**
      * Posts & Sub-Categories Relations
-     * Following soon
      */
+    public function posts() {
+        return $this->hasMany(PostTag::class);
+    }
 }
