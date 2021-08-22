@@ -50,7 +50,7 @@ class BaseController extends Controller
             'paginate' => 'boolean',
             'sort' => 'array',
             'sort.column' => 'string|required_with:sort',
-            'sort.method' => 'integer|required_with:sort',
+            'sort.method' => 'string|required_with:sort',
             'additional' => 'array',
             'recent' => 'integer'
         ]);
@@ -59,25 +59,29 @@ class BaseController extends Controller
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        $data = $this->model::all();
+        $data = (new $this->model);
 
         $per_page = $request->get('per_page', 15);
         $paginate_data = $request->get('paginate', true);
         $recent = $request->get('recent', 0);
 
-        if ($recent > 0) {
-            $data = $data->sortBy('updated_at', SORT_ASC)->take($recent);
+        if ($request->has('sort.column') && $request->has('sort.method')) {
+            error_log(print_r($request->get('sort'), true));
+
+            $data = $data->orderBy(
+                $request->get('sort')['column'],
+                $request->get('sort')['method'],
+            );
         }
 
-        if ($request->has('sort')) {
-            $data = $data->orderBy(
-                $request->get('sort.column', 'id'),
-                $request->get('sort.method', 'ASC')
-            );
+        if ($recent > 0) {
+            $data = $data->take($recent);
         }
 
         if ($paginate_data) {
             $data = $data->paginate($per_page);
+        } else {
+            $data = $data->get();
         }
 
         $response = (new $this->collection($data));

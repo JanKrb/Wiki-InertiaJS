@@ -1,49 +1,29 @@
 <template>
   <div class="grid grid-cols-12 gap-6 mt-2">
     <div class="col-span-12">
-      <section class="h-50 p-8">
+      <section class="py-5">
         <div class="container mx-auto">
-          <div class="text-gray-600 mt-2">
+          <div class="text-gray-600">
             Your search has returned
-            <a class="text-black font-medium">
+            <a class="text-black dark:text-white font-medium">
               {{ this.search_results.posts.length + this.search_results.cats.length + this.search_results.users.length }}
             </a>
             hits
           </div>
           <form @submit.prevent="this.search(this.search_keywords)">
             <div class="pt-2 relative mx-auto text-gray-600 w-full">
-              <input class="w-full h-16 px-3 rounded mb-8 focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg" type="text" placeholder="Search..." v-model="search_keywords">
+              <input class="w-full h-16 px-3 rounded focus:outline-none focus:shadow-outline text-xl px-8 shadow dark:bg-dark-2" type="text" placeholder="Search..." v-model="search_keywords">
               <button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
                 <SearchIcon class="h-9 w-9"></SearchIcon>
               </button>
             </div>
           </form>
-          <div class="h-full flex items-center">
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <PaperclipIcon class="mr-2 w-4 h-4"></PaperclipIcon>
-                1500 POSTS
-              </div>
-            </div>
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <FolderIcon class="mr-2 w-4 h-4"></FolderIcon>
-                20 CATEGORIES
-              </div>
-            </div>
-            <div class="mx-auto text-center">
-              <div class="text-gray-600 mt-1">
-                <UserIcon class="mr-2 w-4 h-4"></UserIcon>
-                10 AUTHORS
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </div>
     <div class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <!-- BEGIN: File Manager Menu -->
-      <div class="intro-y box p-5 mt-6">
+      <div class="intro-y box p-5">
         <h2 class="intro-y text-lg font-medium mr-auto mt-2">
           Search Filter
         </h2>
@@ -70,7 +50,7 @@
     </div>
     <div class="col-span-12 lg:col-span-9 xxl:col-span-10">
       <!-- BEGIN: List all results -->
-      <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
+      <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6">
         <!-- BEGIN: Category Results -->
         <div
           v-for="result in this.view_results.cats"

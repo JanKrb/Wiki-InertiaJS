@@ -11,14 +11,14 @@
           <!-- BEGIN: Modal Header -->
           <div class="modal-header">
             <h2 class="font-medium text-base mr-auto">
-              <component :is="this.view_notification.icon"></component> {{ this.view_notification.title }}
+              <component :is="this.view_notification.icon"></component> {{ this?.view_notification?.title }}
             </h2>
           </div>
           <!-- END: Modal Header -->
           <!-- BEGIN: Modal Body -->
           <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
             <div class="col-span-12">
-              <p>{{ this.view_notification.content }}</p>
+              <p>{{ this?.view_notification?.content }}</p>
             </div>
           </div>
           <!-- END: Modal Body -->
@@ -45,28 +45,28 @@
           <img
             alt=""
             class="w-6"
-            :src="this.wiki_settings.logo"
+            :src="this?.wiki_settings?.logo"
           />
           <span class="text-white text-lg ml-3">
-            <span class="font-medium">{{ this.wiki_settings.name }}</span>
+            <span class="font-medium">{{ this?.wiki_settings?.name }}</span>
           </span>
         </router-link>
         <!-- END: Logo -->
 
         <!-- BEGIN: Breadcrumb -->
         <div class="-intro-x breadcrumb breadcrumb--light mr-auto">
-          <div v-for="breadcrum in this.breadcrums" v-bind:key="breadcrum.path" class="flex">
+          <div v-for="breadcrum in this?.breadcrums" v-bind:key="breadcrum.path" class="flex">
             <a href="" :class="breadcrum.name === this.$router.name ? '' : 'breadcrumb--active'">{{ breadcrum.meta.title }}</a>
             <ChevronRightIcon class="breadcrumb__icon self-center" v-if="breadcrum.children.length !== 0"/>
           </div>
         </div>
         <!-- END: Breadcrumb -->
-        <Searchbar></Searchbar>
+        <Searchbar v-if='this.loggedIn'></Searchbar>
         <!-- BEGIN: Notifications -->
-        <div class="intro-x dropdown mr-4 sm:mr-6" v-show='this.loggedIn'>
+        <div class="intro-x dropdown mr-4 sm:mr-6" v-if='this.loggedIn'>
           <div
             class="dropdown-toggle notification notification--light cursor-pointer"
-            :class="this.notifications.length > 0 ? 'notification--bullet' : ''"
+            :class="this?.notifications.length > 0 ? 'notification--bullet' : ''"
             role="button"
             aria-expanded="false"
           >
@@ -74,13 +74,17 @@
           </div>
           <div class="notification-content pt-2 dropdown-menu">
             <div
-              class="notification-content__box dropdown-menu__content box dark:bg-dark-6"
+              class="p-3 dropdown-menu__content box dark:bg-dark-6"
             >
               <div class="notification-content__title">Notifications</div>
-              <div
-                v-for="notification in this.notifications"
+              <a
+                v-for="notification in this?.notifications"
                 v-bind:key="notification.id"
-                class="cursor-pointer flex items-center mb-3"
+                class="cursor-pointer flex items-center hover:bg-gray-200 dark:hover:bg-dark-3 p-2 rounded-lg w-full"
+                type="button"
+                @click="this.viewNotification(notification)"
+                data-toggle="modal"
+                data-target="#view-notification-modal"
               >
                 <div class="w-12 h-12 flex-none image-fit mr-1">
                   <img
@@ -88,24 +92,22 @@
                     class="rounded-full"
                     :src="notification.user.profile_picture"
                   />
-                  <div
-                    class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"
-                  ></div>
+                  <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                 </div>
                 <div class="ml-2 overflow-hidden w-full">
                   <div class="flex items-center">
-                    <a href="javascript:;" data-toggle="modal" data-target="#view-notification-modal" @click="this.viewNotification(notification)" class="font-medium truncate mr-5">
+                    <a href="javascript:;" class="font-medium truncate mr-5">
                       {{ notification.title }}
                     </a>
                     <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                       {{ formatDate(notification.created_at) }}
                     </div>
                   </div>
-                  <div class="truncate text-gray-600 mt-0.5">
+                  <div class="flex truncate text-gray-600 mt-0.5">
                     {{ notification.content }}
                   </div>
                 </div>
-              </div>
+              </a>
               <div v-if="this.notifications.length === 0" class="text-xs text-gray-500 ml-auto whitespace-nowrap">
                 No recent Notifications!
               </div>
@@ -114,7 +116,7 @@
         </div>
         <!-- END: Notifications -->
         <!-- BEGIN: Account Menu -->
-        <div class="intro-x dropdown w-8 h-8" v-show='this.loggedIn'>
+        <div class="intro-x dropdown w-8 h-8" v-if='this.loggedIn'>
           <div
             class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
             role="button"
@@ -130,9 +132,9 @@
               class="dropdown-menu__content box bg-theme-26 dark:bg-dark-6 text-white"
             >
               <div class="p-4 border-b border-theme-27 dark:border-dark-3">
-                <div class="font-medium">{{ user.name }}</div>
+                <div class="font-medium">{{ user?.name }}</div>
                 <div class="text-xs text-theme-41 mt-0.5 dark:text-gray-600">
-                  {{ user.email }}
+                  {{ user?.email }}
                 </div>
               </div>
               <div class="p-2">
@@ -161,7 +163,7 @@
           :to="{ name: 'login' }"
           tag="a"
           class="intro-x mr-4 sm:mr-6"
-          v-show='!this.loggedIn'
+          v-if='!this.loggedIn'
         >
           <div
             class="notification notification--light notification--bullet cursor-pointer"
@@ -312,7 +314,6 @@ export default defineComponent({
       loggedIn: false,
       breadcrums: [],
       permissions: [],
-      available_permissions: [],
       wiki_settings: {
         name: process.env.VUE_APP_NAME,
         logo: process.env.VUE_APP_LOGO,
@@ -336,16 +337,20 @@ export default defineComponent({
     }
   },
   mounted() {
-    if (this.$route.name === 'TopMenu') {
-      this.$router.push({ name: 'categories' })
-    }
-    this.testPagePermissions()
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
-    this.fetchNotifications()
-
-    this.breadcrums = this.$route.matched
-
+    if (this.loggedIn) {
+      if (this.$route.name === 'TopMenu') {
+        this.$router.push({ name: 'categories' })
+      }
+      this.testPagePermissions()
+      this.fetchNotifications()
+      this.breadcrums = this.$route.matched
+    } else {
+      if (this.$route.name === 'TopMenu') {
+        this.$router.push({ name: 'login' })
+      }
+    }
     localStorage.getItem('darkmode') != null && localStorage.getItem('darkmode') === 'true'
       ? cash('html').addClass('dark')
       : cash('html').removeClass('dark')
@@ -360,13 +365,14 @@ export default defineComponent({
         })
     },
     testPagePermissions() {
+      const availablePermissions = []
       for (const category in this.formattedMenu) {
         if (this.formattedMenu[category].permission) {
-          this.available_permissions.push(this.formattedMenu[category].permission)
+          availablePermissions.push(this.formattedMenu[category].permission)
         }
       }
       axios.post('permissions/test', {
-        permissions: this.available_permissions
+        permissions: availablePermissions
       })
         .then((response) => {
           this.permissions = response.data.data

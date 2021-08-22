@@ -24,7 +24,8 @@ class PostController extends BaseController
     protected $validations_create = [
         'title' => 'required|max:255',
         'content' => '',
-        'thumbnail' => 'nullable|string|max:255'
+        'thumbnail' => 'nullable|string|max:255',
+        'category_id' => 'required'
     ];
 
     /**
@@ -85,7 +86,8 @@ class PostController extends BaseController
             'title' => 'required|max:255',
             'content' => '',
             'approve' => 'boolean',
-            'thumbnail' => 'nullable|string|max:255'
+            'thumbnail' => 'nullable|string|max:255',
+            'category_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -174,7 +176,7 @@ class PostController extends BaseController
 
             $response = $response::additional(array_merge([
                 'success' => true,
-                'message' => 'Successfully retrieved announcements'
+                'message' => 'Successfully retrieved posts'
             ],
                 $additional));
         }

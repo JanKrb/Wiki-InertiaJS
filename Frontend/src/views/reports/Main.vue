@@ -42,7 +42,7 @@
               <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
                 {{ report.user.email }}
               </a>
-              <span class="mx-1">•</span> {{ report.created_at }}
+              <span class="mx-1">•</span> {{ this.formatDate(report.created_at) }}
             </div>
           </div>
           <div class="dropdown ml-3">
@@ -127,6 +127,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 const toast = useToast()
 
 export default defineComponent({
@@ -194,6 +195,9 @@ export default defineComponent({
         total: meta.total
       }
       this.pagination = pagination
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   }
 })

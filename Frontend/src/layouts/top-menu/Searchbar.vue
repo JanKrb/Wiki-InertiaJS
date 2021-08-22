@@ -13,9 +13,11 @@
         />
         <SearchIcon class="search__icon dark:text-gray-300" />
       </div>
-      <a class="notification notification--light sm:hidden" href="">
-        <SearchIcon class="notification__icon dark:text-gray-300" />
-      </a>
+      <router-link :to="{ name: 'search' }">
+        <a class="notification notification--light sm:hidden">
+          <SearchIcon class="notification__icon dark:text-gray-300" />
+        </a>
+      </router-link>
     </form>
     <div class="search-result" :class="{ show: searchDropdown }">
       <div class="search-result__content">

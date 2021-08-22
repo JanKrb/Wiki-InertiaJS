@@ -17,36 +17,36 @@
                     data-toggle="tab"
                     data-target="#latest"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center active"
+                    class="flex-1 py-2 rounded-md text-center active self-center"
                     role="tab"
                     aria-controls="latest"
                     aria-selected="true"
                   >
-                    Latest Notifications
+                    Latest
                   </a>
                   <a
                     id="create-notification-tab"
                     data-toggle="tab"
                     data-target="#create-notification"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center"
+                    class="flex-1 py-2 rounded-md text-center self-center"
                     role="tab"
                     aria-controls="create-notification"
                     aria-selected="false"
                   >
-                    Create Notification
+                    Create
                   </a>
                   <a
                     id="histories-tab"
                     data-toggle="tab"
                     data-target="#histories"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center"
+                    class="flex-1 py-2 rounded-md text-center self-center"
                     role="tab"
                     aria-controls="histories"
                     aria-selected="false"
                   >
-                    User Histories
+                    Histories
                   </a>
                 </div>
               </div>
