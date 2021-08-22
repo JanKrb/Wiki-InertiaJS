@@ -180,6 +180,7 @@ export default defineComponent({
           console.error(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
+          toast.error(error.response)
           loader.hide()
         })
     },
