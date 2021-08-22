@@ -398,7 +398,7 @@ export default defineComponent({
     fetchBans(id) {
       this.isBanned = false
       const loader = this.$loading.show()
-      axios.get('users/' + id + '/bans')
+      axios.get('users/' + id + '/bans?paginate=0')
         .then(response => {
           for (let ban in response.data.data.sort((a, b) => { return new Date(a.created_at) - new Date(b.created_at) })) {
             ban = response.data.data[ban]
