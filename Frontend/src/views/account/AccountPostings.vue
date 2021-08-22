@@ -97,6 +97,7 @@
 import { defineComponent, ref } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import moment from 'moment'
 
 export default defineComponent({
   components: {
@@ -143,6 +144,9 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   }
 })

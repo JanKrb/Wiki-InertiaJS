@@ -104,7 +104,7 @@
               </button>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-              <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+              <a class="font-bold">{{ pagination.current_page }} / {{ pagination.last_page }}</a>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
               <button class="flex items-center font-bold" @click="fetchBans(pagination.next_page_url)" :disabled="!pagination.next_page_url">

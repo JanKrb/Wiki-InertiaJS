@@ -25,7 +25,7 @@
                       {{ bookmark?.post?.title }} {{ bookmark?.category?.title }}
                     </div>
                     <div class="text-gray-600 text-xs mt-0.5">
-                      {{ bookmark.created_at }}
+                      {{ formatDate(bookmark.created_at) }}
                     </div>
                   </div>
                   <div class="py-1 px-2 text-gray-600 cursor-pointer font-medium">
@@ -62,6 +62,7 @@
 import { defineComponent, ref } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import moment from 'moment'
 
 export default defineComponent({
   components: {
@@ -108,6 +109,9 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   }
 })
