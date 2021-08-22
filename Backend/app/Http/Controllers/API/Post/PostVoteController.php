@@ -55,13 +55,7 @@ class PostVoteController extends Controller
             return $this->sendError('Post does not exists.');
         }
 
-        $vote = PostVote::where([
-            ['user_id', auth()->user()->id],
-            ['post_id', $post_id]
-        ])->first();
-
-        $input = $request->all();
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'vote' => 'required|integer'
         ]);
 
@@ -69,16 +63,10 @@ class PostVoteController extends Controller
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
-        if (is_null($vote)) {
-            $input['post_id'] = $post_id;
-            $input['user_id'] = auth()->user()->id;
-
-            $vote = PostVote::create($input);
-            return $this->sendResponse(new PostVoteResource($vote), 'Post Vote created successfully');
-        }
-
-        $vote->vote = $input['vote'];
-        $vote->save();
+        $vote = PostVote::updateOrCreate([
+            'post_id' => $post_id,
+            'user_id' => auth()->user()->id
+        ], $request->all());
 
         return $this->sendResponse(new PostVoteResource($vote), 'Post Vote updated successfully.');
     }
