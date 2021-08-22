@@ -210,7 +210,6 @@ export default defineComponent({
           }
         })
         .catch(error => {
-          console.error(error)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.data.error)
           loader.hide()

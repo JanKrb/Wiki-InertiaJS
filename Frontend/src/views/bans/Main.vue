@@ -158,7 +158,6 @@ export default defineComponent({
           this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
-          console.log(error.response)
           loader.hide()
         })
     },
