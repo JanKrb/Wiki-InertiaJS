@@ -105,7 +105,7 @@
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
                   <div class="w-6 h-6 image-fit mr-3">
-                    <img class="rounded" alt="" :src="this.post?.user?.profile_picture"/>
+                    <img class="rounded" alt="" :src="this.post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"/>
                   </div>
                   <div class="truncate">{{ this.post?.user?.name }}</div>
                   <UserIcon class="w-4 h-4 ml-auto"/>

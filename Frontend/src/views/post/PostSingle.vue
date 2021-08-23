@@ -50,7 +50,7 @@
                   >
                     <img
                       alt=""
-                      :src="history?.user?.profile_picture"
+                      :src="history?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@
               <img
                 alt=""
                 class="rounded-md"
-                :src="this.post?.thumbnail ? this.post?.thumbnail : require('@/assets/images/placeholder.png')"
+                :src="this.post?.thumbnail ?? require('@/assets/images/placeholder.png')"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@
                   alt=""
                   class="rounded-full border border-white zoom-in"
                   :style="index !== 0 ? 'margin-left: -' + index + 'rem;' : ''"
-                  :src="item.user?.profile_picture"
+                  :src="item.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                   :content="item.user?.name"
                 />
               </div>
@@ -174,7 +174,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.post?.user?.profile_picture"
+                  :src="this.post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 mr-auto">
@@ -249,7 +249,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="comment?.user?.profile_picture"
+                  :src="comment?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 flex-1">

@@ -6,7 +6,7 @@
           <img
             alt=""
             class="rounded-full"
-            :src="this.user.profile_picture ?? require('@/assets/images/placeholder.png')"
+            :src="this.user.profile_picture ?? require('@/assets/images/avatar.png')"
           />
         </div>
         <div class="ml-4 mr-auto">

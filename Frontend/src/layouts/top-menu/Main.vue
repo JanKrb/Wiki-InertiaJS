@@ -90,7 +90,7 @@
                   <img
                     alt=""
                     class="rounded-full"
-                    :src="notification.user.profile_picture"
+                    :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                   />
                   <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                 </div>
@@ -124,7 +124,7 @@
           >
             <img
               alt=""
-              :src="user.profile_picture ?? require('@/assets/images/placeholder.png')"
+              :src="user.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="dropdown-menu w-56">

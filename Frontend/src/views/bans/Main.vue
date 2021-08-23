@@ -30,7 +30,7 @@
             <img
               alt=""
               class="rounded-full"
-              :src="ban.target.profile_picture"
+              :src="ban.target.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="ml-3 mr-auto">
