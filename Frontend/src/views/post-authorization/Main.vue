@@ -80,7 +80,6 @@
                 </div>
               </div>
             </div>
-            <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post?.content?.substring(0,200)"></div>{{ post.content?.length > 200 ? '...' : '' }}
           </div>
         </div>
       </div>
@@ -181,6 +180,7 @@ export default defineComponent({
       axios.put('posts/' + post.id, {
         title: post.title,
         content: post.content,
+        category_id: post.parent.id,
         thumbnail: post.thumbnail,
         approve: true
       })
@@ -189,7 +189,8 @@ export default defineComponent({
           this.fetchPosts()
         })
         .catch(error => {
-          console.error(error)
+          console.error(error.response)
+          toast.error(error.response.data.message)
         })
     },
     formatDate(timeString) {
@@ -206,6 +207,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
+          toast.error(error.response.data.message)
         })
     }
   }
