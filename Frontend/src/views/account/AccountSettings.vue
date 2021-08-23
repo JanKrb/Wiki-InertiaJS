@@ -9,7 +9,7 @@
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Roles & Tags -->
-        <form @submit.prevent="submitCredentials(this.user)">
+        <form @submit.prevent="submitCredentials()">
           <div class="intro-y box lg:mt-5">
             <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
               <h2 class="font-medium text-base mr-auto">Roles & Badges</h2>
@@ -25,7 +25,7 @@
                           Role
                         </label>
                         <TailSelect
-                          v-model="user_role"
+                          v-model="user.role.id"
                           :class="'form-control' + (this.validation_error?.role_id != null ? ' border-theme-6' : '')"
                           :options="{
                             search: true,
@@ -150,7 +150,6 @@ export default defineComponent({
   },
   data() {
     return {
-      user_role: '',
       validation_error: {},
       new_badges: [],
       user_badges: [],
@@ -173,9 +172,9 @@ export default defineComponent({
     this.fetchBadges()
   },
   methods: {
-    submitCredentials(user) {
+    submitCredentials() {
       // update User Role
-      this.updateUser(user)
+      this.updateUser()
 
       // Filter Badges
       const deleteBadges = []
@@ -239,18 +238,19 @@ export default defineComponent({
           loader.hide()
         })
     },
-    updateUser(user) {
+    updateUser() {
       const loader = this.$loading.show()
       axios.put('users/' + this.$route.params.id, {
-        name: user.name,
-        pre_name: user.pre_name,
-        last_name: user.last_name,
-        email: user.email,
-        role_id: this.user_role
+        name: this.user.name,
+        pre_name: this.user.pre_name,
+        last_name: this.user.last_name,
+        email: this.user.email,
+        role_id: this.user.role.id
       })
         .then(response => {
           toast.success('Role successfully updated')
           loader.hide()
+          console.error(response)
           this.fetchUserBadges(this.$route.params.id)
         })
         .catch(error => {
