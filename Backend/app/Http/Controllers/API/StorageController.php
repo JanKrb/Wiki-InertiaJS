@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class StorageController extends Controller
 {
-    private $imageValidator = 'required|image|mimes:jpeg,png,jpg,gif,svg,ico|max:2048';
+    private $imageValidator = 'required|image|mimes:jpeg,png,jpg,gif,svg,ico|max:5120';
 
     public function upload(Request $request) {
         $validator = Validator::make($request->all(), [
