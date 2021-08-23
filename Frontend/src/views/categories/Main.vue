@@ -92,7 +92,7 @@
             <img
               :alt="'Thumbnail of ' + post?.title"
               class="rounded-t-md"
-              :src="post?.thumbnail ? post?.thumbnail : require('@/assets/images/placeholder.png')"
+              :src="post?.thumbnail ?? require('@/assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
@@ -229,7 +229,7 @@
                 <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
               </div>
             </div>
-            <div class="intro-x flex items-center h-10">
+            <div class="intro-x flex items-center h-10 mb-3 xxl:mb-8" v-if="this.announcements.length > 0 || this.loading.announcements">
               <h2 class="text-lg font-medium truncate mr-auto">
                 Announcements
               </h2>
@@ -292,7 +292,7 @@
           <!-- END: Announcements -->
 
           <!-- BEGIN: Author Tools -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mb-3 xxl:mb-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Author Tools</h2>
             </div>
@@ -312,7 +312,7 @@
           <!-- END: Author Tools -->
 
           <!-- BEGIN: Recent Postings -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8">
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12" v-if="this.recent.length > 0">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
