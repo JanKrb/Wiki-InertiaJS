@@ -142,7 +142,6 @@
             <label class="form-label">Edit tags</label>
             <TailSelect
               v-model="this.selected_tags"
-              @input="console.error('select')"
               multiple
               :options="
               {
@@ -156,7 +155,7 @@
                 classNames: 'w-full'
               }"
             >
-              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.find( post_tag => post_tag.id === tag.id )">{{ tag.name }}</option>
+              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.some(post_tag => post_tag.id === tag.id)">{{ tag.name }}</option>
             </TailSelect>
           </div>
           <!-- END: Post Tags -->
@@ -212,6 +211,7 @@ export default defineComponent({
       },
       tags: [],
       selected_tags: [],
+      post_tags: [],
       categories: [],
       validation_error: {}
     }
@@ -225,12 +225,7 @@ export default defineComponent({
     handleSubmit(e) {
       e.preventDefault()
       const loader = this.$loading.show()
-      for (const tag in this.post.tags) {
-        axios.post('posts/' + this.$route.params.id + '/tags/' + this.post.tags[tag].id + '/detach')
-      }
-      for (const tag in this.selected_tags) {
-        axios.post('posts/' + this.$route.params.id + '/tags/' + this.selected_tags[tag] + '/attach')
-      }
+
       axios.put('posts/' + this.$route.params.id, {
         title: this.post.title,
         content: this.post.content,
@@ -243,7 +238,6 @@ export default defineComponent({
           loader.hide()
         })
         .catch(error => {
-          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
@@ -289,7 +283,6 @@ export default defineComponent({
       axios.get('tags?paginate=0')
         .then(response => {
           this.tags = response.data
-          for (const tag in response.data) { this.selected_tags.push(response.data[tag].id) }
         })
         .catch(error => {
           console.error(error)
@@ -299,10 +292,30 @@ export default defineComponent({
       axios.get('posts/' + this.$route.params.id)
         .then(response => {
           this.post = response.data.data
+          for (const tag in response.data.data.tags) {
+            this.post_tags.push(response.data.data.tags[tag].id.toString())
+            this.selected_tags.push(response.data.data.tags[tag].id.toString())
+          } // Fetch all Post tags to ID List
         })
         .catch(error => {
           console.error(error)
         })
+    }
+  },
+  watch: {
+    selected_tags: function (val) {
+      const addTags = this.selected_tags.filter(x => !this.post_tags.includes(x))
+      for (const tag in addTags) {
+        axios.post('posts/' + this.$route.params.id + '/tags/' + addTags[tag] + '/attach')
+      }
+
+      for (const tag in this.post_tags) {
+        if (!this.selected_tags.includes(this.post_tags[tag])) {
+          axios.post('posts/' + this.$route.params.id + '/tags/' + this.post_tags[tag] + '/detach')
+        }
+      }
+
+      this.post_tags = this.selected_tags
     }
   },
   setup() {
