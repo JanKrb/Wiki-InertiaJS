@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
-    <div class="col-span-12 xxl:col-span-10">
+    <div :class="this.permissions?.categories_store || this.permissions?.posts_store || this.announcements.length > 0 || !this.loading.announcements || this.recent.length > 0 || !this.loading.recent ? 'col-span-12 xxl:col-span-10' : 'col-span-12'">
       <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-6 gap-8 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
@@ -219,8 +219,8 @@
       </div>
       <!-- END: No Content Placeholder -->
     </div>
-    <div class="col-span-12 xxl:col-span-2">
-      <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
+    <div class="col-span-12 xxl:col-span-2" v-if="this.permissions?.categories_store || this.permissions?.posts_store || this.announcements.length > 0 || !this.loading.announcements || this.recent.length > 0 || !this.loading.recent">
+      <div class="-mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
           <!-- BEGIN: Announcements -->
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
@@ -250,7 +250,7 @@
                 <ChevronRightIcon class="w-4 h-4"/>
               </button>
             </div>
-            <div class="mt-2 intro-x">
+            <div class="intro-x">
               <div class="box zoom-in">
                 <TinySlider ref-key="announcementsRef" v-if='this.loading.announcements'>
                   <div
@@ -312,7 +312,7 @@
           <!-- END: Author Tools -->
 
           <!-- BEGIN: Recent Postings -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12" v-if="this.recent.length > 0">
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12" v-if="this.recent.length > 0 || !this.loading.recent">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
@@ -438,6 +438,7 @@ export default defineComponent({
         .then((response) => {
           this.recent = response.data
           this.loading.recent = true
+          this.recent = []
         })
         .catch((error) => {
           console.error(error)
