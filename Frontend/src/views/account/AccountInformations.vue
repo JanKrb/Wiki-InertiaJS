@@ -157,12 +157,8 @@
                   </div>
                 </div>
                 <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
-                  <div
-                    class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5"
-                  >
-                    <div
-                      class="h-40 relative image-fit cursor-pointer zoom-in mx-auto"
-                    >
+                  <div class="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
+                    <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
                       <img
                         class="rounded-md"
                         alt=""
@@ -172,15 +168,13 @@
                         tag="div"
                         content="Remove this profile photo?"
                         class="w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2"
+                        @click="this.user.profile_picture = null"
                       >
                         <xIcon class="w-4 h-4" />
                       </Tippy>
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
-                      <button
-                        type="button"
-                        class="btn btn-primary w-full"
-                      >
+                      <button type="button" class="btn btn-primary w-full">
                         Change Photo
                       </button>
                       <input
@@ -250,6 +244,7 @@ export default defineComponent({
           this.fetchUser(this.$route.params.id)
         })
         .catch(error => {
+          console.error(error)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
@@ -263,7 +258,7 @@ export default defineComponent({
           toast.success('Account successfully deleted')
           this.$router.push({ name: 'admin.accounts' })
         })
-        .error(error => {
+        .catch(error => {
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
@@ -272,8 +267,8 @@ export default defineComponent({
     changePicture(event) {
       if (event.target.files.length <= 0) return
       const files = event.target.files
-      const data = new FormData()
 
+      const data = new FormData()
       data.append('image', files[0])
 
       const loader = this.$loading.show()
@@ -300,15 +295,15 @@ export default defineComponent({
               loader.hide()
             })
             .catch(error => {
-              console.log(error.response)
+              console.error(error.response)
               this.validation_error = error.response.data.data.errors
               toast.error(error.response.data.message)
               loader.hide()
             })
         })
-        .catch((err) => {
-          console.error(err)
-          toast.error(err.response.data.message)
+        .catch((error) => {
+          console.error(error)
+          toast.error(error.response.data.message)
           loader.hide()
         })
     }
