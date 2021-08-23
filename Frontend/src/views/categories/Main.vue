@@ -461,7 +461,8 @@ export default defineComponent({
           this.loading.content = true
         })
         .catch(error => {
-          console.error(error)
+          toast.error(error.response.data.message)
+          this.$router.push({ name: 'categories' })
         })
     },
     loadMainCategories() {
