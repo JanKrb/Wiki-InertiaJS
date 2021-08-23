@@ -10,9 +10,7 @@
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Display Information -->
         <div class="intro-y box lg:mt-5">
-          <div
-            class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5"
-          >
+          <div class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
             <h2 class="font-medium text-base mr-auto">Display Information</h2>
           </div>
           <div class="p-5">
@@ -110,6 +108,14 @@
                         alt=""
                         :src="this.user.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
+                      <Tippy
+                        tag="div"
+                        content="Remove this profile photo?"
+                        class="w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2"
+                        @click="this.user.profile_picture = null"
+                      >
+                        <xIcon class="w-4 h-4" />
+                      </Tippy>
                     </div>
                     <div class="mx-auto cursor-pointer relative mt-5">
                       <button type="button" class="btn btn-primary w-full">
@@ -117,7 +123,7 @@
                       </button>
                       <input
                         type="file"
-                        class="w-full h-full top-0 left-0 absolute opacity-0"
+                        class="w-full h-full top-0 left-0 absolute opacity-0 cursor-pointer"
                         @change="changePicture"
                       />
                     </div>
@@ -149,7 +155,6 @@ export default defineComponent({
   data() {
     return {
       user: {},
-      profile_picture: null,
       validation_error: {},
       darkmode: localStorage.getItem('darkmode') != null ? localStorage.getItem('darkmode') : false
     }
@@ -174,7 +179,8 @@ export default defineComponent({
         name: this.user.name,
         pre_name: this.user.pre_name,
         last_name: this.user.last_name,
-        email: this.user.email
+        email: this.user.email,
+        profile_picture: this.user.profile_picture
       })
         .then(response => {
           toast.success('Profile successfully updated')
