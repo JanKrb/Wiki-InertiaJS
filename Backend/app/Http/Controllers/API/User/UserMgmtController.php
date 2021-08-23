@@ -58,6 +58,7 @@ class UserMgmtController extends BaseController
 
         $request->request->remove('verify_mail');
         $account->update($request->all());
+        $account->save();
 
         $account->sendActivity('Account details has been changed', 'The profile details has been changed through an admin');
 
