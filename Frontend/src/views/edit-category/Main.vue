@@ -225,7 +225,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.category('storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {
