@@ -90,7 +90,9 @@
                 <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
                   {{ this.post?.parent?.title }}
                 </router-link>
-                <span class="mx-1">•</span> {{ Math.round(this.post?.content.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+                <div v-if="(Math.round(this.post?.content?.split(' ').length)) > 0">
+                  <span class="mx-1">•</span> {{ Math.round(this.post?.content?.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+                </div>
               </div>
             </div>
             <div class="dropdown ml-3">
