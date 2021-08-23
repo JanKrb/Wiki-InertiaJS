@@ -229,7 +229,7 @@
                 <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
               </div>
             </div>
-            <div class="intro-x flex items-center h-10 mb-3 xxl:mb-8" v-if="this.announcements.length > 0 || this.loading.announcements">
+            <div class="intro-x flex items-center h-10 mb-3 xxl:mb-8" v-if="this.announcements.length > 0 || !this.loading.announcements">
               <h2 class="text-lg font-medium truncate mr-auto">
                 Announcements
               </h2>
