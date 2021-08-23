@@ -33,7 +33,8 @@ class User extends Authenticatable
         'email',
         'password',
         'email_verification_code',
-        'subscribed_newsletter'
+        'subscribed_newsletter',
+        'role_id'
     ];
 
     /**
