@@ -438,7 +438,6 @@ export default defineComponent({
         .then((response) => {
           this.recent = response.data
           this.loading.recent = true
-          this.recent = []
         })
         .catch((error) => {
           console.error(error)
