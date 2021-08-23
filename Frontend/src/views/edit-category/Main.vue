@@ -59,7 +59,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.category.thumbnail ? this.category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.category.thumbnail ?? require('@/assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -92,7 +92,7 @@
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
                   <div class="w-6 h-6 image-fit mr-3">
-                    <img class="rounded" alt="" :src="this.user?.profile_picture"/>
+                    <img class="rounded" alt="" :src="this.user?.profile_picture ?? require('@/assets/images/avatar.png')"/>
                   </div>
                   <div class="truncate">{{ this.user?.name }}</div>
                   <UserIcon class="w-4 h-4 ml-auto"/>
@@ -225,7 +225,7 @@ export default defineComponent({
 
       const loader = this.$loading.show()
 
-      axios.category('storage/uploadImage',
+      axios.post('storage/uploadImage',
         data,
         {
           headers: {

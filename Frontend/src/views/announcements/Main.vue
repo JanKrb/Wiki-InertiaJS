@@ -136,7 +136,7 @@
             <img
               alt=""
               class="rounded-full"
-              :src="announce.user.profile_picture"
+              :src="announce.user.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="ml-3 mr-auto">

@@ -85,7 +85,7 @@
                             <img
                               alt=""
                               class="rounded-full"
-                              :src="notification.user.profile_picture"
+                              :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                             />
                             <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                           </div>
@@ -108,7 +108,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="user?.profile_picture"
+                        :src="user?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                       <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
@@ -157,7 +157,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="user?.profile_picture"
+                        :src="user?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                       <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
@@ -212,7 +212,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="notification.target_id?.profile_picture"
+                        :src="notification.target_id?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                     </div>
                     <div class="ml-2 overflow-hidden">
@@ -266,7 +266,7 @@
                           <img
                             alt=""
                             class="rounded-full"
-                            :src="this.single_notification.user?.profile_picture"
+                            :src="this.single_notification.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                           />
                         </div>
                         <div class="ml-5">
@@ -459,7 +459,7 @@
                           <img
                             alt=""
                             class="rounded-full"
-                            :src="this.create_notification.user?.profile_picture"
+                            :src="this.create_notification.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                           />
                         </div>
                         <div class="ml-5">
@@ -638,7 +638,7 @@
                             <img
                               alt=""
                               class="rounded-full"
-                              :src="this.history_notification_user?.profile_picture"
+                              :src="this.history_notification_user?.profile_picture ?? require('@/assets/images/avatar.png')"
                             />
                           </div>
                           <div class="ml-5">
@@ -682,7 +682,7 @@
                               <img
                                 alt=""
                                 class="rounded-full"
-                                :src="notification.user.profile_picture"
+                                :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                               />
                             </div>
                             <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0">

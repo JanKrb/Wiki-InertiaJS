@@ -13,7 +13,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.ban.target?.profile_picture"
+                  :src="this.ban.target?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-5">

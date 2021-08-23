@@ -31,7 +31,7 @@
             <img
               alt=""
               class="rounded-full"
-              :src="report.user.profile_picture"
+              :src="report.user.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="ml-3 mr-auto">

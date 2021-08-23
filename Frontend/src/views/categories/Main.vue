@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
-    <div class="col-span-12 xxl:col-span-10">
+    <div :class="this.permissions?.categories_store || this.permissions?.posts_store || this.announcements.length > 0 || !this.loading.announcements || this.recent.length > 0 || !this.loading.recent ? 'col-span-12 xxl:col-span-10' : 'col-span-12'">
       <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-6 gap-8 mt-6 -mb-6">
         <!-- BEGIN: Categories Layout -->
         <div
@@ -12,14 +12,14 @@
             <img
               :alt="'Thumbnail of ' + category?.title"
               class="rounded-t-md"
-              :src="category?.thumbnail ? category?.thumbnail : require('@/assets/images/placeholder.png')"
+              :src="category?.thumbnail ?? require('@/assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
                   :alt="'Thumbnail of ' + category?.title"
                   class="rounded-full"
-                  :src="category.user.profile_picture ? category.user.profile_picture : require('@/assets/images/placeholder.png')"
+                  :src="category.user.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
@@ -92,14 +92,14 @@
             <img
               :alt="'Thumbnail of ' + post?.title"
               class="rounded-t-md"
-              :src="post?.thumbnail ? post?.thumbnail : require('@/assets/images/placeholder.png')"
+              :src="post?.thumbnail ?? require('@/assets/images/placeholder.png')"
             />
             <div class="absolute w-full flex items-center px-5 pt-6 z-10">
               <div class="w-10 h-10 flex-none image-fit">
                 <img
                   :alt="'Profile Picture of ' + post?.user?.name"
                   class="rounded-full"
-                  :src="post?.user?.profile_picture"
+                  :src="post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 text-white mr-auto">
@@ -219,8 +219,8 @@
       </div>
       <!-- END: No Content Placeholder -->
     </div>
-    <div class="col-span-12 xxl:col-span-2">
-      <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
+    <div class="col-span-12 xxl:col-span-2" v-if="this.permissions?.categories_store || this.permissions?.posts_store || this.announcements.length > 0 || !this.loading.announcements || this.recent.length > 0 || !this.loading.recent">
+      <div class="-mb-10 pb-10">
         <div class="xxl:pl-6 grid grid-cols-12 gap-5">
           <!-- BEGIN: Announcements -->
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
@@ -229,7 +229,7 @@
                 <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
               </div>
             </div>
-            <div class="intro-x flex items-center h-10">
+            <div class="intro-x flex items-center h-10 mb-3 xxl:mb-8" v-if="this.announcements.length > 0 || !this.loading.announcements">
               <h2 class="text-lg font-medium truncate mr-auto">
                 Announcements
               </h2>
@@ -250,7 +250,7 @@
                 <ChevronRightIcon class="w-4 h-4"/>
               </button>
             </div>
-            <div class="mt-2 intro-x">
+            <div class="intro-x">
               <div class="box zoom-in">
                 <TinySlider ref-key="announcementsRef" v-if='this.loading.announcements'>
                   <div
@@ -292,7 +292,7 @@
           <!-- END: Announcements -->
 
           <!-- BEGIN: Author Tools -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mb-3 xxl:mb-8" v-if="this.permissions?.categories_store || this.permissions?.posts_store">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Author Tools</h2>
             </div>
@@ -312,7 +312,7 @@
           <!-- END: Author Tools -->
 
           <!-- BEGIN: Recent Postings -->
-          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8">
+          <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12" v-if="this.recent.length > 0 || !this.loading.recent">
             <div class="intro-x flex items-center h-10">
               <h2 class="text-lg font-medium truncate mr-5">Recent Posts</h2>
             </div>
@@ -327,7 +327,7 @@
                     <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                       <img
                         alt=""
-                        :src="activity.user.profile_picture ? activity.user.profile_picture : require('@/assets/images/placeholder.png')"
+                        :src="activity.user.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                     </div>
                     <div class="ml-4 mr-auto">
@@ -461,7 +461,8 @@ export default defineComponent({
           this.loading.content = true
         })
         .catch(error => {
-          console.error(error)
+          toast.error(error.response.data.message)
+          this.$router.push({ name: 'categories' })
         })
     },
     loadMainCategories() {

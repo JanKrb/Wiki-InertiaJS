@@ -90,7 +90,7 @@
                   <img
                     alt=""
                     class="rounded-full"
-                    :src="notification.user.profile_picture"
+                    :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                   />
                   <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                 </div>
@@ -124,7 +124,7 @@
           >
             <img
               alt=""
-              :src="user.profile_picture ?? require('@/assets/images/placeholder.png')"
+              :src="user.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="dropdown-menu w-56">
@@ -139,18 +139,18 @@
               </div>
               <div class="p-2">
                 <router-link :to="{ name: 'profile.informations' }">
-                  <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
+                  <a href="#" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <UserIcon class="w-4 h-4 mr-2" /> Profile
                   </a>
                 </router-link>
                 <router-link :to="{ name: 'profile.security' }">
-                  <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
+                  <a href="#" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                     <LockIcon class="w-4 h-4 mr-2" /> Change Password
                   </a>
                 </router-link>
               </div>
               <div class="p-2 border-t border-theme-27 dark:border-dark-3">
-                <a v-on:click="logout" href="#" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
+                <a v-on:click="logout" href="#" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                   <LogOutIcon class="w-4 h-4 mr-2"/>Logout
                 </a>
               </div>
