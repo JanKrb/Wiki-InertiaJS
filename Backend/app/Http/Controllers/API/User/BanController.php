@@ -20,7 +20,7 @@ class BanController extends BaseController
         'target_id' => 'required|integer',
         'reason' => 'required|max:255',
         'description' => 'required',
-        'ban_until' => 'required|date_format:Y-m-d H:i:s',
+        'ban_until' => 'nullable|date_format:Y-m-d H:i:s',
         'type' => 'integer|nullable'
     ];
 
