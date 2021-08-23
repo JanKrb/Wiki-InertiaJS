@@ -79,7 +79,7 @@
     <!-- END: Post History Slide -->
     <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
       <div class="col-span-12 lg:col-span-8 intro-y">
-        <div class="box news p-5">
+        <div class="box p-5">
           <div class="flex items-center px-5 py-4">
             <div class="mr-auto">
               <h2 class="intro-y font-medium text-xl sm:text-2xl ml-auto ml-3">
@@ -184,9 +184,7 @@
                 <div class="text-gray-600">{{ this.post?.user?.email }}</div>
               </div>
             </div>
-            <div
-              class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0"
-            >
+            <div class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0">
               <div class="hidden xl:block">Rate this Post:</div>
               <Tippy
                 tag="div"
@@ -209,12 +207,11 @@
           <!-- BEGIN: Post Tags -->
           <div v-if="this.post.tags.length > 0" class="flex">
             <button
-              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex"
-              :style="'color: ' + tag.color + ';'"
+              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex dark:bg-dark-1 text-gray-800 dark:text-gray-600"
               v-for="tag in this.post.tags"
               v-bind:key="tag.id"
             >
-              <component :is="tag.icon" class="mr-1 h-4 w-4"></component>{{ tag.name }}
+              <component :is="tag.icon" class="mr-1 h-4 w-4" :style="'color: ' + tag.color + ';'"></component>{{ tag.name }}
             </button>
           </div>
           <!-- END: Post Tags -->
@@ -244,7 +241,7 @@
             </form>
           </div>
           <div class="pb-3" v-for="comment in this.comments" v-bind:key="comment.id">
-            <div class="flex box p-3 bg-gray-200">
+            <div class="flex box p-3 bg-gray-200 dark:bg-dark-1">
               <div class="w-10 h-10 sm:w-12 sm:h-12 flex-none image-fit">
                 <img
                   alt=""
