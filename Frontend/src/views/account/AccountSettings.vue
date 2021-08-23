@@ -240,6 +240,7 @@ export default defineComponent({
     },
     updateUser() {
       const loader = this.$loading.show()
+
       axios.put('users/' + this.$route.params.id, {
         name: this.user.name,
         pre_name: this.user.pre_name,
