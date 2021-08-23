@@ -59,7 +59,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.category.thumbnail ? this.category.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.category.thumbnail ?? require('@/assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
