@@ -339,6 +339,7 @@ export default defineComponent({
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     if (this.user) this.loggedIn = true
+    console.error(this.user)
     if (this.loggedIn) {
       if (this.$route.name === 'TopMenu') {
         this.$router.push({ name: 'categories' })
