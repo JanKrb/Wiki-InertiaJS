@@ -164,7 +164,8 @@ export default defineComponent({
       validation_error: null,
       has_parent: false,
       user: {},
-      categories: []
+      categories: [],
+      uploadFiles: null
     }
   },
   mounted() {
@@ -174,17 +175,19 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      let parentId = null
-      if (this.has_parent) {
-        parentId = this.category.parent_id
+      if (this.uploadFiles !== null) {
+        this.uploadPicture()
+      } else {
+        this.createPost()
       }
-
+    },
+    createPost() {
       const loader = this.$loading.show()
       axios.post('categories', {
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
-        ...(parentId ? { parent_id: parentId } : {})
+        parent_id: this.has_parent ? this.category.parent_id : null
       })
         .then(response => {
           toast.success('Category was created successfully!')
@@ -192,20 +195,24 @@ export default defineComponent({
           this.$router.push({ name: 'categories' })
         })
         .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
+          this.validation_error = error.response?.data?.data?.errors
+          toast.error(error.response?.data?.message)
           loader.hide()
         })
     },
     changePicture(event) {
       if (event.target.files.length <= 0) return
-      const files = event.target.files
+      this.uploadFiles = event.target.files
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.category.thumbnail = e.target.result
+      }
+      reader.readAsDataURL(this.uploadFiles[0])
+    },
+    uploadPicture() {
       const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
+      data.append('image', this.uploadFiles[0])
       axios.post('storage/uploadImage',
         data,
         {
@@ -216,11 +223,11 @@ export default defineComponent({
         .then((res) => {
           this.category.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
-          loader.hide()
+          this.createPost()
         })
         .catch((err) => {
+          console.error(err)
           toast.error(err.response.data.message)
-          loader.hide()
         })
     },
     fetchCategories() {
