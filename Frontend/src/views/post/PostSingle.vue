@@ -337,18 +337,26 @@ export default defineComponent({
         })
     },
     loadPost(id) {
+      const loader = this.$loading.show()
       axios.get('posts/' + id)
         .then(response => {
-          this.post = response.data.data
-          this.loadComments('posts/' + id + '/comments?per_page=5')
-          this.testPagePermissions()
-          this.loadBookmarks(id)
-          this.loadHistory()
+          if (response.data.data.approved_at && response.data.data.approved_by) {
+            this.post = response.data.data
+            loader.hide()
+            this.loadComments('posts/' + id + '/comments?per_page=5')
+            this.testPagePermissions()
+            this.loadBookmarks(id)
+            this.loadHistory()
+          } else {
+            loader.hide()
+            this.$router.push({ name: 'categories' })
+            toast.error('This Post is not approved at the moment!')
+          }
         })
         .catch(error => {
-          console.error(error)
           toast.error(error.response.data.message)
           this.$router.push({ name: 'categories' })
+          loader.hide()
         })
     },
     loadComments(url) {

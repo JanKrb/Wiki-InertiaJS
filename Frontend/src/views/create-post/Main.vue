@@ -141,8 +141,7 @@
                 multiShowCount: false,
                 multiContainer: true,
                 classNames: 'w-full'
-              }"
-              >
+              }">
                 <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id">{{ tag.name }}</option>
               </TailSelect>
             </div>
