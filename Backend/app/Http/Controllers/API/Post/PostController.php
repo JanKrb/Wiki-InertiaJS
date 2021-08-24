@@ -25,7 +25,7 @@ class PostController extends BaseController
         'title' => 'required|max:255',
         'content' => '',
         'thumbnail' => 'nullable|string|max:255',
-        'category_id' => 'required'
+        'category_id' => 'required|exists:categories,id',
     ];
 
     /**
