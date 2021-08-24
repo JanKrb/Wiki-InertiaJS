@@ -227,16 +227,28 @@
             <div class="text-base sm:text-lg font-medium">
               Comments
             </div>
+            <!-- BEGIN: Comment Tooltip -->
+            <div class="justify-end" v-if="!this.user.email_verified_at">
+              <TippyContent to="custom-tooltip-content">
+                <div class="items-center">
+                  <div class="text-theme-6">
+                    Your Email needs to be verified to write comments
+                  </div>
+                </div>
+              </TippyContent>
+            </div>
+            <!-- END: Comment Tooltip -->
             <form @submit.prevent="writeComment()">
               <div class="news__input relative mt-5">
                 <MessageCircleIcon class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"/>
                 <input
                   type="text"
                   class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
+                  :disabled="!this.user.email_verified_at"
                   placeholder="Post a comment..."
                   v-model='new_comment'
                 >
-                <Button type="submit">
+                <Button type="submit" :name="!this.user.email_verified_at ? 'custom-tooltip-content' : ''" :class="!this.user.email_verified_at ? 'tooltip' : ''">
                   <SendIcon class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"/>
                 </Button>
               </div>
@@ -315,10 +327,12 @@ export default defineComponent({
       report: {
         content: ''
       },
+      user: {},
       histories: []
     }
   },
   mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
     this.loadPost(this.$route.params.id)
   },
   methods: {
@@ -446,16 +460,18 @@ export default defineComponent({
       }
     },
     writeComment() {
-      axios.post('posts/' + this.$route.params.id + '/comments', {
-        content: this.new_comment
-      })
-        .then(response => {
-          this.post.comments.push(response.data.data)
-          toast.success('Comment has successfully been posted.')
+      if (this.user.email_verified_at && this.new_comment.length > 0) {
+        axios.post('posts/' + this.$route.params.id + '/comments', {
+          content: this.new_comment
         })
-        .catch(error => {
-          console.error(error)
-        })
+          .then(response => {
+            this.post.comments.push(response.data.data)
+            toast.success('Comment has successfully been posted.')
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      }
     },
     sendReport(content) {
       axios.post('posts/' + this.$route.params.id + '/reports', {
