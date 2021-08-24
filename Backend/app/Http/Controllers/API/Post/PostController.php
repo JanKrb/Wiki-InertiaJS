@@ -12,6 +12,7 @@ use App\Http\Resources\Post as PostResource;
 use App\Models\PostHistory;
 use App\Http\Resources\PostHistoryCollection;
 use App\Http\Resources\PostHistory as PostHistoryResource;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,6 +27,8 @@ class PostController extends BaseController
         'content' => '',
         'thumbnail' => 'nullable|string|max:255',
         'category_id' => 'required|exists:categories,id',
+        'tags' => 'array',
+        'tags.*' => 'integer|exists:tags,id'
     ];
 
     /**
@@ -60,6 +63,11 @@ class PostController extends BaseController
 
         $data = array_merge($request->all(), $this->additionalCreateData);
         $created_object = $this->model::create($data);
+
+        $tags = Tag::findMany($request->tags);
+        foreach ($tags as $tag) {
+            $created_object->tags()->save($tag);
+        }
 
         if (is_null($created_object)) {
             return $this->sendError('Unknown error while creating the model', [], 500);
