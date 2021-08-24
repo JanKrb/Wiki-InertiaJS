@@ -59,9 +59,11 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.$router.push({ name: 'categories.subcategory', params: { id: category.id } })">
-                {{ category.title }}
-              </a>
+              <router-link :to="{ name: 'categories.subcategory', params: { id: category.id } }">
+                <a class="block font-medium text-xl mt-3">
+                  {{ category.title }}
+                </a>
+              </router-link>
             </div>
           </div>
           <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
@@ -136,9 +138,11 @@
               </div>
             </div>
             <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
-              <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.$router.push({ name: 'posts.view', params: { id: post.id } })">
-                {{ post?.title }}
-              </a>
+              <router-link :to="{ name: 'posts.view', params: { id: post.id } }">
+                <a class="block font-medium text-xl mt-3">
+                  {{ post?.title }}
+                </a>
+              </router-link>
             </div>
           </div>
           <div class="w-100 px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
@@ -226,7 +230,9 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
             <div class="flex items-center h-10 mb-4" v-if="this.$route.name === 'categories.subcategory'">
               <div class="mt-5 intro-x float-left mr-auto">
-                <button class="btn btn-primary shadow-md mr-2" @click="this.$router.push({ name: 'categories' })"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
+                <router-link :to="{ name: 'categories' }">
+                  <button class="btn btn-primary shadow-md mr-2"><HomeIcon class="mr-2 h-5 w-5"/>Dashboard</button>
+                </router-link>
               </div>
             </div>
             <div class="intro-x flex items-center h-10 mb-3 xxl:mb-8" v-if="this.announcements.length > 0 || !this.loading.announcements">
