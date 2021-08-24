@@ -126,6 +126,26 @@
                 </TailSelect>
               </div>
             </div>
+            <div class="mt-4">
+              <label class="form-label">Post tags</label>
+              <TailSelect
+                v-model="this.post.selected_tags"
+                multiple
+                :options="
+              {
+                search: true,
+                descriptions: true,
+                hideSelected: false,
+                hideDisabled: false,
+                multiLimit: 15,
+                multiShowCount: false,
+                multiContainer: true,
+                classNames: 'w-full'
+              }"
+              >
+                <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id">{{ tag.name }}</option>
+              </TailSelect>
+            </div>
             <div v-show="this.validation_error !== null">
               <hr class="my-5">
               <h2 class="text-lg font-medium mr-auto">The following errors have occurred</h2>
@@ -185,16 +205,19 @@ export default defineComponent({
       post: {
         title: '',
         content: '',
-        category_id: null
+        category_id: null,
+        selected_tags: []
       },
       validation_error: null,
       user: {},
-      categories: []
+      categories: [],
+      tags: []
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     this.fetchCategories()
+    this.fetchTags()
   },
   methods: {
     handleSubmit(e) {
@@ -204,7 +227,8 @@ export default defineComponent({
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        category_id: this.post.category_id ?? this.categories[0].id
+        category_id: this.post.category_id ?? this.categories[0].id,
+        tags: this.post.selected_tags
       })
         .then(response => {
           toast.success('Post was created successfully!')
@@ -250,6 +274,15 @@ export default defineComponent({
       axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchTags() {
+      axios.get('tags?paginate=0')
+        .then(response => {
+          this.tags = response.data
         })
         .catch(error => {
           console.error(error)
