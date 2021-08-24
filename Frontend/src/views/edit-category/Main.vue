@@ -183,7 +183,8 @@ export default defineComponent({
       prev_parent: null,
       user: {},
       categories: [],
-      validation_error: {}
+      validation_error: {},
+      uploadFiles: null
     }
   },
   mounted() {
@@ -194,16 +195,19 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      let parentId = null
-      if (this.has_parent) {
-        parentId = this.category.parent_id
+      if (this.uploadFiles !== null) {
+        this.uploadPicture()
+      } else {
+        this.updateCategory()
       }
+    },
+    updateCategory() {
       const loader = this.$loading.show()
       axios.put('categories/' + this.$route.params.id, {
         title: this.category.title,
         description: this.category.description,
         thumbnail: this.category.thumbnail,
-        parent_id: parentId
+        parent_id: this.has_parent ? this.category.parent_id : null
       })
         .then(response => {
           toast.success('Category was updated successfully!')
@@ -218,13 +222,17 @@ export default defineComponent({
     },
     changePicture(event) {
       if (event.target.files.length <= 0) return
-      const files = event.target.files
+      this.uploadFiles = event.target.files
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.category.thumbnail = e.target.result
+      }
+      reader.readAsDataURL(this.uploadFiles[0])
+    },
+    uploadPicture() {
       const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
+      data.append('image', this.uploadFiles[0])
       axios.post('storage/uploadImage',
         data,
         {
@@ -235,12 +243,11 @@ export default defineComponent({
         .then((res) => {
           this.category.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
-          loader.hide()
+          this.updateCategory()
         })
         .catch((err) => {
           console.error(err)
           toast.error(err.response.data.message)
-          loader.hide()
         })
     },
     fetchCategories() {
