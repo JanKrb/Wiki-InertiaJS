@@ -126,6 +126,25 @@
                 </TailSelect>
               </div>
             </div>
+            <div class="mt-4">
+              <label class="form-label">Post tags</label>
+              <TailSelect
+                v-model="this.post.selected_tags"
+                multiple
+                :options="
+              {
+                search: true,
+                descriptions: true,
+                hideSelected: false,
+                hideDisabled: false,
+                multiLimit: 15,
+                multiShowCount: false,
+                multiContainer: true,
+                classNames: 'w-full'
+              }">
+                <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id">{{ tag.name }}</option>
+              </TailSelect>
+            </div>
             <div v-show="this.validation_error !== null">
               <hr class="my-5">
               <h2 class="text-lg font-medium mr-auto">The following errors have occurred</h2>
@@ -185,26 +204,48 @@ export default defineComponent({
       post: {
         title: '',
         content: '',
-        category_id: null
+        category_id: null,
+        selected_tags: []
       },
       validation_error: null,
       user: {},
-      categories: []
+      categories: [],
+      tags: [],
+      uploadFiles: null
     }
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
     this.fetchCategories()
+    this.fetchTags()
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
+      if (this.uploadFiles !== null) {
+        this.uploadPicture()
+      } else {
+        this.createPost()
+      }
+    },
+    changePicture(event) {
+      if (event.target.files.length <= 0) return
+      this.uploadFiles = event.target.files
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.post.thumbnail = e.target.result
+      }
+      reader.readAsDataURL(this.uploadFiles[0])
+    },
+    createPost() {
       const loader = this.$loading.show()
       axios.post('posts', {
         title: this.post.title,
         content: this.post.content,
         thumbnail: this.post.thumbnail,
-        category_id: this.post.category_id ?? this.categories[0].id
+        category_id: this.post.category_id ?? this.categories[0].id,
+        tags: this.post.selected_tags
       })
         .then(response => {
           toast.success('Post was created successfully!')
@@ -219,15 +260,9 @@ export default defineComponent({
           loader.hide()
         })
     },
-    changePicture(event) {
-      if (event.target.files.length <= 0) return
-      const files = event.target.files
+    uploadPicture() {
       const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
+      data.append('image', this.uploadFiles[0])
       axios.post('storage/uploadImage',
         data,
         {
@@ -238,18 +273,26 @@ export default defineComponent({
         .then((res) => {
           this.post.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
-          loader.hide()
+          this.createPost()
         })
         .catch((err) => {
           console.error(err)
           toast.error(err.response.data.message)
-          loader.hide()
         })
     },
     fetchCategories() {
       axios.get('categories?paginate=0')
         .then(response => {
           this.categories = response.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    fetchTags() {
+      axios.get('tags?paginate=0')
+        .then(response => {
+          this.tags = response.data
         })
         .catch(error => {
           console.error(error)

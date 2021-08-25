@@ -213,7 +213,8 @@ export default defineComponent({
       selected_tags: [],
       post_tags: [],
       categories: [],
-      validation_error: {}
+      validation_error: {},
+      uploadFiles: null
     }
   },
   mounted() {
@@ -224,6 +225,13 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
+      if (this.uploadFiles !== null) {
+        this.uploadPicture()
+      } else {
+        this.updatePost()
+      }
+    },
+    updatePost() {
       const loader = this.$loading.show()
 
       axios.put('posts/' + this.$route.params.id, {
@@ -245,13 +253,17 @@ export default defineComponent({
     },
     changePicture(event) {
       if (event.target.files.length <= 0) return
-      const files = event.target.files
+      this.uploadFiles = event.target.files
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.post.thumbnail = e.target.result
+      }
+      reader.readAsDataURL(this.uploadFiles[0])
+    },
+    uploadPicture() {
       const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
+      data.append('image', this.uploadFiles[0])
       axios.post('storage/uploadImage',
         data,
         {
@@ -262,12 +274,11 @@ export default defineComponent({
         .then((res) => {
           this.post.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
-          loader.hide()
+          this.updatePost()
         })
         .catch((err) => {
           console.error(err)
           toast.error(err.response.data.message)
-          loader.hide()
         })
     },
     fetchCategories() {

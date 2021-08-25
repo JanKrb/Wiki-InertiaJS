@@ -186,7 +186,7 @@ export default defineComponent({
       })
         .then(response => {
           toast.success('Post successfully approved')
-          this.fetchPosts()
+          this.fetchPosts('posts/unauthorized')
         })
         .catch(error => {
           console.error(error.response)
