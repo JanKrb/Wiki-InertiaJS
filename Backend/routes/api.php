@@ -44,7 +44,7 @@ Route::get('/', function () {
 });
 
 // Auth System
-Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'auth', 'middleware' => 'api'], function() {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('password/recover', [AuthController::class, 'recover_password']);

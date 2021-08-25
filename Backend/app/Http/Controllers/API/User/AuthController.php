@@ -40,6 +40,23 @@ class AuthController extends Controller
         if (Auth::attempt($request->all())) {
             $user = Auth::user();
 
+            $active_bans = $user->bans()->where(['type' => 0])->get()->filter(function ($b) {
+                if ($b->is_active()) {
+                    return $b;
+                }
+            });
+
+            if (sizeof($active_bans) > 0) {
+                return $this->sendError(
+                    "User has global ban",
+                    [
+                        'banned' => true,
+                        'bans' => $active_bans
+                    ],
+                    403
+                );
+            }
+
             $now = now();
             $user->sendActivity('Successful login.', "$user->name [$user->id] logged in on $now", $user);
 
