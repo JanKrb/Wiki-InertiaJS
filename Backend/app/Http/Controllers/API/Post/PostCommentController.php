@@ -84,6 +84,10 @@ class PostCommentController extends Controller
             return $this->sendError('Validation Error.', ['errors' => $validator->errors()], 400);
         }
 
+        if (!auth()->user()->email_verified_at) {
+            return $this->sendError('Not permitted.', ['errors' => ['You need a verified email address to write a comment']], 403);
+        }
+
         $input['post_id'] = $post_id;
         $input['user_id'] = auth()->user()->id;
 

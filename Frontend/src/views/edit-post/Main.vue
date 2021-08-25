@@ -71,7 +71,7 @@
                           <img
                             class="rounded-md"
                             alt=""
-                            :src="this.post.thumbnail ? this.post.thumbnail : 'https://apsec.iafor.org/wp-content/uploads/sites/37/2017/02/IAFOR-Blank-Avatar-Image.jpg'"
+                            :src="this.post.thumbnail ?? require('@/assets/images/placeholder.png')"
                           />
                         </div>
                         <div class="mx-auto cursor-pointer relative mt-5">
@@ -105,7 +105,7 @@
               <div class="dropdown">
                 <div class="dropdown-toggle btn w-full btn-outline-secondary dark:bg-dark-2 dark:border-dark-2 flex items-center justify-start" role="button" aria-expanded="false">
                   <div class="w-6 h-6 image-fit mr-3">
-                    <img class="rounded" alt="" :src="this.post?.user?.profile_picture"/>
+                    <img class="rounded" alt="" :src="this.post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"/>
                   </div>
                   <div class="truncate">{{ this.post?.user?.name }}</div>
                   <UserIcon class="w-4 h-4 ml-auto"/>
@@ -142,7 +142,6 @@
             <label class="form-label">Edit tags</label>
             <TailSelect
               v-model="this.selected_tags"
-              @input="console.error('select')"
               multiple
               :options="
               {
@@ -156,7 +155,7 @@
                 classNames: 'w-full'
               }"
             >
-              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.find( post_tag => post_tag.id === tag.id )">{{ tag.name }}</option>
+              <option :value="tag.id" v-for="tag in this.tags" v-bind:key="tag.id" :selected="this.post.tags.some(post_tag => post_tag.id === tag.id)">{{ tag.name }}</option>
             </TailSelect>
           </div>
           <!-- END: Post Tags -->
@@ -212,8 +211,10 @@ export default defineComponent({
       },
       tags: [],
       selected_tags: [],
+      post_tags: [],
       categories: [],
-      validation_error: {}
+      validation_error: {},
+      uploadFiles: null
     }
   },
   mounted() {
@@ -224,13 +225,15 @@ export default defineComponent({
   methods: {
     handleSubmit(e) {
       e.preventDefault()
+      if (this.uploadFiles !== null) {
+        this.uploadPicture()
+      } else {
+        this.updatePost()
+      }
+    },
+    updatePost() {
       const loader = this.$loading.show()
-      for (const tag in this.post.tags) {
-        axios.post('posts/' + this.$route.params.id + '/tags/' + this.post.tags[tag].id + '/detach')
-      }
-      for (const tag in this.selected_tags) {
-        axios.post('posts/' + this.$route.params.id + '/tags/' + this.selected_tags[tag] + '/attach')
-      }
+
       axios.put('posts/' + this.$route.params.id, {
         title: this.post.title,
         content: this.post.content,
@@ -243,7 +246,6 @@ export default defineComponent({
           loader.hide()
         })
         .catch(error => {
-          console.log(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
@@ -251,13 +253,17 @@ export default defineComponent({
     },
     changePicture(event) {
       if (event.target.files.length <= 0) return
-      const files = event.target.files
+      this.uploadFiles = event.target.files
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.post.thumbnail = e.target.result
+      }
+      reader.readAsDataURL(this.uploadFiles[0])
+    },
+    uploadPicture() {
       const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
+      data.append('image', this.uploadFiles[0])
       axios.post('storage/uploadImage',
         data,
         {
@@ -268,12 +274,11 @@ export default defineComponent({
         .then((res) => {
           this.post.thumbnail = res.data.data.url
           toast.success('Thumbnail successfully uploaded')
-          loader.hide()
+          this.updatePost()
         })
         .catch((err) => {
           console.error(err)
           toast.error(err.response.data.message)
-          loader.hide()
         })
     },
     fetchCategories() {
@@ -289,7 +294,6 @@ export default defineComponent({
       axios.get('tags?paginate=0')
         .then(response => {
           this.tags = response.data
-          for (const tag in response.data) { this.selected_tags.push(response.data[tag].id) }
         })
         .catch(error => {
           console.error(error)
@@ -299,10 +303,30 @@ export default defineComponent({
       axios.get('posts/' + this.$route.params.id)
         .then(response => {
           this.post = response.data.data
+          for (const tag in response.data.data.tags) {
+            this.post_tags.push(response.data.data.tags[tag].id.toString())
+            this.selected_tags.push(response.data.data.tags[tag].id.toString())
+          } // Fetch all Post tags to ID List
         })
         .catch(error => {
           console.error(error)
         })
+    }
+  },
+  watch: {
+    selected_tags: function (val) {
+      const addTags = this.selected_tags.filter(x => !this.post_tags.includes(x))
+      for (const tag in addTags) {
+        axios.post('posts/' + this.$route.params.id + '/tags/' + addTags[tag] + '/attach')
+      }
+
+      for (const tag in this.post_tags) {
+        if (!this.selected_tags.includes(this.post_tags[tag])) {
+          axios.post('posts/' + this.$route.params.id + '/tags/' + this.post_tags[tag] + '/detach')
+        }
+      }
+
+      this.post_tags = this.selected_tags
     }
   },
   setup() {

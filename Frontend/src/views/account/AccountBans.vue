@@ -16,7 +16,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.user.profile_picture ? this.user.profile_picture : require('@/assets/images/placeholder.png')"
+                  :src="this.user.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-5">
@@ -306,7 +306,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="ban.staff?.profile_picture ? ban.staff?.profile_picture : require('@/assets/images/placeholder.png')"
+                        :src="ban.staff?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                     </div>
                     <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">

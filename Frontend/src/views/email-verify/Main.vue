@@ -7,31 +7,20 @@
         <div class="hidden xl:flex flex-col min-h-screen">
           <a href="" class="-intro-x flex items-center pt-5">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              alt=""
               class="w-6"
-              :src="require(`@/assets/images/logo.svg`)"
+              :src="wiki_settings?.logo"
             />
             <span class="text-white text-lg ml-3">
-              Ru<span class="font-medium">bick</span>
+              {{ wiki_settings.name }}
             </span>
           </a>
           <div class="my-auto">
             <img
-              alt="Icewall Tailwind HTML Admin Template"
+              alt=""
               class="-intro-x w-1/2 -mt-16"
-              :src="require(`@/assets/images/illustration.svg`)"
+              :src="require(`@/assets/images/verify-email-illustration.svg`)"
             />
-            <div
-              class="-intro-x text-white font-medium text-4xl leading-tight mt-10"
-            >
-              A few more clicks to <br />
-              sign in to your account.
-            </div>
-            <div
-              class="-intro-x mt-5 text-lg text-white text-opacity-70 dark:text-gray-500"
-            >
-              Manage all your e-commerce accounts in one place
-            </div>
           </div>
         </div>
         <!-- END: Login Info -->
@@ -40,13 +29,11 @@
           <div
             class="my-auto mx-auto xl:ml-20 bg-white dark:bg-dark-1 xl:bg-transparent px-5 sm:px-8 py-8 xl:p-0 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto"
           >
-            <h2
-              class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left"
-            >
+            <h2 class="intro-x font-bold text-2xl text-center xl:text-left">
               Please Wait...
             </h2>
-            <div class="intro-x mt-2 text-gray-500 xl:hidden text-center">
-              A few more click to reset your password.
+            <div class="intro-x mt-2 text-gray-500 text-center">
+              Your email will be verified
             </div>
           </div>
         </div>
@@ -67,6 +54,14 @@ export default defineComponent({
   components: {
     DarkModeSwitcher
   },
+  data() {
+    return {
+      wiki_settings: {
+        name: process.env.VUE_APP_NAME,
+        logo: process.env.VUE_APP_LOGO
+      }
+    }
+  },
   mounted() {
     cash('body')
       .removeClass('main')
@@ -86,7 +81,7 @@ export default defineComponent({
         this.$router.push({ name: 'login' })
       })
       .catch(error => {
-        console.log(error.response)
+        console.error(error.response)
         toast.error(error.response.data.message)
         this.$router.push({ name: 'login' })
       })

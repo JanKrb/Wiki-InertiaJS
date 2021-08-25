@@ -46,4 +46,8 @@ class Category extends Model
     public function posts() {
         return $this->hasMany(Post::class, 'category_id');
     }
+
+    public function is_bookmarked() {
+        return Bookmark::where('user_id', auth()->user()->id)->where('is_category', true)->where('category_id', $this->id)->exists();
+    }
 }

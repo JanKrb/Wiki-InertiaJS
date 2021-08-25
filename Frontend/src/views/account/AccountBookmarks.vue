@@ -17,8 +17,8 @@
               <div class="intro-y">
                 <div class="box px-4 py-4 flex items-center zoom-in">
                   <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
-                    <img alt="" :src="bookmark?.post?.thumbnail ? bookmark?.post?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_post">
-                    <img alt="" :src="bookmark?.category?.thumbnail ? bookmark?.category?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_category">
+                    <img alt="" :src="bookmark?.post?.thumbnail ?? require('@/assets/images/placeholder.png')" v-if="bookmark?.is_post">
+                    <img alt="" :src="bookmark?.category?.thumbnail ?? require('@/assets/images/placeholder.png')" v-if="bookmark?.is_category">
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">

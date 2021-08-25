@@ -9,7 +9,7 @@
       <!-- END: Sidebar -->
       <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
         <!-- BEGIN: Roles & Tags -->
-        <form @submit.prevent="submitCredentials(this.user)">
+        <form @submit.prevent="submitCredentials()">
           <div class="intro-y box lg:mt-5">
             <div class="flex items-center p-3 border-b border-gray-200 dark:border-dark-5">
               <h2 class="font-medium text-base mr-auto">Roles & Badges</h2>
@@ -25,7 +25,7 @@
                           Role
                         </label>
                         <TailSelect
-                          v-model="user_role"
+                          v-model="user.role.id"
                           :class="'form-control' + (this.validation_error?.role_id != null ? ' border-theme-6' : '')"
                           :options="{
                             search: true,
@@ -46,7 +46,7 @@
                         </label>
                         <TailSelect
                           :class="'form-control' + (this.validation_error?.badges != null ? ' border-theme-6' : '')"
-                          v-model="new_badges"
+                          v-model="selected_badges"
                           :options="{
                             search: true,
                             descriptions: true,
@@ -59,7 +59,7 @@
                           }"
                           multiple
                         >
-                          <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id" :selected="this.user_badges.map((item) => { return item.id }).includes(badge.id)">{{ badge.title }}</option>
+                          <option :value=badge.id v-for="badge in this.badges" v-bind:key="badge.id" :selected="this.old_account_badges.some(account_badge => account_badge.id === badge.id)">{{ badge.title }} - {{ badge.id }}</option>
                         </TailSelect>
                         <div v-if="this.validation_error?.badges != null" class="text-theme-6 mt-2 mb-4">
                           {{ this.validation_error?.badges[0] }}
@@ -150,10 +150,9 @@ export default defineComponent({
   },
   data() {
     return {
-      user_role: '',
       validation_error: {},
-      new_badges: [],
-      user_badges: [],
+      selected_badges: [],
+      account_badges: [],
       user: {
         role: {
           id: 0
@@ -173,85 +172,19 @@ export default defineComponent({
     this.fetchBadges()
   },
   methods: {
-    submitCredentials(user) {
-      // update User Role
-      this.updateUser(user)
-
-      // Filter Badges
-      const deleteBadges = []
-      const createBadges = []
-
-      for (const item in this.user_badges) {
-        const badge = this.user_badges[item]
-        if (!this.new_badges.map((item) => { return parseInt(item) }).includes(badge.id)) {
-          deleteBadges.push(badge.id)
-        }
-      }
-
-      const userBadgesId = this.user_badges.map((item) => { return item.id })
-
-      for (const item in this.new_badges) {
-        const badge = this.new_badges[item]
-        if (!userBadgesId.includes(parseInt(badge))) {
-          createBadges.push(badge)
-        }
-      }
-
-      // Delete old Badges
-      if (deleteBadges.length > 0) {
-        this.deleteUserBadges(deleteBadges)
-      }
-
-      // Create new Badges
-      if (createBadges.length > 0) {
-        this.createUserBadges(createBadges)
-      }
-    },
-    deleteUserBadges(badges) {
+    submitCredentials() {
       const loader = this.$loading.show()
-      axios.delete('users/' + this.$route.params.id + '/badges/multiple', {
-        data: {
-          badges: badges
-        }
-      })
-        .then(response => {
-          this.fetchUserBadges(this.$route.params.id)
-          loader.hide()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
-    createUserBadges(badges) {
-      const loader = this.$loading.show()
-      axios.post('users/' + this.$route.params.id + '/badges/multiple', {
-        badges: badges
-      })
-        .then(response => {
-          this.fetchUserBadges(this.$route.params.id)
-          loader.hide()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
-    updateUser(user) {
-      const loader = this.$loading.show()
+
       axios.put('users/' + this.$route.params.id, {
-        name: user.name,
-        pre_name: user.pre_name,
-        last_name: user.last_name,
-        email: user.email,
-        role_id: this.user_role
+        name: this.user.name,
+        pre_name: this.user.pre_name,
+        last_name: this.user.last_name,
+        email: this.user.email,
+        role_id: this.user.role.id
       })
         .then(response => {
           toast.success('Role successfully updated')
           loader.hide()
-          this.fetchUserBadges(this.$route.params.id)
         })
         .catch(error => {
           this.validation_error = error.response.data.data.errors
@@ -264,7 +197,6 @@ export default defineComponent({
       axios.get('users/' + id)
         .then(response => {
           this.user = response.data.data
-          this.user_role = response.data.data.role.id
           loader.hide()
 
           this.new_verified = (this.user.email_verified_at != null)
@@ -285,21 +217,22 @@ export default defineComponent({
         })
     },
     fetchBadges() {
-      const loader = this.$loading.show()
       axios.get('badges')
         .then(response => {
           this.badges = response.data.data
-          loader.hide()
         })
         .catch(error => {
           console.error(error)
-          loader.hide()
         })
     },
     fetchUserBadges(id) {
       axios.get('users/' + id + '/badges')
         .then(response => {
-          this.user_badges = response.data.data
+          this.old_account_badges = response.data.data
+          for (const badge in response.data.data) {
+            this.account_badges.push(response.data.data[badge].id.toString())
+            this.selected_badges.push(response.data.data[badge].id.toString())
+          }
         })
         .catch(error => {
           console.error(error)
@@ -328,6 +261,22 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
+    }
+  },
+  watch: {
+    selected_badges: function (val) {
+      const addBadges = this.selected_badges.filter(x => !this.account_badges.includes(x))
+      for (const badge in addBadges) {
+        axios.post('users/' + this.$route.params.id + '/badges/' + addBadges[badge] + '/attach')
+      }
+
+      for (const badge in this.account_badges) {
+        if (!this.selected_badges.includes(this.account_badges[badge])) {
+          axios.post('users/' + this.$route.params.id + '/badges/' + this.account_badges[badge] + '/detach')
+        }
+      }
+
+      this.account_badges = this.selected_badges
     }
   }
 })

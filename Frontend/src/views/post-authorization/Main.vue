@@ -30,14 +30,14 @@
               <img
                 :alt="'Thumbnail of ' + post?.title"
                 class="rounded-t-md"
-                :src="post?.thumbnail ? post?.thumbnail : require('@/assets/images/placeholder.png')"
+                :src="post?.thumbnail ?? require('@/assets/images/placeholder.png')"
               />
               <div class="absolute w-full flex items-center px-5 pt-6 z-10">
                 <div class="w-10 h-10 flex-none image-fit">
                   <img
                     :alt="'Profile Picture of ' + post?.user?.name"
                     class="rounded-full"
-                    :src="post?.user?.profile_picture"
+                    :src="post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                   />
                 </div>
                 <div class="ml-3 text-white mr-auto">
@@ -80,7 +80,6 @@
                 </div>
               </div>
             </div>
-            <div class="p-5 text-gray-700 dark:text-gray-600" v-html="post?.content?.substring(0,200)"></div>{{ post.content?.length > 200 ? '...' : '' }}
           </div>
         </div>
       </div>
@@ -181,15 +180,17 @@ export default defineComponent({
       axios.put('posts/' + post.id, {
         title: post.title,
         content: post.content,
+        category_id: post.parent.id,
         thumbnail: post.thumbnail,
         approve: true
       })
         .then(response => {
           toast.success('Post successfully approved')
-          this.fetchPosts()
+          this.fetchPosts('posts/unauthorized')
         })
         .catch(error => {
-          console.error(error)
+          console.error(error.response)
+          toast.error(error.response.data.message)
         })
     },
     formatDate(timeString) {
@@ -206,6 +207,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
+          toast.error(error.response.data.message)
         })
     }
   }

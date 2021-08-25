@@ -21,6 +21,7 @@ class StructuredCategory extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'thumbnail' => $this->thumbnail,
+            'is_bookmarked' => $this->is_bookmarked(),
             'user' => new UserResource($this->user),
             'children' => new StructuredCategoryCollection($this->subcategory),
             'posts' => new PostCollection($this->posts),
