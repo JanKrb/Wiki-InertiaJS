@@ -42,6 +42,7 @@ class Post extends JsonResource
             'dislike_votes_count' => $this->votes->where('vote', 0)->count(),
             'comments_count' => $this->comments->count(),
             'liked' => $liked,
+            'is_bookmarked' => $this->is_bookmarked(),
             'created_at' => $this->created_at->format('Y-m-d h:m:i'),
             'updated_at' => $this->updated_at->format('Y-m-d h:m:i')
         ];
