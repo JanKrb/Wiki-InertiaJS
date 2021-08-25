@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BanCollection;
 use App\Models\Ban;
 use App\Http\Resources\UserBanCollection;
 use App\Http\Resources\Ban as BanResource;
@@ -102,5 +103,16 @@ class UserBansController extends Controller
             'posts' => $bans->where('type', '=', 2)->count()
         ],
             'Ban count retrieved successfully');
+    }
+
+    public function unban(Request $request, User $user) {
+        foreach ($user->bans as $ban) {
+            if ($ban->is_active()) {
+                $ban->ban_until = now();
+                $ban->save();
+            }
+        }
+
+        return $this->sendResponse(['bans' => new BanCollection($user->bans)], 'User unbanned successfully.');
     }
 }

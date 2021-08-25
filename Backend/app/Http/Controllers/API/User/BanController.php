@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\BanCollection;
 use App\Http\Resources\Ban as BanResource;
 use App\Models\Ban;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class BanController extends BaseController
         'target_id' => 'integer',
         'reason' => 'string|max:255',
         'description' => 'string',
-        'ban_until' => 'string|date_format:Y-m-d H:i:s',
+        'ban_until' => 'nullable|date_format:Y-m-d H:i:s',
         'type' => 'integer|nullable'
     ];
 
