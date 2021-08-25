@@ -131,12 +131,10 @@ class AuthController extends Controller
                 'details' => "IP {$request->ip()} tried to fetch his user, but is unauthenticated.",
                 'attributes' => json_encode($request)
             ]);
-        } else {
-            Auth::user()->sendActivity('Fetched user');
         }
 
         return $this->sendResponse([
-            'user' => Auth::user()
+            'user' => Auth::user() ?? null
         ], 'User returned successfully.');
     }
 
