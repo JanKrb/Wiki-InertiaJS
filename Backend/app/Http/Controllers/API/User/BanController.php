@@ -28,7 +28,7 @@ class BanController extends BaseController
         'target_id' => 'integer',
         'reason' => 'string|max:255',
         'description' => 'string',
-        'ban_until' => 'string|date_format:Y-m-d H:i:s',
+        'ban_until' => 'nullable|date_format:Y-m-d H:i:s',
         'type' => 'integer|nullable'
     ];
 
