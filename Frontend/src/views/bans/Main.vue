@@ -30,7 +30,7 @@
             <img
               alt=""
               class="rounded-full"
-              :src="ban.target.profile_picture"
+              :src="ban.target.profile_picture ?? require('@/assets/images/avatar.png')"
             />
           </div>
           <div class="ml-3 mr-auto">
@@ -51,12 +51,12 @@
             <div class="dropdown-menu w-40">
               <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
                 <router-link :to="{ name: 'admin.ban', params: { 'id': ban.id }}">
-                  <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                  <a data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                     <SlashIcon class="w-4 h-4 mr-2"/> View Ban
                   </a>
                 </router-link>
                 <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': ban.target.id }}">
-                  <a href="javascript:;" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                  <a data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
                     <UserIcon class="w-4 h-4 mr-2"/> View Account
                   </a>
                 </router-link>
@@ -104,7 +104,7 @@
               </button>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-              <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+              <a class="font-bold">{{ pagination.current_page }} / {{ pagination.last_page }}</a>
             </li>
             <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
               <button class="flex items-center font-bold" @click="fetchBans(pagination.next_page_url)" :disabled="!pagination.next_page_url">
@@ -158,7 +158,7 @@ export default defineComponent({
           this.makePagination(response.data.meta, response.data.links)
         })
         .catch(error => {
-          console.log(error.response)
+          console.error(error)
           loader.hide()
         })
     },

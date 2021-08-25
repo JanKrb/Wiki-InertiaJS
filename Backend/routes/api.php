@@ -44,7 +44,7 @@ Route::get('/', function () {
 });
 
 // Auth System
-Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'auth', 'middleware' => 'api'], function() {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('password/recover', [AuthController::class, 'recover_password']);
@@ -423,6 +423,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('users.bans.delete')
         ->middleware(['permission:user_bans_delete'])
     ;
+
+    Route::delete('users/{user}/unban', [UserBansController::class, 'unban'])
+        ->name('users.bans.unban')
+        ->middleware(['permission:users_bans_unban'])
+    ;
 });
 
 // Posts System
@@ -431,6 +436,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('posts/unauthorized', [PostController::class, 'get_unauthorized_posts'])
         ->name('posts.unauthorized')
         ->middleware(['permission:posts_get_unauthorized']);
+
+    // Recent
+    Route::get('posts/recent', [PostController::class, 'recent_posts'])
+        ->name('posts.recent')
+        ->middleware(['permission:posts_recent']);
 
     // History
     Route::get('posts/histories', [PostController::class, 'history'])

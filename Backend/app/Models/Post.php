@@ -77,4 +77,8 @@ class Post extends Model
     public function comments() {
         return $this->hasMany(PostComment::class);
     }
+
+    public function is_bookmarked() {
+        return Bookmark::where('user_id', auth()->user()->id)->where('is_post', true)->where('post_id', $this->id)->exists();
+    }
 }

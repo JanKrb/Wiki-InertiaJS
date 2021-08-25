@@ -13,7 +13,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.ban.target?.profile_picture"
+                  :src="this.ban.target?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-5">
@@ -110,7 +110,7 @@
                     <div class="col-span-12 xxl:col-span-6 mb-4">
                       <div>
                         <label for="update-date-ban" class="form-label">
-                          Unban Date
+                          Unban Date {{ ban_time.date }}
                         </label>
                         <input
                           id="update-date-ban"
@@ -126,13 +126,14 @@
                     <div class="col-span-12 xxl:col-span-6 mb-4">
                       <div>
                         <label for="update-time-ban" class="form-label">
-                          Ban Time
+                          Ban Time {{ ban_time.time }}
                         </label>
                         <input
                           id="update-time-ban"
                           type="time"
                           :class="'form-control' + (this.validation_error?.ban_until != null ? ' border-theme-6' : '')"
                           v-model="ban_time.time"
+                          step="60"
                         />
                         <div v-if="this.validation_error?.ban_until != null" class="text-theme-6 mt-2 mb-4">
                           {{ this.validation_error?.ban_until[0] }}
@@ -228,7 +229,7 @@
                                 <AlignLeftIcon class="w-4 h-4 mr-2"/>{{ this.lastBan.reason.substring(0, 25) }}{{ this.lastBan.reason.length > 25 ? '...' : '' }}
                               </div>
                               <div class="truncate sm:whitespace-normal flex items-center mt-3">
-                                <ClockIcon class="w-4 h-4 mr-2"/>{{ this.lastBan.ban_until }}
+                                <ClockIcon class="w-4 h-4 mr-2"/>{{ formatDate(this.lastBan.ban_until) }}
                               </div>
                             </div>
                           </div>
@@ -250,6 +251,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import moment from 'moment'
 const toast = useToast()
 
 export default defineComponent({
@@ -352,7 +354,7 @@ export default defineComponent({
         reason: ban.reason,
         description: ban.description,
         type: ban.type,
-        ban_until: this.ban_time.date + ' ' + this.ban_time.time
+        ban_until: this.ban_time.date !== null && this.ban_time.time !== null ? (this.ban_time.date + ' ' + this.ban_time.time) : '01-01-1970 00:00:00'
       })
         .then(response => {
           this.checkBans(ban.target.id)
@@ -383,6 +385,9 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY  hh:mm')
     }
   }
 })

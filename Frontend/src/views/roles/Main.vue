@@ -17,7 +17,7 @@
     </div>
 
     <!-- BEGIN: Create Role Modal -->
-    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
+    <div id="create-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-show="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="addRole(this.role)">
           <div class="modal-content">
@@ -84,7 +84,7 @@
     <!-- END: Create Role Modal -->
 
     <!-- BEGIN: Edit Role Modal -->
-    <div id="edit-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.edit" @hide="modalState.edit = false">
+    <div id="edit-role-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-show="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editRole">
           <div class="modal-content">

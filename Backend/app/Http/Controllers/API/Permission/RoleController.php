@@ -18,14 +18,14 @@ class RoleController extends BaseController
 
     protected $validations_create = [
         'name' => 'required|max:255',
-        'description' => '',
+        'description' => 'nullable|string',
         'color' => 'required|regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
         'is_default' => 'nullable|boolean'
     ];
 
     protected $validations_update = [
         'name' => 'max:255',
-        'description' => 'string',
+        'description' => 'nullable|string',
         'color' => 'regex:^(?:[0-9a-fA-F]{3}){1,2}$^',
         'is_default' => 'nullable|boolean'
     ];

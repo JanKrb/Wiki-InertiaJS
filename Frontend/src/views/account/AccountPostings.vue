@@ -11,52 +11,55 @@
           <div
             v-for="post in this.posts"
             :key="post.id"
-            class="intro-y col-span-12 md:col-span-6"
+            class="intro-y col-span-12 md:col-span-6 blog"
           >
-            <div class="box">
-              <div class="flex items-center border-b border-gray-200 dark:border-dark-5 px-5 py-4">
+            <div class="blog__preview image-fit">
+              <img
+                :alt="'Thumbnail of ' + post?.title"
+                class="rounded-t-md"
+                :src="post?.thumbnail ?? require('@/assets/images/placeholder.png')"
+              />
+              <div class="absolute w-full flex items-center px-5 pt-6 z-10">
                 <div class="w-10 h-10 flex-none image-fit">
                   <img
-                    alt=""
+                    :alt="'Profile Picture of ' + post?.user?.name"
                     class="rounded-full"
-                    :src="post.user.profile_picture ? post.user.profile_picture : require('@/assets/images/placeholder.png')"
+                    :src="post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                   />
                 </div>
-                <div class="ml-3 mr-auto">
-                  <router-link :to="{ name: 'admin.accounts.informations', params: { 'id': post.id }}">
-                    <a href="javascript:;" class="font-medium">{{ post.user.name }}</a>
-                  </router-link>
-                  <div class="flex text-gray-600 truncate text-xs mt-0.5">
-                    <router-link :to="{ name: 'categories.subcategory', params: { 'id': post?.parent?.id }}">
-                      <a class="text-theme-1 dark:text-theme-10 inline-block truncate">
-                        {{ post?.parent?.title }}
-                      </a>
-                    </router-link>
-                    <span class="mx-1">•</span> {{ post.created_at }}
-                  </div>
+                <div class="ml-3 text-white mr-auto">
+                  <a href="" class="font-medium">{{ post?.user?.name }}</a>
+                  <div class="text-xs mt-0.5">{{ formatDate(post?.updated_at) }}</div>
                 </div>
-                <div class="dropdown ml-3">
-                  <a href="javascript:;" class="dropdown-toggle w-5 h-5 text-gray-600 dark:text-gray-300" aria-expanded="false">
-                    <MoreVerticalIcon class="w-5 h-5"/>
+                <div class="dropdown ml-3" v-if="post.approved_at">
+                  <a
+                    href='javascript:'
+                    class="blog__action dropdown-toggle w-8 h-8 flex items-center justify-center rounded-full"
+                    aria-expanded="false"
+                  >
+                    <MoreVerticalIcon class="w-4 h-4 text-white"/>
                   </a>
                   <div class="dropdown-menu w-40">
                     <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                      <router-link :to="{ name: 'posts.view', params: { 'id': post.id }}">
-                        <a href="" data-dismiss="dropdown" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                          <FileIcon class="w-4 h-4 mr-2"/> View Post
-                        </a>
-                      </router-link>
+                      <a
+                        href="javascript:;"
+                        @click="this.$router.push({ name: 'posts.view', params: { id: post.id } })"
+                        data-dismiss="dropdown"
+                        class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                        <FileIcon class="w-4 h-4 mr-2"/> View Post
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="p-5">
-                <a class="block font-medium text-base">
-                  {{ post.title }}
+              <div class="absolute bottom-0 text-white px-5 pb-6 z-10">
+                <a href="javascript:;" class="block font-medium text-xl mt-3" @click="this.$router.push({ name: 'posts.view', params: { id: post.id } })">
+                  {{ post?.title }}
                 </a>
-                <div class="text-gray-700 dark:text-gray-600 mt-2" v-html="post?.content?.substring(0,200) + '...'"></div>
               </div>
-              <div class="px-5 pt-3 pb-5 border-t border-gray-200 dark:border-dark-5">
+            </div>
+            <div class="box">
+              <div class="px-5 pt-3 pb-5">
                 <div class="w-full flex text-gray-600 text-xs sm:text-sm">
                   <div class="mr-2 flex">
                     <HeartIcon class="mr-1 h-4 w-4"></HeartIcon>{{ post.like_votes_count }}
@@ -68,8 +71,8 @@
                     <ClockIcon class="mr-1 h-4 w-4"></ClockIcon>{{ post.histories_count }}
                   </div>
                   <div class="ml-auto">
-                    <span v-if="post.approved_at"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1 dark:text-black">Public</span></span>
-                    <span v-else><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1 dark:text-black">Not Approved</span></span>
+                    <span v-if="post.approved_at"><span class="px-2 py-1 rounded-full bg-theme-9 text-white mr-1">Public</span></span>
+                    <span v-else><span class="px-2 py-1 rounded-full bg-theme-12 text-white mr-1">Not Approved</span></span>
                   </div>
                 </div>
               </div>
@@ -97,6 +100,7 @@
 import { defineComponent, ref } from 'vue'
 import Sidebar from './Components/Sidebar.vue'
 import axios from 'axios'
+import moment from 'moment'
 
 export default defineComponent({
   components: {
@@ -143,6 +147,9 @@ export default defineComponent({
           console.error(error)
           loader.hide()
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   }
 })

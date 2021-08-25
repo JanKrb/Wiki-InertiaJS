@@ -19,15 +19,15 @@
               <div class="intro-y">
                 <div class="box px-4 py-4 flex items-center zoom-in">
                   <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
-                    <img alt="" :src="bookmark?.post?.thumbnail ? bookmark?.post?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_post">
-                    <img alt="" :src="bookmark?.category?.thumbnail ? bookmark?.category?.thumbnail : require('@/assets/images/placeholder.png')" v-if="bookmark?.is_category">
+                    <img alt="" :src="bookmark?.post?.thumbnail ?? require('@/assets/images/placeholder.png')" v-if="bookmark?.is_post">
+                    <img alt="" :src="bookmark?.category?.thumbnail ?? require('@/assets/images/placeholder.png')" v-if="bookmark?.is_category">
                   </div>
                   <div class="ml-4 mr-auto">
                     <div class="font-medium">
                       {{ bookmark?.post?.title }} {{ bookmark?.category?.title }}
                     </div>
                     <div class="text-gray-600 text-xs mt-0.5">
-                      {{ bookmark.created_at }}
+                      {{ formatDate(bookmark.created_at) }}
                     </div>
                   </div>
                   <div class="py-1 px-2 text-gray-600 cursor-pointer font-medium">
@@ -64,6 +64,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import Sidebar from './Components/Sidebar'
+import moment from 'moment'
 
 export default defineComponent({
   components: {
@@ -89,6 +90,9 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
+    },
+    formatDate(timeString) {
+      return moment(String(timeString)).format('MMM Do YYYY')
     }
   }
 })

@@ -161,7 +161,7 @@
                         {{ permission.name }}
                       </td>
                       <td class="text-center">
-                        {{ permission.user_id }}
+                        {{ permission.user.name }}
                       </td>
                       <td class="text-center">
                         {{ this.formatDate(permission.updated_at) }}
@@ -196,7 +196,7 @@
                       </button>
                     </li>
                     <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
-                      <a class="font-bold">Page {{ pagination.current_page }} / {{ pagination.last_page }}</a>
+                      <a class="font-bold">{{ pagination.current_page }} / {{ pagination.last_page }}</a>
                     </li>
                     <li class="mx-1 px-3 py-2 bg-gray-200 dark:bg-dark-5 dark:hover:bg-dark-7 dark:text-gray-200 dark:hover:text-gray-600 text-gray-700 hover:bg-gray-700 hover:text-gray-200 rounded-lg">
                       <button class="flex items-center font-bold" @click="fetchPagePermissions(pagination.next_page_url)" :disabled="!pagination.next_page_url">
@@ -231,21 +231,21 @@
           <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
             <div>
               <div class="text-gray-600">Created by</div>
-              <div class="mt-1">{{ this.role.user_id ? this.role.user_id : 'Unknown' }}</div>
+              <div class="mt-1">{{ this.role.user.name ? this.role.user.name : 'Unknown' }}</div>
             </div>
             <UserIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>
           <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
             <div>
               <div class="text-gray-600">Created at</div>
-              <div class="mt-1">{{ this.role.created_at ? this.role.created_at : 'Unknown' }}</div>
+              <div class="mt-1">{{ this.role.created_at ? formatDate(this.role.created_at) : 'Unknown' }}</div>
             </div>
             <PlusCircleIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>
           <div class="flex items-center pt-5">
             <div>
               <div class="text-gray-600">Updated at</div>
-              <div class="mt-1">{{ this.role.updated_at ? this.role.updated_at : 'Unknown' }}</div>
+              <div class="mt-1">{{ this.role.updated_at ? formatDate(this.role.updated_at) : 'Unknown' }}</div>
             </div>
             <ClockIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>

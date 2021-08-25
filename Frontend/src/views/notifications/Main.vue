@@ -17,36 +17,36 @@
                     data-toggle="tab"
                     data-target="#latest"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center active"
+                    class="flex-1 py-2 rounded-md text-center active self-center"
                     role="tab"
                     aria-controls="latest"
                     aria-selected="true"
                   >
-                    Latest Notifications
+                    Latest
                   </a>
                   <a
                     id="create-notification-tab"
                     data-toggle="tab"
                     data-target="#create-notification"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center"
+                    class="flex-1 py-2 rounded-md text-center self-center"
                     role="tab"
                     aria-controls="create-notification"
                     aria-selected="false"
                   >
-                    Create Notification
+                    Create
                   </a>
                   <a
                     id="histories-tab"
                     data-toggle="tab"
                     data-target="#histories"
                     href="javascript:;"
-                    class="flex-1 py-2 rounded-md text-center"
+                    class="flex-1 py-2 rounded-md text-center self-center"
                     role="tab"
                     aria-controls="histories"
                     aria-selected="false"
                   >
-                    User Histories
+                    Histories
                   </a>
                 </div>
               </div>
@@ -85,7 +85,7 @@
                             <img
                               alt=""
                               class="rounded-full"
-                              :src="notification.user.profile_picture"
+                              :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                             />
                             <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                           </div>
@@ -108,7 +108,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="user?.profile_picture"
+                        :src="user?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                       <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
@@ -157,7 +157,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="user?.profile_picture"
+                        :src="user?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                       <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
@@ -212,7 +212,7 @@
                       <img
                         alt=""
                         class="rounded-full"
-                        :src="notification.target_id?.profile_picture"
+                        :src="notification.target_id?.profile_picture ?? require('@/assets/images/avatar.png')"
                       />
                     </div>
                     <div class="ml-2 overflow-hidden">
@@ -266,7 +266,7 @@
                           <img
                             alt=""
                             class="rounded-full"
-                            :src="this.single_notification.user?.profile_picture"
+                            :src="this.single_notification.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                           />
                         </div>
                         <div class="ml-5">
@@ -459,7 +459,7 @@
                           <img
                             alt=""
                             class="rounded-full"
-                            :src="this.create_notification.user?.profile_picture"
+                            :src="this.create_notification.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                           />
                         </div>
                         <div class="ml-5">
@@ -638,7 +638,7 @@
                             <img
                               alt=""
                               class="rounded-full"
-                              :src="this.history_notification_user?.profile_picture"
+                              :src="this.history_notification_user?.profile_picture ?? require('@/assets/images/avatar.png')"
                             />
                           </div>
                           <div class="ml-5">
@@ -682,7 +682,7 @@
                               <img
                                 alt=""
                                 class="rounded-full"
-                                :src="notification.user.profile_picture"
+                                :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
                               />
                             </div>
                             <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0">
@@ -884,7 +884,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification updated successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
         })
         .catch(error => {
           console.log(error.response)
@@ -899,7 +899,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Notification deleted successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
           this.active_tab = 0
         })
         .catch(error => {
@@ -915,6 +915,7 @@ export default defineComponent({
         content: notification.content,
         type: notification.type,
         icon: notification.icon,
+        seen: 0,
         target_id: notification.target_id,
         color: notification.color
       })
@@ -922,7 +923,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification created successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
         })
         .catch(error => {
           console.log(error.response)

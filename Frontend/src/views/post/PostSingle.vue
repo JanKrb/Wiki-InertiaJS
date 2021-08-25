@@ -50,7 +50,7 @@
                   >
                     <img
                       alt=""
-                      :src="history?.user?.profile_picture"
+                      :src="history?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                     />
                   </div>
                 </div>
@@ -79,7 +79,7 @@
     <!-- END: Post History Slide -->
     <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
       <div class="col-span-12 lg:col-span-8 intro-y">
-        <div class="box news p-5">
+        <div class="box p-5">
           <div class="flex items-center px-5 py-4">
             <div class="mr-auto">
               <h2 class="intro-y font-medium text-xl sm:text-2xl ml-auto ml-3">
@@ -90,7 +90,9 @@
                 <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
                   {{ this.post?.parent?.title }}
                 </router-link>
-                <span class="mx-1">•</span> {{ Math.round(this.post?.content.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+                <div v-if="(Math.round(this.post?.content?.split(' ').length)) > 0">
+                  <span class="mx-1">•</span> {{ Math.round(this.post?.content?.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+                </div>
               </div>
             </div>
             <div class="dropdown ml-3">
@@ -124,7 +126,7 @@
               <img
                 alt=""
                 class="rounded-md"
-                :src="this.post?.thumbnail ? this.post?.thumbnail : require('@/assets/images/placeholder.png')"
+                :src="this.post?.thumbnail ?? require('@/assets/images/placeholder.png')"
               />
             </div>
           </div>
@@ -148,7 +150,7 @@
                   alt=""
                   class="rounded-full border border-white zoom-in"
                   :style="index !== 0 ? 'margin-left: -' + index + 'rem;' : ''"
-                  :src="item.user?.profile_picture"
+                  :src="item.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                   :content="item.user?.name"
                 />
               </div>
@@ -174,7 +176,7 @@
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="this.post?.user?.profile_picture"
+                  :src="this.post?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 mr-auto">
@@ -184,9 +186,7 @@
                 <div class="text-gray-600">{{ this.post?.user?.email }}</div>
               </div>
             </div>
-            <div
-              class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0"
-            >
+            <div class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0">
               <div class="hidden xl:block">Rate this Post:</div>
               <Tippy
                 tag="div"
@@ -209,12 +209,11 @@
           <!-- BEGIN: Post Tags -->
           <div v-if="this.post.tags.length > 0" class="flex">
             <button
-              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex"
-              :style="'color: ' + tag.color + ';'"
+              class="bg-gray-200 py-1 px-2 rounded-lg mr-2 flex dark:bg-dark-1 text-gray-800 dark:text-gray-600"
               v-for="tag in this.post.tags"
               v-bind:key="tag.id"
             >
-              <component :is="tag.icon" class="mr-1 h-4 w-4"></component>{{ tag.name }}
+              <component :is="tag.icon" class="mr-1 h-4 w-4" :style="'color: ' + tag.color + ';'"></component>{{ tag.name }}
             </button>
           </div>
           <!-- END: Post Tags -->
@@ -228,28 +227,40 @@
             <div class="text-base sm:text-lg font-medium">
               Comments
             </div>
+            <!-- BEGIN: Comment Tooltip -->
+            <div class="justify-end" v-if="!this.user.email_verified_at">
+              <TippyContent to="custom-tooltip-content">
+                <div class="items-center">
+                  <div class="text-theme-6">
+                    Your Email needs to be verified to write comments
+                  </div>
+                </div>
+              </TippyContent>
+            </div>
+            <!-- END: Comment Tooltip -->
             <form @submit.prevent="writeComment()">
               <div class="news__input relative mt-5">
                 <MessageCircleIcon class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-gray-600"/>
                 <input
                   type="text"
                   class="form-control border-transparent bg-gray-300 pl-16 py-6 placeholder-theme-13 resize-none"
+                  :disabled="!this.user.email_verified_at"
                   placeholder="Post a comment..."
                   v-model='new_comment'
                 >
-                <Button type="submit">
+                <Button type="submit" :name="!this.user.email_verified_at ? 'custom-tooltip-content' : ''" :class="!this.user.email_verified_at ? 'tooltip' : ''">
                   <SendIcon class="w-5 h-5 absolute my-auto inset-y-0 mr-6 right-0 text-gray-600"/>
                 </Button>
               </div>
             </form>
           </div>
           <div class="pb-3" v-for="comment in this.comments" v-bind:key="comment.id">
-            <div class="flex box p-3 bg-gray-200">
+            <div class="flex box p-3 bg-gray-200 dark:bg-dark-1">
               <div class="w-10 h-10 sm:w-12 sm:h-12 flex-none image-fit">
                 <img
                   alt=""
                   class="rounded-full"
-                  :src="comment?.user?.profile_picture"
+                  :src="comment?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                 />
               </div>
               <div class="ml-3 flex-1">
@@ -316,10 +327,12 @@ export default defineComponent({
       report: {
         content: ''
       },
+      user: {},
       histories: []
     }
   },
   mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
     this.loadPost(this.$route.params.id)
   },
   methods: {
@@ -338,18 +351,26 @@ export default defineComponent({
         })
     },
     loadPost(id) {
+      const loader = this.$loading.show()
       axios.get('posts/' + id)
         .then(response => {
-          this.post = response.data.data
-          this.loadComments('posts/' + id + '/comments?per_page=5')
-          this.testPagePermissions()
-          this.loadBookmarks(id)
-          this.loadHistory()
+          if (response.data.data.approved_at && response.data.data.approved_by) {
+            this.post = response.data.data
+            loader.hide()
+            this.loadComments('posts/' + id + '/comments?per_page=5')
+            this.testPagePermissions()
+            this.loadBookmarks(id)
+            this.loadHistory()
+          } else {
+            loader.hide()
+            this.$router.push({ name: 'categories' })
+            toast.error('This Post is not approved at the moment!')
+          }
         })
         .catch(error => {
-          console.error(error)
           toast.error(error.response.data.message)
           this.$router.push({ name: 'categories' })
+          loader.hide()
         })
     },
     loadComments(url) {
@@ -439,16 +460,18 @@ export default defineComponent({
       }
     },
     writeComment() {
-      axios.post('posts/' + this.$route.params.id + '/comments', {
-        content: this.new_comment
-      })
-        .then(response => {
-          this.post.comments.push(response.data.data)
-          toast.success('Comment has successfully been posted.')
+      if (this.user.email_verified_at && this.new_comment.length > 0) {
+        axios.post('posts/' + this.$route.params.id + '/comments', {
+          content: this.new_comment
         })
-        .catch(error => {
-          console.error(error)
-        })
+          .then(response => {
+            this.post.comments.push(response.data.data)
+            toast.success('Comment has successfully been posted.')
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      }
     },
     sendReport(content) {
       axios.post('posts/' + this.$route.params.id + '/reports', {

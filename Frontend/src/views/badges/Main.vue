@@ -187,7 +187,7 @@
     <!-- END: Delete Confirmation Modal -->
 
     <!-- BEGIN: Edit Badge Modal -->
-    <div id="edit-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-badge-modal" v-if="modalState.edit" @hide="modalState.edit = false">
+    <div id="edit-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-badge-modal" v-show="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editBadge">
           <div class="modal-content">
@@ -269,7 +269,7 @@
     <!-- END: Edit Badge Modal -->
 
     <!-- BEGIN: Create Badge Modal -->
-    <div id="create-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="create-badge-modal" v-if="modalState.create" @hide="modalState.create = false">
+    <div id="create-badge-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="create-badge-modal" v-show="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="createBadge">
           <div class="modal-content">

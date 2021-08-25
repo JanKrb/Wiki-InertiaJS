@@ -44,7 +44,7 @@
               <img
                 alt=""
                 class="rounded"
-                :src="result.thumbnail"
+                :src="result.thumbnail ?? require('@/assets/images/placeholder.png')"
               />
             </div>
             <div class="ml-3">{{ result.title }}</div>
@@ -66,7 +66,7 @@
               <img
                 alt=""
                 class="rounded"
-                :src="result.thumbnail"
+                :src="result.thumbnail ?? require('@/assets/images/placeholder.png')"
               />
             </div>
             <div class="ml-3">{{ result.title }}</div>
@@ -85,7 +85,7 @@
               <img
                 alt=""
                 class="rounded-full"
-                :src="result.profile_picture"
+                :src="result.profile_picture ?? require('@/assets/images/avatar.png')"
               />
             </div>
             <div class="ml-3">{{ result.name }}</div>
