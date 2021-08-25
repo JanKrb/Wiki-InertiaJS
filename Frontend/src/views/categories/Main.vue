@@ -564,56 +564,6 @@ export default defineComponent({
           console.error(error)
         })
     },
-    changePicture(event) {
-      if (event.target.files.length <= 0) return
-      const files = event.target.files
-      const data = new FormData()
-
-      data.append('image', files[0])
-
-      const loader = this.$loading.show()
-
-      axios.post('storage/uploadImage',
-        data,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-          this.edit_category.thumbnail = res.data.data.url
-          toast.success('Thumbnail successfully uploaded')
-          loader.hide()
-        })
-        .catch((err) => {
-          console.error(err)
-          toast.error(err.response.data.message)
-          loader.hide()
-        })
-    },
-    handleSubmit(e) {
-      e.preventDefault()
-      const loader = this.$loading.show()
-
-      let parentId = null
-      if (this.edit_category.has_parent) { parentId = this.edit_category.parent_id }
-
-      axios.put('categories/' + this.edit_category.id, {
-        title: this.edit_category.title,
-        description: this.edit_category.description,
-        thumbnail: this.edit_category.thumbnail,
-        parent_id: parentId
-      })
-        .then(response => {
-          toast.success('Category was successfully updated!')
-          loader.hide()
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
     deleteCategory(id) {
       const loader = this.$loading.show()
       axios.delete('categories/' + id)
