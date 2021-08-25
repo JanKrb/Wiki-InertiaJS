@@ -16,7 +16,7 @@
       </div>
     </div>
     <!-- BEGIN: Create Permission Modal -->
-    <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
+    <div id="create-permission-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-show="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="createPermission(this.permission)">
           <div class="modal-content">
@@ -61,7 +61,7 @@
     </div>
     <!-- END: Create Permission Modal -->
     <!-- BEGIN: Edit Permission Modal -->
-    <div id="edit-permission-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-permission-modal" v-if="modalState.edit" @hide="modalState.edit = false">
+    <div id="edit-permission-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-permission-modal" v-show="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="editPermission">
           <div class="modal-content">

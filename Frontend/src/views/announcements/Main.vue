@@ -2,7 +2,7 @@
   <div>
     <h2 class="intro-y text-lg font-medium mt-10">Announcements</h2>
     <!-- BEGIN: Create Announcement Modal -->
-    <div id="create-announcement-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState.create" @hide="modalState.create = false">
+    <div id="create-announcement-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-show="modalState.create" @hide="modalState.create = false">
       <div class="modal-dialog">
         <form @submit.prevent="addAnnouncement(this.announcement)">
           <div class="modal-content">
@@ -48,7 +48,7 @@
     </div>
     <!-- END: Create Tag Modal -->
     <!-- BEGIN: Edit Announcement Modal -->
-    <div id="edit-announcement-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal" v-if="modalState.edit" @hide="modalState.edit = false">
+    <div id="edit-announcement-modal" class="modal" data-backdrop="static" tabindex="-1" aria-hidden="true" ref="edit-role-modal" v-show="modalState.edit" @hide="modalState.edit = false">
       <div class="modal-dialog">
         <form @submit.prevent="updateAnnouncement()">
           <div class="modal-content">
