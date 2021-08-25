@@ -37,7 +37,7 @@ class ClearUnusedResourcesTask
             }
         }
 
-        Log::info($deletedFiles . ' files has been deleted.');
+        error_log($deletedFiles . ' files has been deleted.');
     }
 
     private function isUsedInProfile($name) {
