@@ -437,6 +437,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('posts.unauthorized')
         ->middleware(['permission:posts_get_unauthorized']);
 
+    // Recent
+    Route::get('posts/recent', [PostController::class, 'recent_posts'])
+        ->name('posts.recent')
+        ->middleware(['permission:posts_recent']);
+
     // History
     Route::get('posts/histories', [PostController::class, 'history'])
         ->name('posts_history.get_all')

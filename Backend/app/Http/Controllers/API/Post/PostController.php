@@ -191,4 +191,10 @@ class PostController extends BaseController
 
         return $response;
     }
+
+    public function recent_posts() {
+        return $this->sendResponse([
+            'posts' => new $this->collection(Post::where('approved_at', '!=', null)->limit(5)->orderByDesc('updated_at')->get()),
+        ], 'Successfully retrieved recent posts');
+    }
 }
