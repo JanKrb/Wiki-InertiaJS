@@ -23,7 +23,7 @@
               >
                 Cancel
               </button>
-              <button type="button" class="btn btn-danger w-24">
+              <button type="button" class="btn btn-danger w-24" data-dismiss="modal">
                 Delete
               </button>
             </div>
@@ -33,7 +33,7 @@
     </div>
     <!-- END: Delete Modal -->
     <!-- BEGIN: Create Modal -->
-    <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-if="modalState" @hide="modalState = false">
+    <div id="create-account-modal" data-backdrop="static" class="modal" tabindex="-1" aria-hidden="true" v-show="modalState" @hide="modalState = false">
       <div class="modal-dialog">
         <form @submit.prevent="handleSubmit">
           <div class="modal-content">
