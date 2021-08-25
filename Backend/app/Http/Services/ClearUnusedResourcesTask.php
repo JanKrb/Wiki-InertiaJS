@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ClearUnusedResourcesTask
@@ -21,6 +22,7 @@ class ClearUnusedResourcesTask
             return null;
         });
 
+        $deletedFiles = 0;
         foreach ($files as $file) {
             $used = false;
 
@@ -31,8 +33,11 @@ class ClearUnusedResourcesTask
 
             if (!$used) {
                 Storage::delete('public/' . $file);
+                $deletedFiles++;
             }
         }
+
+        Log::info($deletedFiles . ' files has been deleted.');
     }
 
     private function isUsedInProfile($name) {
