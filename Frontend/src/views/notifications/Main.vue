@@ -884,7 +884,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification updated successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
         })
         .catch(error => {
           console.log(error.response)
@@ -899,7 +899,7 @@ export default defineComponent({
         .then(response => {
           toast.success('Notification deleted successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
           this.active_tab = 0
         })
         .catch(error => {
@@ -915,6 +915,7 @@ export default defineComponent({
         content: notification.content,
         type: notification.type,
         icon: notification.icon,
+        seen: 0,
         target_id: notification.target_id,
         color: notification.color
       })
@@ -922,7 +923,7 @@ export default defineComponent({
           console.log(response)
           toast.success('Notification created successfully')
           loader.hide()
-          this.fetchNotifications('notifications?per_page=100000')
+          this.fetchNotifications('notifications?paginate=0')
         })
         .catch(error => {
           console.log(error.response)
