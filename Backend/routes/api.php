@@ -423,6 +423,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->name('users.bans.delete')
         ->middleware(['permission:user_bans_delete'])
     ;
+
+    Route::delete('users/{user}/unban', [UserBansController::class, 'unban'])
+        ->name('users.bans.unban')
+        ->middleware(['permission:users_bans_unban'])
+    ;
 });
 
 // Posts System
