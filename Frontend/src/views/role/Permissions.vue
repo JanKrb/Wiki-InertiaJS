@@ -60,7 +60,6 @@
                     <tr>
                       <th class="border-b-2 dark:border-dark-5 whitespace-nowrap"></th>
                       <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Permission Name</th>
-                      <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Creator</th>
                       <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Last update</th>
                       <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Created at</th>
                     </tr>
@@ -69,7 +68,6 @@
                     <tr v-for="(permission, index) in group" v-bind:key="index">
                       <td class="border-b dark:border-dark-5"><input class="form-check-switch self-center" type="checkbox" @change="togglePermission(permission)" v-model="permission.active" :checked="permission?.active"></td>
                       <td class="border-b dark:border-dark-5">{{ permission?.name }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission?.user?.name }}</td>
                       <td class="border-b dark:border-dark-5">{{ formatDate(permission?.updated_at) }}</td>
                       <td class="border-b dark:border-dark-5">{{ formatDate(permission?.created_at) }}</td>
                     </tr>
