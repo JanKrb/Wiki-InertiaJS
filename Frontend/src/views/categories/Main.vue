@@ -442,7 +442,7 @@ export default defineComponent({
     loadRecent() {
       axios.get('posts/recent?sort.column=updated_at&sort.method=desc&paginate=0')
         .then((response) => {
-          this.recent = response.data
+          this.recent = response.data.data.posts
           this.loading.recent = true
         })
         .catch((error) => {
