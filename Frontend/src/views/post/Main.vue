@@ -45,16 +45,14 @@
             <div class="report-timeline mt-5 relative">
               <div class="intro-x relative flex items-center mb-3" v-for="history in this.histories" v-bind:key="history.id">
                 <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
+                  <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                     <img
                       alt=""
                       :src="history?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                     />
                   </div>
                 </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
+                <div class="box px-5 py-3 ml-4 flex-1">
                   <div class="flex items-center">
                     <div class="font-medium">
                       {{ history?.title }}
