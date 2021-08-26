@@ -187,7 +187,6 @@
               </div>
             </div>
             <div class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0">
-              <div class="hidden xl:block">Rate this Post:</div>
               <Tippy
                 tag="div"
                 v-on:click='this.votePost(1)'
