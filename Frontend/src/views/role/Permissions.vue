@@ -67,11 +67,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(permission, index) in group" v-bind:key="index">
-                      <td class="border-b dark:border-dark-5"><input class="form-check-switch self-center" type="checkbox" @change="togglePermission(permission)" v-model="permission.checked" :checked="permission?.checked"></td>
-                      <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
-                      <td class="border-b dark:border-dark-5">{{ permission.user.name }}</td>
-                      <td class="border-b dark:border-dark-5">{{ formatDate(permission.updated_at) }}</td>
-                      <td class="border-b dark:border-dark-5">{{ formatDate(permission.created_at) }}</td>
+                      <td class="border-b dark:border-dark-5"><input class="form-check-switch self-center" type="checkbox" @change="togglePermission(permission)" v-model="permission.active" :checked="permission?.active"></td>
+                      <td class="border-b dark:border-dark-5">{{ permission?.name }}</td>
+                      <td class="border-b dark:border-dark-5">{{ permission?.user?.name }}</td>
+                      <td class="border-b dark:border-dark-5">{{ formatDate(permission?.updated_at) }}</td>
+                      <td class="border-b dark:border-dark-5">{{ formatDate(permission?.created_at) }}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -95,7 +95,7 @@
           </div>
           <div v-for="result in searchResults" v-bind:key="result" class="bg-gray-200 p-2 rounded-lg mt-2 hover:bg-gray-400 flex justify-between" @click="togglePermission(result)">
             <div>{{ result.name }}</div>
-            <input class="form-check-switch self-center" type="checkbox" @change="togglePermission(result)" v-model="result.checked" :checked="result?.checked">
+            <input class="form-check-switch self-center" type="checkbox" @change="togglePermission(result)" v-model="result.active" :checked="result?.active">
           </div>
           <div v-show="search_keyword.length === 0" class="mt-3 text-gray-500 text-center">
             Please type a keyword to search
@@ -175,9 +175,9 @@ export default defineComponent({
         })
     },
     fetchPermissions() {
-      axios.get('permissions?paginate=0')
+      axios.get('permissions/active/' + this.$route.params.id + '?paginate=0')
         .then(response => {
-          this.all_permissions = response.data // set all permissions
+          this.all_permissions = response.data.data // set all permissions
           for (const permission in this.all_permissions) {
             const permissionGroup = this.all_permissions[permission].name.split('_')[0] // Spit the group name from permission name
             if (!Object.keys(this.permission_groups).includes(permissionGroup)) { this.permission_groups[permissionGroup] = [] } // Check if group is already set
@@ -189,7 +189,7 @@ export default defineComponent({
         })
     },
     togglePermission(permission) {
-      if (permission.checked) {
+      if (permission.active) {
         axios.post('roles/' + this.role.id + '/permissions/' + permission.id + '/attach')
           .then(response => {
             toast.success('The permission ' + permission.name + ' was added successfully')
