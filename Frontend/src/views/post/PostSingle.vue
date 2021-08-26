@@ -111,14 +111,14 @@
                   </div>
                 </div>
               </div>
-              <div class="h-48 w-full bg-theme-31 rounded-md"></div>
-              <div class="p-5 w-full bg-theme-31 rounded-md">
-                <h2 class="text-white text-2xl font-bold leading-tight mb-3 pr-5">{{ post.title }}</h2>
+              <div class="h-48 w-full bg-theme-31 rounded-tl-md rounded-tr-md"></div>
+              <div class="p-5 w-full bg-theme-31 rounded-bl-md rounded-br-md">
+                <h2 class="text-white text-2xl font-bold leading-tight mb-2 pr-5">{{ post.title }}</h2>
                 <div class="flex w-full items-center text-sm text-gray-300 font-medium">
                   <div class="flex-1 flex items-center">
-                    <div class="flex text-gray-400 truncate text-xs mt-0.5">
-                      {{ this.formatDate(this.post?.created_at) }} <span class="mx-1">•</span>
-                      <router-link class="text-theme-20 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
+                    <div class="flex text-gray-400 truncate text-xs">
+                      <span class="mx-1 self-center">{{ this.formatDate(this.post?.created_at) }} •</span>
+                      <router-link class="bg-theme-1 dark:bg-theme-1 text-white px-3 py-1 rounded-full" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
                         {{ this.post?.parent?.title }}
                       </router-link>
                     </div>
