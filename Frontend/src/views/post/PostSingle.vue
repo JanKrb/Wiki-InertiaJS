@@ -82,7 +82,7 @@
         <div class="box p-5">
           <div class="intro-y mt-3">
             <a href="#" class="block rounded-lg relative" :style="'background: url(' + (this.post.thumbnail ?? require('@/assets/images/placeholder.png')) + ') center; background-size: cover;'">
-              <div class="absolute top-0 right-0 -mt-3 mr-3">
+              <div class="absolute top-0 right-0 -mt-3 mr-3" v-if="this.permissions?.posts_report_store || this.permissions?.posts_history_get_post || this.permissions?.posts_update || this.permissions?.posts_delete">
                 <div class="rounded-full bg-theme-1 text-white text-xs p-1 leading-none">
                   <div class="dropdown p-1">
                     <a href="javascript:;" class="dropdown-toggle text-white dark:text-gray-300" aria-expanded="false">
