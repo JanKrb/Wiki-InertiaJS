@@ -191,7 +191,7 @@
 
           <td class="table-report__action w-56">
             <div class="flex justify-center items-center">
-              <router-link :to="{ 'name': 'admin.role.view', 'params': { id: role.id }}">
+              <router-link :to="{ 'name': 'admin.role.view.preferences', 'params': { id: role.id }}">
                 <a href="javascript:;" class="text-small">
                   <EyeIcon class="w-5 h-5 mr-5 hover:text-blue-700"></EyeIcon>
                 </a>

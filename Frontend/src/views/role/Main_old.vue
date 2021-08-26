@@ -224,14 +224,14 @@
           <div class="flex items-center border-b border-gray-200 dark:border-dark-5 pb-5">
             <div>
               <div class="text-gray-600">Role ID</div>
-              <div class="mt-1">{{ this.role.id ? this.role.id : 'Unknown' }}</div>
+              <div class="mt-1">{{ this.role?.id ?? 'Unknown' }}</div>
             </div>
             <ShieldIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>
           <div class="flex items-center border-b border-gray-200 dark:border-dark-5 py-5">
             <div>
               <div class="text-gray-600">Created by</div>
-              <div class="mt-1">{{ this.role.user.name ? this.role.user.name : 'Unknown' }}</div>
+              <div class="mt-1">{{ this.role?.user?.name ?? 'Unknown' }}</div>
             </div>
             <UserIcon class="w-4 h-4 text-gray-600 ml-auto" />
           </div>
@@ -263,7 +263,7 @@
                   classNames: 'w-full'
                 }"
               >
-                <option :value="permission.id" v-for="permission in this.selectable_permissions" v-bind:key="permission.id">{{ permission.name }}</option>
+                <option :value="permission.id" v-for="permission in this.selectable_permissions" v-bind:key="permission.id">{{ permission?.name }}</option>
               </TailSelect>
             </div>
             <button type="submit" class="btn btn-primary btn-sm w-20 mt-3">

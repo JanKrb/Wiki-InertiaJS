@@ -3,7 +3,8 @@ import axios from 'axios'
 import TopMenu from '../layouts/top-menu/Main.vue'
 import Categories from '../views/categories/Main.vue'
 import Roles from '../views/roles/Main.vue'
-import Role from '../views/role/Main.vue'
+import RolePreferences from '../views/role/Preferences.vue'
+import RolePermissions from '../views/role/Permissions.vue'
 import Permissions from '../views/permissions/Main.vue'
 import Bans from '../views/bans/Main.vue'
 import Ban from '../views/ban/Main.vue'
@@ -188,11 +189,21 @@ const routes = [
         }
       },
       {
-        path: 'roles/:id',
-        name: 'admin.role.view',
-        component: Role,
+        path: 'roles/:id/preferences',
+        name: 'admin.role.view.preferences',
+        component: RolePreferences,
         meta: {
-          title: 'View Role',
+          title: 'Role Preferences',
+          auth: true,
+          isAuth: false
+        }
+      },
+      {
+        path: 'roles/:id/permissions',
+        name: 'admin.role.view.permissions',
+        component: RolePermissions,
+        meta: {
+          title: 'Role Permissions',
           auth: true,
           isAuth: false
         }

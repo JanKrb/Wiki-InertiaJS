@@ -252,13 +252,14 @@ export default defineComponent({
     },
     deleteUser() {
       const loader = this.$loading.show()
-      axios.post('users/' + this.$route.params.id + '/delete')
+      axios.delete('users/' + this.$route.params.id)
         .then(response => {
           loader.hide()
           toast.success('Account successfully deleted')
           this.$router.push({ name: 'admin.accounts' })
         })
         .catch(error => {
+          console.error(error.response)
           this.validation_error = error.response.data.data.errors
           toast.error(error.response.data.message)
           loader.hide()
