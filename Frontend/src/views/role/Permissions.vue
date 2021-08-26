@@ -3,9 +3,6 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
       <h2 class="text-lg font-medium mr-auto">Edit Role</h2>
       <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <button type="button" @click="editRole" class="btn box text-gray-700 dark:text-gray-300 mr-2 flex items-center ml-auto sm:ml-0">
-          <SaveIcon class="w-4 h-4 mr-2"/> Save
-        </button>
         <div class="dropdown">
           <button
             class="dropdown-toggle btn btn-primary shadow-md flex items-center"
@@ -28,17 +25,36 @@
     <!-- END: Header -->
     <div class="pos intro-y grid grid-cols-12 gap-5 mt-5">
       <div class="intro-y col-span-12 lg:col-span-9">
-        <div class="box p-5">
+        <div class="box p-5" v-show="!this.all_permissions.length > 0">
+          <div class="p-5 text-center">
+            <div class="mx-auto mt-5 w-80">
+              <img alt="" :src="require(`@/assets/images/loading-data-illustration.svg`)"/>
+            </div>
+            <div class="text-3xl mt-5">Please be patient</div>
+            <div class="text-gray-600 mt-2 mb-5">
+              The content is about to be loaded
+            </div>
+          </div>
+        </div>
+        <div class="box p-5" v-show="this.all_permissions.length > 0">
+          <div class="flex justify-between mb-5">
+            <div class="mb-5 text-xl font-medium">
+              Permission Groups
+            </div>
+            <div class="mb-5 text-sm self-center">
+              {{ this.all_permissions.length }} Permissions
+            </div>
+          </div>
           <!-- BEGIN: Box content -->
-          <div class="accordion">
+          <div class="accordion mb-5">
             <div class="accordion-item border-2 p-5 rounded-lg mb-3" v-for="(group, index) in this.permission_groups" v-bind:key="index">
-              <div :id="'faq-accordion-collapse-' + group.id" class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#faq-accordion-collapse-' + group.id" aria-expanded="true" :aria-controls="'faq-accordion-collapse-' + group.id">
+              <div :id="'faq-accordion-collapse-' + index" class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#faq-accordion-collapse-' + index" aria-expanded="true" :aria-controls="'faq-accordion-collapse-' + index">
                   {{ capitalizeFirstLetter(index) }} Permissions
                 </button>
               </div>
-              <div :id="'faq-accordion-collapse-' + group.id" class="accordion-collapse collapse" :aria-labelledby="'faq-accordion-content-' + group.id" :data-bs-parent="'#faq-accordion-' + group.id">
-                <div class="accordion-body text-gray-700 dark:text-gray-600">
+              <div :id="'faq-accordion-collapse-' + index" class="accordion-collapse collapse" :aria-labelledby="'faq-accordion-content-' + index" :data-bs-parent="'#faq-accordion-' + index">
+                <div class="accordion-body text-gray-700 dark:text-gray-600 overflow-x-auto">
                   <table class="table table--sm">
                     <thead>
                     <tr>
@@ -51,7 +67,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(permission, index) in group" v-bind:key="index">
-                      <td class="border-b dark:border-dark-5"><input class="form-check-switch self-center" type="checkbox"></td>
+                      <td class="border-b dark:border-dark-5"><input class="form-check-switch self-center" type="checkbox" @change="togglePermission(permission)" v-model="permission.checked" :checked="permission?.checked"></td>
                       <td class="border-b dark:border-dark-5">{{ permission.name }}</td>
                       <td class="border-b dark:border-dark-5">{{ permission.user.name }}</td>
                       <td class="border-b dark:border-dark-5">{{ formatDate(permission.updated_at) }}</td>
@@ -67,7 +83,28 @@
         </div>
       </div>
       <!-- BEGIN: Role Info -->
-      <Sidebar :role="this.role"></Sidebar>
+      <div class="col-span-12 lg:col-span-3">
+        <Sidebar :role="this.role" class="mb-5"></Sidebar>
+
+        <div class="box p-5">
+          <div class="flex border-b border-gray-200 dark:border-dark-5 pb-5">
+            <div class="w-full">
+              <div class="text-gray-600">Search for Permission</div>
+              <input id="form-role-color" type="text" class="form-control h-10 mt-2" placeholder="Search..." v-model="search_keyword"/>
+            </div>
+          </div>
+          <div v-for="result in searchResults" v-bind:key="result" class="bg-gray-200 p-2 rounded-lg mt-2 hover:bg-gray-400 flex justify-between" @click="togglePermission(result)">
+            <div>{{ result.name }}</div>
+            <input class="form-check-switch self-center" type="checkbox" @change="togglePermission(result)" v-model="result.checked" :checked="result?.checked">
+          </div>
+          <div v-show="search_keyword.length === 0" class="mt-3 text-gray-500 text-center">
+            Please type a keyword to search
+          </div>
+          <div v-show="search_keyword.length !== 0 && searchResults.length === 0" class="mt-3 text-red-500 text-center">
+            No search result found, please try another search query
+          </div>
+        </div>
+      </div>
       <!-- END: Role Info -->
     </div>
   </div>
@@ -93,6 +130,7 @@ export default defineComponent({
       permission_groups: {},
       all_permissions: [],
       pagination: {},
+      search_keyword: '',
       validation_error: {}
     }
   },
@@ -100,18 +138,14 @@ export default defineComponent({
     this.fetchRole(this.$route.params.id)
     this.fetchPermissions()
   },
+  computed: {
+    searchResults: function () {
+      return this.all_permissions.filter((permission) => {
+        if (this.search_keyword.length > 0) { return permission?.name.toLowerCase().match(this.search_keyword.toLowerCase()) }
+      })
+    }
+  },
   methods: {
-    makePagination(meta, links) {
-      const pagination = {
-        current_page: meta.current_page,
-        last_page: meta.last_page,
-        last_page_url: links.last,
-        first_page_url: links.first,
-        next_page_url: links.next,
-        prev_page_url: links.prev
-      }
-      this.pagination = pagination
-    },
     fetchRole(id) {
       const loader = this.$loading.show()
       axios.get('roles/' + id)
@@ -124,6 +158,20 @@ export default defineComponent({
           toast.error(error.response.data.message)
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
+        })
+    },
+    deleteRole() {
+      const loader = this.$loading.show()
+      axios.delete('roles/' + this.role.id)
+        .then(response => {
+          toast.success('Role deleted successfully')
+          loader.hide()
+          this.$router.push({ name: 'admin.roles' })
+        })
+        .catch(error => {
+          this.validation_error = error.response.data.data.errors
+          toast.error(error.response.data.message)
+          loader.hide()
         })
     },
     fetchPermissions() {
@@ -139,6 +187,19 @@ export default defineComponent({
         .catch(error => {
           console.error(error)
         })
+    },
+    togglePermission(permission) {
+      if (permission.checked) {
+        axios.post('roles/' + this.role.id + '/permissions/' + permission.id + '/attach')
+          .then(response => {
+            toast.success('The permission ' + permission.name + ' was added successfully')
+          })
+      } else {
+        axios.post('roles/' + this.role.id + '/permissions/' + permission.id + '/detach')
+          .then(response => {
+            toast.success('The permission ' + permission.name + ' was removed successfully')
+          })
+      }
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
