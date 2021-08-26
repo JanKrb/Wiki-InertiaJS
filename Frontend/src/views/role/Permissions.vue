@@ -93,7 +93,7 @@
               <input id="form-role-color" type="text" class="form-control h-10 mt-2" placeholder="Search..." v-model="search_keyword"/>
             </div>
           </div>
-          <div v-for="result in searchResults" v-bind:key="result" class="bg-gray-200 p-2 rounded-lg mt-2 hover:bg-gray-400 flex justify-between" @click="togglePermission(result)">
+          <div v-for="result in searchResults" v-bind:key="result" class="p-2 rounded-lg mt-2 flex justify-between dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 transition duration-100" @click="togglePermission(result)">
             <div>{{ result.name }}</div>
             <input class="form-check-switch self-center" type="checkbox" @change="togglePermission(result)" v-model="result.active" :checked="result?.active">
           </div>
