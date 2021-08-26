@@ -68,7 +68,9 @@
       </div>
       <!-- END: Role Content -->
       <!-- BEGIN: Role Info -->
-      <Sidebar :role="this.role"></Sidebar>
+      <div class="col-span-12 lg:col-span-3">
+        <Sidebar :role="this.role"></Sidebar>
+      </div>
       <!-- END: Role Info -->
     </div>
   </div>
