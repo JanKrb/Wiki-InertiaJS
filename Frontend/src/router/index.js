@@ -42,7 +42,7 @@ import EditCategories from '../views/edit-category/Main.vue'
 import Search from '../views/search/Main.vue'
 import TermsOfService from '../views/terms-of-service/Main.vue'
 import PrivacyPolicy from '../views/privacy-policy/Main.vue'
-import PostSingle from '../views/post/PostSingle.vue'
+import PostSingle from '../views/post/Main.vue'
 
 const routes = [
   {

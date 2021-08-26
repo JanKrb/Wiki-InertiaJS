@@ -332,6 +332,7 @@ export default defineComponent({
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
+    this.testPagePermissions()
     this.loadPost(this.$route.params.id)
   },
   methods: {
@@ -353,11 +354,10 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get('posts/' + id)
         .then(response => {
-          if (response.data.data.approved_at && response.data.data.approved_by) {
+          if ((response.data.data.approved_at && response.data.data.approved_by) || this.permissions?.posts_view_unapproved) {
             this.post = response.data.data
             loader.hide()
             this.loadComments('posts/' + id + '/comments?per_page=5')
-            this.testPagePermissions()
             this.loadBookmarks(id)
             this.loadHistory()
           } else {
@@ -495,7 +495,8 @@ export default defineComponent({
           'posts_report_store',
           'posts_history_get_post',
           'posts_update',
-          'posts_delete'
+          'posts_delete',
+          'posts_view_unapproved'
         ]
       })
         .then((response) => {
