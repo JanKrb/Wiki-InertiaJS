@@ -111,6 +111,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:permissions_test'])
     ;
 
+    Route::get('permissions/active/{role}', [PermissionController::class, 'get_active_permissions'])
+        ->name('permissions.active')
+        ->middleware(['permission:permissions_get_active'])
+    ;
+
     Route::put('permissions/{permission}', [PermissionController::class, 'update'])
         ->name('permissions.update')
         ->middleware(['permission:permissions_update'])
