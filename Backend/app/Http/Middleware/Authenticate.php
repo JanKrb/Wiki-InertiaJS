@@ -26,7 +26,7 @@ class Authenticate extends Middleware
             'issuer_id' => 1,
             'short' => 'Unauthenticated access',
             'details' => "IP " . $request->ip() . " tried to access on " . url()->full() . " without authentication.",
-            'attributes' => print_r($request->json(), true)
+            'attributes' => $request->json() ?? '{}'
         ]);
 
         return response()->json($response, 401);
