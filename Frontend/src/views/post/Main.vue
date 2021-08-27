@@ -45,16 +45,14 @@
             <div class="report-timeline mt-5 relative">
               <div class="intro-x relative flex items-center mb-3" v-for="history in this.histories" v-bind:key="history.id">
                 <div class="report-timeline__image">
-                  <div
-                    class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden"
-                  >
+                  <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                     <img
                       alt=""
                       :src="history?.user?.profile_picture ?? require('@/assets/images/avatar.png')"
                     />
                   </div>
                 </div>
-                <div class="box px-5 py-3 ml-4 flex-1 zoom-in">
+                <div class="box px-5 py-3 ml-4 flex-1">
                   <div class="flex items-center">
                     <div class="font-medium">
                       {{ history?.title }}
@@ -80,55 +78,55 @@
     <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
       <div class="col-span-12 lg:col-span-8 intro-y">
         <div class="box p-5">
-          <div class="flex items-center px-5 py-4">
-            <div class="mr-auto">
-              <h2 class="intro-y font-medium text-xl sm:text-2xl ml-auto ml-3">
-                {{ this.post?.title }}
-              </h2>
-              <div class="flex text-gray-600 truncate text-xs mt-0.5">
-                {{ this.formatDate(this.post?.created_at) }} <span class="mx-1">•</span>
-                <router-link class="text-theme-1 dark:text-theme-10" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
-                  {{ this.post?.parent?.title }}
-                </router-link>
-                <div v-if="(Math.round(this.post?.content?.split(' ').length)) > 0">
-                  <span class="mx-1">•</span> {{ Math.round(this.post?.content?.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+          <div class="intro-y mt-3">
+            <a href="#" class="block rounded-lg relative" :style="'background: url(' + (this.post.thumbnail ?? require('@/assets/images/placeholder.png')) + ') center; background-size: cover;'">
+              <div class="absolute top-0 right-0 -mt-3 mr-3" v-if="this.permissions?.posts_report_store || this.permissions?.posts_history_get_post || this.permissions?.posts_update || this.permissions?.posts_delete">
+                <div class="rounded-full bg-theme-1 text-white text-xs p-1 leading-none">
+                  <div class="dropdown p-1">
+                    <a href="javascript:;" class="dropdown-toggle text-white dark:text-gray-300" aria-expanded="false">
+                      <EditIcon class="w-5 h-5"></EditIcon>
+                    </a>
+                    <div class="dropdown-menu w-40">
+                      <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
+                        <a v-if="this.permissions?.posts_report_store" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
+                          <SlashIcon class="mr-3"></SlashIcon>
+                          Report Post
+                        </a>
+                        <a v-if="this.permissions?.posts_history_get_post" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
+                          <ClockIcon class="mr-3"></ClockIcon>
+                          Post History
+                        </a>
+                        <a v-if="this.permissions?.posts_update" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: this.post.id }})" data-dismiss="dropdown">
+                          <Edit2Icon class="mr-3"></Edit2Icon>
+                          Edit
+                        </a>
+                        <a v-if="this.permissions?.posts_delete" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.deletePost(this.post.id)" data-dismiss="dropdown">
+                          <Trash2Icon class="mr-3"></Trash2Icon>
+                          Delete
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="dropdown ml-3">
-              <a href="javascript:;" class="dropdown-toggle w-5 h-5 text-gray-600 dark:text-gray-300" aria-expanded="false">
-                <MoreVerticalIcon></MoreVerticalIcon>
-              </a>
-              <div class="dropdown-menu w-40">
-                <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                  <a v-if="this.permissions?.posts_report_store" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#report-post-modal" data-dismiss="dropdown">
-                    <SlashIcon class="mr-3"></SlashIcon>
-                    Report Post
-                  </a>
-                  <a v-if="this.permissions?.posts_history_get_post" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" data-toggle="modal" data-target="#post-history-slider" data-dismiss="dropdown">
-                    <ClockIcon class="mr-3"></ClockIcon>
-                    Post History
-                  </a>
-                  <a v-if="this.permissions?.posts_update" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.$router.push({ name: 'moderation.posts.edit', params: { id: this.post.id }})" data-dismiss="dropdown">
-                    <Edit2Icon class="mr-3"></Edit2Icon>
-                    Edit
-                  </a>
-                  <a v-if="this.permissions?.posts_delete" href="javascript:;" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md" @click="this.deletePost(this.post.id)" data-dismiss="dropdown">
-                    <Trash2Icon class="mr-3"></Trash2Icon>
-                    Delete
-                  </a>
+              <div class="h-48 w-full bg-theme-31 rounded-tl-md rounded-tr-md"></div>
+              <div class="p-5 w-full bg-theme-31 rounded-bl-md rounded-br-md">
+                <h2 class="text-white text-2xl font-bold leading-tight mb-2 pr-5">{{ post.title }}</h2>
+                <div class="flex w-full items-center text-sm text-gray-300 font-medium">
+                  <div class="flex-1 flex items-center">
+                    <div class="flex text-gray-400 truncate text-xs">
+                      <span class="mx-1 self-center">{{ this.formatDate(this.post?.created_at) }} •</span>
+                      <router-link class="bg-theme-1 dark:bg-theme-1 text-white px-3 py-1 rounded-full" :to="{ name: 'categories.subcategory', params: { 'id': this.post?.parent?.id } }">
+                        {{ this.post?.parent?.title }}
+                      </router-link>
+                    </div>
+                  </div>
+                  <div v-if="(Math.round(this.post?.content?.split(' ').length)) > 0" class="hidden md:block">
+                    {{ Math.round(this.post?.content?.split(' ').length / 3000 * 60 * 100) / 100 }} Min read
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="intro-y mt-6">
-            <div class="news__preview image-fit">
-              <img
-                alt=""
-                class="rounded-md"
-                :src="this.post?.thumbnail ?? require('@/assets/images/placeholder.png')"
-              />
-            </div>
+            </a>
           </div>
           <div class="intro-y flex relative pt-16 sm:pt-6 items-center pb-6">
             <Tippy
@@ -187,7 +185,6 @@
               </div>
             </div>
             <div class="flex items-center text-gray-700 dark:text-gray-600 sm:ml-auto mt-5 sm:mt-0">
-              <div class="hidden xl:block">Rate this Post:</div>
               <Tippy
                 tag="div"
                 v-on:click='this.votePost(1)'
@@ -333,6 +330,7 @@ export default defineComponent({
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'))
+    this.testPagePermissions()
     this.loadPost(this.$route.params.id)
   },
   methods: {
@@ -354,11 +352,10 @@ export default defineComponent({
       const loader = this.$loading.show()
       axios.get('posts/' + id)
         .then(response => {
-          if (response.data.data.approved_at && response.data.data.approved_by) {
+          if ((response.data.data.approved_at && response.data.data.approved_by) || this.permissions?.posts_view_unapproved) {
             this.post = response.data.data
             loader.hide()
             this.loadComments('posts/' + id + '/comments?per_page=5')
-            this.testPagePermissions()
             this.loadBookmarks(id)
             this.loadHistory()
           } else {
@@ -496,7 +493,8 @@ export default defineComponent({
           'posts_report_store',
           'posts_history_get_post',
           'posts_update',
-          'posts_delete'
+          'posts_delete',
+          'posts_view_unapproved'
         ]
       })
         .then((response) => {

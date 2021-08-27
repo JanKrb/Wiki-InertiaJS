@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\Permission;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionCollection;
+use App\Http\Resources\ActivePermissionCollection;
 use App\Models\Permission;
 use App\Http\Resources\Permission as PermissionResource;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,6 +24,17 @@ class PermissionController extends BaseController
 
     protected $validations_update = [];
 
+    public function get_active_permissions(Role $role) {
+        $data = (new $this->model());
+        $data->orderByDesc('name');
+        $data = $data->get();
+        $data = $data->map(function ($d) use ($role) {
+            $d['active'] = $role->relations->contains($d->id);
+           return $d;
+        });
+
+        return $this->sendResponse((new ActivePermissionCollection($data, $role)), 'Successfully get active permissions');
+    }
 
     public function update(Request $request, int $id)
     {

@@ -47,7 +47,8 @@ module.exports = {
           27: '#2064ad',
           28: '#BBC8FD',
           29: '#284EB2',
-          30: '#98AFF5'
+          30: '#98AFF5',
+          31: 'rgba(0,0,0,0.5)'
         }
       },
       fontFamily: {
@@ -62,6 +63,7 @@ module.exports = {
         '3/4': '75%'
       },
       screens: {
+        xs: '450px',
         sm: '640px',
         md: '768px',
         lg: '1024px',

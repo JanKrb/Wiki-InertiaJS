@@ -258,7 +258,7 @@
           <div class="intro-y col-span-12 lg:col-span-8 xxl:col-span-9" v-if="this.active_tab === 1">
             <div class="chat__box box h-4 flex-grow">
               <div class="h-full flex flex-col">
-                <div class="overflow-y-scroll scrollbar-hidden px-5 pt-5 flex-1">
+                <div class="px-5 pt-5 flex-1 overflow-y-scroll scrollbar-hidden">
                   <div class="intro-y box px-5 pt-5">
                     <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5 pb-5 -mx-5">
                       <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
@@ -450,8 +450,8 @@
           <!-- BEGIN: Notification Creation Tab -->
           <div class="intro-y col-span-12 lg:col-span-8 xxl:col-span-9" v-if="this.active_tab === 2">
             <div class="chat__box box">
-              <div class="h-full flex flex-col">
-                <div class="overflow-y-scroll scrollbar-hidden px-5 pt-5 flex-1">
+              <div class="h-full flex flex-col overflow-y-scroll scrollbar-hidden">
+                <div class="px-5 pt-5 flex-1">
                   <div class="intro-y box px-5 pt-5">
                     <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5 pb-5 -mx-5">
                       <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
@@ -676,15 +676,8 @@
                       class="intro-y col-span-12 md:col-span-6 lg:col-span-4"
                     >
                       <div class="box">
-                        <div class="flex items-start px-5 pt-5">
+                        <div class="flex items-start pt-5 pl-1">
                           <div class="w-full flex flex-col lg:flex-row items-center">
-                            <div class="w-16 h-16 image-fit">
-                              <img
-                                alt=""
-                                class="rounded-full"
-                                :src="notification.user.profile_picture ?? require('@/assets/images/avatar.png')"
-                              />
-                            </div>
                             <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0">
                               <a href="" class="font-medium">{{ notification.title }}</a>
                               <div class="text-gray-600 text-xs mt-0.5">
