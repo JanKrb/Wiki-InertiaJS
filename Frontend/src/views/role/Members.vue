@@ -1,28 +1,5 @@
 <template>
   <div>
-    <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Edit Role</h2>
-      <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <button type="button" @click="editRole" class="btn box text-gray-700 dark:text-gray-300 mr-2 flex items-center ml-auto sm:ml-0">
-          <SaveIcon class="w-4 h-4 mr-2"/> Save
-        </button>
-        <div class="dropdown">
-          <button
-            class="dropdown-toggle btn btn-primary shadow-md flex items-center"
-            aria-expanded="false"
-          >
-            <SettingsIcon class="w-4 h-4 mr-2"></SettingsIcon> Settings <ChevronDownIcon class="w-4 h-4 ml-2" />
-          </button>
-          <div class="dropdown-menu w-40">
-            <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-              <a href="#" @click="deleteRole" aria-expanded="false" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                <Trash2Icon class="w-4 h-4 mr-2"/> Delete Role
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- BEGIN: Header -->
     <Header :role="this.role"></Header>
     <!-- END: Header -->
@@ -30,40 +7,24 @@
       <!-- BEGIN: Role Content -->
       <div class="intro-y col-span-12 lg:col-span-9">
         <div class="box p-5">
-          <!-- BEGIN: Role Title/Color -->
-          <div class="grid lg:grid-cols-2 gap-6">
-            <div>
-              <label for="form-role-name" class="form-label">Name</label>
-              <input id="form-role-name" type="text" class="form-control h-10" placeholder="Role Name" v-model="role.name"/>
-            </div>
-            <div>
-              <label for="form-role-color" class="form-label">Color</label>
-              <input id="form-role-color" type="color" class="form-control h-10" placeholder="Role Color" v-model="role.color"/>
-            </div>
-          </div>
-          <!-- END: Role Title/Color -->
-          <br>
-          <!-- BEGIN: Role Description -->
-          <div>
-            <label for="form-role-description" class="form-label">Description</label>
-            <textarea autocomplete="false" tabindex="0" id="form-role-description" type="text" class="form-control" v-model="role.description"/>
-          </div>
-          <!-- END: Role Description -->
-          <br>
-
-          <!-- BEGIN: Default role -->
-          <div>
-            <label for="form-role-description" class="form-label">Default Role</label>
-            <div class="form-control">
-              <div class="flex justify-between">
-                <p class="self-center">Is the role a default user role?</p>
-                <p class="focus:text-indigo-800 focus:outline-none text-sm leading-normal cursor-pointer text-right self-justify-end">
-                  <input class="form-check-switch self-center" type="checkbox" v-model="role.is_default">
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- END: Default role -->
+          <table class="table table--sm">
+            <thead>
+            <tr>
+              <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Username</th>
+              <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Email</th>
+              <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Last update</th>
+              <th class="border-b-2 dark:border-dark-5 whitespace-nowrap">Created at</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="member in role_members" v-bind:key="member">
+              <td class="border-b dark:border-dark-5">{{ member?.name }}</td>
+              <td class="border-b dark:border-dark-5">{{ member?.email }}</td>
+              <td class="border-b dark:border-dark-5">{{ formatDate(member?.updated_at) }}</td>
+              <td class="border-b dark:border-dark-5">{{ formatDate(member?.created_at) }}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <!-- END: Role Content -->
@@ -92,11 +53,13 @@ export default defineComponent({
   data() {
     return {
       role: {},
+      role_members: {},
       validation_error: {}
     }
   },
   mounted() {
-    this.fetchRole(this.$route.params.id)
+    this.fetchRole()
+    this.fetchRoleMembers()
   },
   methods: {
     deleteRole() {
@@ -113,27 +76,9 @@ export default defineComponent({
           loader.hide()
         })
     },
-    editRole() {
+    fetchRole() {
       const loader = this.$loading.show()
-      axios.put('roles/' + this.role.id, {
-        name: this.role.name,
-        description: this.role.description,
-        color: this.role.color
-      })
-        .then(response => {
-          toast.success('Role edited successfully')
-          loader.hide()
-          this.fetchRole(this.role.id)
-        })
-        .catch(error => {
-          this.validation_error = error.response.data.data.errors
-          toast.error(error.response.data.message)
-          loader.hide()
-        })
-    },
-    fetchRole(id) {
-      const loader = this.$loading.show()
-      axios.get('roles/' + id)
+      axios.get('roles/' + this.$route.params.id)
         .then(response => {
           this.role = response.data.data
           loader.hide()
@@ -143,6 +88,15 @@ export default defineComponent({
           toast.error(error.response.data.message)
           loader.hide()
           this.$router.push({ name: 'admin.roles' })
+        })
+    },
+    fetchRoleMembers() {
+      axios.get('roles/' + this.$route.params.id + '/users')
+        .then(response => {
+          this.role_members = response.data.data
+        })
+        .catch(error => {
+          console.error(error)
         })
     }
   }
