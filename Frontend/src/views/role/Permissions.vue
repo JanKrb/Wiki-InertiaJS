@@ -1,25 +1,5 @@
 <template>
   <div>
-    <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-      <h2 class="text-lg font-medium mr-auto">Edit Role</h2>
-      <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-        <div class="dropdown">
-          <button
-            class="dropdown-toggle btn btn-primary shadow-md flex items-center"
-            aria-expanded="false"
-          >
-            <SettingsIcon class="w-4 h-4 mr-2"></SettingsIcon> Settings <ChevronDownIcon class="w-4 h-4 ml-2" />
-          </button>
-          <div class="dropdown-menu w-40">
-            <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-              <a href="#" @click="deleteRole" aria-expanded="false" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
-                <Trash2Icon class="w-4 h-4 mr-2"/> Delete Role
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- BEGIN: Header -->
     <Header :role="this.role"></Header>
     <!-- END: Header -->
