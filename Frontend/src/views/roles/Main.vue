@@ -113,7 +113,7 @@
                 <div class="flex items-center">
                   <div>
                     <a>
-                      Default Role
+                      Default Role {{ edit_role.is_default }}
                     </a>
                     <div class="text-gray-600">
                       Is the role a default user role?
