@@ -119,7 +119,7 @@
                       Is the role a default user role?
                     </div>
                   </div>
-                  <input class="form-check-switch ml-auto" type="checkbox" v-model="edit_role.is_default">
+                  <input class="form-check-switch ml-auto" type="checkbox" v-model="edit_role.is_default" :checked="edit_role.is_default">
                 </div>
               </div>
               <div class="col-span-12" v-show="this.validation_error !== null">
@@ -349,7 +349,8 @@ export default defineComponent({
         is_default: this.edit_role.is_default
       })
         .then(response => {
-          toast.info('Role was successfully edited')
+          console.error(response)
+          toast.success('Role was successfully edited')
           loader.hide()
           this.modalState.edit = false
           this.fetchRoles('roles?page=' + this.pagination.current_page)
