@@ -146,6 +146,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         ->middleware(['permission:roles_permissions_get_all'])
     ;
 
+    Route::get('roles/{role}/users', [RoleController::class, 'get_users'])
+        ->name('roles.permissions.users')
+        ->middleware(['permission:roles_permissions_get_users'])
+    ;
+
     Route::get('roles/{role}/permissions/{permission}/check', [RolesPermissionsController::class, 'check'])
         ->name('roles.permissions.check')
         ->middleware(['permission:roles_permissions_check'])
