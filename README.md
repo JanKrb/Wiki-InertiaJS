@@ -1,2 +1,1 @@
-# Wiki-Software
-Laravel VueJS Wiki Software
+# Moved to https://github.com/orgs/KrbDevelopment/teams/articly/repositories
