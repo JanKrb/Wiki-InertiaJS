@@ -1,1 +1,3 @@
-# Moved to https://github.com/orgs/KrbDevelopment/teams/articly/repositories
+# Moved to
+https://github.com/KrbDevelopment/Articly-Frontend
+https://github.com/KrbDevelopment/Articly-Backend
