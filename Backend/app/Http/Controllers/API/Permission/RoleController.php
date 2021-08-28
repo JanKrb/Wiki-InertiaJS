@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API\Permission;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\MiniUserCollection;
 use App\Http\Resources\RoleCollection;
+use App\Http\Resources\UserCollection;
 use App\Models\Role;
 use App\Http\Resources\Role as RoleResource;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -89,5 +92,9 @@ class RoleController extends BaseController
         }
 
         return $this->sendResponse($response, $message);
+    }
+
+    public function get_users(Role $role) {
+        return new MiniUserCollection(User::where('role_id', $role->id)->get());
     }
 }

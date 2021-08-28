@@ -14,6 +14,5 @@ class RolesPermissionsController extends RelationController
     protected $childModel = Permission::class;
 
     protected $resource = RolePermissionResource::class;
-
     protected $collection = RolePermissionCollection::class;
 }
